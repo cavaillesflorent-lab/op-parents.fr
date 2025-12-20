@@ -259,23 +259,23 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-md) 0;
+    padding: var(--space-xs) 0;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-sm);
 }
 
 .logo-img {
-    height: 60px;
+    height: 40px;
     width: auto;
 }
 
 .logo-text {
     font-family: var(--font-sans);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--vert-clair);
     letter-spacing: 0.05em;
@@ -289,12 +289,12 @@ section {
 .nav {
     display: flex;
     align-items: center;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
 }
 
 .nav a {
     color: var(--white);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     opacity: 0.9;
     position: relative;

@@ -342,7 +342,7 @@ section {
    ======================================== */
 
 .hero {
-    min-height: 100vh;
+    min-height: 70vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -357,7 +357,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(45, 64, 59, 0.75) 0%, rgba(45, 64, 59, 0.5) 100%);
+    background: linear-gradient(135deg, rgba(45, 64, 59, 0.4) 0%, rgba(45, 64, 59, 0.25) 100%);
     z-index: 1;
 }
 

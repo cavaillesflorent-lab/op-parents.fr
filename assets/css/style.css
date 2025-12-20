@@ -357,7 +357,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(45, 64, 59, 0.4) 0%, rgba(45, 64, 59, 0.25) 100%);
+    background: linear-gradient(135deg, rgba(45, 64, 59, 0.15) 0%, rgba(45, 64, 59, 0.1) 100%);
     z-index: 1;
 }
 

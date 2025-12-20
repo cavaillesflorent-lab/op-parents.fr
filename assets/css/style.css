@@ -230,7 +230,7 @@ p {
    ======================================== */
 
 .header {
-    background: var(--peach);
+    background: #E8563A;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -264,8 +264,8 @@ p {
 .logo-tagline {
     font-family: var(--font-accent);
     font-size: 1rem;
-    color: var(--brown-dark);
-    opacity: 0.8;
+    color: var(--cream-light);
+    opacity: 0.9;
 }
 
 .nav {
@@ -275,7 +275,7 @@ p {
 }
 
 .nav a {
-    color: var(--brown-dark);
+    color: var(--cream-light);
     font-family: var(--font-body);
     font-size: 1rem;
     padding: 0.5rem 0;
@@ -289,7 +289,7 @@ p {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--terracotta);
+    background: var(--cream-light);
     transition: width var(--transition);
 }
 
@@ -298,7 +298,7 @@ p {
 }
 
 .nav a:hover {
-    color: var(--terracotta-dark);
+    color: var(--cream);
 }
 
 .btn-nav {
@@ -330,7 +330,7 @@ p {
 .mobile-toggle span {
     width: 28px;
     height: 2px;
-    background: var(--brown-dark);
+    background: var(--cream-light);
     border-radius: 2px;
     transition: var(--transition);
 }
@@ -406,6 +406,15 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow-lg);
 }
 
@@ -1347,7 +1356,7 @@ p {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--peach);
+        background: #E8563A;
         flex-direction: column;
         padding: var(--space-md);
         gap: var(--space-sm);

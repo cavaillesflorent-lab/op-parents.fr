@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OP! - Santé financière des parents | Quiz, Ateliers & Investissement</title>
-    <meta name="description" content="La 1ère plateforme de santé financière pour les parents. Quiz gratuits, ateliers ludiques et accompagnement pour investir en confiance. Fun & sans pression.">
+    <title>OP! - Éducation financière des parents | Ateliers & Webinaires</title>
+    <meta name="description" content="La plateforme d'éducation financière dédiée aux parents. Ateliers interactifs et webinaires pour structurer les finances de votre famille sans jargon ni pression.">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="canonical" href="https://op-parents.fr">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="OP! - Santé financière des parents">
-    <meta property="og:description" content="Comprendre l'argent quand on devient responsable d'un foyer. Quiz, ateliers et investissement en confiance.">
+    <meta property="og:title" content="OP! - Éducation financière des parents">
+    <meta property="og:description" content="Ateliers et webinaires pour décider sans jargon ni pression.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://op-parents.fr">
     
@@ -19,27 +19,29 @@
     {
       "@context": "https://schema.org",
       "@type": "EducationalOrganization",
-      "name": "OP! - Santé financière des parents",
+      "name": "OP! - Éducation financière des parents",
       "description": "Plateforme d'éducation financière pour les parents",
       "url": "https://op-parents.fr"
     }
     </script>
 </head>
 <body>
-    <!-- Header -->
+    <!-- HEADER -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <span class="logo-op">OP!</span>
-                    <span class="logo-tagline">Santé financière des parents</span>
+                    <a href="/">
+                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
+                    </a>
+                    <span class="logo-text">booste tes finances !</span>
                 </div>
                 <nav class="nav">
-                    <a href="#comment-ca-marche">Comment ça marche</a>
-                    <a href="#ateliers">Ateliers</a>
-                    <a href="#methode">Notre méthode</a>
-                    <a href="#faq">FAQ</a>
-                    <a href="#quiz" class="btn-nav">Faire le quiz</a>
+                    <a href="#formations"><span class="nav-icon">📚</span> Formations</a>
+                    <a href="#webinaires"><span class="nav-icon">🎥</span> Webinaires</a>
+                    <a href="#investir"><span class="nav-icon">💰</span> Investir</a>
+                    <a href="#missions"><span class="nav-icon">🚀</span> Missions OP!</a>
+                    <a href="#contact"><span class="nav-icon">✉️</span> Contact</a>
                 </nav>
                 <button class="mobile-toggle" aria-label="Menu">
                     <span></span>
@@ -50,312 +52,269 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
+    <!-- SECTION 1 — HERO PLEIN ÉCRAN -->
+    <section class="hero" style="background-image: url('assets/images/Famille.png');">
+        <div class="hero-overlay"></div>
         <div class="container">
             <div class="hero-content">
-                <h1>Prendre soin de la santé financière de votre famille</h1>
-                <p class="hero-subtitle">La 1ère plateforme qui aide les parents à comprendre l'argent et à investir en confiance.<br>Fun, gratuit, et sans pression.</p>
+                <p class="hero-tagline">L'éducation financière des parents par des parents</p>
+                <h1>Accédez à des ateliers et webinaires pour mieux gérer les finances de votre famille</h1>
+                <p class="hero-subtitle">Des contenus pédagogiques, des ressources pratiques et, lorsque c'est pertinent, un accompagnement pour vous aider à comprendre avant d'agir.</p>
                 <div class="hero-cta">
-                    <a href="#quiz" class="btn btn-primary">Faire le quiz gratuit 🎯</a>
-                    <a href="#comment-ca-marche" class="btn btn-secondary">Découvrir OP!</a>
-                </div>
-                <p class="hero-note">✨ Déjà 1 200+ parents nous font confiance</p>
-            </div>
-            <div class="hero-illustration">
-                <!-- Placeholder pour illustration -->
-                <div class="hero-image-placeholder">
-                    <span style="font-size: 8rem;">👨‍👩‍👧‍👦</span>
+                    <a href="#formations" class="btn btn-primary">Voir les formations</a>
+                    <a href="#missions" class="btn btn-secondary">Découvrir Missions OP!</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pourquoi OP! -->
-    <section class="why-section">
+    <!-- SECTION 2 — TRIPTYQUE PRINCIPAL -->
+    <section id="formations" class="triptych-section">
+        <div class="container">
+            <h2 class="text-center">Une réponse aux besoins de tous les parents</h2>
+            <p class="section-intro text-center">Découvrez nos trois piliers pour vous accompagner dans votre santé financière familiale</p>
+            
+            <div class="triptych-grid">
+                <div class="triptych-card">
+                    <div class="triptych-image">
+                        <img src="assets/images/20.jpg" alt="Quiz interactifs">
+                    </div>
+                    <div class="triptych-content">
+                        <h3>Quiz interactifs</h3>
+                        <p>Pour poser les bases et structurer les décisions financières du foyer.</p>
+                        <a href="#quiz" class="btn btn-soft">Faire le quiz</a>
+                    </div>
+                </div>
+                
+                <div id="webinaires" class="triptych-card">
+                    <div class="triptych-image">
+                        <img src="assets/images/21.jpg" alt="Webinaires thématiques">
+                    </div>
+                    <div class="triptych-content">
+                        <h3>Webinaires thématiques</h3>
+                        <p>Pour approfondir un sujet précis, à votre rythme, avec des experts.</p>
+                        <a href="#webinaires-liste" class="btn btn-soft">Voir les webinaires</a>
+                    </div>
+                </div>
+                
+                <div id="investir" class="triptych-card">
+                    <div class="triptych-image">
+                        <img src="assets/images/19.jpg" alt="Investir en confiance">
+                    </div>
+                    <div class="triptych-content">
+                        <h3>Investir en confiance</h3>
+                        <p>Pour être accompagné(e) par un ingénieur en patrimoine selon vos besoins et envies.</p>
+                        <a href="#accompagnement" class="btn btn-soft">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 — BÉNÉFICES CONCRETS -->
+    <section class="benefits-section">
+        <div class="container">
+            <h2 class="text-center">Nous aidons les parents à mieux comprendre, mieux organiser et mieux anticiper leurs finances</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">📚</div>
+                    <h3>Comprendre les bases sans jargon</h3>
+                    <p>Des explications simples et accessibles pour maîtriser les fondamentaux de la gestion financière familiale.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🏠</div>
+                    <h3>Structurer les décisions importantes du foyer</h3>
+                    <p>Des méthodes concrètes pour organiser vos finances et prendre les bonnes décisions en famille.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🌱</div>
+                    <h3>Anticiper les grandes étapes de vie</h3>
+                    <p>Enfants, projets, études, retraite : préparez sereinement chaque étape importante.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 — MOMENTS DE VIE (AMÉLIORÉE) -->
+    <section class="moments-section-v2">
+        <div class="container">
+            <h2 class="text-center">Des contenus adaptés aux grandes étapes de la vie de parent</h2>
+            
+            <div class="moments-cards">
+                <div class="moment-card">
+                    <div class="moment-card-icon">👶</div>
+                    <h4>Accueil d'un enfant</h4>
+                    <p>Préparer sereinement l'arrivée de bébé</p>
+                </div>
+                <div class="moment-card">
+                    <div class="moment-card-icon">💑</div>
+                    <h4>Organisation du couple</h4>
+                    <p>Gérer les finances à deux efficacement</p>
+                </div>
+                <div class="moment-card">
+                    <div class="moment-card-icon">💰</div>
+                    <h4>Investir pour ses enfants</h4>
+                    <p>Épargner et faire fructifier pour leur avenir</p>
+                </div>
+                <div class="moment-card">
+                    <div class="moment-card-icon">🎓</div>
+                    <h4>Éduquer à l'argent</h4>
+                    <p>Transmettre les bonnes bases financières</p>
+                </div>
+                <div class="moment-card">
+                    <div class="moment-card-icon">🎯</div>
+                    <h4>Études & projets</h4>
+                    <p>Financer les grandes étapes à venir</p>
+                </div>
+                <div class="moment-card">
+                    <div class="moment-card-icon">🏡</div>
+                    <h4>Héritage & transmission</h4>
+                    <p>Préparer l'avenir de vos proches</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5 — POUR QUI (TRIPTYQUE AVEC PHOTOS) -->
+    <section class="for-who-section-v2">
+        <div class="container">
+            <h2 class="text-center">OP! s'adresse aux parents qui veulent décider sans se tromper</h2>
+            <p class="section-intro text-center">Que vous soyez futur parent ou parent d'adultes, nous vous accompagnons</p>
+            
+            <div class="audience-triptych">
+                <div class="audience-card">
+                    <div class="audience-card-image">
+                        <span class="audience-emoji">🤰</span>
+                    </div>
+                    <h4>Futur parent</h4>
+                    <p>Anticipez les changements financiers liés à l'arrivée d'un enfant</p>
+                </div>
+                
+                <div class="audience-card">
+                    <div class="audience-card-image">
+                        <span class="audience-emoji">👶</span>
+                    </div>
+                    <h4>Parent de jeunes enfants</h4>
+                    <p>Structurez vos finances pour le quotidien et l'épargne</p>
+                </div>
+                
+                <div class="audience-card">
+                    <div class="audience-card-image">
+                        <span class="audience-emoji">🧑‍🎓</span>
+                    </div>
+                    <h4>Parent d'ados ou jeunes adultes</h4>
+                    <p>Préparez les études, l'indépendance et la transmission</p>
+                </div>
+            </div>
+            
+            <p class="highlight-text text-center">OP! vous aide à structurer les finances du foyer en fonction de votre réalité, pas d'un modèle théorique.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 6 — CRÉDIBILITÉ -->
+    <section id="missions" class="credibility-section">
         <div class="container">
             <div class="container-narrow">
-                <h2>Pourquoi OP! existe</h2>
+                <h2 class="text-center">Ici, on ne vous vend pas des produits financiers</h2>
                 
-                <div class="story-box">
-                    <p>Avant que Florent ne devienne gestionnaire de patrimoine, nous avons eu nos deux enfants.</p>
-                    
-                    <p>Comme beaucoup de parents, nous faisions "au mieux". Nous pensions surtout au présent. Nous n'avions jamais reçu de vraie éducation financière.</p>
-                    
-                    <p>Ni à l'école. Ni de la part de nos parents.</p>
-                    
-                    <p>Nous avancions sans cadre, sans méthode, sans vision claire du long terme.</p>
-                    
-                    <p class="story-highlight">Puis, au fil du temps, nous avons réalisé tout ce que nous <strong>aurions pu mettre en place plus tôt</strong> pour sécuriser notre foyer, anticiper l'avenir, protéger nos enfants.</p>
-                    
-                    <p>Si nous, pourtant impliqués et de bonne volonté, n'avions pas eu ces clés…<br><strong>Combien de parents avancent aujourd'hui dans le même flou ?</strong></p>
-                </div>
-                
-                <div class="mission-box">
-                    <h3>🎯 La mission d'OP!</h3>
-                    <p>Permettre aux parents d'avoir <strong>plus tôt</strong> les bonnes questions, les bons repères et les bonnes bases.</p>
-                    <p><strong>Pas pour faire peur. Pas pour culpabiliser.<br>Mais pour décider mieux, au bon moment.</strong></p>
+                <div class="credibility-box">
+                    <p>OP! est une plateforme d'éducation financière.</p>
+                    <p>Notre rôle est de vous aider à <strong>comprendre</strong>, <strong>réfléchir</strong> et <strong>décider</strong>.</p>
+                    <p>Un accompagnement est possible uniquement quand c'est pertinent pour vous.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Comment ça marche -->
-    <section id="comment-ca-marche" class="how-section">
+    <!-- SECTION 7 — TÉMOIGNAGES -->
+    <section class="testimonials-section">
         <div class="container">
-            <h2>Comment ça marche ?</h2>
-            <p class="section-intro">3 étapes simples pour prendre en main la santé financière de votre foyer</p>
+            <h2 class="text-center">Ce que les parents en pensent</h2>
             
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-icon">🎯</div>
-                    <h3>Faire le quiz</h3>
-                    <p>5 minutes pour identifier où vous en êtes et ce dont vous avez vraiment besoin selon votre situation de famille.</p>
-                    <a href="#quiz" class="step-link">Faire le quiz →</a>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">« En tant que maman solo, l'argent a toujours été une source de stress pour moi. Avec OP!, j'ai enfin pu poser mes questions sans me sentir bête ou jugée. J'ai compris des choses simples que personne ne m'avait jamais expliquées. »</p>
+                    <p class="testimonial-author">— Camille, maman de Léo, 6 ans</p>
                 </div>
                 
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-icon">🎓</div>
-                    <h3>Participer aux ateliers</h3>
-                    <p>Des ateliers ludiques et interactifs pour comprendre les bases : épargne, immobilier, protection, transmission.</p>
-                    <a href="#ateliers" class="step-link">Voir les ateliers →</a>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">« Ce que j'ai aimé avec OP!, c'est qu'on ne me dit jamais quoi faire. On m'aide à comprendre, à réfléchir, à prendre du recul. En quelques contenus et un atelier, tout est devenu beaucoup plus clair. »</p>
+                    <p class="testimonial-author">— Sophie, maman de deux enfants (3 et 8 ans)</p>
                 </div>
                 
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-icon">💡</div>
-                    <h3>Investir en confiance</h3>
-                    <p>Quand vous êtes prêt, nous vous aidons à passer à l'action avec un accompagnement personnalisé (si vous le souhaitez).</p>
-                    <a href="#methode" class="step-link">Notre méthode →</a>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">« Quand les enfants ont quitté la maison, je me suis rendu compte que je n'avais jamais vraiment réfléchi à la suite. Avec OP!, j'ai enfin pris le temps de me poser les bonnes questions sur la retraite. »</p>
+                    <p class="testimonial-author">— Marc, papa de deux grands enfants</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Ateliers -->
-    <section id="ateliers" class="ateliers-section">
+    <!-- SECTION 8 — OP! C'EST... -->
+    <section class="summary-section">
         <div class="container">
-            <h2>Nos ateliers gratuits</h2>
-            <p class="section-intro">Des rendez-vous ludiques pour comprendre l'argent au rythme de votre vie</p>
+            <h2 class="text-center">Finalement, OP! c'est…</h2>
             
-            <div class="ateliers-grid">
-                <div class="atelier-card">
-                    <div class="atelier-emoji">🏠</div>
-                    <h3>Acheter sa maison quand on est parent</h3>
-                    <p>Prêt, apport, charges, assurances : tout ce qu'il faut comprendre avant de signer.</p>
-                    <div class="atelier-meta">
-                        <span>📅 Prochain : 15 janvier</span>
-                        <span>⏱️ 1h30</span>
-                    </div>
-                    <a href="#inscription" class="btn btn-atelier">S'inscrire</a>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-icon">✨</span>
+                    <span>Un espace pour penser, comprendre, décider</span>
                 </div>
-                
-                <div class="atelier-card">
-                    <div class="atelier-emoji">👶</div>
-                    <h3>L'argent des enfants</h3>
-                    <p>Cadeaux, donations, livrets : comment gérer l'argent que vos enfants reçoivent.</p>
-                    <div class="atelier-meta">
-                        <span>📅 Prochain : 22 janvier</span>
-                        <span>⏱️ 1h30</span>
-                    </div>
-                    <a href="#inscription" class="btn btn-atelier">S'inscrire</a>
+                <div class="summary-item">
+                    <span class="summary-icon">❤️</span>
+                    <span>Sans jugement, sans pression</span>
                 </div>
-                
-                <div class="atelier-card">
-                    <div class="atelier-emoji">🛡️</div>
-                    <h3>Protéger sa famille</h3>
-                    <p>Assurances, succession, transmission : les bases pour sécuriser votre foyer.</p>
-                    <div class="atelier-meta">
-                        <span>📅 Prochain : 29 janvier</span>
-                        <span>⏱️ 1h30</span>
-                    </div>
-                    <a href="#inscription" class="btn btn-atelier">S'inscrire</a>
+                <div class="summary-item">
+                    <span class="summary-icon">⚖️</span>
+                    <span>Avec des repères pratiques</span>
                 </div>
-                
-                <div class="atelier-card">
-                    <div class="atelier-emoji">💰</div>
-                    <h3>Investir pour son foyer</h3>
-                    <p>Épargne, placements, immobilier locatif : comment faire fructifier votre argent.</p>
-                    <div class="atelier-meta">
-                        <span>📅 Prochain : 5 février</span>
-                        <span>⏱️ 1h30</span>
-                    </div>
-                    <a href="#inscription" class="btn btn-atelier">S'inscrire</a>
+                <div class="summary-item">
+                    <span class="summary-icon">🌱</span>
+                    <span>Pensé pour toute la vie familiale</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pour qui -->
-    <section class="for-who-section">
-        <div class="container">
-            <h2>OP! est fait pour vous si...</h2>
-            
-            <div class="personas-grid">
-                <div class="persona-card">
-                    <div class="persona-emoji">🤰</div>
-                    <h3>Vous attendez un enfant</h3>
-                    <p>Vous voulez anticiper les changements financiers et prendre les bonnes décisions dès maintenant.</p>
-                </div>
-                
-                <div class="persona-card">
-                    <div class="persona-emoji">👨‍👩‍👧</div>
-                    <h3>Vous êtes jeunes parents</h3>
-                    <p>Vous jonglez entre crèche, épargne, projet immobilier... et vous aimeriez y voir plus clair.</p>
-                </div>
-                
-                <div class="persona-card">
-                    <div class="persona-emoji">🏡</div>
-                    <h3>Vous avez des projets</h3>
-                    <p>Maison, études des enfants, transmission : vous voulez structurer tout ça intelligemment.</p>
-                </div>
-                
-                <div class="persona-card">
-                    <div class="persona-emoji">💼</div>
-                    <h3>Vous êtes entrepreneur·e</h3>
-                    <p>Vous voulez séparer le pro du perso et protéger votre famille en cas d'imprévu.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Notre méthode -->
-    <section id="methode" class="method-section">
+    <!-- SECTION 9 — CTA FINAL -->
+    <section class="cta-final">
         <div class="container">
             <div class="container-narrow">
-                <h2>Notre approche</h2>
-                
-                <div class="values-list">
-                    <div class="value-item">
-                        <div class="value-icon">📚</div>
-                        <div class="value-content">
-                            <h3>Comprendre avant d'agir</h3>
-                            <p>Nous expliquons simplement, sans jargon. Vous décidez en toute clarté.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="value-item">
-                        <div class="value-icon">🎯</div>
-                        <div class="value-content">
-                            <h3>Fun & sans pression</h3>
-                            <p>Pas de culpabilisation, pas de discours anxiogène. Juste du concret et du positif.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="value-item">
-                        <div class="value-icon">🆓</div>
-                        <div class="value-content">
-                            <h3>Accessible à tous</h3>
-                            <p>Quiz, ateliers et ressources 100% gratuits. L'accompagnement personnalisé reste optionnel.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="value-item">
-                        <div class="value-icon">👨‍👩‍👧‍👦</div>
-                        <div class="value-content">
-                            <h3>Par des parents, pour des parents</h3>
-                            <p>Nous vivons les mêmes questionnements que vous. Nous partageons juste ce que nous aurions aimé savoir.</p>
-                        </div>
-                    </div>
+                <h2>Commencez par un premier quiz ou un webinaire</h2>
+                <div class="cta-buttons">
+                    <a href="#quiz" class="btn btn-primary">Faire le quiz gratuit</a>
+                    <a href="#webinaires" class="btn btn-secondary">Voir les webinaires</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quiz CTA -->
-    <section id="quiz" class="quiz-section">
-        <div class="container">
-            <div class="quiz-box">
-                <h2>🎯 Par où commencer ?</h2>
-                <p>Faites le quiz gratuit pour identifier vos priorités en 5 minutes</p>
-                
-                <form class="quiz-form" id="quizForm">
-                    <div class="form-group">
-                        <label>Votre prénom</label>
-                        <input type="text" name="prenom" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Votre email</label>
-                        <input type="email" name="email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Votre situation</label>
-                        <select name="situation" required>
-                            <option value="">-- Choisissez --</option>
-                            <option value="enceinte">Enceinte / Projet d'enfant</option>
-                            <option value="jeune-parent">Jeune parent (enfants < 5 ans)</option>
-                            <option value="parent">Parent (enfants 5-18 ans)</option>
-                            <option value="entrepreneur">Entrepreneur·e avec famille</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-full">Démarrer le quiz 🚀</button>
-                    
-                    <p class="form-note">Résultats instantanés + feuille de route personnalisée</p>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="faq-section">
-        <div class="container">
-            <div class="container-narrow">
-                <h2>Questions fréquentes</h2>
-                
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <h3>C'est vraiment gratuit ?</h3>
-                        <p>Oui ! Les quiz, ateliers et ressources sont 100% gratuits. Nous proposons aussi un accompagnement personnalisé payant (optionnel) pour ceux qui veulent aller plus loin.</p>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <h3>Vous vendez des placements ?</h3>
-                        <p>Non. OP! est une plateforme pédagogique. Si vous voulez être accompagné pour investir, nous vous orientons vers un conseiller en gestion de patrimoine (CGP) indépendant.</p>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <h3>C'est pour qui exactement ?</h3>
-                        <p>Pour tous les parents (ou futurs parents) qui veulent comprendre l'argent et prendre de meilleures décisions pour leur foyer. Peu importe vos revenus.</p>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <h3>Je n'y connais rien en finance, c'est grave ?</h3>
-                        <p>Au contraire ! OP! est fait pour ça. On explique tout simplement, sans jargon, sans jugement.</p>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <h3>Comment vous gagnez de l'argent alors ?</h3>
-                        <p>Sur l'accompagnement personnalisé (si vous choisissez d'être suivi par un CGP). Le reste est gratuit pour créer une communauté de parents mieux informés.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- FOOTER -->
+    <footer id="contact" class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
                     <div class="footer-logo">
-                        <span class="logo-op">OP!</span>
-                        <span class="footer-tagline">Santé financière des parents</span>
+                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
+                        <span class="footer-tagline">booste tes finances !</span>
                     </div>
-                    <p>La 1ère plateforme pour comprendre l'argent quand on devient parent.</p>
+                    <p>La plateforme d'éducation financière dédiée aux parents.</p>
                 </div>
                 
                 <div class="footer-col">
                     <h4>Navigation</h4>
                     <ul>
-                        <li><a href="#comment-ca-marche">Comment ça marche</a></li>
-                        <li><a href="#ateliers">Ateliers</a></li>
-                        <li><a href="#methode">Notre méthode</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#formations">Formations</a></li>
+                        <li><a href="#webinaires">Webinaires</a></li>
+                        <li><a href="#investir">Investir</a></li>
+                        <li><a href="#missions">Missions OP!</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 
@@ -369,7 +328,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 OP! - Tous droits réservés</p>
+                <p>&copy; 2025 OP! - Tous droits réservés</p>
                 <div class="footer-legal">
                     <a href="mentions-legales.html">Mentions légales</a>
                     <a href="politique-confidentialite.html">Confidentialité</a>

@@ -298,6 +298,15 @@ section {
     font-weight: 500;
     opacity: 0.9;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.nav-icon {
+    font-size: 0.9rem;
+    filter: grayscale(100%) brightness(10);
+    opacity: 0.9;
 }
 
 .nav a::after {

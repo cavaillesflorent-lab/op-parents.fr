@@ -296,7 +296,7 @@ section {
     color: var(--white);
     font-size: 0.95rem;
     font-weight: 500;
-    opacity: 0.9;
+    opacity: 1;
     position: relative;
     display: flex;
     align-items: center;
@@ -307,6 +307,10 @@ section {
     font-size: 0.9rem;
     filter: grayscale(100%) brightness(10);
     opacity: 0.9;
+}
+
+.nav a:hover {
+    opacity: 1;
 }
 
 .nav a::after {

@@ -428,6 +428,193 @@ section {
    VALUE PROPOSITION
    ======================================== */
 
+.section-intro {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto var(--space-2xl);
+}
+
+/* ========================================
+   TRIPTYQUE SECTION (STYLE LIZEA CARE)
+   ======================================== */
+
+.triptych-section {
+    background: var(--off-white);
+    padding: var(--space-4xl) 0;
+}
+
+.triptych-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+}
+
+.triptych-card {
+    background: var(--white);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition);
+}
+
+.triptych-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+.triptych-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.triptych-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.triptych-card:hover .triptych-image img {
+    transform: scale(1.05);
+}
+
+.triptych-content {
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+.triptych-content h3 {
+    color: var(--vert-fonce);
+    margin-bottom: var(--space-sm);
+    font-size: 1.4rem;
+}
+
+.triptych-content p {
+    margin-bottom: var(--space-lg);
+    font-size: 0.95rem;
+}
+
+/* ========================================
+   MOMENTS SECTION V2 (AMÉLIORÉE)
+   ======================================== */
+
+.moments-section-v2 {
+    background: var(--vert-clair);
+    padding: var(--space-4xl) 0;
+}
+
+.moments-section-v2 h2 {
+    color: var(--vert-fonce);
+}
+
+.moments-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+}
+
+.moment-card {
+    background: var(--white);
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition);
+    border: 2px solid transparent;
+}
+
+.moment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--peche);
+}
+
+.moment-card-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    display: block;
+}
+
+.moment-card h4 {
+    color: var(--vert-fonce);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    font-size: 1.1rem;
+}
+
+.moment-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+/* ========================================
+   AUDIENCE SECTION V2 (TRIPTYQUE)
+   ======================================== */
+
+.for-who-section-v2 {
+    background: var(--white);
+    padding: var(--space-4xl) 0;
+}
+
+.audience-triptych {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.audience-card {
+    background: var(--off-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-xl);
+    text-align: center;
+    transition: all var(--transition);
+    border: 2px solid var(--gray-200);
+}
+
+.audience-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--terracotta);
+}
+
+.audience-card-image {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--vert-clair) 0%, var(--jaune-dore) 100%);
+    border-radius: 50%;
+    margin: 0 auto var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.audience-emoji {
+    font-size: 3.5rem;
+}
+
+.audience-card h4 {
+    color: var(--vert-fonce);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    font-size: 1.2rem;
+}
+
+.audience-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+/* ========================================
+   VALUE PROPOSITION (suite)
+   ======================================== */
+
 .value-proposition {
     background: var(--white);
     text-align: center;
@@ -911,14 +1098,18 @@ section {
 @media (max-width: 1024px) {
     .benefits-grid,
     .offerings-grid,
-    .testimonials-grid {
+    .testimonials-grid,
+    .triptych-grid,
+    .moments-cards,
+    .audience-triptych {
         grid-template-columns: 1fr;
         max-width: 500px;
         margin: 0 auto;
     }
     
-    .moments-grid {
+    .moments-cards {
         grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
     }
     
     .footer-content {
@@ -972,7 +1163,10 @@ section {
         align-items: center;
     }
     
-    .moments-grid {
+    .moments-grid,
+    .triptych-grid,
+    .moments-cards,
+    .audience-triptych {
         grid-template-columns: 1fr;
     }
     

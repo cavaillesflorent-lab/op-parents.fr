@@ -249,7 +249,7 @@ section {
    ======================================== */
 
 .header {
-    background: var(--jaune-dore);
+    background: #3A3F4D;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -277,7 +277,7 @@ section {
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 700;
-    color: var(--vert-fonce);
+    color: var(--white);
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
@@ -289,7 +289,7 @@ section {
 }
 
 .nav a {
-    color: var(--vert-fonce);
+    color: var(--white);
     font-size: 0.95rem;
     font-weight: 500;
     opacity: 1;
@@ -301,12 +301,12 @@ section {
 
 .nav-icon {
     font-size: 0.9rem;
-    filter: grayscale(100%) brightness(0);
-    opacity: 0.7;
+    filter: grayscale(100%) brightness(10);
+    opacity: 0.9;
 }
 
 .nav a:hover {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 .nav a::after {
@@ -316,7 +316,7 @@ section {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--vert-fonce);
+    background: var(--white);
     transition: width var(--transition);
 }
 
@@ -341,7 +341,7 @@ section {
 .mobile-toggle span {
     width: 24px;
     height: 2px;
-    background: var(--vert-fonce);
+    background: var(--white);
     border-radius: 2px;
     transition: var(--transition);
 }
@@ -1236,7 +1236,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--jaune-dore);
+        background: #3A3F4D;
         flex-direction: column;
         padding: var(--space-lg);
         gap: var(--space-md);

@@ -249,7 +249,7 @@ section {
    ======================================== */
 
 .header {
-    background: var(--vert-fonce);
+    background: var(--vert-clair);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -277,13 +277,9 @@ section {
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 700;
-    color: var(--vert-clair);
+    color: var(--vert-fonce);
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    background: linear-gradient(135deg, var(--vert-clair) 0%, var(--jaune-dore) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .nav {
@@ -293,7 +289,7 @@ section {
 }
 
 .nav a {
-    color: var(--white);
+    color: var(--vert-fonce);
     font-size: 0.95rem;
     font-weight: 500;
     opacity: 1;
@@ -305,8 +301,8 @@ section {
 
 .nav-icon {
     font-size: 0.9rem;
-    filter: grayscale(100%) brightness(10);
-    opacity: 0.9;
+    filter: grayscale(100%) brightness(0);
+    opacity: 0.7;
 }
 
 .nav a:hover {
@@ -320,7 +316,7 @@ section {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--vert-clair);
+    background: var(--vert-fonce);
     transition: width var(--transition);
 }
 
@@ -345,7 +341,7 @@ section {
 .mobile-toggle span {
     width: 24px;
     height: 2px;
-    background: var(--white);
+    background: var(--vert-fonce);
     border-radius: 2px;
     transition: var(--transition);
 }
@@ -378,10 +374,17 @@ section {
     position: relative;
     z-index: 2;
     max-width: 800px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .hero-content {
     max-width: 700px;
+}
+
+.hero-content-right {
+    text-align: right;
+    margin-left: auto;
 }
 
 .hero-tagline {
@@ -415,6 +418,7 @@ section {
     display: flex;
     gap: var(--space-md);
     flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .hero .btn-primary {
@@ -453,7 +457,7 @@ section {
    ======================================== */
 
 .triptych-section {
-    background: var(--off-white);
+    background: var(--jaune-dore);
     padding: var(--space-4xl) 0;
 }
 
@@ -642,6 +646,95 @@ section {
     color: var(--text-secondary);
     max-width: 700px;
     margin: 0 auto;
+}
+
+/* ========================================
+   STATS SECTION
+   ======================================== */
+
+.stats-section {
+    background: var(--white);
+    padding: var(--space-4xl) 0;
+}
+
+.stats-section h2 {
+    max-width: 900px;
+    margin: 0 auto var(--space-3xl);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+}
+
+.stat-card {
+    background: var(--off-white);
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    border-left: 4px solid var(--terracotta);
+}
+
+.stat-number {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--terracotta);
+    margin-bottom: var(--space-md);
+}
+
+.stat-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* ========================================
+   WHY SECTION (POURQUOI INVESTIR)
+   ======================================== */
+
+.why-section {
+    background: var(--vert-clair);
+    padding: var(--space-4xl) 0;
+}
+
+.why-section h2 {
+    color: var(--vert-fonce);
+}
+
+.why-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.why-content p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin-bottom: var(--space-lg);
+    color: var(--text-primary);
+}
+
+.highlight-paragraph {
+    font-size: 1.2rem;
+    color: var(--vert-fonce);
+    text-align: center;
+    margin: var(--space-xl) 0;
+}
+
+.cta-text {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--terracotta);
+    text-align: center;
+    font-style: italic;
+    margin: var(--space-xl) 0 var(--space-lg);
+}
+
+.why-cta {
+    text-align: center;
+    margin-top: var(--space-xl);
 }
 
 /* ========================================
@@ -1114,7 +1207,8 @@ section {
     .testimonials-grid,
     .triptych-grid,
     .moments-cards,
-    .audience-triptych {
+    .audience-triptych,
+    .stats-grid {
         grid-template-columns: 1fr;
         max-width: 500px;
         margin: 0 auto;
@@ -1142,7 +1236,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--vert-fonce);
+        background: var(--vert-clair);
         flex-direction: column;
         padding: var(--space-lg);
         gap: var(--space-md);
@@ -1160,10 +1254,16 @@ section {
     .hero .container {
         text-align: center;
         padding: var(--space-lg);
+        justify-content: center;
     }
     
     .hero-content {
         max-width: 100%;
+    }
+    
+    .hero-content-right {
+        text-align: center;
+        margin-left: 0;
     }
     
     .hero-content h1 {
@@ -1179,7 +1279,8 @@ section {
     .moments-grid,
     .triptych-grid,
     .moments-cards,
-    .audience-triptych {
+    .audience-triptych,
+    .stats-grid {
         grid-template-columns: 1fr;
     }
     

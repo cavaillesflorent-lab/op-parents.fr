@@ -249,7 +249,7 @@ section {
    ======================================== */
 
 .header {
-    background: var(--vert-clair);
+    background: var(--jaune-dore);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -457,7 +457,7 @@ section {
    ======================================== */
 
 .triptych-section {
-    background: var(--jaune-dore);
+    background: var(--vert-clair);
     padding: var(--space-4xl) 0;
 }
 
@@ -1236,7 +1236,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--vert-clair);
+        background: var(--jaune-dore);
         flex-direction: column;
         padding: var(--space-lg);
         gap: var(--space-md);

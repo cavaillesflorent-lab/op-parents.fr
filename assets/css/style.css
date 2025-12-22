@@ -457,7 +457,7 @@ section {
    ======================================== */
 
 .triptych-section {
-    background: var(--vert-clair);
+    background: var(--jaune-dore);
     padding: var(--space-4xl) 0;
 }
 
@@ -673,14 +673,14 @@ section {
     padding: var(--space-xl);
     border-radius: var(--radius-xl);
     text-align: center;
-    border-left: 4px solid var(--terracotta);
+    border: 2px solid var(--jaune-dore);
 }
 
 .stat-number {
     font-family: var(--font-serif);
     font-size: 1.8rem;
     font-weight: 600;
-    color: var(--terracotta);
+    color: var(--vert-fonce);
     margin-bottom: var(--space-md);
 }
 

@@ -1811,3 +1811,13 @@ section {
         gap: var(--space-sm);
     }
 }
+
+/* Lien admin discret */
+.admin-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinaires - OP! Éducation financière des parents</title>
+    <meta name="description" content="Découvrez nos webinaires sur la gestion financière familiale. Des sessions en direct pour approfondir vos connaissances.">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
+                    </a>
+                    <span class="logo-text">booste tes finances !</span>
+                </div>
+                <nav class="nav">
+                    <a href="formations.html"><span class="nav-icon">📚</span> Formations</a>
+                    <a href="webinaires.html" class="active"><span class="nav-icon">🎥</span> Webinaires</a>
+                    <a href="index.html#investir"><span class="nav-icon">💰</span> Investir</a>
+                    <a href="index.html#missions"><span class="nav-icon">🚀</span> Missions OP!</a>
+                    <a href="index.html#contact"><span class="nav-icon">✉️</span> Contact</a>
+                </nav>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Nos Webinaires</h1>
+            <p>Des sessions en direct pour approfondir un sujet précis, à votre rythme, avec des experts.</p>
+        </div>
+    </section>
+
+    <!-- FILTRES -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="a_venir">À venir</button>
+                <button class="filter-btn" data-filter="replay">Replays</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LISTE WEBINAIRES -->
+    <section class="webinaires-list-section">
+        <div class="container">
+            <div class="webinaires-grid" id="webinaires-grid">
+                <div class="loading-state">
+                    <p>Chargement des webinaires...</p>
+                </div>
+            </div>
+            
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <p>Aucun webinaire disponible pour le moment.</p>
+                <a href="index.html#contact" class="btn btn-primary">Être informé des prochains webinaires</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2>Vous souhaitez un webinaire sur un sujet particulier ?</h2>
+                <p>Dites-nous quel thème vous intéresse et nous l'ajouterons à notre programme.</p>
+                <a href="index.html#contact" class="btn btn-primary">Suggérer un thème</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
+                        <span class="footer-tagline">booste tes finances !</span>
+                    </div>
+                    <p>La plateforme d'éducation financière dédiée aux parents.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="formations.html">Formations</a></li>
+                        <li><a href="webinaires.html">Webinaires</a></li>
+                        <li><a href="index.html#investir">Investir</a></li>
+                        <li><a href="index.html#missions">Missions OP!</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Suivez-nous</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
+                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 OP! - Tous droits réservés</p>
+                <div class="footer-legal">
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="politique-confidentialite.html">Confidentialité</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabase-config.js"></script>
+    <script>
+        let allWebinaires = [];
+        let currentFilter = 'all';
+
+        // Charger les webinaires
+        async function loadWebinaires() {
+            const { data, error } = await supabaseClient
+                .from('webinaires')
+                .select('*')
+                .order('date_heure', { ascending: true });
+
+            if (error) {
+                console.error('Erreur:', error);
+                document.getElementById('webinaires-grid').innerHTML = '<p class="error">Erreur de chargement</p>';
+                return;
+            }
+
+            allWebinaires = data || [];
+            displayWebinaires();
+        }
+
+        // Afficher les webinaires
+        function displayWebinaires() {
+            const grid = document.getElementById('webinaires-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            let filtered = allWebinaires;
+            if (currentFilter !== 'all') {
+                filtered = allWebinaires.filter(w => w.statut === currentFilter);
+            }
+
+            if (filtered.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = filtered.map(w => `
+                <div class="webinaire-card">
+                    ${w.image_url ? `<div class="webinaire-image"><img src="${w.image_url}" alt="${w.titre}"></div>` : ''}
+                    <div class="webinaire-content">
+                        <span class="webinaire-badge badge-${w.statut}">${formatStatut(w.statut)}</span>
+                        <h3>${w.titre}</h3>
+                        ${w.description ? `<p>${w.description}</p>` : ''}
+                        ${w.date_heure ? `<div class="webinaire-date">📅 ${formatDate(w.date_heure)}</div>` : ''}
+                        ${w.statut === 'a_venir' && w.lien_meet ? 
+                            `<a href="${w.lien_meet}" target="_blank" class="btn btn-primary">S'inscrire</a>` : 
+                            w.statut === 'replay' && w.lien_meet ? 
+                            `<a href="${w.lien_meet}" target="_blank" class="btn btn-secondary">Voir le replay</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Formater le statut
+        function formatStatut(statut) {
+            const labels = {
+                'a_venir': 'À venir',
+                'replay': 'Replay disponible',
+                'termine': 'Terminé'
+            };
+            return labels[statut] || statut;
+        }
+
+        // Formater la date
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Filtres
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                displayWebinaires();
+            });
+        });
+
+        // Init
+        loadWebinaires();
+    </script>
+</body>
+</html>

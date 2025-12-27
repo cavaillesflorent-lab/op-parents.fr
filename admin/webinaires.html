@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinaires - Admin OP!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
+                <span>Admin OP!</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="webinaires.html" class="nav-item active">
+                    <span class="nav-icon">🎥</span>
+                    Webinaires
+                </a>
+                <a href="formations.html" class="nav-item">
+                    <span class="nav-icon">📚</span>
+                    Formations
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html" class="nav-item">
+                    <span class="nav-icon">🌐</span>
+                    Voir le site
+                </a>
+                <button id="logout-btn" class="nav-item logout-btn">
+                    <span class="nav-icon">🚪</span>
+                    Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Webinaires</h1>
+                <button class="btn btn-primary" id="new-webinaire-btn">
+                    ➕ Nouveau webinaire
+                </button>
+            </header>
+
+            <div class="admin-content">
+                <!-- Liste des webinaires -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="webinaires-list">
+                            <tr>
+                                <td colspan="4" class="loading">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Formulaire -->
+    <div class="modal" id="webinaire-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Nouveau webinaire</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            
+            <form id="webinaire-form" class="admin-form">
+                <input type="hidden" id="webinaire-id">
+                
+                <div class="form-group">
+                    <label for="titre">Titre *</label>
+                    <input type="text" id="titre" name="titre" required placeholder="Ex: Comment préparer l'arrivée de bébé">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Description du webinaire..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date_heure">Date et heure</label>
+                        <input type="datetime-local" id="date_heure" name="date_heure">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="statut">Statut</label>
+                        <select id="statut" name="statut">
+                            <option value="a_venir">À venir</option>
+                            <option value="replay">Replay disponible</option>
+                            <option value="termine">Terminé</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lien_meet">Lien Google Meet</label>
+                    <input type="url" id="lien_meet" name="lien_meet" placeholder="https://meet.google.com/xxx-xxx-xxx">
+                </div>
+                
+                <div class="form-group">
+                    <label for="image_url">URL de l'image</label>
+                    <input type="url" id="image_url" name="image_url" placeholder="https://...">
+                    <small class="form-hint">Utilisez un service comme Imgur ou Cloudinary pour héberger vos images</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Annuler</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Enregistrer</span>
+                        <span class="btn-loader" style="display: none;">Enregistrement...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation Suppression -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirmer la suppression</h2>
+                <button class="modal-close" id="delete-modal-close">&times;</button>
+            </div>
+            <p>Êtes-vous sûr de vouloir supprimer ce webinaire ?</p>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
+                <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/supabase-config.js"></script>
+    <script>
+        let currentDeleteId = null;
+
+        // Vérifier l'authentification
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return session;
+        }
+
+        // Charger les webinaires
+        async function loadWebinaires() {
+            const { data, error } = await supabaseClient
+                .from('webinaires')
+                .select('*')
+                .order('date_heure', { ascending: false });
+
+            if (error) {
+                console.error('Erreur:', error);
+                return;
+            }
+
+            displayWebinaires(data || []);
+        }
+
+        // Afficher les webinaires
+        function displayWebinaires(webinaires) {
+            const tbody = document.getElementById('webinaires-list');
+            
+            if (webinaires.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty">Aucun webinaire. Créez-en un !</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = webinaires.map(w => `
+                <tr>
+                    <td>
+                        <strong>${w.titre}</strong>
+                        ${w.description ? `<br><small>${w.description.substring(0, 50)}...</small>` : ''}
+                    </td>
+                    <td>${w.date_heure ? new Date(w.date_heure).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
+                    <td><span class="status-badge status-${w.statut}">${formatStatut(w.statut)}</span></td>
+                    <td class="actions-cell">
+                        <button class="btn-icon" onclick="editWebinaire('${w.id}')" title="Modifier">✏️</button>
+                        <button class="btn-icon btn-danger" onclick="confirmDelete('${w.id}')" title="Supprimer">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Formater le statut
+        function formatStatut(statut) {
+            const labels = {
+                'a_venir': 'À venir',
+                'replay': 'Replay',
+                'termine': 'Terminé'
+            };
+            return labels[statut] || statut;
+        }
+
+        // Ouvrir le modal
+        function openModal(title = 'Nouveau webinaire') {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('webinaire-modal').classList.add('active');
+        }
+
+        // Fermer le modal
+        function closeModal() {
+            document.getElementById('webinaire-modal').classList.remove('active');
+            document.getElementById('webinaire-form').reset();
+            document.getElementById('webinaire-id').value = '';
+        }
+
+        // Nouveau webinaire
+        document.getElementById('new-webinaire-btn').addEventListener('click', () => {
+            openModal('Nouveau webinaire');
+        });
+
+        // Fermer modal
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('cancel-btn').addEventListener('click', closeModal);
+        document.querySelector('#webinaire-modal .modal-overlay').addEventListener('click', closeModal);
+
+        // Modifier un webinaire
+        async function editWebinaire(id) {
+            const { data, error } = await supabaseClient
+                .from('webinaires')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error || !data) {
+                alert('Erreur lors du chargement');
+                return;
+            }
+
+            document.getElementById('webinaire-id').value = data.id;
+            document.getElementById('titre').value = data.titre || '';
+            document.getElementById('description').value = data.description || '';
+            document.getElementById('date_heure').value = data.date_heure ? data.date_heure.slice(0, 16) : '';
+            document.getElementById('statut').value = data.statut || 'a_venir';
+            document.getElementById('lien_meet').value = data.lien_meet || '';
+            document.getElementById('image_url').value = data.image_url || '';
+
+            openModal('Modifier le webinaire');
+        }
+
+        // Soumettre le formulaire
+        document.getElementById('webinaire-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnText = document.querySelector('.btn-text');
+            const btnLoader = document.querySelector('.btn-loader');
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline';
+
+            const id = document.getElementById('webinaire-id').value;
+            const webinaire = {
+                titre: document.getElementById('titre').value,
+                description: document.getElementById('description').value,
+                date_heure: document.getElementById('date_heure').value || null,
+                statut: document.getElementById('statut').value,
+                lien_meet: document.getElementById('lien_meet').value,
+                image_url: document.getElementById('image_url').value
+            };
+
+            let error;
+            if (id) {
+                // Update
+                ({ error } = await supabaseClient.from('webinaires').update(webinaire).eq('id', id));
+            } else {
+                // Insert
+                ({ error } = await supabaseClient.from('webinaires').insert([webinaire]));
+            }
+
+            btnText.style.display = 'inline';
+            btnLoader.style.display = 'none';
+
+            if (error) {
+                alert('Erreur: ' + error.message);
+                return;
+            }
+
+            closeModal();
+            loadWebinaires();
+        });
+
+        // Confirmation suppression
+        function confirmDelete(id) {
+            currentDeleteId = id;
+            document.getElementById('delete-modal').classList.add('active');
+        }
+
+        document.getElementById('delete-modal-close').addEventListener('click', () => {
+            document.getElementById('delete-modal').classList.remove('active');
+        });
+        document.getElementById('delete-cancel').addEventListener('click', () => {
+            document.getElementById('delete-modal').classList.remove('active');
+        });
+
+        // Supprimer
+        document.getElementById('delete-confirm').addEventListener('click', async () => {
+            if (!currentDeleteId) return;
+
+            const { error } = await supabaseClient
+                .from('webinaires')
+                .delete()
+                .eq('id', currentDeleteId);
+
+            if (error) {
+                alert('Erreur: ' + error.message);
+                return;
+            }
+
+            document.getElementById('delete-modal').classList.remove('active');
+            currentDeleteId = null;
+            loadWebinaires();
+        });
+
+        // Déconnexion
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        });
+
+        // Init
+        checkAuth().then(session => {
+            if (session) loadWebinaires();
+        });
+    </script>
+</body>
+</html>

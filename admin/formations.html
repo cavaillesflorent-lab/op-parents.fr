@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formations - Admin OP!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
+                <span>Admin OP!</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="webinaires.html" class="nav-item">
+                    <span class="nav-icon">🎥</span>
+                    Webinaires
+                </a>
+                <a href="formations.html" class="nav-item active">
+                    <span class="nav-icon">📚</span>
+                    Formations
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="../index.html" class="nav-item">
+                    <span class="nav-icon">🌐</span>
+                    Voir le site
+                </a>
+                <button id="logout-btn" class="nav-item logout-btn">
+                    <span class="nav-icon">🚪</span>
+                    Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Formations</h1>
+                <button class="btn btn-primary" id="new-formation-btn">
+                    ➕ Nouvelle formation
+                </button>
+            </header>
+
+            <div class="admin-content">
+                <!-- Liste des formations -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Modules</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formations-list">
+                            <tr>
+                                <td colspan="4" class="loading">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Formation -->
+    <div class="modal" id="formation-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modal-title">Nouvelle formation</h2>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            
+            <form id="formation-form" class="admin-form">
+                <input type="hidden" id="formation-id">
+                
+                <div class="form-section">
+                    <h3>Informations générales</h3>
+                    
+                    <div class="form-group">
+                        <label for="titre">Titre *</label>
+                        <input type="text" id="titre" name="titre" required placeholder="Ex: Les bases de la gestion financière familiale">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Description de la formation..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="image_url">URL de l'image</label>
+                            <input type="url" id="image_url" name="image_url" placeholder="https://...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="published">Publier</label>
+                            <label class="toggle">
+                                <input type="checkbox" id="published" name="published">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Visible sur le site</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section" id="modules-section" style="display: none;">
+                    <h3>Modules</h3>
+                    <p class="form-hint">Ajoutez des modules à votre formation (vidéos, PDF, texte)</p>
+                    
+                    <div id="modules-list" class="modules-list"></div>
+                    
+                    <button type="button" class="btn btn-secondary btn-small" id="add-module-btn">
+                        ➕ Ajouter un module
+                    </button>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Annuler</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Enregistrer</span>
+                        <span class="btn-loader" style="display: none;">Enregistrement...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation Suppression -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirmer la suppression</h2>
+                <button class="modal-close" id="delete-modal-close">&times;</button>
+            </div>
+            <p>Êtes-vous sûr de vouloir supprimer cette formation et tous ses modules ?</p>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
+                <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/supabase-config.js"></script>
+    <script>
+        let currentDeleteId = null;
+        let moduleCounter = 0;
+        let existingModules = [];
+
+        // Vérifier l'authentification
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return null;
+            }
+            return session;
+        }
+
+        // Charger les formations
+        async function loadFormations() {
+            const { data: formations, error } = await supabaseClient
+                .from('formations')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Erreur:', error);
+                return;
+            }
+
+            // Charger le nombre de modules pour chaque formation
+            const { data: modules } = await supabaseClient
+                .from('modules')
+                .select('formation_id');
+
+            const moduleCounts = {};
+            modules?.forEach(m => {
+                moduleCounts[m.formation_id] = (moduleCounts[m.formation_id] || 0) + 1;
+            });
+
+            displayFormations(formations || [], moduleCounts);
+        }
+
+        // Afficher les formations
+        function displayFormations(formations, moduleCounts) {
+            const tbody = document.getElementById('formations-list');
+            
+            if (formations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty">Aucune formation. Créez-en une !</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = formations.map(f => `
+                <tr>
+                    <td>
+                        <strong>${f.titre}</strong>
+                        ${f.description ? `<br><small>${f.description.substring(0, 50)}...</small>` : ''}
+                    </td>
+                    <td>${moduleCounts[f.id] || 0} module(s)</td>
+                    <td>
+                        <span class="status-badge ${f.published ? 'status-a_venir' : 'status-termine'}">
+                            ${f.published ? 'Publiée' : 'Brouillon'}
+                        </span>
+                    </td>
+                    <td class="actions-cell">
+                        <button class="btn-icon" onclick="editFormation('${f.id}')" title="Modifier">✏️</button>
+                        <button class="btn-icon btn-danger" onclick="confirmDelete('${f.id}')" title="Supprimer">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Template module
+        function createModuleTemplate(module = {}) {
+            const id = module.id || `new-${moduleCounter++}`;
+            return `
+                <div class="module-item" data-module-id="${id}">
+                    <div class="module-header">
+                        <span class="module-drag">⋮⋮</span>
+                        <span class="module-number">#${moduleCounter}</span>
+                        <button type="button" class="btn-icon btn-danger" onclick="removeModule('${id}')">🗑️</button>
+                    </div>
+                    <div class="module-content">
+                        <div class="form-group">
+                            <label>Titre du module</label>
+                            <input type="text" name="module_titre_${id}" value="${module.titre || ''}" placeholder="Ex: Introduction">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select name="module_type_${id}" onchange="toggleModuleContent('${id}', this.value)">
+                                    <option value="video" ${module.type === 'video' ? 'selected' : ''}>Vidéo</option>
+                                    <option value="pdf" ${module.type === 'pdf' ? 'selected' : ''}>PDF</option>
+                                    <option value="texte" ${module.type === 'texte' ? 'selected' : ''}>Texte</option>
+                                </select>
+                            </div>
+                            <div class="form-group module-url-group" ${module.type === 'texte' ? 'style="display:none"' : ''}>
+                                <label>URL</label>
+                                <input type="url" name="module_url_${id}" value="${module.contenu_url || ''}" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="form-group module-texte-group" ${module.type !== 'texte' ? 'style="display:none"' : ''}>
+                            <label>Contenu texte</label>
+                            <textarea name="module_texte_${id}" rows="3" placeholder="Contenu du module...">${module.contenu_texte || ''}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle contenu module
+        function toggleModuleContent(id, type) {
+            const moduleItem = document.querySelector(`[data-module-id="${id}"]`);
+            const urlGroup = moduleItem.querySelector('.module-url-group');
+            const texteGroup = moduleItem.querySelector('.module-texte-group');
+            
+            if (type === 'texte') {
+                urlGroup.style.display = 'none';
+                texteGroup.style.display = 'block';
+            } else {
+                urlGroup.style.display = 'block';
+                texteGroup.style.display = 'none';
+            }
+        }
+
+        // Ajouter un module
+        document.getElementById('add-module-btn').addEventListener('click', () => {
+            moduleCounter++;
+            const container = document.getElementById('modules-list');
+            container.insertAdjacentHTML('beforeend', createModuleTemplate());
+        });
+
+        // Supprimer un module
+        function removeModule(id) {
+            const moduleItem = document.querySelector(`[data-module-id="${id}"]`);
+            if (moduleItem) moduleItem.remove();
+        }
+
+        // Ouvrir le modal
+        function openModal(title = 'Nouvelle formation', isEdit = false) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modules-section').style.display = isEdit ? 'block' : 'none';
+            document.getElementById('formation-modal').classList.add('active');
+        }
+
+        // Fermer le modal
+        function closeModal() {
+            document.getElementById('formation-modal').classList.remove('active');
+            document.getElementById('formation-form').reset();
+            document.getElementById('formation-id').value = '';
+            document.getElementById('modules-list').innerHTML = '';
+            moduleCounter = 0;
+            existingModules = [];
+        }
+
+        // Nouveau
+        document.getElementById('new-formation-btn').addEventListener('click', () => {
+            openModal('Nouvelle formation', false);
+        });
+
+        // Fermer modal
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('cancel-btn').addEventListener('click', closeModal);
+        document.querySelector('#formation-modal .modal-overlay').addEventListener('click', closeModal);
+
+        // Modifier une formation
+        async function editFormation(id) {
+            const { data: formation, error } = await supabaseClient
+                .from('formations')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error || !formation) {
+                alert('Erreur lors du chargement');
+                return;
+            }
+
+            // Charger les modules
+            const { data: modules } = await supabaseClient
+                .from('modules')
+                .select('*')
+                .eq('formation_id', id)
+                .order('ordre', { ascending: true });
+
+            existingModules = modules || [];
+
+            document.getElementById('formation-id').value = formation.id;
+            document.getElementById('titre').value = formation.titre || '';
+            document.getElementById('description').value = formation.description || '';
+            document.getElementById('image_url').value = formation.image_url || '';
+            document.getElementById('published').checked = formation.published || false;
+
+            // Afficher les modules
+            const modulesContainer = document.getElementById('modules-list');
+            modulesContainer.innerHTML = '';
+            existingModules.forEach((m, i) => {
+                moduleCounter = i + 1;
+                modulesContainer.insertAdjacentHTML('beforeend', createModuleTemplate(m));
+            });
+
+            openModal('Modifier la formation', true);
+        }
+
+        // Soumettre le formulaire
+        document.getElementById('formation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnText = document.querySelector('.btn-text');
+            const btnLoader = document.querySelector('.btn-loader');
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline';
+
+            const id = document.getElementById('formation-id').value;
+            const formation = {
+                titre: document.getElementById('titre').value,
+                description: document.getElementById('description').value,
+                image_url: document.getElementById('image_url').value,
+                published: document.getElementById('published').checked
+            };
+
+            let formationId = id;
+            let error;
+
+            if (id) {
+                // Update formation
+                ({ error } = await supabaseClient.from('formations').update(formation).eq('id', id));
+            } else {
+                // Insert formation
+                const { data, error: insertError } = await supabaseClient.from('formations').insert([formation]).select();
+                error = insertError;
+                formationId = data?.[0]?.id;
+            }
+
+            if (error) {
+                alert('Erreur: ' + error.message);
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                return;
+            }
+
+            // Gérer les modules si c'est une édition
+            if (id && formationId) {
+                // Supprimer les anciens modules
+                await supabaseClient.from('modules').delete().eq('formation_id', formationId);
+
+                // Insérer les nouveaux modules
+                const moduleItems = document.querySelectorAll('.module-item');
+                const newModules = [];
+                
+                moduleItems.forEach((item, index) => {
+                    const moduleId = item.dataset.moduleId;
+                    newModules.push({
+                        formation_id: formationId,
+                        titre: document.querySelector(`[name="module_titre_${moduleId}"]`).value,
+                        type: document.querySelector(`[name="module_type_${moduleId}"]`).value,
+                        contenu_url: document.querySelector(`[name="module_url_${moduleId}"]`)?.value || null,
+                        contenu_texte: document.querySelector(`[name="module_texte_${moduleId}"]`)?.value || null,
+                        ordre: index
+                    });
+                });
+
+                if (newModules.length > 0) {
+                    await supabaseClient.from('modules').insert(newModules);
+                }
+            }
+
+            btnText.style.display = 'inline';
+            btnLoader.style.display = 'none';
+            closeModal();
+            loadFormations();
+        });
+
+        // Confirmation suppression
+        function confirmDelete(id) {
+            currentDeleteId = id;
+            document.getElementById('delete-modal').classList.add('active');
+        }
+
+        document.getElementById('delete-modal-close').addEventListener('click', () => {
+            document.getElementById('delete-modal').classList.remove('active');
+        });
+        document.getElementById('delete-cancel').addEventListener('click', () => {
+            document.getElementById('delete-modal').classList.remove('active');
+        });
+
+        // Supprimer
+        document.getElementById('delete-confirm').addEventListener('click', async () => {
+            if (!currentDeleteId) return;
+
+            // Les modules sont supprimés automatiquement (ON DELETE CASCADE)
+            const { error } = await supabaseClient
+                .from('formations')
+                .delete()
+                .eq('id', currentDeleteId);
+
+            if (error) {
+                alert('Erreur: ' + error.message);
+                return;
+            }
+
+            document.getElementById('delete-modal').classList.remove('active');
+            currentDeleteId = null;
+            loadFormations();
+        });
+
+        // Déconnexion
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'login.html';
+        });
+
+        // Init
+        checkAuth().then(session => {
+            if (session) loadFormations();
+        });
+    </script>
+</body>
+</html>

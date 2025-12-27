@@ -156,8 +156,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../assets/js/supabase-config.js"></script>
     <script>
+        // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
+        const SUPABASE_URL = 'https://XXXXX.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyXXXXX';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let currentDeleteId = null;
         let moduleCounter = 0;
         let existingModules = [];

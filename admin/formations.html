@@ -166,15 +166,14 @@
         let moduleCounter = 0;
         let existingModules = [];
 
-        // Vérifier l'authentification
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+        // Écouter les changements d'authentification
+        supabaseClient.auth.onAuthStateChange((event, session) => {
             if (!session) {
                 window.location.href = 'login.html';
-                return null;
+            } else {
+                loadFormations();
             }
-            return session;
-        }
+        });
 
         // Charger les formations
         async function loadFormations() {
@@ -468,11 +467,6 @@
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
-        });
-
-        // Init
-        checkAuth().then(session => {
-            if (session) loadFormations();
         });
     </script>
 </body>

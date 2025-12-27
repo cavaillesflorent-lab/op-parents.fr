@@ -160,15 +160,14 @@
 
         let currentDeleteId = null;
 
-        // Vérifier l'authentification
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+        // Écouter les changements d'authentification
+        supabaseClient.auth.onAuthStateChange((event, session) => {
             if (!session) {
                 window.location.href = 'login.html';
-                return null;
+            } else {
+                loadWebinaires();
             }
-            return session;
-        }
+        });
 
         // Charger les webinaires
         async function loadWebinaires() {
@@ -343,11 +342,6 @@
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
-        });
-
-        // Init
-        checkAuth().then(session => {
-            if (session) loadWebinaires();
         });
     </script>
 </body>

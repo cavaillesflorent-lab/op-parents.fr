@@ -51,17 +51,11 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         // Vérifier si déjà connecté
-        async function checkAuth() {
-            try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
-                    window.location.href = 'index.html';
-                }
-            } catch (error) {
-                console.log('Pas de session active');
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                window.location.href = 'index.html';
             }
-        }
-        checkAuth();
+        });
 
         // Gestion du formulaire de connexion
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -86,9 +80,10 @@
                 
                 if (error) throw error;
                 
-                window.location.href = 'index.html';
+                // La redirection sera gérée par onAuthStateChange
             } catch (error) {
-                errorDiv.textContent = 'Email ou mot de passe incorrect';
+                console.error('Erreur connexion:', error);
+                errorDiv.textContent = error.message || 'Email ou mot de passe incorrect';
                 errorDiv.style.display = 'block';
                 btnText.style.display = 'inline';
                 btnLoader.style.display = 'none';

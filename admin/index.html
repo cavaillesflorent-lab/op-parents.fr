@@ -117,20 +117,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
-        const SUPABASE_URL = 'https://XXXXX.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyXXXXX';
+       const SUPABASE_URL = 'https://qjdoepgvqpmckqnxcsob.supabase.co'; // Remplace XXXXX par ton URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4'; 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Vérifier l'authentification
-        async function checkAuth() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+        // Écouter les changements d'authentification
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            console.log('Auth event:', event, session);
             if (!session) {
                 window.location.href = 'login.html';
-                return null;
+            } else {
+                document.querySelector('.user-email').textContent = session.user.email;
+                loadStats();
             }
-            document.querySelector('.user-email').textContent = session.user.email;
-            return session;
-        }
+        });
 
         // Charger les statistiques
         async function loadStats() {
@@ -176,11 +176,6 @@
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';
-        });
-
-        // Init
-        checkAuth().then(session => {
-            if (session) loadStats();
         });
     </script>
 </body>

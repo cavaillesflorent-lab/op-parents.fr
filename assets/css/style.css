@@ -1845,7 +1845,7 @@ section {
 
 /* Header de l'encart */
 .pourquoi-header {
-    background: var(--peche);
+    background: linear-gradient(135deg, var(--vert-fonce) 0%, #4A7C5C 100%);
     padding: 3rem 3rem 2.5rem;
     text-align: center;
     color: white;
@@ -1928,7 +1928,7 @@ section {
 .raison-icon {
     width: 56px;
     height: 56px;
-    background: var(--vert-fonce);
+    background: var(--terracotta);
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -1969,7 +1969,7 @@ section {
     gap: 0.5rem;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--terracotta);
+    color: var(--vert-fonce);
 }
 
 .trust-item .emoji {
@@ -2025,6 +2025,468 @@ section {
     }
 
     .pourquoi-cta .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* ========================================
+   PAGE MISSION
+   ======================================== */
+
+/* Hero Mission */
+.mission-hero {
+    background: linear-gradient(135deg, var(--vert-fonce) 0%, #4A7C5C 100%);
+    padding: 4rem 0;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--vert-clair) 0%, transparent 70%);
+    opacity: 0.15;
+}
+
+.mission-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.mission-emoji {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.mission-hero h1 {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    color: white;
+}
+
+.mission-hero h1 span {
+    color: var(--vert-clair);
+}
+
+.mission-subtitle {
+    font-size: 1.15rem;
+    opacity: 0.9;
+    line-height: 1.7;
+}
+
+/* Section Problème */
+.mission-problem {
+    padding: var(--space-3xl) 0;
+    background: var(--off-white);
+}
+
+.problem-card {
+    background: var(--text-primary);
+    color: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.problem-card h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: white;
+}
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.problem-item {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 1.25rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.problem-item .emoji {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.problem-item strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: white;
+}
+
+.problem-item p {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.problem-result {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.problem-result strong {
+    color: var(--peche);
+}
+
+/* Section Solution */
+.mission-solution {
+    padding: var(--space-3xl) 0;
+    background: white;
+}
+
+.solution-card {
+    background: var(--vert-clair);
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.solution-card h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--vert-fonce);
+}
+
+.solution-tagline {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+    margin-bottom: 0.75rem;
+}
+
+.solution-description {
+    font-size: 1.05rem;
+    color: var(--vert-fonce);
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+}
+
+.solution-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.pillar {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.pillar-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.pillar h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+    margin-bottom: 0.5rem;
+}
+
+.pillar p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Section Concrètement */
+.mission-concrete {
+    padding: var(--space-3xl) 0;
+    background: var(--off-white);
+}
+
+.mission-concrete h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.concrete-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.concrete-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.concrete-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.concrete-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.concrete-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.concrete-item p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Section Fondateurs */
+.mission-founders {
+    padding: var(--space-3xl) 0;
+    background: white;
+}
+
+.founders-intro {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.founders-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.founder-card {
+    background: var(--off-white);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.founder-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+}
+
+.founder-avatar.florent {
+    background: linear-gradient(135deg, var(--vert-fonce) 0%, #4A7C5C 100%);
+}
+
+.founder-avatar.charlene {
+    background: linear-gradient(135deg, var(--terracotta) 0%, #D4725F 100%);
+}
+
+.founder-info h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.founder-role {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.founder-bio {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    text-align: left;
+}
+
+.founder-bio strong {
+    color: var(--vert-fonce);
+}
+
+/* Section Pour qui */
+.mission-for-who {
+    padding: var(--space-3xl) 0;
+    background: var(--peche);
+}
+
+.mission-for-who h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: var(--vert-fonce);
+}
+
+.for-who-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.for-who-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.for-who-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.for-who-item p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.for-who-item strong {
+    color: var(--vert-fonce);
+}
+
+/* Quote */
+.mission-quote {
+    padding: var(--space-3xl) 0;
+    background: var(--vert-fonce);
+}
+
+.mission-quote blockquote {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.mission-quote p {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-style: italic;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.mission-quote span {
+    font-size: 1.2rem;
+    color: var(--vert-clair);
+}
+
+/* CTA Mission */
+.mission-cta {
+    padding: var(--space-3xl) 0;
+    background: var(--off-white);
+}
+
+.mission-cta .cta-card {
+    background: white;
+    border-radius: 24px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.mission-cta h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.mission-cta .cta-card > p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.mission-cta .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Responsive Mission */
+@media (max-width: 768px) {
+    .mission-hero {
+        padding: 3rem 0;
+    }
+
+    .mission-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .problem-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .solution-pillars {
+        grid-template-columns: 1fr;
+    }
+
+    .concrete-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .founders-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .for-who-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mission-cta .cta-buttons {
         flex-direction: column;
         align-items: center;
     }

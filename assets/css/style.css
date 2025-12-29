@@ -374,13 +374,15 @@ section {
 .hero .container {
     position: relative;
     z-index: 2;
-    max-width: 800px;
+    max-width: 1200px;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
+    padding-left: 40%;
 }
 
 .hero-content {
-    max-width: 700px;
+    max-width: 600px;
 }
 
 .hero-content-right {
@@ -1274,6 +1276,7 @@ section {
     .hero .container {
         text-align: center;
         padding: var(--space-lg);
+        padding-left: var(--space-lg);
         justify-content: center;
     }
     

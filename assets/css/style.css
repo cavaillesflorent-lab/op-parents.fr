@@ -1845,7 +1845,7 @@ section {
 
 /* Header de l'encart */
 .pourquoi-header {
-    background: linear-gradient(135deg, var(--vert-fonce) 0%, #4A7C5C 100%);
+    background: var(--peche);
     padding: 3rem 3rem 2.5rem;
     text-align: center;
     color: white;

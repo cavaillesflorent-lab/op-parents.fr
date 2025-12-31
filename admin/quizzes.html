@@ -6,6 +6,7 @@
     <title>Gestion des Quiz - Admin OP!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-quiz.css">
 </head>
 <body class="admin-body">
     <div class="admin-layout">
@@ -94,229 +95,380 @@
         </main>
     </div>
 
-    <!-- Modal Nouveau/Éditer Quiz -->
-    <div class="modal" id="quiz-modal">
-        <div class="modal-overlay"></div>
-        <div class="modal-content modal-large">
-            <div class="modal-header">
-                <h2 id="modal-title">Nouveau quiz</h2>
-                <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            
-            <form id="quiz-form" class="admin-form">
-                <input type="hidden" id="quiz-id">
+    <!-- MODAL CRÉATION/ÉDITION QUIZ (Plein écran) -->
+    <div class="quiz-editor-modal" id="quiz-editor-modal">
+        <div class="quiz-editor">
+            <!-- Header -->
+            <header class="editor-header">
+                <div class="editor-header-left">
+                    <button class="btn-back" id="btn-back">
+                        ← Retour
+                    </button>
+                    <h1 id="editor-title">Nouveau Quiz</h1>
+                </div>
+                <div class="editor-header-right">
+                    <span class="save-status" id="save-status"></span>
+                    <button class="btn btn-secondary" id="btn-preview">
+                        👁️ Aperçu
+                    </button>
+                    <button class="btn btn-primary" id="btn-save">
+                        💾 Enregistrer
+                    </button>
+                </div>
+            </header>
+
+            <!-- Navigation Onglets -->
+            <nav class="editor-tabs">
+                <button class="tab-btn active" data-tab="intro">
+                    <span class="tab-icon">🎯</span>
+                    <span class="tab-label">Introduction</span>
+                </button>
+                <button class="tab-btn" data-tab="questions">
+                    <span class="tab-icon">❓</span>
+                    <span class="tab-label">Questions</span>
+                </button>
+                <button class="tab-btn" data-tab="profiles">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-label">Profils de résultat</span>
+                </button>
+                <button class="tab-btn" data-tab="conclusion">
+                    <span class="tab-icon">🏆</span>
+                    <span class="tab-label">Conclusion</span>
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <span class="tab-icon">⚙️</span>
+                    <span class="tab-label">Paramètres</span>
+                </button>
+            </nav>
+
+            <!-- Contenu des onglets -->
+            <div class="editor-content">
                 
-                <!-- Tabs -->
-                <div class="form-tabs">
-                    <button type="button" class="tab-btn active" data-tab="general">Général</button>
-                    <button type="button" class="tab-btn" data-tab="questions">Questions</button>
-                    <button type="button" class="tab-btn" data-tab="profiles">Profils</button>
+                <!-- TAB: Introduction -->
+                <div class="tab-panel active" id="panel-intro">
+                    <div class="panel-section">
+                        <h2>Présentation du Quiz</h2>
+                        <p class="section-desc">Ces informations seront affichées sur l'écran d'accueil du quiz, avant que l'utilisateur ne commence.</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="quiz-title">Titre du quiz *</label>
+                                <input type="text" id="quiz-title" placeholder="Ex: Quel est ton mindset par rapport à l'argent ?">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="quiz-subtitle">Sous-titre / Accroche</label>
+                                <input type="text" id="quiz-subtitle" placeholder="Ex: Découvre ton profil financier en 3 minutes">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="quiz-description">Description</label>
+                                <textarea id="quiz-description" rows="3" placeholder="Courte description du quiz et de son objectif..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Statistique d'accroche</h2>
+                        <p class="section-desc">Une statistique impactante pour capter l'attention (optionnel).</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="intro-stat">Statistique</label>
+                                <input type="text" id="intro-stat" placeholder="Ex: 67% des Français reproduisent les habitudes financières de leurs parents">
+                            </div>
+                            <div class="form-group">
+                                <label for="intro-stat-source">Source</label>
+                                <input type="text" id="intro-stat-source" placeholder="Ex: Étude IFOP 2024">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Ce que l'utilisateur va apprendre</h2>
+                        <p class="section-desc">Liste des bénéfices affichés sous "À la fin de ce quiz, tu sauras :"</p>
+                        
+                        <div class="benefits-list" id="benefits-list">
+                            <div class="benefit-item">
+                                <span class="benefit-icon">✓</span>
+                                <input type="text" class="benefit-input" placeholder="Ex: Si ton rapport à l'argent est dominé par la sécurité ou la liberté">
+                                <button class="btn-remove-benefit" title="Supprimer">×</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="add-benefit-btn">
+                            + Ajouter un bénéfice
+                        </button>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Encart scientifique (optionnel)</h2>
+                        <p class="section-desc">Un encart "Le saviez-vous ?" pour crédibiliser le quiz.</p>
+                        
+                        <div class="form-group full-width">
+                            <label for="intro-scientific">Texte scientifique</label>
+                            <textarea id="intro-scientific" rows="4" placeholder="Ex: Les chercheurs en psychologie financière ont démontré que nos premières croyances sur l'argent se forment avant 7 ans..."></textarea>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Tab: Général -->
-                <div class="tab-content active" id="tab-general">
-                    <div class="form-group">
-                        <label for="titre">Titre du quiz *</label>
-                        <input type="text" id="titre" name="titre" required 
-                            placeholder="Ex: Quel est ton mindset par rapport à l'argent ?">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="slug">Slug (URL) *</label>
-                        <input type="text" id="slug" name="slug" required 
-                            placeholder="Ex: mindset-financier">
-                        <small class="form-hint">Sera utilisé dans l'URL : /quiz.html?quiz=<strong>mindset-financier</strong></small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="3"
-                            placeholder="Courte description du quiz..."></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="intro_stat">Statistique d'intro</label>
-                            <input type="text" id="intro_stat" name="intro_stat"
-                                placeholder="Ex: 67% des Français reproduisent...">
-                        </div>
-                        <div class="form-group">
-                            <label for="intro_stat_source">Source</label>
-                            <input type="text" id="intro_stat_source" name="intro_stat_source"
-                                placeholder="Ex: Étude IFOP 2024">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="published" name="published">
-                            <span>Quiz publié (visible sur le site)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Tab: Questions -->
-                <div class="tab-content" id="tab-questions">
-                    <div class="questions-builder">
-                        <div class="questions-list" id="questions-list">
-                            <p class="empty-message">Aucune question. Cliquez sur "Ajouter une question" pour commencer.</p>
-                        </div>
-                        <button type="button" class="btn btn-secondary" id="add-question-btn">
+                <!-- TAB: Questions -->
+                <div class="tab-panel" id="panel-questions">
+                    <div class="questions-header">
+                        <h2>Questions du Quiz</h2>
+                        <button class="btn btn-primary" id="add-question-btn">
                             ➕ Ajouter une question
+                        </button>
+                    </div>
+
+                    <div class="questions-container" id="questions-container">
+                        <div class="empty-state">
+                            <div class="empty-icon">❓</div>
+                            <h3>Aucune question</h3>
+                            <p>Cliquez sur "Ajouter une question" pour commencer à créer votre quiz.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Profils -->
+                <div class="tab-panel" id="panel-profiles">
+                    <div class="panel-section">
+                        <h2>Profils de Résultat</h2>
+                        <p class="section-desc">Définissez les différents profils que les utilisateurs peuvent obtenir selon leurs réponses. Chaque réponse sera associée à un de ces profils.</p>
+                        
+                        <div class="profiles-container" id="profiles-container">
+                            <!-- Les profils seront ajoutés ici -->
+                        </div>
+                        
+                        <button class="btn btn-secondary" id="add-profile-btn">
+                            ➕ Ajouter un profil
                         </button>
                     </div>
                 </div>
 
-                <!-- Tab: Profils -->
-                <div class="tab-content" id="tab-profiles">
-                    <p class="tab-intro">Définissez les 4 profils de résultats (A, B, C, D)</p>
-                    
-                    <div class="profiles-list" id="profiles-list">
-                        <!-- Profile A -->
-                        <div class="profile-editor" data-code="A">
-                            <div class="profile-header">
-                                <span class="profile-letter">A</span>
-                                <input type="text" class="profile-nom" placeholder="Nom du profil (ex: Sécurité Dominante)">
-                            </div>
-                            <div class="profile-fields">
-                                <input type="text" class="profile-emoji" placeholder="Emoji (ex: 🔒)">
-                                <input type="text" class="profile-titre" placeholder="Titre court (ex: Profil Sécurité)">
-                            </div>
-                            <textarea class="profile-description" rows="2" placeholder="Description du profil..."></textarea>
-                            <div class="profile-lists">
-                                <div class="profile-list">
-                                    <label>Forces (une par ligne)</label>
-                                    <textarea class="profile-forces" rows="3" placeholder="Prudence développée&#10;Capacité d'anticipation&#10;Sens des responsabilités"></textarea>
+                <!-- TAB: Conclusion -->
+                <div class="tab-panel" id="panel-conclusion">
+                    <div class="panel-section">
+                        <h2>Message de conclusion</h2>
+                        <p class="section-desc">Ce message s'affiche après le résultat du quiz.</p>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-title">Titre de conclusion</label>
+                            <input type="text" id="conclusion-title" placeholder="Ex: Le Vrai Changement de Mindset">
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Ce que ce n'est PAS</label>
+                                <div class="list-editor" id="conclusion-not-list">
+                                    <div class="list-item">
+                                        <span class="list-icon">❌</span>
+                                        <input type="text" placeholder="Ex: Gagner plus">
+                                        <button class="btn-remove">×</button>
+                                    </div>
                                 </div>
-                                <div class="profile-list">
-                                    <label>Points de vigilance (une par ligne)</label>
-                                    <textarea class="profile-vigilances" rows="3" placeholder="Difficulté à se projeter&#10;Tendance à retenir&#10;Risque d'attente permanente"></textarea>
+                                <button class="btn btn-sm btn-ghost add-list-item" data-target="conclusion-not-list">+ Ajouter</button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Ce que c'EST</label>
+                                <div class="list-editor" id="conclusion-is-list">
+                                    <div class="list-item">
+                                        <span class="list-icon">✅</span>
+                                        <input type="text" placeholder="Ex: Te sentir légitime">
+                                        <button class="btn-remove">×</button>
+                                    </div>
                                 </div>
+                                <button class="btn btn-sm btn-ghost add-list-item" data-target="conclusion-is-list">+ Ajouter</button>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Profile B -->
-                        <div class="profile-editor" data-code="B">
-                            <div class="profile-header">
-                                <span class="profile-letter">B</span>
-                                <input type="text" class="profile-nom" placeholder="Nom du profil">
+                    <div class="panel-section">
+                        <h2>Message final</h2>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-quote">Citation / Message clé</label>
+                            <input type="text" id="conclusion-quote" placeholder="Ex: La liberté financière commence par la liberté de décision">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-cta">Texte Call-to-Action</label>
+                            <input type="text" id="conclusion-cta" placeholder="Ex: Tu viens de faire le premier pas. Maintenant, on passe à l'action ?">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Paramètres -->
+                <div class="tab-panel" id="panel-settings">
+                    <div class="panel-section">
+                        <h2>Paramètres généraux</h2>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="quiz-slug">Slug (URL) *</label>
+                                <input type="text" id="quiz-slug" placeholder="mindset-financier">
+                                <small class="form-hint">URL: /quiz.html?quiz=<strong id="slug-preview">mindset-financier</strong></small>
                             </div>
-                            <div class="profile-fields">
-                                <input type="text" class="profile-emoji" placeholder="Emoji">
-                                <input type="text" class="profile-titre" placeholder="Titre court">
-                            </div>
-                            <textarea class="profile-description" rows="2" placeholder="Description du profil..."></textarea>
-                            <div class="profile-lists">
-                                <div class="profile-list">
-                                    <label>Forces</label>
-                                    <textarea class="profile-forces" rows="3"></textarea>
-                                </div>
-                                <div class="profile-list">
-                                    <label>Points de vigilance</label>
-                                    <textarea class="profile-vigilances" rows="3"></textarea>
-                                </div>
+                            
+                            <div class="form-group">
+                                <label for="quiz-duration">Durée estimée</label>
+                                <input type="text" id="quiz-duration" placeholder="3 min" value="3 min">
                             </div>
                         </div>
-
-                        <!-- Profile C -->
-                        <div class="profile-editor" data-code="C">
-                            <div class="profile-header">
-                                <span class="profile-letter">C</span>
-                                <input type="text" class="profile-nom" placeholder="Nom du profil">
-                            </div>
-                            <div class="profile-fields">
-                                <input type="text" class="profile-emoji" placeholder="Emoji">
-                                <input type="text" class="profile-titre" placeholder="Titre court">
-                            </div>
-                            <textarea class="profile-description" rows="2" placeholder="Description du profil..."></textarea>
-                            <div class="profile-lists">
-                                <div class="profile-list">
-                                    <label>Forces</label>
-                                    <textarea class="profile-forces" rows="3"></textarea>
-                                </div>
-                                <div class="profile-list">
-                                    <label>Points de vigilance</label>
-                                    <textarea class="profile-vigilances" rows="3"></textarea>
-                                </div>
-                            </div>
+                        
+                        <div class="form-group">
+                            <label for="quiz-image">Image de couverture (URL)</label>
+                            <input type="url" id="quiz-image" placeholder="https://...">
                         </div>
+                    </div>
 
-                        <!-- Profile D -->
-                        <div class="profile-editor" data-code="D">
-                            <div class="profile-header">
-                                <span class="profile-letter">D</span>
-                                <input type="text" class="profile-nom" placeholder="Nom du profil">
+                    <div class="panel-section">
+                        <h2>Publication</h2>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-published">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Quiz publié (visible sur le site)</span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-collect-email">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Proposer de collecter l'email à la fin</span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-show-progress" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Afficher la barre de progression</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL QUESTION -->
+    <div class="modal" id="question-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h2 id="question-modal-title">Nouvelle Question</h2>
+                <button class="modal-close" id="question-modal-close">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <input type="hidden" id="question-edit-index" value="-1">
+                
+                <!-- Type de question -->
+                <div class="question-type-selector">
+                    <label>Type de question</label>
+                    <div class="type-options">
+                        <label class="type-option active">
+                            <input type="radio" name="question-type" value="single" checked>
+                            <span class="type-card">
+                                <span class="type-icon">◉</span>
+                                <span class="type-name">Choix unique</span>
+                                <span class="type-desc">Une seule réponse possible</span>
+                            </span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="question-type" value="multiple">
+                            <span class="type-card">
+                                <span class="type-icon">☑️</span>
+                                <span class="type-name">Choix multiple</span>
+                                <span class="type-desc">Plusieurs réponses possibles</span>
+                            </span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="question-type" value="profile">
+                            <span class="type-card">
+                                <span class="type-icon">👤</span>
+                                <span class="type-name">Profil</span>
+                                <span class="type-desc">Associe chaque réponse à un profil</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Contexte -->
+                <div class="form-section collapsible">
+                    <div class="section-header" data-toggle="context-section">
+                        <h3>📚 Contexte (optionnel)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content collapsed" id="context-section">
+                        <div class="form-group">
+                            <label for="question-context-title">Titre du contexte</label>
+                            <input type="text" id="question-context-title" placeholder="Ex: SÉQUENCE 1 — L'Héritage Invisible">
+                        </div>
+                        <div class="form-group">
+                            <label for="question-context">Texte de contexte</label>
+                            <textarea id="question-context" rows="3" placeholder="Ex: Dans 63% des familles françaises, les enfants ne connaissaient pas les revenus de leurs parents..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="question-stat">Statistique mise en avant</label>
+                                <input type="text" id="question-stat" placeholder="Ex: 90% des jeunes ont entendu...">
                             </div>
-                            <div class="profile-fields">
-                                <input type="text" class="profile-emoji" placeholder="Emoji">
-                                <input type="text" class="profile-titre" placeholder="Titre court">
-                            </div>
-                            <textarea class="profile-description" rows="2" placeholder="Description du profil..."></textarea>
-                            <div class="profile-lists">
-                                <div class="profile-list">
-                                    <label>Forces</label>
-                                    <textarea class="profile-forces" rows="3"></textarea>
-                                </div>
-                                <div class="profile-list">
-                                    <label>Points de vigilance</label>
-                                    <textarea class="profile-vigilances" rows="3"></textarea>
-                                </div>
+                            <div class="form-group">
+                                <label for="question-stat-source">Source</label>
+                                <input type="text" id="question-stat-source" placeholder="Ex: Étude IFOP 2024">
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancel-btn">Annuler</button>
-                    <button type="submit" class="btn btn-primary">
-                        <span class="btn-text">Enregistrer</span>
-                        <span class="btn-loader" style="display: none;">Enregistrement...</span>
+
+                <!-- Question -->
+                <div class="form-section">
+                    <h3>❓ Question</h3>
+                    <div class="form-group">
+                        <label for="question-text">Texte de la question *</label>
+                        <textarea id="question-text" rows="2" placeholder="Ex: Quand tu étais enfant, l'argent était surtout..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Réponses -->
+                <div class="form-section">
+                    <h3>💬 Réponses</h3>
+                    <p class="section-desc">Ajoutez les réponses possibles. Pour chaque réponse, vous pouvez indiquer si elle est correcte et ajouter une explication.</p>
+                    
+                    <div class="answers-builder" id="answers-builder">
+                        <!-- Les réponses seront ajoutées ici -->
+                    </div>
+                    
+                    <button class="btn btn-secondary btn-sm" id="add-answer-btn">
+                        ➕ Ajouter une réponse
                     </button>
                 </div>
-            </form>
+
+                <!-- Feedback après réponse -->
+                <div class="form-section collapsible">
+                    <div class="section-header" data-toggle="feedback-section">
+                        <h3>💡 Feedback après réponse (optionnel)</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="section-content collapsed" id="feedback-section">
+                        <div class="form-group">
+                            <label for="question-insight">Message insight</label>
+                            <textarea id="question-insight" rows="2" placeholder="Ex: Le ressenti n'est pas lié au montant sur ton compte, mais à la signification émotionnelle que tu donnes à l'argent."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="question-cancel-btn">Annuler</button>
+                <button class="btn btn-primary" id="question-save-btn">Enregistrer la question</button>
+            </div>
         </div>
     </div>
-
-    <!-- Template Question -->
-    <template id="question-template">
-        <div class="question-card" data-index="">
-            <div class="question-header">
-                <span class="question-number">Question 1</span>
-                <button type="button" class="btn-icon delete-question" title="Supprimer">🗑️</button>
-            </div>
-            <div class="form-group">
-                <label>Question *</label>
-                <input type="text" class="question-text" required placeholder="Ex: Quand tu étais enfant, l'argent était surtout...">
-            </div>
-            <div class="form-group">
-                <label>Contexte/Insight (optionnel)</label>
-                <textarea class="question-insight" rows="2" placeholder="Texte affiché après la réponse..."></textarea>
-            </div>
-            <div class="answers-section">
-                <label>Réponses (4 obligatoires)</label>
-                <div class="answer-row">
-                    <span class="answer-code">A</span>
-                    <input type="text" class="answer-text" placeholder="Texte de la réponse A" required>
-                    <input type="text" class="answer-label" placeholder="Label (ex: Profil Sécurité)">
-                </div>
-                <div class="answer-row">
-                    <span class="answer-code">B</span>
-                    <input type="text" class="answer-text" placeholder="Texte de la réponse B" required>
-                    <input type="text" class="answer-label" placeholder="Label">
-                </div>
-                <div class="answer-row">
-                    <span class="answer-code">C</span>
-                    <input type="text" class="answer-text" placeholder="Texte de la réponse C" required>
-                    <input type="text" class="answer-label" placeholder="Label">
-                </div>
-                <div class="answer-row">
-                    <span class="answer-code">D</span>
-                    <input type="text" class="answer-text" placeholder="Texte de la réponse D" required>
-                    <input type="text" class="answer-label" placeholder="Label">
-                </div>
-            </div>
-        </div>
-    </template>
 
     <!-- Modal Suppression -->
     <div class="modal" id="delete-modal">
@@ -324,10 +476,10 @@
         <div class="modal-content modal-small">
             <div class="modal-header">
                 <h2>Confirmer la suppression</h2>
-                <button class="modal-close" id="delete-modal-close">&times;</button>
+                <button class="modal-close" id="delete-modal-close">×</button>
             </div>
             <p>Êtes-vous sûr de vouloir supprimer ce quiz ? Cette action est irréversible.</p>
-            <div class="form-actions">
+            <div class="modal-footer">
                 <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
                 <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
             </div>

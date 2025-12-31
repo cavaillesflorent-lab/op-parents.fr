@@ -8,14 +8,13 @@
     <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
 <body class="admin-body">
-    <div class="admin-wrapper">
+    <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
-                <span>Admin OP!</span>
+                <span>Administration</span>
             </div>
-            
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item active">
                     <span class="nav-icon">📊</span>
@@ -30,13 +29,12 @@
                     Formations
                 </a>
             </nav>
-            
             <div class="sidebar-footer">
                 <a href="../index.html" class="nav-item">
-                    <span class="nav-icon">🌐</span>
+                    <span class="nav-icon">🏠</span>
                     Voir le site
                 </a>
-                <button id="logout-btn" class="nav-item logout-btn">
+                <button class="nav-item logout-btn" id="logout-btn">
                     <span class="nav-icon">🚪</span>
                     Déconnexion
                 </button>
@@ -47,44 +45,29 @@
         <main class="admin-main">
             <header class="admin-header">
                 <h1>Dashboard</h1>
-                <div class="admin-user" id="admin-user">
-                    <span class="user-email"></span>
+                <div class="user-info">
+                    <span class="user-email">Chargement...</span>
                 </div>
             </header>
 
             <div class="admin-content">
                 <!-- Stats Cards -->
-                <div class="stats-grid-admin">
-                    <div class="stat-card-admin">
+                <div class="stats-cards">
+                    <div class="stat-card">
                         <div class="stat-icon">🎥</div>
                         <div class="stat-info">
-                            <span class="stat-number-admin" id="webinaires-count">0</span>
+                            <span class="stat-number" id="webinaires-count">-</span>
                             <span class="stat-label">Webinaires</span>
                         </div>
+                        <span class="stat-badge" id="webinaires-avenir">- à venir</span>
                     </div>
-                    
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-info">
-                            <span class="stat-number-admin" id="webinaires-avenir">0</span>
-                            <span class="stat-label">À venir</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card-admin">
+                    <div class="stat-card">
                         <div class="stat-icon">📚</div>
                         <div class="stat-info">
-                            <span class="stat-number-admin" id="formations-count">0</span>
+                            <span class="stat-number" id="formations-count">-</span>
                             <span class="stat-label">Formations</span>
                         </div>
-                    </div>
-                    
-                    <div class="stat-card-admin">
-                        <div class="stat-icon">✅</div>
-                        <div class="stat-info">
-                            <span class="stat-number-admin" id="formations-published">0</span>
-                            <span class="stat-label">Publiées</span>
-                        </div>
+                        <span class="stat-badge" id="formations-published">- publiées</span>
                     </div>
                 </div>
 
@@ -92,11 +75,11 @@
                 <div class="quick-actions">
                     <h2>Actions rapides</h2>
                     <div class="actions-grid">
-                        <a href="webinaires.html?action=new" class="action-card">
+                        <a href="webinaires.html" class="action-card">
                             <span class="action-icon">➕</span>
                             <span>Nouveau webinaire</span>
                         </a>
-                        <a href="formations.html?action=new" class="action-card">
+                        <a href="formations.html" class="action-card">
                             <span class="action-icon">➕</span>
                             <span>Nouvelle formation</span>
                         </a>
@@ -115,14 +98,13 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
     <script>
-        // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
-       const SUPABASE_URL = 'https://qjdoepgvqpmckqnxcsob.supabase.co'; // Remplace XXXXX par ton URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4'; 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialiser Supabase
+        const client = initSupabase();
 
         // Écouter les changements d'authentification
-        supabaseClient.auth.onAuthStateChange((event, session) => {
+        client.auth.onAuthStateChange((event, session) => {
             console.log('Auth event:', event, session);
             if (!session) {
                 window.location.href = 'login.html';
@@ -139,14 +121,14 @@
             document.getElementById('webinaires-count').textContent = webinaires?.length || 0;
             
             const aVenir = webinaires?.filter(w => w.statut === 'a_venir').length || 0;
-            document.getElementById('webinaires-avenir').textContent = aVenir;
+            document.getElementById('webinaires-avenir').textContent = aVenir + ' à venir';
 
             // Formations
             const { data: formations } = await supabaseClient.from('formations').select('*');
             document.getElementById('formations-count').textContent = formations?.length || 0;
             
             const published = formations?.filter(f => f.published).length || 0;
-            document.getElementById('formations-published').textContent = published;
+            document.getElementById('formations-published').textContent = published + ' publiées';
 
             // Derniers webinaires
             displayRecentWebinaires(webinaires?.slice(0, 5) || []);

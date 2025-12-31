@@ -156,18 +156,17 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
     <script>
-        // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
-        const SUPABASE_URL = 'https://qjdoepgvqpmckqnxcsob.supabase.co'; // Remplace XXXXX par ton URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4'; 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialiser Supabase
+        const client = initSupabase();
 
         let currentDeleteId = null;
         let moduleCounter = 0;
         let existingModules = [];
 
         // Écouter les changements d'authentification
-        supabaseClient.auth.onAuthStateChange((event, session) => {
+        client.auth.onAuthStateChange((event, session) => {
             if (!session) {
                 window.location.href = 'login.html';
             } else {

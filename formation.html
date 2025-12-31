@@ -3,96 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formation - OP!</title>
-    <meta name="description" content="Formation OP! - Éducation financière pour les parents">
+    <title>Formation - OP! Éducation financière des parents</title>
+    <meta name="description" content="Découvrez cette formation sur la gestion financière familiale.">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
-                    </a>
-                    <span class="logo-text">booste tes finances !</span>
-                </div>
-                <nav class="nav">
-                    <a href="formations.html" class="active"><span class="nav-icon">📚</span> Formations</a>
-                    <a href="webinaires.html"><span class="nav-icon">🎥</span> Webinaires</a>
-                    <a href="index.html#investir"><span class="nav-icon">💰</span> Investir</a>
-                    <a href="mission.html"><span class="nav-icon">🚀</span> Missions OP!</a>
-                    <a href="index.html#contact"><span class="nav-icon">✉️</span> Contact</a>
-                </nav>
-                <button class="mobile-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- HEADER (chargé dynamiquement) -->
+    <div id="header-placeholder"></div>
 
     <!-- CONTENU FORMATION -->
-    <main class="formation-detail" id="formation-detail">
-        <div class="loading-state">
-            <p>Chargement de la formation...</p>
-        </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
+    <section class="formation-detail-section">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <div class="footer-logo">
-                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
-                        <span class="footer-tagline">booste tes finances !</span>
-                    </div>
-                    <p>La plateforme d'éducation financière dédiée aux parents.</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Navigation</h4>
-                    <ul>
-                        <li><a href="formations.html">Formations</a></li>
-                        <li><a href="webinaires.html">Webinaires</a></li>
-                        <li><a href="index.html#investir">Investir</a></li>
-                        <li><a href="mission.html">Missions OP!</a></li>
-                        <li><a href="index.html#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Suivez-nous</h4>
-                    <div class="social-links">
-                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
-                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 <a href="admin/login.html" class="admin-link">OP!</a> - Tous droits réservés</p>
-                <div class="footer-legal">
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <a href="politique-confidentialite.html">Confidentialité</a>
+            <nav class="breadcrumb">
+                <a href="index.html">Accueil</a> &gt; 
+                <a href="formations.html">Formations</a> &gt; 
+                <span id="breadcrumb-title">Chargement...</span>
+            </nav>
+
+            <div class="formation-detail" id="formation-detail">
+                <div class="loading-state">
+                    <p>Chargement de la formation...</p>
                 </div>
             </div>
         </div>
-    </footer>
+    </section>
 
+    <!-- FOOTER (chargé dynamiquement) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
     <script>
-        // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
-         const SUPABASE_URL = 'https://qjdoepgvqpmckqnxcsob.supabase.co'; // Remplace XXXXX par ton URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4'; 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         // Récupérer l'ID de la formation depuis l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const formationId = urlParams.get('id');
+
+        // Attendre que les composants soient chargés
+        document.addEventListener('componentsLoaded', () => {
+            initSupabase();
+            loadFormation();
+        });
 
         // Charger la formation
         async function loadFormation() {
@@ -111,12 +63,9 @@
 
             if (error || !formation) {
                 document.getElementById('formation-detail').innerHTML = `
-                    <div class="container">
-                        <div class="error-state">
-                            <h2>Formation non trouvée</h2>
-                            <p>Cette formation n'existe pas ou n'est plus disponible.</p>
-                            <a href="formations.html" class="btn btn-primary">Voir toutes les formations</a>
-                        </div>
+                    <div class="error-state">
+                        <p>Formation non trouvée.</p>
+                        <a href="formations.html" class="btn btn-primary">Voir toutes les formations</a>
                     </div>
                 `;
                 return;
@@ -130,83 +79,46 @@
                 .order('ordre', { ascending: true });
 
             displayFormation(formation, modules || []);
-            
-            // Mettre à jour le titre de la page
-            document.title = `${formation.titre} - OP!`;
         }
 
         // Afficher la formation
         function displayFormation(formation, modules) {
+            document.title = `${formation.titre} - OP!`;
+            document.getElementById('breadcrumb-title').textContent = formation.titre;
+
             const container = document.getElementById('formation-detail');
-
             container.innerHTML = `
-                <!-- Hero Formation -->
-                <section class="formation-hero" ${formation.image_url ? `style="background-image: url('${formation.image_url}')"` : ''}>
-                    <div class="formation-hero-overlay"></div>
-                    <div class="container">
-                        <a href="formations.html" class="back-link">← Retour aux formations</a>
-                        <h1>${formation.titre}</h1>
-                        ${formation.description ? `<p class="formation-description">${formation.description}</p>` : ''}
-                        <div class="formation-meta-hero">
-                            <span>📖 ${modules.length} module(s)</span>
-                            <span class="badge-gratuit">Gratuit</span>
-                        </div>
-                    </div>
-                </section>
+                <div class="formation-header">
+                    ${formation.image_url ? `<img src="${formation.image_url}" alt="${formation.titre}" class="formation-hero-image">` : ''}
+                    <h1>${formation.titre}</h1>
+                    <p class="formation-description">${formation.description || ''}</p>
+                </div>
 
-                <!-- Modules -->
-                <section class="modules-section">
-                    <div class="container">
-                        <h2>Contenu de la formation</h2>
-                        
-                        ${modules.length > 0 ? `
-                            <div class="modules-list-public">
-                                ${modules.map((m, i) => `
-                                    <div class="module-public" id="module-${m.id}">
-                                        <div class="module-public-header" onclick="toggleModule('${m.id}')">
-                                            <span class="module-number-public">${i + 1}</span>
-                                            <span class="module-title-public">${m.titre}</span>
-                                            <span class="module-type-badge">${getTypeLabel(m.type)}</span>
-                                            <span class="module-toggle">▼</span>
-                                        </div>
-                                        <div class="module-public-content" id="content-${m.id}" style="display: none;">
-                                            ${renderModuleContent(m)}
-                                        </div>
-                                    </div>
-                                `).join('')}
+                <div class="modules-list">
+                    <h2>Contenu de la formation</h2>
+                    ${modules.length === 0 ? '<p class="empty">Aucun module disponible.</p>' : ''}
+                    ${modules.map((module, index) => `
+                        <div class="module-item" data-index="${index}">
+                            <div class="module-header" onclick="toggleModule(${index})">
+                                <span class="module-number">${index + 1}</span>
+                                <h3>${module.titre}</h3>
+                                <span class="module-type">${getTypeLabel(module.type)}</span>
+                                <span class="module-toggle">▼</span>
                             </div>
-                        ` : `
-                            <div class="empty-modules">
-                                <p>Les modules de cette formation arrivent bientôt !</p>
+                            <div class="module-content" id="module-content-${index}">
+                                ${renderModuleContent(module)}
                             </div>
-                        `}
-                    </div>
-                </section>
-
-                <!-- CTA -->
-                <section class="formation-cta">
-                    <div class="container">
-                        <div class="cta-box">
-                            <h2>Des questions sur cette formation ?</h2>
-                            <p>Contactez-nous pour en savoir plus ou pour un accompagnement personnalisé.</p>
-                            <a href="index.html#contact" class="btn btn-primary">Nous contacter</a>
                         </div>
-                    </div>
-                </section>
+                    `).join('')}
+                </div>
+
+                <div class="formation-cta">
+                    <a href="formations.html" class="btn btn-secondary">← Retour aux formations</a>
+                </div>
             `;
         }
 
-        // Toggle module
-        function toggleModule(id) {
-            const content = document.getElementById(`content-${id}`);
-            const module = document.getElementById(`module-${id}`);
-            const isOpen = content.style.display !== 'none';
-            
-            content.style.display = isOpen ? 'none' : 'block';
-            module.classList.toggle('open', !isOpen);
-        }
-
-        // Type label
+        // Type de module
         function getTypeLabel(type) {
             const labels = {
                 'video': '🎥 Vidéo',
@@ -216,44 +128,52 @@
             return labels[type] || type;
         }
 
-        // Render module content
+        // Contenu du module
         function renderModuleContent(module) {
-            switch(module.type) {
+            switch (module.type) {
                 case 'video':
-                    if (module.contenu_url) {
-                        // YouTube embed
-                        if (module.contenu_url.includes('youtube.com') || module.contenu_url.includes('youtu.be')) {
-                            const videoId = extractYouTubeId(module.contenu_url);
-                            return `<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>`;
-                        }
-                        // Autre vidéo
-                        return `<video controls src="${module.contenu_url}"></video>`;
+                    const videoUrl = module.contenu_url || '';
+                    // Convertir URL YouTube en embed
+                    let embedUrl = videoUrl;
+                    if (videoUrl.includes('youtube.com/watch')) {
+                        const videoId = new URL(videoUrl).searchParams.get('v');
+                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    } else if (videoUrl.includes('youtu.be/')) {
+                        const videoId = videoUrl.split('youtu.be/')[1];
+                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
                     }
-                    return '<p>Vidéo non disponible</p>';
-                    
+                    return `
+                        <div class="video-container">
+                            <iframe src="${embedUrl}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    `;
                 case 'pdf':
-                    if (module.contenu_url) {
-                        return `<a href="${module.contenu_url}" target="_blank" class="btn btn-secondary">📄 Télécharger le PDF</a>`;
-                    }
-                    return '<p>PDF non disponible</p>';
-                    
+                    return `
+                        <div class="pdf-container">
+                            <a href="${module.contenu_url}" target="_blank" class="btn btn-primary">
+                                📄 Télécharger le PDF
+                            </a>
+                        </div>
+                    `;
                 case 'texte':
-                    return `<div class="module-text-content">${module.contenu_texte || 'Contenu non disponible'}</div>`;
-                    
+                    return `
+                        <div class="text-content">
+                            ${module.contenu_texte || ''}
+                        </div>
+                    `;
                 default:
                     return '<p>Contenu non disponible</p>';
             }
         }
 
-        // Extract YouTube ID
-        function extractYouTubeId(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : '';
+        // Toggle module
+        function toggleModule(index) {
+            const content = document.getElementById(`module-content-${index}`);
+            const item = document.querySelector(`.module-item[data-index="${index}"]`);
+            
+            content.classList.toggle('open');
+            item.classList.toggle('expanded');
         }
-
-        // Init
-        loadFormation();
     </script>
 </body>
 </html>

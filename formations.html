@@ -8,31 +8,8 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
-                    </a>
-                    <span class="logo-text">booste tes finances !</span>
-                </div>
-                <nav class="nav">
-                    <a href="formations.html" class="active"><span class="nav-icon">📚</span> Formations</a>
-                    <a href="webinaires.html"><span class="nav-icon">🎥</span> Webinaires</a>
-                    <a href="index.html#investir"><span class="nav-icon">💰</span> Investir</a>
-                    <a href="mission.html"><span class="nav-icon">🚀</span> Missions OP!</a>
-                    <a href="index.html#contact"><span class="nav-icon">✉️</span> Contact</a>
-                </nav>
-                <button class="mobile-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- HEADER (chargé dynamiquement) -->
+    <div id="header-placeholder"></div>
 
     <!-- HERO -->
     <section class="page-hero">
@@ -52,71 +29,25 @@
             </div>
             
             <div class="empty-state" id="empty-state" style="display: none;">
-                <p>Nos formations arrivent bientôt !</p>
-                <a href="index.html#contact" class="btn btn-primary">Être informé du lancement</a>
+                <p>Aucune formation disponible pour le moment.</p>
+                <p>Revenez bientôt !</p>
             </div>
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-box">
-                <h2>Besoin d'un accompagnement personnalisé ?</h2>
-                <p>Prenez rendez-vous avec un expert pour discuter de votre situation.</p>
-                <a href="index.html#contact" class="btn btn-primary">Prendre rendez-vous</a>
-            </div>
-        </div>
-    </section>
+    <!-- FOOTER (chargé dynamiquement) -->
+    <div id="footer-placeholder"></div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <div class="footer-logo">
-                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
-                        <span class="footer-tagline">booste tes finances !</span>
-                    </div>
-                    <p>La plateforme d'éducation financière dédiée aux parents.</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Navigation</h4>
-                    <ul>
-                        <li><a href="formations.html">Formations</a></li>
-                        <li><a href="webinaires.html">Webinaires</a></li>
-                        <li><a href="index.html#investir">Investir</a></li>
-                        <li><a href="mission.html">Missions OP!</a></li>
-                        <li><a href="index.html#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Suivez-nous</h4>
-                    <div class="social-links">
-                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
-                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 <a href="admin/login.html" class="admin-link">OP!</a> - Tous droits réservés</p>
-                <div class="footer-legal">
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <a href="politique-confidentialite.html">Confidentialité</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
     <script>
-        // ⚠️ REMPLACE CES VALEURS PAR TES CLÉS SUPABASE ⚠️
-        const SUPABASE_URL = 'https://qjdoepgvqpmckqnxcsob.supabase.co'; // Remplace XXXXX par ton URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4'; 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Attendre que les composants soient chargés
+        document.addEventListener('componentsLoaded', () => {
+            initSupabase();
+            loadFormations();
+        });
 
         // Charger les formations
         async function loadFormations() {
@@ -137,6 +68,7 @@
                 .from('modules')
                 .select('formation_id');
 
+            // Compter les modules par formation
             const moduleCounts = {};
             modules?.forEach(m => {
                 moduleCounts[m.formation_id] = (moduleCounts[m.formation_id] || 0) + 1;
@@ -149,34 +81,28 @@
         function displayFormations(formations, moduleCounts) {
             const grid = document.getElementById('formations-grid');
             const emptyState = document.getElementById('empty-state');
-
+            
             if (formations.length === 0) {
                 grid.style.display = 'none';
                 emptyState.style.display = 'block';
                 return;
             }
 
-            grid.style.display = 'grid';
-            emptyState.style.display = 'none';
-
-            grid.innerHTML = formations.map(f => `
-                <div class="formation-card">
-                    ${f.image_url ? `<div class="formation-image"><img src="${f.image_url}" alt="${f.titre}"></div>` : `<div class="formation-image formation-placeholder">📚</div>`}
-                    <div class="formation-content">
-                        <h3>${f.titre}</h3>
-                        ${f.description ? `<p>${f.description}</p>` : ''}
-                        <div class="formation-meta">
-                            <span class="formation-modules">📖 ${moduleCounts[f.id] || 0} module(s)</span>
-                            <span class="formation-badge">Gratuit</span>
+            grid.innerHTML = formations.map(formation => `
+                <a href="formation.html?id=${formation.id}" class="formation-card-link">
+                    <div class="formation-card">
+                        ${formation.image_url ? `<img src="${formation.image_url}" alt="${formation.titre}" class="formation-image">` : ''}
+                        <div class="formation-content">
+                            <h3>${formation.titre}</h3>
+                            <p>${formation.description || ''}</p>
+                            <div class="formation-meta">
+                                <span class="module-count">${moduleCounts[formation.id] || 0} module(s)</span>
+                            </div>
                         </div>
-                        <a href="formation.html?id=${f.id}" class="btn btn-primary">Accéder à la formation</a>
                     </div>
-                </div>
+                </a>
             `).join('');
         }
-
-        // Init
-        loadFormations();
     </script>
 </body>
 </html>

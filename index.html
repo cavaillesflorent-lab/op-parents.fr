@@ -26,31 +26,8 @@
     </script>
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="/">
-                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
-                    </a>
-                    <span class="logo-text">booste tes finances !</span>
-                </div>
-                <nav class="nav">
-                    <a href="formations.html"><span class="nav-icon">📚</span> Formations</a>
-                    <a href="webinaires.html"><span class="nav-icon">🎥</span> Webinaires</a>
-                    <a href="#investir"><span class="nav-icon">💰</span> Investir</a>
-                    <a href="mission.html"><span class="nav-icon">🚀</span> Missions OP!</a>
-                    <a href="#contact"><span class="nav-icon">✉️</span> Contact</a>
-                </nav>
-                <button class="mobile-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- HEADER (chargé dynamiquement) -->
+    <div id="header-placeholder"></div>
 
     <!-- SECTION 1 — HERO PLEIN ÉCRAN -->
     <section class="hero" style="background-image: url('assets/images/accueil2.jpg');">
@@ -104,7 +81,7 @@
                     <div class="triptych-content">
                         <h3>Investir en confiance</h3>
                         <p>Pour être accompagné(e) par un ingénieur en patrimoine selon vos besoins et envies.</p>
-                        <a href="#contact" class="btn btn-soft">En savoir plus</a>
+                        <a href="investir.html" class="btn btn-soft">En savoir plus</a>
                     </div>
                 </div>
             </div>
@@ -190,7 +167,7 @@
                         <a href="formations.html" class="btn btn-primary">
                             <span>📚</span> Voir les formations
                         </a>
-                        <a href="#contact" class="btn btn-secondary">
+                        <a href="contact.html" class="btn btn-secondary">
                             <span>💬</span> En savoir plus
                         </a>
                     </div>
@@ -317,48 +294,12 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer id="contact" class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <div class="footer-logo">
-                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
-                        <span class="footer-tagline">booste tes finances !</span>
-                    </div>
-                    <p>La plateforme d'éducation financière dédiée aux parents.</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Navigation</h4>
-                    <ul>
-                        <li><a href="formations.html">Formations</a></li>
-                        <li><a href="webinaires.html">Webinaires</a></li>
-                        <li><a href="#investir">Investir</a></li>
-                        <li><a href="mission.html">Missions OP!</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Suivez-nous</h4>
-                    <div class="social-links">
-                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
-                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 <a href="admin/login.html" class="admin-link">OP!</a> - Tous droits réservés</p>
-                <div class="footer-legal">
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <a href="politique-confidentialite.html">Confidentialité</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- FOOTER (chargé dynamiquement) -->
+    <div id="footer-placeholder"></div>
 
+    <!-- Scripts -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>

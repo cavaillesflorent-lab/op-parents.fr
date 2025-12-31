@@ -33,6 +33,7 @@ function initSupabase() {
             OP_CONFIG.supabase.url, 
             OP_CONFIG.supabase.anonKey
         );
+        window.supabaseClient = supabaseClient; // Assigne aussi à window
         console.log('✅ Supabase initialisé');
         return supabaseClient;
     } else {
@@ -43,5 +44,4 @@ function initSupabase() {
 
 // Export pour utilisation globale
 window.OP_CONFIG = OP_CONFIG;
-window.supabaseClient = null;
 window.initSupabase = initSupabase;

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Mindset Financier - OP!</title>
+    <meta name="description" content="Découvre ton profil financier grâce à notre quiz basé sur la psychologie financière.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/quiz.css">
+</head>
+<body class="quiz-body">
+    <!-- HEADER (chargé dynamiquement) -->
+    <div id="header-placeholder"></div>
+
+    <!-- QUIZ CONTAINER -->
+    <main class="quiz-main">
+        <!-- Écran de chargement -->
+        <div class="quiz-loading" id="quiz-loading">
+            <div class="loader-spinner"></div>
+            <p>Chargement du quiz...</p>
+        </div>
+
+        <!-- Écran d'accueil -->
+        <div class="quiz-screen quiz-intro" id="quiz-intro" style="display: none;">
+            <div class="quiz-intro-card">
+                <div class="quiz-intro-header">
+                    <span class="quiz-badge">🧠 Quiz Gratuit</span>
+                    <h1 id="quiz-title">Quel est ton mindset par rapport à l'argent ?</h1>
+                    <p class="quiz-subtitle" id="quiz-description"></p>
+                </div>
+
+                <div class="quiz-intro-stat" id="quiz-stat">
+                    <div class="stat-number" id="stat-number"></div>
+                    <div class="stat-source" id="stat-source"></div>
+                </div>
+
+                <div class="quiz-intro-benefits">
+                    <h3>🎯 À la fin de ce quiz, tu sauras :</h3>
+                    <ul>
+                        <li>Si ton rapport à l'argent est dominé par la sécurité, la prudence, l'équilibre ou la liberté</li>
+                        <li>Quelles croyances viennent de ton histoire familiale</li>
+                        <li>Comment ton mindset impacte tes décisions et ta transmission</li>
+                    </ul>
+                </div>
+
+                <div class="quiz-intro-meta">
+                    <span class="meta-item">⏱️ <span id="quiz-duration">3 min</span></span>
+                    <span class="meta-item">📝 <span id="quiz-questions-count">6</span> questions</span>
+                    <span class="meta-item">🔬 Basé sur la science</span>
+                </div>
+
+                <button class="btn-quiz-start" id="btn-start">
+                    <span>Commencer le quiz</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+
+                <p class="quiz-disclaimer">100% gratuit • Aucune inscription requise • Résultats immédiats</p>
+            </div>
+        </div>
+
+        <!-- Écran de question -->
+        <div class="quiz-screen quiz-question-screen" id="quiz-question-screen" style="display: none;">
+            <!-- Progress bar -->
+            <div class="quiz-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-text" id="progress-text">Question 1/6</span>
+            </div>
+
+            <!-- Contexte de la séquence (optionnel) -->
+            <div class="quiz-context" id="quiz-context" style="display: none;">
+                <div class="context-badge" id="context-badge"></div>
+                <p class="context-text" id="context-text"></p>
+            </div>
+
+            <!-- Stat highlight (optionnel) -->
+            <div class="quiz-stat-highlight" id="quiz-stat-highlight" style="display: none;">
+                <div class="stat-icon">🔬</div>
+                <div class="stat-content">
+                    <p class="stat-text" id="highlight-stat-text"></p>
+                    <span class="stat-source" id="highlight-stat-source"></span>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="quiz-question-container">
+                <h2 class="quiz-question" id="quiz-question"></h2>
+                
+                <div class="quiz-answers" id="quiz-answers">
+                    <!-- Answers will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Insight après réponse -->
+            <div class="quiz-insight" id="quiz-insight" style="display: none;">
+                <div class="insight-icon">💡</div>
+                <p class="insight-text" id="insight-text"></p>
+                <button class="btn-next" id="btn-next">
+                    <span>Question suivante</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Écran de résultat -->
+        <div class="quiz-screen quiz-result-screen" id="quiz-result-screen" style="display: none;">
+            <div class="result-card">
+                <div class="result-header">
+                    <span class="result-badge">🎉 Ton résultat</span>
+                    <div class="result-profile-icon" id="result-icon"></div>
+                    <h2 class="result-profile-name" id="result-profile-name"></h2>
+                    <p class="result-profile-subtitle" id="result-profile-subtitle"></p>
+                </div>
+
+                <!-- Graphique radar des scores -->
+                <div class="result-chart">
+                    <canvas id="result-radar-chart"></canvas>
+                </div>
+
+                <!-- Description du profil -->
+                <div class="result-description">
+                    <p id="result-description-text"></p>
+                </div>
+
+                <!-- Forces et vigilances -->
+                <div class="result-details">
+                    <div class="result-section result-forces">
+                        <h3>✅ Tes forces</h3>
+                        <ul id="result-forces-list"></ul>
+                    </div>
+                    <div class="result-section result-vigilances">
+                        <h3>⚠️ Points de vigilance</h3>
+                        <ul id="result-vigilances-list"></ul>
+                    </div>
+                </div>
+
+                <!-- Message clé -->
+                <div class="result-key-message">
+                    <p>🔑 <strong>Clé de lecture :</strong> Aucun profil n'est « meilleur ». L'enjeu n'est pas de changer, mais de rendre conscient.</p>
+                </div>
+
+                <!-- Actions -->
+                <div class="result-actions">
+                    <button class="btn-share" id="btn-share">
+                        <span>📤</span> Partager mon résultat
+                    </button>
+                    <a href="formations.html" class="btn-cta-primary">
+                        <span>📚</span> Découvrir les formations
+                    </a>
+                    <button class="btn-restart" id="btn-restart">
+                        Refaire le quiz
+                    </button>
+                </div>
+
+                <!-- Capture email (optionnel) -->
+                <div class="result-email-capture">
+                    <p>Reçois ton profil complet par email + des conseils personnalisés</p>
+                    <form class="email-form" id="email-form">
+                        <input type="email" placeholder="ton@email.com" id="result-email">
+                        <button type="submit">Recevoir</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- CTA Final -->
+            <div class="result-cta-section">
+                <h3>🚀 Prêt à transformer ta relation à l'argent ?</h3>
+                <p>Rejoins OP! et accède à des formations concrètes pour les parents.</p>
+                <div class="cta-buttons">
+                    <a href="formations.html" class="btn btn-primary">Voir les formations</a>
+                    <a href="webinaires.html" class="btn btn-secondary">Webinaires gratuits</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER (chargé dynamiquement) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Chart.js pour le graphique -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/quiz.js"></script>
+</body>
+</html>

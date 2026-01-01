@@ -23,10 +23,30 @@
         <!-- Écran d'accueil -->
         <div class="quiz-screen quiz-intro" id="quiz-intro" style="display: none;">
             <div class="quiz-intro-card">
+                <!-- Image de couverture -->
+                <div class="quiz-cover-wrapper">
+                    <img src="" alt="Quiz" id="quiz-cover-image" class="quiz-cover-image" style="display: none;">
+                    <div class="quiz-cover-placeholder" id="quiz-cover-placeholder">🧠</div>
+                </div>
+
                 <div class="quiz-intro-header">
                     <span class="quiz-badge">🧠 Quiz Gratuit</span>
                     <h1 id="quiz-title">Quel est ton mindset par rapport à l'argent ?</h1>
                     <p class="quiz-subtitle" id="quiz-description"></p>
+                </div>
+
+                <!-- Bloc de reprise (affiché si progression en cours) -->
+                <div class="quiz-resume-block" id="quiz-resume-block" style="display: none;">
+                    <div class="resume-info">
+                        <span class="resume-icon">⏸️</span>
+                        <div class="resume-text">
+                            <strong>Tu as un quiz en cours !</strong>
+                            <span id="resume-progress-text">Question 3 sur 10</span>
+                        </div>
+                    </div>
+                    <div class="resume-progress-bar">
+                        <div class="resume-progress-fill" id="resume-progress-fill"></div>
+                    </div>
                 </div>
 
                 <div class="quiz-intro-stat" id="quiz-stat">
@@ -49,11 +69,23 @@
                     <span class="meta-item">🔬 Basé sur la science</span>
                 </div>
 
+                <!-- Bouton normal (nouveau quiz) -->
                 <button class="btn-quiz-start" id="btn-start">
                     <span>Commencer le quiz</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
+                </button>
+
+                <!-- Boutons de reprise (affichés si progression) -->
+                <button class="btn-quiz-start btn-resume" id="btn-resume" style="display: none;">
+                    <span>Reprendre où j'en étais</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                </button>
+                <button class="btn-quiz-secondary" id="btn-restart-fresh" style="display: none;">
+                    <span>Recommencer depuis le début</span>
                 </button>
 
                 <p class="quiz-disclaimer">100% gratuit • Aucune inscription requise • Résultats immédiats</p>

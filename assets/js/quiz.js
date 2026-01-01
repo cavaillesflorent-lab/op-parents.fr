@@ -1,10 +1,14 @@
 // ============================================
 // QUIZ ENGINE - OP! Parents
+// Avec sauvegarde de progression localStorage
 // ============================================
+
+const STORAGE_KEY = 'op_quiz_progress';
 
 class QuizEngine {
     constructor() {
         this.quiz = null;
+        this.quizSlug = null;
         this.questions = [];
         this.profiles = [];
         this.currentIndex = 0;
@@ -18,20 +22,126 @@ class QuizEngine {
         return 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    // Initialiser le quiz
+    // ============================================
+    // GESTION DE LA PROGRESSION (localStorage)
+    // ============================================
+
+    // Récupérer toutes les progressions
+    getAllProgress() {
+        try {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        } catch {
+            return {};
+        }
+    }
+
+    // Récupérer la progression pour ce quiz
+    getProgress() {
+        return this.getAllProgress()[this.quizSlug] || null;
+    }
+
+    // Sauvegarder la progression
+    saveProgress() {
+        const allProgress = this.getAllProgress();
+        allProgress[this.quizSlug] = {
+            currentIndex: this.currentIndex,
+            answers: this.answers,
+            scores: this.scores,
+            answeredQuestions: Object.keys(this.answers).length,
+            totalQuestions: this.questions.length,
+            completed: false,
+            updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+        console.log('Progression sauvegardée:', this.currentIndex + 1, '/', this.questions.length);
+    }
+
+    // Marquer le quiz comme terminé
+    markCompleted(dominant) {
+        const allProgress = this.getAllProgress();
+        allProgress[this.quizSlug] = {
+            ...allProgress[this.quizSlug],
+            completed: true,
+            dominant: dominant,
+            completedAt: new Date().toISOString()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+    }
+
+    // Effacer la progression (recommencer)
+    clearProgress() {
+        const allProgress = this.getAllProgress();
+        delete allProgress[this.quizSlug];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+    }
+
+    // Restaurer la progression sauvegardée
+    restoreProgress() {
+        const saved = this.getProgress();
+        if (saved && !saved.completed) {
+            this.currentIndex = saved.currentIndex || 0;
+            this.answers = saved.answers || {};
+            this.scores = saved.scores || { A: 0, B: 0, C: 0, D: 0 };
+            return true;
+        }
+        return false;
+    }
+
+    // ============================================
+    // INITIALISATION
+    // ============================================
+
     async init(quizSlug = null) {
         try {
-            // Récupérer le slug depuis l'URL ou utiliser celui par défaut
             const urlParams = new URLSearchParams(window.location.search);
-            const slug = quizSlug || urlParams.get('quiz') || 'mindset-financier';
+            this.quizSlug = quizSlug || urlParams.get('quiz') || 'mindset-financier';
 
-            await this.loadQuiz(slug);
+            await this.loadQuiz(this.quizSlug);
             this.bindEvents();
-            this.showIntro();
+            
+            // Vérifier s'il y a une progression à reprendre
+            const hasProgress = this.restoreProgress();
+            
+            if (hasProgress && this.currentIndex > 0) {
+                this.showResumePrompt();
+            } else {
+                this.showIntro();
+            }
         } catch (error) {
             console.error('Erreur initialisation quiz:', error);
             this.showError('Impossible de charger le quiz. Veuillez réessayer.');
         }
+    }
+
+    // Afficher le prompt de reprise
+    showResumePrompt() {
+        document.getElementById('quiz-loading').style.display = 'none';
+        document.getElementById('quiz-intro').style.display = 'block';
+        
+        // Remplir les infos de base
+        document.getElementById('quiz-title').textContent = this.quiz.titre;
+        document.getElementById('quiz-description').textContent = this.quiz.description || '';
+        document.getElementById('quiz-questions-count').textContent = this.questions.length;
+        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(this.questions.length * 0.5) + ' min';
+
+        // Afficher le bloc de reprise
+        const resumeBlock = document.getElementById('quiz-resume-block');
+        if (resumeBlock) {
+            resumeBlock.style.display = 'block';
+            document.getElementById('resume-progress-text').textContent = 
+                `Question ${this.currentIndex} sur ${this.questions.length}`;
+            document.getElementById('resume-progress-fill').style.width = 
+                `${(this.currentIndex / this.questions.length) * 100}%`;
+        }
+
+        // Masquer le bouton normal, afficher les boutons de reprise
+        const startBtn = document.getElementById('btn-start');
+        const resumeBtn = document.getElementById('btn-resume');
+        const restartBtn = document.getElementById('btn-restart-fresh');
+        
+        if (startBtn) startBtn.style.display = 'none';
+        if (resumeBtn) resumeBtn.style.display = 'inline-flex';
+        if (restartBtn) restartBtn.style.display = 'inline-flex';
     }
 
     // Charger le quiz depuis Supabase
@@ -96,9 +206,29 @@ class QuizEngine {
         document.getElementById('quiz-question-screen').style.display = 'none';
         document.getElementById('quiz-result-screen').style.display = 'none';
 
+        // Masquer le bloc de reprise
+        const resumeBlock = document.getElementById('quiz-resume-block');
+        if (resumeBlock) resumeBlock.style.display = 'none';
+
+        // Afficher le bouton normal
+        const startBtn = document.getElementById('btn-start');
+        const resumeBtn = document.getElementById('btn-resume');
+        const restartBtn = document.getElementById('btn-restart-fresh');
+        
+        if (startBtn) startBtn.style.display = 'inline-flex';
+        if (resumeBtn) resumeBtn.style.display = 'none';
+        if (restartBtn) restartBtn.style.display = 'none';
+
         // Remplir les infos
         document.getElementById('quiz-title').textContent = this.quiz.titre;
         document.getElementById('quiz-description').textContent = this.quiz.description || '';
+        
+        // Image de couverture
+        const coverImg = document.getElementById('quiz-cover-image');
+        if (coverImg && this.quiz.image_url) {
+            coverImg.src = this.quiz.image_url;
+            coverImg.style.display = 'block';
+        }
         
         if (this.quiz.intro_stat) {
             document.getElementById('stat-number').textContent = this.quiz.intro_stat;
@@ -107,14 +237,36 @@ class QuizEngine {
         }
 
         document.getElementById('quiz-questions-count').textContent = this.questions.length;
-        document.getElementById('quiz-duration').textContent = Math.ceil(this.questions.length * 0.5) + ' min';
+        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(this.questions.length * 0.5) + ' min';
     }
 
-    // Démarrer le quiz
+    // Démarrer le quiz (depuis le début)
     start() {
         this.currentIndex = 0;
         this.answers = {};
         this.scores = { A: 0, B: 0, C: 0, D: 0 };
+        this.clearProgress();
+        
+        document.getElementById('quiz-intro').style.display = 'none';
+        document.getElementById('quiz-question-screen').style.display = 'block';
+        
+        this.showQuestion();
+    }
+
+    // Reprendre où on s'était arrêté
+    resume() {
+        document.getElementById('quiz-intro').style.display = 'none';
+        document.getElementById('quiz-question-screen').style.display = 'block';
+        
+        this.showQuestion();
+    }
+
+    // Recommencer depuis le début (efface la progression)
+    startFresh() {
+        this.currentIndex = 0;
+        this.answers = {};
+        this.scores = { A: 0, B: 0, C: 0, D: 0 };
+        this.clearProgress();
         
         document.getElementById('quiz-intro').style.display = 'none';
         document.getElementById('quiz-question-screen').style.display = 'block';
@@ -196,6 +348,9 @@ class QuizEngine {
         this.answers[questionId] = code;
         this.scores[code]++;
 
+        // Sauvegarder la progression dans localStorage
+        this.saveProgress();
+
         // Show insight
         const question = this.questions[this.currentIndex];
         const insightEl = document.getElementById('quiz-insight');
@@ -237,6 +392,9 @@ class QuizEngine {
             .sort((a, b) => b[1] - a[1])[0][0];
 
         const profile = this.profiles.find(p => p.code === dominant) || this.getDefaultProfile(dominant);
+
+        // Marquer comme terminé dans localStorage
+        this.markCompleted(dominant);
 
         // Afficher l'écran de résultat
         document.getElementById('quiz-question-screen').style.display = 'none';
@@ -403,7 +561,15 @@ class QuizEngine {
 
     // Bind events
     bindEvents() {
-        document.getElementById('btn-start').addEventListener('click', () => this.start());
+        // Boutons de démarrage
+        const startBtn = document.getElementById('btn-start');
+        const resumeBtn = document.getElementById('btn-resume');
+        const restartFreshBtn = document.getElementById('btn-restart-fresh');
+        
+        if (startBtn) startBtn.addEventListener('click', () => this.start());
+        if (resumeBtn) resumeBtn.addEventListener('click', () => this.resume());
+        if (restartFreshBtn) restartFreshBtn.addEventListener('click', () => this.startFresh());
+        
         document.getElementById('btn-next').addEventListener('click', () => this.nextQuestion());
         document.getElementById('btn-share').addEventListener('click', () => this.share());
         document.getElementById('btn-restart').addEventListener('click', () => this.restart());

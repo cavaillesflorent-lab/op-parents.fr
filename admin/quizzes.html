@@ -78,6 +78,7 @@
                         <thead>
                             <tr>
                                 <th>Quiz</th>
+                                <th>Séquences</th>
                                 <th>Questions</th>
                                 <th>Réponses</th>
                                 <th>Statut</th>
@@ -86,7 +87,7 @@
                         </thead>
                         <tbody id="quizzes-list">
                             <tr>
-                                <td colspan="5" class="loading">Chargement...</td>
+                                <td colspan="6" class="loading">Chargement...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -123,13 +124,13 @@
                     <span class="tab-icon">🎯</span>
                     <span class="tab-label">Introduction</span>
                 </button>
-                <button class="tab-btn" data-tab="questions">
-                    <span class="tab-icon">❓</span>
-                    <span class="tab-label">Questions</span>
+                <button class="tab-btn" data-tab="sequences">
+                    <span class="tab-icon">📑</span>
+                    <span class="tab-label">Séquences</span>
                 </button>
                 <button class="tab-btn" data-tab="profiles">
                     <span class="tab-icon">👤</span>
-                    <span class="tab-label">Profils de résultat</span>
+                    <span class="tab-label">Profils</span>
                 </button>
                 <button class="tab-btn" data-tab="conclusion">
                     <span class="tab-icon">🏆</span>
@@ -148,7 +149,7 @@
                 <div class="tab-panel active" id="panel-intro">
                     <div class="panel-section">
                         <h2>Présentation du Quiz</h2>
-                        <p class="section-desc">Ces informations seront affichées sur l'écran d'accueil du quiz, avant que l'utilisateur ne commence.</p>
+                        <p class="section-desc">Ces informations seront affichées sur l'écran d'accueil du quiz.</p>
                         
                         <div class="form-grid">
                             <div class="form-group full-width">
@@ -158,19 +159,19 @@
                             
                             <div class="form-group full-width">
                                 <label for="quiz-subtitle">Sous-titre / Accroche</label>
-                                <input type="text" id="quiz-subtitle" placeholder="Ex: Découvre ton profil financier en 3 minutes">
+                                <input type="text" id="quiz-subtitle" placeholder="Ex: Découvre ton profil financier en 5 minutes">
                             </div>
                             
                             <div class="form-group full-width">
                                 <label for="quiz-description">Description</label>
-                                <textarea id="quiz-description" rows="3" placeholder="Courte description du quiz et de son objectif..."></textarea>
+                                <textarea id="quiz-description" rows="3" placeholder="Courte description du quiz..."></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="panel-section">
                         <h2>Statistique d'accroche</h2>
-                        <p class="section-desc">Une statistique impactante pour capter l'attention (optionnel).</p>
+                        <p class="section-desc">Une statistique impactante pour capter l'attention.</p>
                         
                         <div class="form-grid">
                             <div class="form-group">
@@ -186,45 +187,38 @@
 
                     <div class="panel-section">
                         <h2>Ce que l'utilisateur va apprendre</h2>
-                        <p class="section-desc">Liste des bénéfices affichés sous "À la fin de ce quiz, tu sauras :"</p>
+                        <p class="section-desc">Liste affichée sous "À la fin de ce quiz, tu sauras :"</p>
                         
-                        <div class="benefits-list" id="benefits-list">
-                            <div class="benefit-item">
-                                <span class="benefit-icon">✓</span>
-                                <input type="text" class="benefit-input" placeholder="Ex: Si ton rapport à l'argent est dominé par la sécurité ou la liberté">
-                                <button class="btn-remove-benefit" title="Supprimer">×</button>
+                        <div class="dynamic-list" id="benefits-list">
+                            <div class="dynamic-item">
+                                <span class="item-icon">✓</span>
+                                <input type="text" placeholder="Ex: Si ton rapport à l'argent est dominé par la sécurité ou la liberté">
+                                <button class="btn-remove-item" title="Supprimer">×</button>
                             </div>
                         </div>
                         <button class="btn btn-secondary btn-sm" id="add-benefit-btn">
                             + Ajouter un bénéfice
                         </button>
                     </div>
-
-                    <div class="panel-section">
-                        <h2>Encart scientifique (optionnel)</h2>
-                        <p class="section-desc">Un encart "Le saviez-vous ?" pour crédibiliser le quiz.</p>
-                        
-                        <div class="form-group full-width">
-                            <label for="intro-scientific">Texte scientifique</label>
-                            <textarea id="intro-scientific" rows="4" placeholder="Ex: Les chercheurs en psychologie financière ont démontré que nos premières croyances sur l'argent se forment avant 7 ans..."></textarea>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- TAB: Questions -->
-                <div class="tab-panel" id="panel-questions">
-                    <div class="questions-header">
-                        <h2>Questions du Quiz</h2>
-                        <button class="btn btn-primary" id="add-question-btn">
-                            ➕ Ajouter une question
+                <!-- TAB: Séquences -->
+                <div class="tab-panel" id="panel-sequences">
+                    <div class="sequences-header">
+                        <div>
+                            <h2>Séquences du Quiz</h2>
+                            <p class="section-desc">Organisez votre quiz en séquences thématiques. Chaque séquence contient plusieurs questions et un bilan.</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-sequence-btn">
+                            ➕ Ajouter une séquence
                         </button>
                     </div>
 
-                    <div class="questions-container" id="questions-container">
+                    <div class="sequences-container" id="sequences-container">
                         <div class="empty-state">
-                            <div class="empty-icon">❓</div>
-                            <h3>Aucune question</h3>
-                            <p>Cliquez sur "Ajouter une question" pour commencer à créer votre quiz.</p>
+                            <div class="empty-icon">📑</div>
+                            <h3>Aucune séquence</h3>
+                            <p>Cliquez sur "Ajouter une séquence" pour structurer votre quiz.</p>
                         </div>
                     </div>
                 </div>
@@ -233,7 +227,7 @@
                 <div class="tab-panel" id="panel-profiles">
                     <div class="panel-section">
                         <h2>Profils de Résultat</h2>
-                        <p class="section-desc">Définissez les différents profils que les utilisateurs peuvent obtenir selon leurs réponses. Chaque réponse sera associée à un de ces profils.</p>
+                        <p class="section-desc">Définissez les différents profils. Chaque réponse sera associée à un de ces profils.</p>
                         
                         <div class="profiles-container" id="profiles-container">
                             <!-- Les profils seront ajoutés ici -->
@@ -259,26 +253,26 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Ce que ce n'est PAS</label>
-                                <div class="list-editor" id="conclusion-not-list">
-                                    <div class="list-item">
-                                        <span class="list-icon">❌</span>
+                                <div class="dynamic-list" id="conclusion-not-list">
+                                    <div class="dynamic-item">
+                                        <span class="item-icon">❌</span>
                                         <input type="text" placeholder="Ex: Gagner plus">
-                                        <button class="btn-remove">×</button>
+                                        <button class="btn-remove-item">×</button>
                                     </div>
                                 </div>
-                                <button class="btn btn-sm btn-ghost add-list-item" data-target="conclusion-not-list">+ Ajouter</button>
+                                <button class="btn btn-sm btn-ghost add-dynamic-item" data-target="conclusion-not-list" data-icon="❌">+ Ajouter</button>
                             </div>
                             
                             <div class="form-group">
                                 <label>Ce que c'EST</label>
-                                <div class="list-editor" id="conclusion-is-list">
-                                    <div class="list-item">
-                                        <span class="list-icon">✅</span>
+                                <div class="dynamic-list" id="conclusion-is-list">
+                                    <div class="dynamic-item">
+                                        <span class="item-icon">✅</span>
                                         <input type="text" placeholder="Ex: Te sentir légitime">
-                                        <button class="btn-remove">×</button>
+                                        <button class="btn-remove-item">×</button>
                                     </div>
                                 </div>
-                                <button class="btn btn-sm btn-ghost add-list-item" data-target="conclusion-is-list">+ Ajouter</button>
+                                <button class="btn btn-sm btn-ghost add-dynamic-item" data-target="conclusion-is-list" data-icon="✅">+ Ajouter</button>
                             </div>
                         </div>
                     </div>
@@ -312,7 +306,7 @@
                             
                             <div class="form-group">
                                 <label for="quiz-duration">Durée estimée</label>
-                                <input type="text" id="quiz-duration" placeholder="3 min" value="3 min">
+                                <input type="text" id="quiz-duration" placeholder="5 min" value="5 min">
                             </div>
                         </div>
                         
@@ -348,8 +342,91 @@
                                 <span class="toggle-label">Afficher la barre de progression</span>
                             </label>
                         </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-show-sequence-bilan" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Afficher le bilan après chaque séquence</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SÉQUENCE -->
+    <div class="modal" id="sequence-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h2 id="sequence-modal-title">Nouvelle Séquence</h2>
+                <button class="modal-close" id="sequence-modal-close">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <input type="hidden" id="sequence-edit-index" value="-1">
+                
+                <!-- Info séquence -->
+                <div class="form-section">
+                    <h3>📑 Informations de la séquence</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="sequence-title">Titre de la séquence *</label>
+                            <input type="text" id="sequence-title" placeholder="Ex: Mon mindset financier">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="sequence-description">Description / Contexte</label>
+                            <textarea id="sequence-description" rows="2" placeholder="Ex: Dans cette séquence, nous allons explorer ta relation à l'argent..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sequence-stat">Statistique (optionnel)</label>
+                            <input type="text" id="sequence-stat" placeholder="Ex: 90% des adultes...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sequence-stat-source">Source</label>
+                            <input type="text" id="sequence-stat-source" placeholder="Ex: IFOP 2024">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions de la séquence -->
+                <div class="form-section">
+                    <div class="section-header-flex">
+                        <h3>❓ Questions de la séquence</h3>
+                        <button class="btn btn-secondary btn-sm" id="add-seq-question-btn">
+                            ➕ Ajouter une question
+                        </button>
+                    </div>
+                    
+                    <div class="sequence-questions" id="sequence-questions">
+                        <div class="empty-state-small">
+                            <p>Aucune question. Cliquez sur "Ajouter une question".</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bilan de la séquence -->
+                <div class="form-section">
+                    <h3>📊 Bilan de la séquence</h3>
+                    <p class="section-desc">Message affiché après la dernière question de cette séquence.</p>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="sequence-bilan-title">Titre du bilan</label>
+                            <input type="text" id="sequence-bilan-title" placeholder="Ex: Ce que révèle cette séquence">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="sequence-bilan-text">Texte du bilan</label>
+                            <textarea id="sequence-bilan-text" rows="3" placeholder="Ex: Tes réponses montrent que tu as une relation particulière avec..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="sequence-cancel-btn">Annuler</button>
+                <button class="btn btn-primary" id="sequence-save-btn">Enregistrer la séquence</button>
             </div>
         </div>
     </div>
@@ -357,7 +434,7 @@
     <!-- MODAL QUESTION -->
     <div class="modal" id="question-modal">
         <div class="modal-overlay"></div>
-        <div class="modal-content modal-xl">
+        <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h2 id="question-modal-title">Nouvelle Question</h2>
                 <button class="modal-close" id="question-modal-close">×</button>
@@ -370,12 +447,11 @@
                 <div class="question-type-selector">
                     <label>Type de question</label>
                     <div class="type-options">
-                        <label class="type-option active">
+                        <label class="type-option">
                             <input type="radio" name="question-type" value="single" checked>
                             <span class="type-card">
                                 <span class="type-icon">◉</span>
                                 <span class="type-name">Choix unique</span>
-                                <span class="type-desc">Une seule réponse possible</span>
                             </span>
                         </label>
                         <label class="type-option">
@@ -383,7 +459,6 @@
                             <span class="type-card">
                                 <span class="type-icon">☑️</span>
                                 <span class="type-name">Choix multiple</span>
-                                <span class="type-desc">Plusieurs réponses possibles</span>
                             </span>
                         </label>
                         <label class="type-option">
@@ -391,43 +466,13 @@
                             <span class="type-card">
                                 <span class="type-icon">👤</span>
                                 <span class="type-name">Profil</span>
-                                <span class="type-desc">Associe chaque réponse à un profil</span>
                             </span>
                         </label>
                     </div>
                 </div>
 
-                <!-- Contexte -->
-                <div class="form-section collapsible">
-                    <div class="section-header" data-toggle="context-section">
-                        <h3>📚 Contexte (optionnel)</h3>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="section-content collapsed" id="context-section">
-                        <div class="form-group">
-                            <label for="question-context-title">Titre du contexte</label>
-                            <input type="text" id="question-context-title" placeholder="Ex: SÉQUENCE 1 — L'Héritage Invisible">
-                        </div>
-                        <div class="form-group">
-                            <label for="question-context">Texte de contexte</label>
-                            <textarea id="question-context" rows="3" placeholder="Ex: Dans 63% des familles françaises, les enfants ne connaissaient pas les revenus de leurs parents..."></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="question-stat">Statistique mise en avant</label>
-                                <input type="text" id="question-stat" placeholder="Ex: 90% des jeunes ont entendu...">
-                            </div>
-                            <div class="form-group">
-                                <label for="question-stat-source">Source</label>
-                                <input type="text" id="question-stat-source" placeholder="Ex: Étude IFOP 2024">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Question -->
                 <div class="form-section">
-                    <h3>❓ Question</h3>
                     <div class="form-group">
                         <label for="question-text">Texte de la question *</label>
                         <textarea id="question-text" rows="2" placeholder="Ex: Quand tu étais enfant, l'argent était surtout..." required></textarea>
@@ -436,36 +481,30 @@
 
                 <!-- Réponses -->
                 <div class="form-section">
-                    <h3>💬 Réponses</h3>
-                    <p class="section-desc">Ajoutez les réponses possibles. Pour chaque réponse, vous pouvez indiquer si elle est correcte et ajouter une explication.</p>
+                    <div class="section-header-flex">
+                        <h3>💬 Réponses</h3>
+                        <button class="btn btn-secondary btn-sm" id="add-answer-btn">
+                            ➕ Ajouter
+                        </button>
+                    </div>
                     
                     <div class="answers-builder" id="answers-builder">
                         <!-- Les réponses seront ajoutées ici -->
                     </div>
-                    
-                    <button class="btn btn-secondary btn-sm" id="add-answer-btn">
-                        ➕ Ajouter une réponse
-                    </button>
                 </div>
 
-                <!-- Feedback après réponse -->
-                <div class="form-section collapsible">
-                    <div class="section-header" data-toggle="feedback-section">
-                        <h3>💡 Feedback après réponse (optionnel)</h3>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="section-content collapsed" id="feedback-section">
-                        <div class="form-group">
-                            <label for="question-insight">Message insight</label>
-                            <textarea id="question-insight" rows="2" placeholder="Ex: Le ressenti n'est pas lié au montant sur ton compte, mais à la signification émotionnelle que tu donnes à l'argent."></textarea>
-                        </div>
+                <!-- Feedback -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="question-insight">💡 Insight après réponse (optionnel)</label>
+                        <textarea id="question-insight" rows="2" placeholder="Ex: Le ressenti n'est pas lié au montant, mais à la signification émotionnelle..."></textarea>
                     </div>
                 </div>
             </div>
             
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="question-cancel-btn">Annuler</button>
-                <button class="btn btn-primary" id="question-save-btn">Enregistrer la question</button>
+                <button class="btn btn-primary" id="question-save-btn">Enregistrer</button>
             </div>
         </div>
     </div>

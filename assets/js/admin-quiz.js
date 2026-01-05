@@ -877,21 +877,38 @@ async function saveQuiz() {
             return;
         }
         
+        // Vérifier si le slug existe déjà (pour un autre quiz)
+        const { data: existingQuiz } = await supabaseClient
+            .from('quizzes')
+            .select('id')
+            .eq('slug', quizPayload.slug)
+            .maybeSingle();
+        
+        if (existingQuiz && existingQuiz.id !== currentQuizId) {
+            alert(`Le slug "${quizPayload.slug}" est déjà utilisé par un autre quiz. Veuillez en choisir un autre.`);
+            saveStatus.textContent = '';
+            return;
+        }
+        
         console.log('Payload quiz:', quizPayload);
         console.log('Séquences à sauvegarder:', quizData.sequences);
+        console.log('currentQuizId:', currentQuizId);
         
         saveStatus.textContent = 'Sauvegarde quiz...';
         
         let quizId = currentQuizId;
         
         if (currentQuizId) {
+            console.log('Mode UPDATE pour quiz:', currentQuizId);
             const { error } = await supabaseClient.from('quizzes').update(quizPayload).eq('id', currentQuizId);
             if (error) throw error;
         } else {
+            console.log('Mode INSERT nouveau quiz');
             const { data, error } = await supabaseClient.from('quizzes').insert(quizPayload).select().single();
             if (error) throw error;
             quizId = data.id;
             currentQuizId = quizId;
+            console.log('Nouveau quiz créé avec ID:', quizId);
         }
         
         // Sauvegarder profils

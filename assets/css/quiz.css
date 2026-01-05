@@ -836,3 +836,54 @@
 .result-profile-icon.profile-b { background: linear-gradient(135deg, #26a69a 0%, #00897b 100%); }
 .result-profile-icon.profile-c { background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%); }
 .result-profile-icon.profile-d { background: linear-gradient(135deg, #ffb74d 0%, #ffa726 100%); }
+
+/* ========================================
+   BANDEAU MODE APERÇU
+   ======================================== */
+
+.preview-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    color: white;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.preview-banner span:first-child {
+    font-weight: 700;
+}
+
+.preview-banner-link {
+    color: white;
+    text-decoration: underline;
+    opacity: 0.9;
+}
+
+.preview-banner-link:hover {
+    opacity: 1;
+}
+
+/* Décaler le contenu quand le bandeau est présent */
+body:has(.preview-banner) .quiz-container {
+    padding-top: 60px;
+}
+
+@media (max-width: 600px) {
+    .preview-banner {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+}

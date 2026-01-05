@@ -1034,7 +1034,7 @@ async function editQuiz(id) {
 }
 
 function previewQuiz(slug) {
-    window.open(`../quiz.html?quiz=${slug}`, '_blank');
+    window.open(`../quiz.html?quiz=${slug}&preview=true`, '_blank');
 }
 
 function confirmDelete(id) {

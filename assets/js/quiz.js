@@ -95,9 +95,15 @@ class QuizEngine {
         try {
             const urlParams = new URLSearchParams(window.location.search);
             this.quizSlug = quizSlug || urlParams.get('quiz') || 'mindset-financier';
+            this.isPreview = urlParams.get('preview') === 'true';
 
             await this.loadQuiz(this.quizSlug);
             this.bindEvents();
+            
+            // Afficher bandeau preview si mode aperçu
+            if (this.isPreview) {
+                this.showPreviewBanner();
+            }
             
             // Vérifier s'il y a une progression à reprendre
             const hasProgress = this.restoreProgress();
@@ -111,6 +117,18 @@ class QuizEngine {
             console.error('Erreur initialisation quiz:', error);
             this.showError('Impossible de charger le quiz. Veuillez réessayer.');
         }
+    }
+    
+    // Afficher le bandeau de prévisualisation
+    showPreviewBanner() {
+        const banner = document.createElement('div');
+        banner.className = 'preview-banner';
+        banner.innerHTML = `
+            <span>👁️ Mode aperçu</span>
+            <span>Ce quiz n'est pas encore publié</span>
+            <a href="admin/quizzes.html" class="preview-banner-link">← Retour à l'admin</a>
+        `;
+        document.body.insertBefore(banner, document.body.firstChild);
     }
 
     // Afficher le prompt de reprise
@@ -147,12 +165,18 @@ class QuizEngine {
     // Charger le quiz depuis Supabase
     async loadQuiz(slug) {
         // Charger le quiz
-        const { data: quiz, error: quizError } = await supabaseClient
+        let query = supabaseClient
             .from('quizzes')
             .select('*')
-            .eq('slug', slug)
-            .eq('published', true)
-            .single();
+            .eq('slug', slug);
+        
+        // En mode normal, filtrer uniquement les quiz publiés
+        // En mode preview, charger même les brouillons
+        if (!this.isPreview) {
+            query = query.eq('published', true);
+        }
+        
+        const { data: quiz, error: quizError } = await query.single();
 
         if (quizError || !quiz) {
             throw new Error('Quiz non trouvé');

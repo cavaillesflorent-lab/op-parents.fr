@@ -9,6 +9,7 @@ let currentDeleteId = null;
 let currentSequenceIndex = -1;
 let currentQuestionIndex = -1;
 let tempSequenceQuestions = []; // Questions temporaires pour nouvelle séquence
+let hasUnsavedChanges = false; // Track si des modifications non sauvegardées
 
 let quizData = {
     intro: {
@@ -196,6 +197,7 @@ function displayQuizzes(quizzes, sequenceCounts, questionCounts, resultCounts) {
 
 function openEditor(quiz = null) {
     currentQuizId = quiz?.id || null;
+    hasUnsavedChanges = false; // Reset le flag au début
     
     if (!quiz) {
         resetQuizData();
@@ -222,6 +224,9 @@ function openEditor(quiz = null) {
         renderSequences();
         renderProfiles();
     }
+    
+    // Après chargement, reset le flag (le chargement déclenche des événements)
+    setTimeout(() => { hasUnsavedChanges = false; }, 100);
 }
 
 function closeEditor() {
@@ -539,6 +544,7 @@ function saveSequence() {
     console.log('Séquence sauvegardée:', sequenceData);
     console.log('Toutes les séquences:', quizData.sequences);
     
+    markAsChanged();
     closeSequenceModal();
     renderSequences();
 }
@@ -556,6 +562,7 @@ function editSequence(index) {
 function deleteSequence(index) {
     if (confirm('Supprimer cette séquence et toutes ses questions ?')) {
         quizData.sequences.splice(index, 1);
+        markAsChanged();
         renderSequences();
     }
 }
@@ -569,6 +576,7 @@ function duplicateSequence(index) {
         q.answers.forEach(a => delete a.id);
     });
     quizData.sequences.splice(index + 1, 0, copy);
+    markAsChanged();
     renderSequences();
 }
 
@@ -704,6 +712,7 @@ function saveQuestion() {
     }
     
     console.log('Question sauvegardée:', question);
+    markAsChanged();
     closeQuestionModal();
 }
 
@@ -732,6 +741,7 @@ function deleteSequenceQuestion(index) {
         tempSequenceQuestions.splice(index, 1);
         renderSequenceQuestions(tempSequenceQuestions);
     }
+    markAsChanged();
 }
 
 // ============================================
@@ -791,22 +801,26 @@ function addProfile() {
         color: '#2D5A3D'
     });
     
+    markAsChanged();
     renderProfiles();
 }
 
 function removeProfile(index) {
     if (confirm('Supprimer ce profil ?')) {
         quizData.profiles.splice(index, 1);
+        markAsChanged();
         renderProfiles();
     }
 }
 
 function updateProfile(index, field, value) {
     quizData.profiles[index][field] = value;
+    markAsChanged();
 }
 
 function updateProfileList(index, field, value) {
     quizData.profiles[index][field] = value.split('\n').filter(v => v.trim());
+    markAsChanged();
 }
 
 // ============================================
@@ -964,6 +978,9 @@ async function saveQuiz() {
             }
         }
         
+        // Marquer comme sauvegardé
+        hasUnsavedChanges = false;
+        
         saveStatus.textContent = '✓ Enregistré';
         saveStatus.className = 'save-status saved';
         setTimeout(() => { saveStatus.textContent = ''; }, 3000);
@@ -1035,9 +1052,14 @@ function bindAllEvents() {
     // Nouveau quiz
     document.getElementById('new-quiz-btn').addEventListener('click', () => openEditor());
     
-    // Retour
+    // Retour - ne demande confirmation que s'il y a des changements non sauvegardés
     document.getElementById('btn-back').addEventListener('click', () => {
-        if (confirm('Quitter sans enregistrer ?')) {
+        if (hasUnsavedChanges) {
+            if (confirm('Des modifications non enregistrées seront perdues. Quitter quand même ?')) {
+                closeEditor();
+                loadQuizzes();
+            }
+        } else {
             closeEditor();
             loadQuizzes();
         }
@@ -1045,6 +1067,15 @@ function bindAllEvents() {
     
     // Sauvegarder
     document.getElementById('btn-save').addEventListener('click', saveQuiz);
+    
+    // Sauvegarder et quitter
+    document.getElementById('btn-save-close')?.addEventListener('click', async () => {
+        await saveQuiz();
+        if (!hasUnsavedChanges) { // Si la sauvegarde a réussi
+            closeEditor();
+            loadQuizzes();
+        }
+    });
     
     // Aperçu
     document.getElementById('btn-preview').addEventListener('click', () => {
@@ -1066,12 +1097,14 @@ function bindAllEvents() {
     // Ajouter bénéfice
     document.getElementById('add-benefit-btn').addEventListener('click', () => {
         addDynamicItem('benefits-list', '✓');
+        markAsChanged();
     });
     
     // Ajouter items dynamiques
     document.querySelectorAll('.add-dynamic-item').forEach(btn => {
         btn.addEventListener('click', () => {
             addDynamicItem(btn.dataset.target, btn.dataset.icon);
+            markAsChanged();
         });
     });
     
@@ -1079,6 +1112,7 @@ function bindAllEvents() {
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-remove-item')) {
             e.target.closest('.dynamic-item').remove();
+            markAsChanged();
         }
     });
     
@@ -1132,6 +1166,19 @@ function bindAllEvents() {
         await supabaseClient.auth.signOut();
         window.location.href = 'login.html';
     });
+    
+    // Tracking des changements sur tous les inputs du formulaire
+    document.getElementById('quiz-editor-modal').addEventListener('input', (e) => {
+        if (e.target.matches('input, textarea, select')) {
+            markAsChanged();
+        }
+    });
+    
+    document.getElementById('quiz-editor-modal').addEventListener('change', (e) => {
+        if (e.target.matches('input[type="checkbox"], input[type="color"], select')) {
+            markAsChanged();
+        }
+    });
 }
 
 function addDynamicItem(listId, icon) {
@@ -1143,4 +1190,9 @@ function addDynamicItem(listId, icon) {
             <button class="btn-remove-item">×</button>
         </div>
     `);
+}
+
+// Marquer qu'il y a des modifications non sauvegardées
+function markAsChanged() {
+    hasUnsavedChanges = true;
 }

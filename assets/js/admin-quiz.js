@@ -1,6 +1,6 @@
 // ============================================
 // ADMIN QUIZ - OP! Parents
-// Système avec Séquences
+// Système avec Séquences + Upload Images
 // ============================================
 
 // État global
@@ -8,6 +8,7 @@ let currentQuizId = null;
 let currentDeleteId = null;
 let currentSequenceIndex = -1;
 let currentQuestionIndex = -1;
+let tempSequenceQuestions = []; // Questions temporaires pour nouvelle séquence
 
 let quizData = {
     intro: {
@@ -56,6 +57,73 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
+// UPLOAD D'IMAGES
+// ============================================
+
+async function uploadImage(file) {
+    if (!file) return null;
+    
+    const fileExt = file.name.split('.').pop();
+    const fileName = `quiz-${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const filePath = `covers/${fileName}`;
+    
+    try {
+        const { data, error } = await supabaseClient.storage
+            .from('quiz-images')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        
+        if (error) throw error;
+        
+        // Récupérer l'URL publique
+        const { data: urlData } = supabaseClient.storage
+            .from('quiz-images')
+            .getPublicUrl(filePath);
+        
+        return urlData.publicUrl;
+    } catch (error) {
+        console.error('Erreur upload:', error);
+        alert('Erreur lors de l\'upload de l\'image: ' + error.message);
+        return null;
+    }
+}
+
+function handleImageSelect(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    // Vérifier le type
+    if (!file.type.startsWith('image/')) {
+        alert('Veuillez sélectionner une image');
+        input.value = '';
+        return;
+    }
+    
+    // Vérifier la taille (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+        alert('L\'image doit faire moins de 5MB');
+        input.value = '';
+        return;
+    }
+    
+    // Prévisualisation
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('image-preview').src = e.target.result;
+        document.getElementById('image-preview-container').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImagePreview() {
+    document.getElementById('quiz-image-file').value = '';
+    document.getElementById('quiz-image').value = '';
+    document.getElementById('image-preview-container').style.display = 'none';
+}
+
+// ============================================
 // CHARGEMENT DES QUIZ
 // ============================================
 
@@ -87,6 +155,7 @@ async function loadQuizzes() {
         displayQuizzes(quizzes || [], sequenceCounts, questionCounts, resultCounts);
     } catch (error) {
         console.error('Erreur chargement:', error);
+        alert('Erreur de chargement: ' + error.message);
     }
 }
 
@@ -140,6 +209,10 @@ function openEditor(quiz = null) {
     document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
     document.querySelector('[data-tab="intro"]').classList.add('active');
     document.getElementById('panel-intro').classList.add('active');
+    
+    // Reset image preview
+    document.getElementById('image-preview-container').style.display = 'none';
+    document.getElementById('quiz-image-file').value = '';
     
     if (quiz) {
         loadQuizData(quiz);
@@ -226,6 +299,12 @@ async function loadQuizData(quiz) {
     document.getElementById('quiz-collect-email').checked = quiz.collect_email || false;
     document.getElementById('quiz-show-progress').checked = quiz.show_progress !== false;
     document.getElementById('quiz-show-sequence-bilan').checked = quiz.show_sequence_bilan !== false;
+    
+    // Image preview si URL existe
+    if (quiz.image_url) {
+        document.getElementById('image-preview').src = quiz.image_url;
+        document.getElementById('image-preview-container').style.display = 'block';
+    }
     
     // Conclusion
     document.getElementById('conclusion-title').value = quiz.conclusion_title || '';
@@ -320,7 +399,7 @@ function fillDynamicList(listId, items, icon) {
 }
 
 // ============================================
-// SÉQUENCES
+// SÉQUENCES - CORRIGÉ
 // ============================================
 
 function renderSequences() {
@@ -371,6 +450,8 @@ function renderSequences() {
 
 function openSequenceModal(sequence = null, editIndex = -1) {
     currentSequenceIndex = editIndex;
+    tempSequenceQuestions = []; // Reset questions temporaires
+    
     document.getElementById('sequence-edit-index').value = editIndex;
     document.getElementById('sequence-modal-title').textContent = editIndex >= 0 ? 'Modifier la séquence' : 'Nouvelle séquence';
     
@@ -383,14 +464,12 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     document.getElementById('sequence-bilan-text').value = sequence?.bilanText || '';
     
     // Questions de la séquence
-    if (sequence && sequence.questions) {
+    if (editIndex >= 0 && sequence && sequence.questions) {
+        // Mode édition: utiliser les questions existantes
         renderSequenceQuestions(sequence.questions);
     } else {
-        document.getElementById('sequence-questions').innerHTML = `
-            <div class="empty-state-small">
-                <p>Aucune question. Cliquez sur "Ajouter une question".</p>
-            </div>
-        `;
+        // Mode création: utiliser les questions temporaires (vide au début)
+        renderSequenceQuestions(tempSequenceQuestions);
     }
     
     document.getElementById('sequence-modal').classList.add('open');
@@ -414,8 +493,8 @@ function renderSequenceQuestions(questions) {
                 <span class="seq-question-num">Q${index + 1}</span>
                 <span class="seq-question-type">${getQuestionTypeLabel(q.type)}</span>
                 <div class="seq-question-actions">
-                    <button onclick="editSequenceQuestion(${index})" title="Modifier">✏️</button>
-                    <button onclick="deleteSequenceQuestion(${index})" title="Supprimer">🗑️</button>
+                    <button type="button" onclick="editSequenceQuestion(${index})" title="Modifier">✏️</button>
+                    <button type="button" onclick="deleteSequenceQuestion(${index})" title="Supprimer">🗑️</button>
                 </div>
             </div>
             <p class="seq-question-text">${escapeHtml(q.question)}</p>
@@ -434,26 +513,31 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
-    const sequence = {
+    const sequenceData = {
         title: document.getElementById('sequence-title').value.trim(),
         description: document.getElementById('sequence-description').value.trim(),
         stat: document.getElementById('sequence-stat').value.trim(),
         statSource: document.getElementById('sequence-stat-source').value.trim(),
         bilanTitle: document.getElementById('sequence-bilan-title').value.trim(),
         bilanText: document.getElementById('sequence-bilan-text').value.trim(),
-        questions: editIndex >= 0 ? quizData.sequences[editIndex].questions : []
+        questions: editIndex >= 0 ? quizData.sequences[editIndex].questions : tempSequenceQuestions
     };
     
-    if (!sequence.title) {
+    if (!sequenceData.title) {
         alert('Veuillez entrer un titre pour la séquence');
         return;
     }
     
     if (editIndex >= 0) {
-        quizData.sequences[editIndex] = { ...quizData.sequences[editIndex], ...sequence };
+        // Mode édition
+        quizData.sequences[editIndex] = { ...quizData.sequences[editIndex], ...sequenceData };
     } else {
-        quizData.sequences.push(sequence);
+        // Mode création: ajouter la nouvelle séquence
+        quizData.sequences.push(sequenceData);
     }
+    
+    console.log('Séquence sauvegardée:', sequenceData);
+    console.log('Toutes les séquences:', quizData.sequences);
     
     closeSequenceModal();
     renderSequences();
@@ -462,6 +546,7 @@ function saveSequence() {
 function closeSequenceModal() {
     document.getElementById('sequence-modal').classList.remove('open');
     currentSequenceIndex = -1;
+    tempSequenceQuestions = [];
 }
 
 function editSequence(index) {
@@ -488,7 +573,7 @@ function duplicateSequence(index) {
 }
 
 // ============================================
-// QUESTIONS (dans séquence)
+// QUESTIONS (dans séquence) - CORRIGÉ
 // ============================================
 
 function openQuestionModal(question = null, editIndex = -1) {
@@ -599,16 +684,26 @@ function saveQuestion() {
         return;
     }
     
-    // Ajouter/modifier dans la séquence courante
+    // Ajouter/modifier dans la séquence courante OU dans les questions temporaires
     if (currentSequenceIndex >= 0) {
+        // Mode édition d'une séquence existante
         if (editIndex >= 0) {
             quizData.sequences[currentSequenceIndex].questions[editIndex] = question;
         } else {
             quizData.sequences[currentSequenceIndex].questions.push(question);
         }
         renderSequenceQuestions(quizData.sequences[currentSequenceIndex].questions);
+    } else {
+        // Mode nouvelle séquence: stocker dans les questions temporaires
+        if (editIndex >= 0) {
+            tempSequenceQuestions[editIndex] = question;
+        } else {
+            tempSequenceQuestions.push(question);
+        }
+        renderSequenceQuestions(tempSequenceQuestions);
     }
     
+    console.log('Question sauvegardée:', question);
     closeQuestionModal();
 }
 
@@ -618,15 +713,24 @@ function closeQuestionModal() {
 }
 
 function editSequenceQuestion(index) {
+    let questions;
     if (currentSequenceIndex >= 0) {
-        openQuestionModal(quizData.sequences[currentSequenceIndex].questions[index], index);
+        questions = quizData.sequences[currentSequenceIndex].questions;
+    } else {
+        questions = tempSequenceQuestions;
     }
+    openQuestionModal(questions[index], index);
 }
 
 function deleteSequenceQuestion(index) {
-    if (currentSequenceIndex >= 0 && confirm('Supprimer cette question ?')) {
+    if (!confirm('Supprimer cette question ?')) return;
+    
+    if (currentSequenceIndex >= 0) {
         quizData.sequences[currentSequenceIndex].questions.splice(index, 1);
         renderSequenceQuestions(quizData.sequences[currentSequenceIndex].questions);
+    } else {
+        tempSequenceQuestions.splice(index, 1);
+        renderSequenceQuestions(tempSequenceQuestions);
     }
 }
 
@@ -651,7 +755,7 @@ function renderProfiles() {
                     <input type="text" class="profile-code" value="${escapeHtml(p.code)}" maxlength="1" placeholder="A" onchange="updateProfile(${index}, 'code', this.value.toUpperCase())">
                     <input type="text" class="profile-name" value="${escapeHtml(p.name)}" placeholder="Nom" onchange="updateProfile(${index}, 'name', this.value)">
                 </div>
-                <button class="btn-remove-profile" onclick="removeProfile(${index})">×</button>
+                <button type="button" class="btn-remove-profile" onclick="removeProfile(${index})">×</button>
             </div>
             <div class="profile-body">
                 <input type="text" value="${escapeHtml(p.title)}" placeholder="Titre complet" onchange="updateProfile(${index}, 'title', this.value)">
@@ -706,7 +810,7 @@ function updateProfileList(index, field, value) {
 }
 
 // ============================================
-// SAUVEGARDE
+// SAUVEGARDE - AVEC UPLOAD IMAGE
 // ============================================
 
 async function saveQuiz() {
@@ -715,6 +819,18 @@ async function saveQuiz() {
     saveStatus.className = 'save-status saving';
     
     try {
+        // Upload image si fichier sélectionné
+        let imageUrl = document.getElementById('quiz-image').value.trim();
+        const imageFile = document.getElementById('quiz-image-file').files[0];
+        
+        if (imageFile) {
+            saveStatus.textContent = 'Upload image...';
+            const uploadedUrl = await uploadImage(imageFile);
+            if (uploadedUrl) {
+                imageUrl = uploadedUrl;
+            }
+        }
+        
         // Collecter les listes
         const benefits = collectDynamicList('benefits-list');
         const conclusionNot = collectDynamicList('conclusion-not-list');
@@ -729,7 +845,7 @@ async function saveQuiz() {
             benefits: benefits,
             slug: document.getElementById('quiz-slug').value.trim(),
             duree: document.getElementById('quiz-duration').value.trim(),
-            image_url: document.getElementById('quiz-image').value.trim(),
+            image_url: imageUrl,
             published: document.getElementById('quiz-published').checked,
             collect_email: document.getElementById('quiz-collect-email').checked,
             show_progress: document.getElementById('quiz-show-progress').checked,
@@ -747,10 +863,16 @@ async function saveQuiz() {
             return;
         }
         
+        console.log('Payload quiz:', quizPayload);
+        console.log('Séquences à sauvegarder:', quizData.sequences);
+        
+        saveStatus.textContent = 'Sauvegarde quiz...';
+        
         let quizId = currentQuizId;
         
         if (currentQuizId) {
-            await supabaseClient.from('quizzes').update(quizPayload).eq('id', currentQuizId);
+            const { error } = await supabaseClient.from('quizzes').update(quizPayload).eq('id', currentQuizId);
+            if (error) throw error;
         } else {
             const { data, error } = await supabaseClient.from('quizzes').insert(quizPayload).select().single();
             if (error) throw error;
@@ -759,6 +881,7 @@ async function saveQuiz() {
         }
         
         // Sauvegarder profils
+        saveStatus.textContent = 'Sauvegarde profils...';
         await supabaseClient.from('quiz_profiles').delete().eq('quiz_id', quizId);
         if (quizData.profiles.length > 0) {
             const profilesPayload = quizData.profiles.map(p => ({
@@ -772,52 +895,71 @@ async function saveQuiz() {
                 vigilances: p.vigilances,
                 couleur: p.color
             }));
-            await supabaseClient.from('quiz_profiles').insert(profilesPayload);
+            const { error: profErr } = await supabaseClient.from('quiz_profiles').insert(profilesPayload);
+            if (profErr) throw profErr;
         }
         
-        // Sauvegarder séquences et questions
+        // Supprimer les anciennes séquences (cascade supprime questions et réponses)
+        saveStatus.textContent = 'Sauvegarde séquences...';
         await supabaseClient.from('quiz_sequences').delete().eq('quiz_id', quizId);
         
+        // Sauvegarder les nouvelles séquences et questions
         for (let i = 0; i < quizData.sequences.length; i++) {
             const seq = quizData.sequences[i];
+            console.log(`Sauvegarde séquence ${i + 1}:`, seq.title, `(${seq.questions.length} questions)`);
             
-            const { data: seqData } = await supabaseClient.from('quiz_sequences').insert({
+            const { data: seqData, error: seqErr } = await supabaseClient.from('quiz_sequences').insert({
                 quiz_id: quizId,
                 numero: i + 1,
                 titre: seq.title,
-                description: seq.description,
-                contexte: seq.contexte,
-                stat: seq.stat,
-                stat_source: seq.statSource,
-                bilan_titre: seq.bilanTitle,
-                bilan_texte: seq.bilanText
+                description: seq.description || null,
+                contexte: seq.contexte || null,
+                stat: seq.stat || null,
+                stat_source: seq.statSource || null,
+                bilan_titre: seq.bilanTitle || null,
+                bilan_texte: seq.bilanText || null
             }).select().single();
+            
+            if (seqErr) {
+                console.error('Erreur séquence:', seqErr);
+                throw seqErr;
+            }
             
             // Questions de la séquence
             for (let j = 0; j < seq.questions.length; j++) {
                 const q = seq.questions[j];
+                console.log(`  Question ${j + 1}:`, q.question.substring(0, 50));
                 
-                const { data: qData } = await supabaseClient.from('quiz_questions').insert({
+                const { data: qData, error: qErr } = await supabaseClient.from('quiz_questions').insert({
                     quiz_id: quizId,
                     sequence_id: seqData.id,
                     numero: j + 1,
                     type: q.type,
                     question: q.question,
-                    explication: q.insight
+                    explication: q.insight || null
                 }).select().single();
                 
+                if (qErr) {
+                    console.error('Erreur question:', qErr);
+                    throw qErr;
+                }
+                
                 // Réponses
-                if (q.answers.length > 0) {
+                if (q.answers && q.answers.length > 0) {
                     const answersPayload = q.answers.map((a, k) => ({
                         question_id: qData.id,
                         code: a.profileCode || ['A', 'B', 'C', 'D'][k] || String(k + 1),
                         texte: a.text,
-                        is_correct: a.isCorrect,
+                        is_correct: a.isCorrect || false,
                         profil_label: a.profileLabel || '',
-                        feedback: a.feedback,
+                        feedback: a.feedback || '',
                         ordre: k
                     }));
-                    await supabaseClient.from('quiz_answers').insert(answersPayload);
+                    const { error: aErr } = await supabaseClient.from('quiz_answers').insert(answersPayload);
+                    if (aErr) {
+                        console.error('Erreur réponses:', aErr);
+                        throw aErr;
+                    }
                 }
             }
         }
@@ -826,10 +968,13 @@ async function saveQuiz() {
         saveStatus.className = 'save-status saved';
         setTimeout(() => { saveStatus.textContent = ''; }, 3000);
         
+        console.log('Quiz sauvegardé avec succès!');
+        
     } catch (error) {
         console.error('Erreur:', error);
         alert('Erreur: ' + error.message);
         saveStatus.textContent = 'Erreur';
+        saveStatus.className = 'save-status error';
     }
 }
 
@@ -846,7 +991,11 @@ function collectDynamicList(listId) {
 // ============================================
 
 async function editQuiz(id) {
-    const { data: quiz } = await supabaseClient.from('quizzes').select('*').eq('id', id).single();
+    const { data: quiz, error } = await supabaseClient.from('quizzes').select('*').eq('id', id).single();
+    if (error) {
+        alert('Erreur: ' + error.message);
+        return;
+    }
     if (quiz) openEditor(quiz);
 }
 
@@ -861,7 +1010,11 @@ function confirmDelete(id) {
 
 async function deleteQuiz() {
     if (!currentDeleteId) return;
-    await supabaseClient.from('quizzes').delete().eq('id', currentDeleteId);
+    const { error } = await supabaseClient.from('quizzes').delete().eq('id', currentDeleteId);
+    if (error) {
+        alert('Erreur: ' + error.message);
+        return;
+    }
     document.getElementById('delete-modal').classList.remove('open');
     currentDeleteId = null;
     loadQuizzes();
@@ -961,6 +1114,13 @@ function bindAllEvents() {
     document.getElementById('quiz-slug').addEventListener('input', (e) => {
         document.getElementById('slug-preview').textContent = e.target.value || 'mon-quiz';
     });
+    
+    // Upload image
+    document.getElementById('quiz-image-file').addEventListener('change', (e) => {
+        handleImageSelect(e.target);
+    });
+    
+    document.getElementById('remove-image-btn').addEventListener('click', removeImagePreview);
     
     // Delete modal
     document.getElementById('delete-modal-close').addEventListener('click', () => document.getElementById('delete-modal').classList.remove('open'));

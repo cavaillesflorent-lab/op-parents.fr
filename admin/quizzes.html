@@ -311,8 +311,23 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="quiz-image">Image de couverture (URL)</label>
-                            <input type="url" id="quiz-image" placeholder="https://...">
+                            <label>Image de couverture</label>
+                            <div class="image-upload-zone">
+                                <div class="image-upload-input">
+                                    <input type="file" id="quiz-image-file" accept="image/*" class="file-input">
+                                    <label for="quiz-image-file" class="file-label">
+                                        <span class="file-icon">📁</span>
+                                        <span>Choisir une image depuis l'ordinateur</span>
+                                    </label>
+                                </div>
+                                <div class="image-or">ou</div>
+                                <input type="url" id="quiz-image" placeholder="Coller une URL d'image (https://...)">
+                            </div>
+                            <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                                <img src="" alt="Aperçu" id="image-preview" class="image-preview">
+                                <button type="button" class="btn-remove-image" id="remove-image-btn">✕ Supprimer</button>
+                            </div>
+                            <small class="form-hint">Formats acceptés: JPG, PNG, WebP. Max 5MB.</small>
                         </div>
                     </div>
 

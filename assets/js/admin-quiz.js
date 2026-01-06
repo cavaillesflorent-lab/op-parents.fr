@@ -44,6 +44,8 @@ let quizData = {
 // INITIALISATION
 // ============================================
 
+let eventsInitialized = false; // Protection contre double binding
+
 document.addEventListener('DOMContentLoaded', () => {
     initSupabase();
     
@@ -52,7 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'login.html';
         } else {
             loadQuizzes();
-            bindAllEvents();
+            if (!eventsInitialized) {
+                bindAllEvents();
+                eventsInitialized = true;
+            }
         }
     });
 });
@@ -827,7 +832,16 @@ function updateProfileList(index, field, value) {
 // SAUVEGARDE - AVEC UPLOAD IMAGE
 // ============================================
 
+let isSaving = false; // Protection contre double-clic
+
 async function saveQuiz() {
+    // Protection contre les appels multiples
+    if (isSaving) {
+        console.log('⚠️ Sauvegarde déjà en cours, ignoré');
+        return;
+    }
+    isSaving = true;
+    
     const saveStatus = document.getElementById('save-status');
     saveStatus.textContent = 'Enregistrement...';
     saveStatus.className = 'save-status saving';
@@ -1082,6 +1096,9 @@ async function saveQuiz() {
         alert('Erreur: ' + error.message);
         saveStatus.textContent = 'Erreur';
         saveStatus.className = 'save-status error';
+    } finally {
+        // Toujours réinitialiser le flag
+        isSaving = false;
     }
 }
 

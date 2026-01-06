@@ -6,81 +6,71 @@
     <title>Quiz - OP! Parents</title>
     <meta name="description" content="Découvre ton profil financier grâce à nos quiz interactifs. Teste ton mindset et progresse à ton rythme.">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/quizzes-page.css">
 </head>
 <body>
     <!-- HEADER -->
     <div id="header-placeholder"></div>
 
-    <main class="quiz-page">
-        <!-- Hero Section -->
-        <section class="quiz-hero">
-            <div class="quiz-hero-content">
-                <span class="quiz-hero-badge">🧠 Quiz interactifs</span>
+    <main>
+        <!-- HERO -->
+        <section class="page-hero">
+            <div class="page-hero-content">
+                <span class="page-hero-badge">🧠 Quiz interactifs</span>
                 <h1>Découvre ton profil financier</h1>
                 <p>Des quiz conçus pour t'aider à comprendre ta relation à l'argent et identifier tes axes de progression.</p>
             </div>
-            <div class="quiz-hero-decoration">
+            <div class="page-hero-decoration">
                 <div class="hero-circle circle-1"></div>
                 <div class="hero-circle circle-2"></div>
                 <div class="hero-circle circle-3"></div>
             </div>
         </section>
 
-        <!-- Stats utilisateur -->
-        <section class="quiz-stats-section">
-            <div class="container">
-                <div class="quiz-stats">
-                    <div class="quiz-stat">
-                        <div class="quiz-stat-icon">✅</div>
-                        <div class="quiz-stat-info">
-                            <span class="quiz-stat-value" id="stat-completed">0</span>
-                            <span class="quiz-stat-label">Terminés</span>
-                        </div>
+        <!-- STATS -->
+        <section class="page-stats-section">
+            <div class="page-stats">
+                <div class="page-stat">
+                    <div class="page-stat-icon">✅</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-completed">0</span>
+                        <span class="page-stat-label">Terminés</span>
                     </div>
-                    <div class="quiz-stat-divider"></div>
-                    <div class="quiz-stat">
-                        <div class="quiz-stat-icon">⏳</div>
-                        <div class="quiz-stat-info">
-                            <span class="quiz-stat-value" id="stat-in-progress">0</span>
-                            <span class="quiz-stat-label">En cours</span>
-                        </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">⏳</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-in-progress">0</span>
+                        <span class="page-stat-label">En cours</span>
                     </div>
-                    <div class="quiz-stat-divider"></div>
-                    <div class="quiz-stat">
-                        <div class="quiz-stat-icon">📚</div>
-                        <div class="quiz-stat-info">
-                            <span class="quiz-stat-value" id="stat-total">0</span>
-                            <span class="quiz-stat-label">Disponibles</span>
-                        </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">📚</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-total">0</span>
+                        <span class="page-stat-label">Disponibles</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Filtres -->
-        <section class="quiz-filters-section">
+        <!-- FILTRES -->
+        <section class="page-filters-section">
             <div class="container">
-                <div class="quiz-filters">
-                    <button class="quiz-filter-btn active" data-filter="all">
-                        Tous les quiz
-                    </button>
-                    <button class="quiz-filter-btn" data-filter="in-progress">
-                        En cours
-                    </button>
-                    <button class="quiz-filter-btn" data-filter="completed">
-                        Terminés
-                    </button>
+                <div class="page-filters">
+                    <button class="page-filter-btn active" data-filter="all">Tous les quiz</button>
+                    <button class="page-filter-btn" data-filter="in-progress">En cours</button>
+                    <button class="page-filter-btn" data-filter="completed">Terminés</button>
                 </div>
             </div>
         </section>
 
-        <!-- Liste des quiz -->
-        <section class="quiz-list-section">
+        <!-- LISTE -->
+        <section class="page-list-section">
             <div class="container">
                 <div class="quiz-grid" id="quiz-list">
-                    <!-- Loading state -->
-                    <div class="quiz-loading">
+                    <div class="loading-state">
                         <div class="quiz-loading-spinner"></div>
                         <p>Chargement des quiz...</p>
                     </div>
@@ -88,15 +78,15 @@
             </div>
         </section>
 
-        <!-- CTA Footer -->
-        <section class="quiz-cta-section">
+        <!-- CTA -->
+        <section class="page-cta-section">
             <div class="container">
-                <div class="quiz-cta-card">
-                    <div class="quiz-cta-content">
+                <div class="page-cta-card">
+                    <div class="page-cta-content">
                         <h2>Tu veux aller plus loin ?</h2>
                         <p>Découvre nos webinaires pour approfondir ta transformation financière avec des experts.</p>
                     </div>
-                    <a href="webinaires.html" class="quiz-cta-btn">
+                    <a href="webinaires.html" class="page-cta-btn">
                         Voir les webinaires
                         <span class="arrow">→</span>
                     </a>
@@ -112,13 +102,8 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
-        // ============================================
-        // QUIZ LIST - OP! Parents
-        // ============================================
-
         const STORAGE_KEY = 'op_quiz_progress';
 
-        // Récupérer la progression sauvegardée
         function getProgress() {
             try {
                 return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
@@ -127,7 +112,6 @@
             }
         }
 
-        // Calculer le pourcentage de progression
         function getQuizProgress(quizSlug, totalQuestions) {
             const progress = getProgress()[quizSlug];
             if (!progress) return { percent: 0, status: 'not-started', currentQuestion: 0 };
@@ -146,24 +130,18 @@
             };
         }
 
-        // Créer le cercle de progression SVG
         function createProgressCircle(percent) {
             const radius = 20;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (percent / 100) * circumference;
-            
-            const color = percent === 100 ? '#2D5A3D' : percent > 0 ? '#D4A574' : '#e0e0e0';
+            const color = percent === 100 ? '#2D403B' : percent > 0 ? '#F2B47E' : '#dee2e0';
             
             return `
                 <div class="quiz-card-progress">
                     <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
-                        <circle class="progress-ring-bg" cx="26" cy="26" r="${radius}" 
-                            fill="none" stroke="#e8e8e8" stroke-width="4"/>
-                        <circle class="progress-ring-fill" cx="26" cy="26" r="${radius}"
-                            fill="none" stroke="${color}" stroke-width="4"
-                            stroke-linecap="round"
-                            stroke-dasharray="${circumference}"
-                            stroke-dashoffset="${offset}"
+                        <circle cx="26" cy="26" r="${radius}" fill="none" stroke="#e8e8e8" stroke-width="4"/>
+                        <circle cx="26" cy="26" r="${radius}" fill="none" stroke="${color}" stroke-width="4"
+                            stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
                             transform="rotate(-90 26 26)"/>
                     </svg>
                     <span class="progress-percent">${percent}%</span>
@@ -171,7 +149,6 @@
             `;
         }
 
-        // Créer une carte de quiz
         function createQuizCard(quiz, questionCount) {
             const progress = getQuizProgress(quiz.slug, questionCount);
             
@@ -196,8 +173,8 @@
                         <h3 class="quiz-card-title">${quiz.titre}</h3>
                         ${quiz.sous_titre ? `<p class="quiz-card-subtitle">${quiz.sous_titre}</p>` : ''}
                         <div class="quiz-card-meta">
-                            <span><i>❓</i> ${questionCount} questions</span>
-                            <span><i>⏱️</i> ${quiz.duree || '5 min'}</span>
+                            <span>❓ ${questionCount} questions</span>
+                            <span>⏱️ ${quiz.duree || '5 min'}</span>
                         </div>
                         <div class="quiz-card-footer">
                             ${createProgressCircle(progress.percent)}
@@ -211,7 +188,6 @@
             `;
         }
 
-        // Charger les quiz
         async function loadQuizzes() {
             try {
                 initSupabase();
@@ -237,8 +213,8 @@
                 
                 if (!quizzes || quizzes.length === 0) {
                     container.innerHTML = `
-                        <div class="quiz-empty">
-                            <div class="quiz-empty-icon">🧠</div>
+                        <div class="page-empty">
+                            <div class="page-empty-icon">🧠</div>
                             <h3>Aucun quiz disponible</h3>
                             <p>Les quiz arrivent très bientôt, reste connecté !</p>
                         </div>
@@ -256,8 +232,8 @@
             } catch (error) {
                 console.error('Erreur:', error);
                 document.getElementById('quiz-list').innerHTML = `
-                    <div class="quiz-empty error">
-                        <div class="quiz-empty-icon">😕</div>
+                    <div class="page-empty">
+                        <div class="page-empty-icon">😕</div>
                         <h3>Oups, une erreur</h3>
                         <p>Impossible de charger les quiz. Réessaie plus tard.</p>
                         <button onclick="loadQuizzes()" class="retry-btn">Réessayer</button>
@@ -266,7 +242,6 @@
             }
         }
 
-        // Mettre à jour les stats
         function updateStats(quizzes, questionCounts) {
             let completed = 0;
             let inProgress = 0;
@@ -282,11 +257,10 @@
             document.getElementById('stat-total').textContent = quizzes.length;
         }
 
-        // Filtres
         function setupFilters() {
-            document.querySelectorAll('.quiz-filter-btn').forEach(btn => {
+            document.querySelectorAll('.page-filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.quiz-filter-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.page-filter-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
                     const filter = btn.dataset.filter;
@@ -302,7 +276,6 @@
                         if (show) hasVisible = true;
                     });
 
-                    // Message si aucun résultat
                     const container = document.getElementById('quiz-list');
                     const existingEmpty = container.querySelector('.filter-empty');
                     if (existingEmpty) existingEmpty.remove();
@@ -321,7 +294,6 @@
             });
         }
 
-        // Init
         document.addEventListener('componentsLoaded', loadQuizzes);
         setTimeout(() => {
             if (document.getElementById('quiz-list').innerHTML.includes('Chargement')) {

@@ -174,7 +174,7 @@ function displayQuizzes(quizzes, sequenceCounts, questionCounts, resultCounts) {
     }
 
     tbody.innerHTML = quizzes.map(quiz => `
-        <tr>
+        <tr data-quiz-id="${quiz.id}">
             <td>
                 <strong>${escapeHtml(quiz.titre)}</strong>
                 <br><small style="color: var(--text-secondary);">/quiz.html?quiz=${quiz.slug}</small>
@@ -183,9 +183,11 @@ function displayQuizzes(quizzes, sequenceCounts, questionCounts, resultCounts) {
             <td>${questionCounts[quiz.id] || 0}</td>
             <td>${resultCounts[quiz.id] || 0}</td>
             <td>
-                <span class="status-badge ${quiz.published ? 'status-published' : 'status-draft'}">
-                    ${quiz.published ? 'Publié' : 'Brouillon'}
-                </span>
+                <label class="publish-toggle" title="${quiz.published ? 'Cliquer pour dépublier' : 'Cliquer pour publier'}">
+                    <input type="checkbox" ${quiz.published ? 'checked' : ''} onchange="togglePublish('${quiz.id}', this.checked)">
+                    <span class="publish-slider"></span>
+                    <span class="publish-label ${quiz.published ? 'published' : 'draft'}">${quiz.published ? 'Publié' : 'Brouillon'}</span>
+                </label>
             </td>
             <td style="white-space: nowrap;">
                 <button class="btn btn-sm btn-secondary" onclick="editQuiz('${quiz.id}')" title="Modifier">✏️</button>
@@ -194,6 +196,45 @@ function displayQuizzes(quizzes, sequenceCounts, questionCounts, resultCounts) {
             </td>
         </tr>
     `).join('');
+}
+
+// Basculer le statut publié/brouillon
+async function togglePublish(quizId, published) {
+    try {
+        const { error } = await supabaseClient
+            .from('quizzes')
+            .update({ published: published })
+            .eq('id', quizId);
+        
+        if (error) throw error;
+        
+        // Mettre à jour l'affichage
+        const row = document.querySelector(`tr[data-quiz-id="${quizId}"]`);
+        if (row) {
+            const label = row.querySelector('.publish-label');
+            const toggle = row.querySelector('.publish-toggle');
+            if (label) {
+                label.textContent = published ? 'Publié' : 'Brouillon';
+                label.className = `publish-label ${published ? 'published' : 'draft'}`;
+            }
+            if (toggle) {
+                toggle.title = published ? 'Cliquer pour dépublier' : 'Cliquer pour publier';
+            }
+        }
+        
+        // Mettre à jour le compteur
+        const publishedCount = document.querySelectorAll('.publish-toggle input:checked').length;
+        document.getElementById('published-quizzes').textContent = publishedCount;
+        
+        console.log(`Quiz ${quizId} ${published ? 'publié' : 'dépublié'}`);
+        
+    } catch (error) {
+        console.error('Erreur toggle publish:', error);
+        alert('Erreur: ' + error.message);
+        // Remettre le toggle à son état précédent
+        const checkbox = document.querySelector(`tr[data-quiz-id="${quizId}"] .publish-toggle input`);
+        if (checkbox) checkbox.checked = !published;
+    }
 }
 
 // ============================================

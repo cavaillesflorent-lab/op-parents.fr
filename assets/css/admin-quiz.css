@@ -996,3 +996,72 @@
 .btn-remove-image:hover {
     background: #dc3545;
 }
+
+/* ========================================
+   TOGGLE PUBLICATION
+   ======================================== */
+
+.publish-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.publish-toggle input {
+    display: none;
+}
+
+.publish-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.publish-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.publish-toggle input:checked + .publish-slider {
+    background: var(--vert-fonce, #2D5A3D);
+}
+
+.publish-toggle input:checked + .publish-slider::before {
+    transform: translateX(20px);
+}
+
+.publish-toggle:hover .publish-slider {
+    box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.2);
+}
+
+.publish-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 65px;
+}
+
+.publish-label.published {
+    color: var(--vert-fonce, #2D5A3D);
+}
+
+.publish-label.draft {
+    color: #888;
+}
+
+/* Animation au changement */
+.publish-toggle input:focus + .publish-slider {
+    box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.3);
+}

@@ -913,7 +913,11 @@ async function saveQuiz() {
         
         // Sauvegarder profils
         saveStatus.textContent = 'Sauvegarde profils...';
-        await supabaseClient.from('quiz_profiles').delete().eq('quiz_id', quizId);
+        const { error: delProfErr } = await supabaseClient.from('quiz_profiles').delete().eq('quiz_id', quizId);
+        if (delProfErr) {
+            console.error('Erreur suppression profils:', delProfErr);
+        }
+        
         if (quizData.profiles.length > 0) {
             const profilesPayload = quizData.profiles.map(p => ({
                 quiz_id: quizId,
@@ -930,9 +934,42 @@ async function saveQuiz() {
             if (profErr) throw profErr;
         }
         
-        // Supprimer les anciennes séquences (cascade supprime questions et réponses)
+        // Supprimer les anciennes données (dans l'ordre pour respecter les foreign keys)
+        saveStatus.textContent = 'Nettoyage anciennes données...';
+        
+        // 1. Supprimer les réponses (via les questions du quiz)
+        const { data: oldQuestions } = await supabaseClient
+            .from('quiz_questions')
+            .select('id')
+            .eq('quiz_id', quizId);
+        
+        if (oldQuestions && oldQuestions.length > 0) {
+            const questionIds = oldQuestions.map(q => q.id);
+            const { error: delAnsErr } = await supabaseClient
+                .from('quiz_answers')
+                .delete()
+                .in('question_id', questionIds);
+            if (delAnsErr) console.error('Erreur suppression réponses:', delAnsErr);
+        }
+        
+        // 2. Supprimer les questions
+        const { error: delQErr } = await supabaseClient
+            .from('quiz_questions')
+            .delete()
+            .eq('quiz_id', quizId);
+        if (delQErr) console.error('Erreur suppression questions:', delQErr);
+        
+        // 3. Supprimer les séquences
+        const { error: delSeqErr } = await supabaseClient
+            .from('quiz_sequences')
+            .delete()
+            .eq('quiz_id', quizId);
+        if (delSeqErr) console.error('Erreur suppression séquences:', delSeqErr);
+        
+        console.log('Anciennes données supprimées, insertion des nouvelles...');
+        
+        // Sauvegarder les nouvelles séquences et questions
         saveStatus.textContent = 'Sauvegarde séquences...';
-        await supabaseClient.from('quiz_sequences').delete().eq('quiz_id', quizId);
         
         // Sauvegarder les nouvelles séquences et questions
         for (let i = 0; i < quizData.sequences.length; i++) {

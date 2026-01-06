@@ -6,393 +6,103 @@
     <title>Quiz - OP! Parents</title>
     <meta name="description" content="Découvre ton profil financier grâce à nos quiz interactifs. Teste ton mindset et progresse à ton rythme.">
     <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        /* Page Quiz List Styles */
-        .quiz-page {
-            padding-top: 100px;
-            min-height: 100vh;
-            background: #f5f5f7;
-        }
-
-        /* Header de page */
-        .quiz-page-header {
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, #4A7C5C 100%);
-            color: white;
-            padding: 3rem 1.5rem;
-            text-align: center;
-        }
-
-        .quiz-page-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .quiz-page-header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* Tabs */
-        .quiz-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            background: white;
-            border-bottom: 1px solid #e5e5e5;
-            position: sticky;
-            top: 80px;
-            z-index: 100;
-        }
-
-        .quiz-tab {
-            padding: 0.6rem 1.25rem;
-            border: none;
-            background: #f0f0f0;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-
-        .quiz-tab.active {
-            background: var(--vert-fonce);
-            color: white;
-        }
-
-        .quiz-tab:hover:not(.active) {
-            background: #e5e5e5;
-        }
-
-        /* Container */
-        .quiz-list-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        /* Stats rapides */
-        .user-stats {
-            display: flex;
-            justify-content: space-around;
-            background: white;
-            border-radius: 16px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .user-stat {
-            text-align: center;
-        }
-
-        .user-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-        }
-
-        .user-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* Quiz Cards */
-        .quiz-cards-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .quiz-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-        }
-
-        .quiz-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-
-        .quiz-card-image {
-            position: relative;
-            height: 160px;
-            overflow: hidden;
-        }
-
-        .quiz-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .quiz-card-image-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--lime) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        /* Badge recommandé */
-        .quiz-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: white;
-            color: var(--vert-fonce);
-            padding: 0.3rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .quiz-badge.new {
-            background: var(--terracotta);
-            color: white;
-        }
-
-        /* Progress circle overlay */
-        .quiz-progress-circle {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-
-        .progress-ring-bg {
-            fill: none;
-            stroke: #e5e5e5;
-            stroke-width: 3;
-        }
-
-        .progress-ring-fill {
-            fill: none;
-            stroke: var(--vert-fonce);
-            stroke-width: 3;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.5s ease;
-        }
-
-        .progress-text {
-            position: absolute;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-        }
-
-        /* Card content */
-        .quiz-card-content {
-            padding: 1.25rem;
-        }
-
-        .quiz-card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-
-        .quiz-card-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .quiz-card-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        /* Continue button */
-        .quiz-continue-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 0.75rem 1rem;
-            margin-top: 1rem;
-            background: var(--vert-clair);
-            border: none;
-            border-radius: 12px;
-            color: var(--vert-fonce);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .quiz-continue-btn:hover {
-            background: var(--vert-fonce);
-            color: white;
-        }
-
-        .quiz-continue-btn .arrow {
-            font-size: 1.2rem;
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: white;
-            border-radius: 20px;
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-        }
-
-        /* Loading */
-        .loading-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e5e5e5;
-            border-top-color: var(--vert-fonce);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Footer CTA */
-        .quiz-footer-cta {
-            background: white;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .quiz-footer-cta p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .btn-cta {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: var(--terracotta);
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .btn-cta:hover {
-            background: #c96a52;
-            transform: translateY(-2px);
-        }
-
-        /* Responsive */
-        @media (min-width: 768px) {
-            .quiz-list-container {
-                max-width: 900px;
-            }
-
-            .quiz-cards-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/quizzes-page.css">
 </head>
 <body>
     <!-- HEADER -->
     <div id="header-placeholder"></div>
 
-    <!-- PAGE CONTENT -->
     <main class="quiz-page">
-        <!-- Header -->
-        <div class="quiz-page-header">
-            <h1>🧠 Nos Quiz</h1>
-            <p>Découvre ton profil financier et progresse à ton rythme</p>
-        </div>
+        <!-- Hero Section -->
+        <section class="quiz-hero">
+            <div class="quiz-hero-content">
+                <span class="quiz-hero-badge">🧠 Quiz interactifs</span>
+                <h1>Découvre ton profil financier</h1>
+                <p>Des quiz conçus pour t'aider à comprendre ta relation à l'argent et identifier tes axes de progression.</p>
+            </div>
+            <div class="quiz-hero-decoration">
+                <div class="hero-circle circle-1"></div>
+                <div class="hero-circle circle-2"></div>
+                <div class="hero-circle circle-3"></div>
+            </div>
+        </section>
 
-        <!-- Tabs -->
-        <nav class="quiz-tabs">
-            <button class="quiz-tab active" data-filter="all">Tous les quiz</button>
-            <button class="quiz-tab" data-filter="in-progress">En cours</button>
-            <button class="quiz-tab" data-filter="completed">Terminés</button>
-        </nav>
-
-        <!-- Container -->
-        <div class="quiz-list-container">
-            <!-- Stats utilisateur -->
-            <div class="user-stats" id="user-stats">
-                <div class="user-stat">
-                    <div class="user-stat-value" id="stat-completed">0</div>
-                    <div class="user-stat-label">Quiz terminés</div>
-                </div>
-                <div class="user-stat">
-                    <div class="user-stat-value" id="stat-in-progress">0</div>
-                    <div class="user-stat-label">En cours</div>
-                </div>
-                <div class="user-stat">
-                    <div class="user-stat-value" id="stat-total">0</div>
-                    <div class="user-stat-label">Disponibles</div>
+        <!-- Stats utilisateur -->
+        <section class="quiz-stats-section">
+            <div class="container">
+                <div class="quiz-stats">
+                    <div class="quiz-stat">
+                        <div class="quiz-stat-icon">✅</div>
+                        <div class="quiz-stat-info">
+                            <span class="quiz-stat-value" id="stat-completed">0</span>
+                            <span class="quiz-stat-label">Terminés</span>
+                        </div>
+                    </div>
+                    <div class="quiz-stat-divider"></div>
+                    <div class="quiz-stat">
+                        <div class="quiz-stat-icon">⏳</div>
+                        <div class="quiz-stat-info">
+                            <span class="quiz-stat-value" id="stat-in-progress">0</span>
+                            <span class="quiz-stat-label">En cours</span>
+                        </div>
+                    </div>
+                    <div class="quiz-stat-divider"></div>
+                    <div class="quiz-stat">
+                        <div class="quiz-stat-icon">📚</div>
+                        <div class="quiz-stat-info">
+                            <span class="quiz-stat-value" id="stat-total">0</span>
+                            <span class="quiz-stat-label">Disponibles</span>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Liste des quiz -->
-            <div class="quiz-cards-grid" id="quiz-list">
-                <div class="loading-state">
-                    <div class="loading-spinner"></div>
-                    <p>Chargement des quiz...</p>
+        <!-- Filtres -->
+        <section class="quiz-filters-section">
+            <div class="container">
+                <div class="quiz-filters">
+                    <button class="quiz-filter-btn active" data-filter="all">
+                        Tous les quiz
+                    </button>
+                    <button class="quiz-filter-btn" data-filter="in-progress">
+                        En cours
+                    </button>
+                    <button class="quiz-filter-btn" data-filter="completed">
+                        Terminés
+                    </button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Footer CTA -->
-        <div class="quiz-footer-cta">
-            <p>Tu veux aller plus loin dans ta transformation financière ?</p>
-            <a href="webinaires.html" class="btn-cta">Découvrir nos webinaires →</a>
-        </div>
+        <!-- Liste des quiz -->
+        <section class="quiz-list-section">
+            <div class="container">
+                <div class="quiz-grid" id="quiz-list">
+                    <!-- Loading state -->
+                    <div class="quiz-loading">
+                        <div class="quiz-loading-spinner"></div>
+                        <p>Chargement des quiz...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Footer -->
+        <section class="quiz-cta-section">
+            <div class="container">
+                <div class="quiz-cta-card">
+                    <div class="quiz-cta-content">
+                        <h2>Tu veux aller plus loin ?</h2>
+                        <p>Découvre nos webinaires pour approfondir ta transformation financière avec des experts.</p>
+                    </div>
+                    <a href="webinaires.html" class="quiz-cta-btn">
+                        Voir les webinaires
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- FOOTER -->
@@ -404,7 +114,6 @@
     <script>
         // ============================================
         // QUIZ LIST - OP! Parents
-        // Avec progression localStorage
         // ============================================
 
         const STORAGE_KEY = 'op_quiz_progress';
@@ -439,19 +148,25 @@
 
         // Créer le cercle de progression SVG
         function createProgressCircle(percent) {
-            const radius = 18;
+            const radius = 20;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (percent / 100) * circumference;
             
+            const color = percent === 100 ? '#2D5A3D' : percent > 0 ? '#D4A574' : '#e0e0e0';
+            
             return `
-                <div class="quiz-progress-circle">
-                    <svg class="progress-ring" width="44" height="44">
-                        <circle class="progress-ring-bg" cx="22" cy="22" r="${radius}"/>
-                        <circle class="progress-ring-fill" cx="22" cy="22" r="${radius}"
+                <div class="quiz-card-progress">
+                    <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+                        <circle class="progress-ring-bg" cx="26" cy="26" r="${radius}" 
+                            fill="none" stroke="#e8e8e8" stroke-width="4"/>
+                        <circle class="progress-ring-fill" cx="26" cy="26" r="${radius}"
+                            fill="none" stroke="${color}" stroke-width="4"
+                            stroke-linecap="round"
                             stroke-dasharray="${circumference}"
-                            stroke-dashoffset="${offset}"/>
+                            stroke-dashoffset="${offset}"
+                            transform="rotate(-90 26 26)"/>
                     </svg>
-                    <span class="progress-text">${percent}%</span>
+                    <span class="progress-percent">${percent}%</span>
                 </div>
             `;
         }
@@ -460,45 +175,40 @@
         function createQuizCard(quiz, questionCount) {
             const progress = getQuizProgress(quiz.slug, questionCount);
             
-            const buttonLabels = {
-                'not-started': 'Commencer',
-                'in-progress': 'Continuer',
-                'completed': 'Refaire'
+            const statusLabels = {
+                'not-started': { text: 'Nouveau', class: 'new', btn: 'Commencer' },
+                'in-progress': { text: 'En cours', class: 'progress', btn: 'Continuer' },
+                'completed': { text: 'Terminé', class: 'done', btn: 'Refaire' }
             };
+            const status = statusLabels[progress.status];
 
             const imageHtml = quiz.image_url 
-                ? `<img src="${quiz.image_url}" alt="${quiz.titre}">`
-                : `<div class="quiz-card-image-placeholder">🧠</div>`;
-
-            const badgeHtml = progress.status === 'not-started' 
-                ? `<span class="quiz-badge new">Nouveau</span>` 
-                : '';
+                ? `<img src="${quiz.image_url}" alt="${quiz.titre}" loading="lazy">`
+                : `<div class="quiz-card-placeholder"><span>🧠</span></div>`;
 
             return `
-                <article class="quiz-card" data-slug="${quiz.slug}" data-status="${progress.status}" onclick="goToQuiz('${quiz.slug}')">
+                <article class="quiz-card" data-slug="${quiz.slug}" data-status="${progress.status}">
                     <div class="quiz-card-image">
                         ${imageHtml}
-                        ${badgeHtml}
-                        ${createProgressCircle(progress.percent)}
+                        <span class="quiz-card-badge ${status.class}">${status.text}</span>
                     </div>
-                    <div class="quiz-card-content">
+                    <div class="quiz-card-body">
                         <h3 class="quiz-card-title">${quiz.titre}</h3>
+                        ${quiz.sous_titre ? `<p class="quiz-card-subtitle">${quiz.sous_titre}</p>` : ''}
                         <div class="quiz-card-meta">
-                            <span>❓ ${questionCount} questions</span>
-                            <span>⏱️ ${quiz.duree || '5 min'}</span>
+                            <span><i>❓</i> ${questionCount} questions</span>
+                            <span><i>⏱️</i> ${quiz.duree || '5 min'}</span>
                         </div>
-                        <button class="quiz-continue-btn">
-                            <span>${buttonLabels[progress.status]}</span>
-                            <span class="arrow">→</span>
-                        </button>
+                        <div class="quiz-card-footer">
+                            ${createProgressCircle(progress.percent)}
+                            <a href="quiz.html?quiz=${quiz.slug}" class="quiz-card-btn ${status.class}">
+                                ${status.btn}
+                                <span class="arrow">→</span>
+                            </a>
+                        </div>
                     </div>
                 </article>
             `;
-        }
-
-        // Aller au quiz
-        function goToQuiz(slug) {
-            window.location.href = `quiz.html?quiz=${slug}`;
         }
 
         // Charger les quiz
@@ -506,7 +216,6 @@
             try {
                 initSupabase();
                 
-                // Récupérer les quiz publiés
                 const { data: quizzes, error } = await supabaseClient
                     .from('quizzes')
                     .select('*')
@@ -515,7 +224,6 @@
 
                 if (error) throw error;
 
-                // Récupérer le nombre de questions par quiz
                 const { data: questions } = await supabaseClient
                     .from('quiz_questions')
                     .select('quiz_id');
@@ -525,15 +233,14 @@
                     questionCounts[q.quiz_id] = (questionCounts[q.quiz_id] || 0) + 1;
                 });
 
-                // Afficher les quiz
                 const container = document.getElementById('quiz-list');
                 
                 if (!quizzes || quizzes.length === 0) {
                     container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-state-icon">🧠</div>
+                        <div class="quiz-empty">
+                            <div class="quiz-empty-icon">🧠</div>
                             <h3>Aucun quiz disponible</h3>
-                            <p>Les quiz arrivent bientôt !</p>
+                            <p>Les quiz arrivent très bientôt, reste connecté !</p>
                         </div>
                     `;
                     return;
@@ -543,27 +250,24 @@
                     createQuizCard(quiz, questionCounts[quiz.id] || 0)
                 ).join('');
 
-                // Mettre à jour les stats
                 updateStats(quizzes, questionCounts);
-
-                // Activer les filtres
                 setupFilters();
 
             } catch (error) {
                 console.error('Erreur:', error);
                 document.getElementById('quiz-list').innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">😕</div>
-                        <h3>Erreur de chargement</h3>
-                        <p>Impossible de charger les quiz. Réessayez plus tard.</p>
+                    <div class="quiz-empty error">
+                        <div class="quiz-empty-icon">😕</div>
+                        <h3>Oups, une erreur</h3>
+                        <p>Impossible de charger les quiz. Réessaie plus tard.</p>
+                        <button onclick="loadQuizzes()" class="retry-btn">Réessayer</button>
                     </div>
                 `;
             }
         }
 
-        // Mettre à jour les stats utilisateur
+        // Mettre à jour les stats
         function updateStats(quizzes, questionCounts) {
-            const progress = getProgress();
             let completed = 0;
             let inProgress = 0;
 
@@ -580,32 +284,45 @@
 
         // Filtres
         function setupFilters() {
-            document.querySelectorAll('.quiz-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.quiz-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+            document.querySelectorAll('.quiz-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.quiz-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
 
-                    const filter = tab.dataset.filter;
+                    const filter = btn.dataset.filter;
+                    let hasVisible = false;
                     
                     document.querySelectorAll('.quiz-card').forEach(card => {
                         const status = card.dataset.status;
+                        const show = filter === 'all' || 
+                            (filter === 'in-progress' && status === 'in-progress') ||
+                            (filter === 'completed' && status === 'completed');
                         
-                        if (filter === 'all') {
-                            card.style.display = '';
-                        } else if (filter === 'in-progress') {
-                            card.style.display = status === 'in-progress' ? '' : 'none';
-                        } else if (filter === 'completed') {
-                            card.style.display = status === 'completed' ? '' : 'none';
-                        }
+                        card.style.display = show ? '' : 'none';
+                        if (show) hasVisible = true;
                     });
+
+                    // Message si aucun résultat
+                    const container = document.getElementById('quiz-list');
+                    const existingEmpty = container.querySelector('.filter-empty');
+                    if (existingEmpty) existingEmpty.remove();
+
+                    if (!hasVisible && filter !== 'all') {
+                        const msg = filter === 'in-progress' 
+                            ? "Tu n'as aucun quiz en cours. Commence-en un !" 
+                            : "Tu n'as pas encore terminé de quiz. Lance-toi !";
+                        container.insertAdjacentHTML('beforeend', `
+                            <div class="filter-empty">
+                                <p>${msg}</p>
+                            </div>
+                        `);
+                    }
                 });
             });
         }
 
-        // Init après chargement des composants
+        // Init
         document.addEventListener('componentsLoaded', loadQuizzes);
-        
-        // Fallback
         setTimeout(() => {
             if (document.getElementById('quiz-list').innerHTML.includes('Chargement')) {
                 loadQuizzes();

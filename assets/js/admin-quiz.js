@@ -936,6 +936,7 @@ async function saveQuiz() {
         
         // Supprimer les anciennes données (dans l'ordre pour respecter les foreign keys)
         saveStatus.textContent = 'Nettoyage anciennes données...';
+        console.log('Suppression des anciennes données pour quiz_id:', quizId);
         
         // 1. Supprimer les réponses (via les questions du quiz)
         const { data: oldQuestions } = await supabaseClient
@@ -943,30 +944,44 @@ async function saveQuiz() {
             .select('id')
             .eq('quiz_id', quizId);
         
+        console.log('Questions existantes à supprimer:', oldQuestions?.length || 0);
+        
         if (oldQuestions && oldQuestions.length > 0) {
             const questionIds = oldQuestions.map(q => q.id);
-            const { error: delAnsErr } = await supabaseClient
+            const { error: delAnsErr, count: ansCount } = await supabaseClient
                 .from('quiz_answers')
                 .delete()
                 .in('question_id', questionIds);
-            if (delAnsErr) console.error('Erreur suppression réponses:', delAnsErr);
+            console.log('Réponses supprimées:', ansCount, delAnsErr ? 'ERREUR:' + delAnsErr.message : 'OK');
         }
         
         // 2. Supprimer les questions
-        const { error: delQErr } = await supabaseClient
+        const { error: delQErr, count: qCount } = await supabaseClient
             .from('quiz_questions')
             .delete()
             .eq('quiz_id', quizId);
-        if (delQErr) console.error('Erreur suppression questions:', delQErr);
+        console.log('Questions supprimées:', qCount, delQErr ? 'ERREUR:' + delQErr.message : 'OK');
         
         // 3. Supprimer les séquences
-        const { error: delSeqErr } = await supabaseClient
+        const { error: delSeqErr, count: seqCount } = await supabaseClient
             .from('quiz_sequences')
             .delete()
             .eq('quiz_id', quizId);
-        if (delSeqErr) console.error('Erreur suppression séquences:', delSeqErr);
+        console.log('Séquences supprimées:', seqCount, delSeqErr ? 'ERREUR:' + delSeqErr.message : 'OK');
         
-        console.log('Anciennes données supprimées, insertion des nouvelles...');
+        // Vérification que les séquences ont bien été supprimées
+        const { data: checkSeq } = await supabaseClient
+            .from('quiz_sequences')
+            .select('id')
+            .eq('quiz_id', quizId);
+        
+        if (checkSeq && checkSeq.length > 0) {
+            console.error('ATTENTION: Il reste encore', checkSeq.length, 'séquences non supprimées!');
+            console.error('Les policies RLS bloquent peut-être la suppression.');
+            throw new Error('Impossible de supprimer les anciennes séquences. Vérifiez les policies RLS dans Supabase.');
+        }
+        
+        console.log('✅ Anciennes données supprimées, insertion des nouvelles...');
         
         // Sauvegarder les nouvelles séquences et questions
         saveStatus.textContent = 'Sauvegarde séquences...';
@@ -976,7 +991,7 @@ async function saveQuiz() {
             const seq = quizData.sequences[i];
             console.log(`Sauvegarde séquence ${i + 1}:`, seq.title, `(${seq.questions.length} questions)`);
             
-            const { data: seqData, error: seqErr } = await supabaseClient.from('quiz_sequences').insert({
+            const seqPayload = {
                 quiz_id: quizId,
                 numero: i + 1,
                 titre: seq.title,
@@ -986,17 +1001,33 @@ async function saveQuiz() {
                 stat_source: seq.statSource || null,
                 bilan_titre: seq.bilanTitle || null,
                 bilan_texte: seq.bilanText || null
-            }).select().single();
+            };
+            console.log('Payload séquence:', seqPayload);
+            
+            const { data: seqData, error: seqErr } = await supabaseClient
+                .from('quiz_sequences')
+                .insert(seqPayload)
+                .select()
+                .single();
+            
+            console.log('Résultat insertion séquence:', { seqData, seqErr });
             
             if (seqErr) {
                 console.error('Erreur séquence:', seqErr);
                 throw seqErr;
             }
             
+            if (!seqData || !seqData.id) {
+                console.error('seqData est null ou sans id:', seqData);
+                throw new Error('Échec création séquence - pas de données retournées. Vérifiez les policies RLS.');
+            }
+            
+            console.log('Séquence créée avec ID:', seqData.id);
+            
             // Questions de la séquence
             for (let j = 0; j < seq.questions.length; j++) {
                 const q = seq.questions[j];
-                console.log(`  Question ${j + 1}:`, q.question.substring(0, 50));
+                console.log(`  Question ${j + 1}:`, q.question.substring(0, 50), '- sequence_id:', seqData.id);
                 
                 const { data: qData, error: qErr } = await supabaseClient.from('quiz_questions').insert({
                     quiz_id: quizId,
@@ -1010,6 +1041,11 @@ async function saveQuiz() {
                 if (qErr) {
                     console.error('Erreur question:', qErr);
                     throw qErr;
+                }
+                
+                if (!qData || !qData.id) {
+                    console.error('qData est null ou sans id:', qData);
+                    throw new Error('Échec création question - pas de données retournées.');
                 }
                 
                 // Réponses

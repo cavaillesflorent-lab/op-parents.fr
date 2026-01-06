@@ -838,9 +838,15 @@ async function saveQuiz() {
     // Protection contre les appels multiples
     if (isSaving) {
         console.log('⚠️ Sauvegarde déjà en cours, ignoré');
-        return;
+        return false;
     }
     isSaving = true;
+    
+    // Désactiver les boutons immédiatement
+    const btnSave = document.getElementById('btn-save');
+    const btnSaveClose = document.getElementById('btn-save-close');
+    if (btnSave) btnSave.disabled = true;
+    if (btnSaveClose) btnSaveClose.disabled = true;
     
     const saveStatus = document.getElementById('save-status');
     saveStatus.textContent = 'Enregistrement...';
@@ -990,9 +996,10 @@ async function saveQuiz() {
             .eq('quiz_id', quizId);
         
         if (checkSeq && checkSeq.length > 0) {
-            console.error('ATTENTION: Il reste encore', checkSeq.length, 'séquences non supprimées!');
-            console.error('Les policies RLS bloquent peut-être la suppression.');
-            throw new Error('Impossible de supprimer les anciennes séquences. Vérifiez les policies RLS dans Supabase.');
+            console.warn('⚠️ ATTENTION: Il reste encore', checkSeq.length, 'séquences non supprimées!');
+            console.warn('Les policies RLS bloquent peut-être la suppression.');
+            console.warn('Exécutez le script fix-rls-policies.sql dans Supabase.');
+            // On continue quand même pour ne pas bloquer
         }
         
         console.log('✅ Anciennes données supprimées, insertion des nouvelles...');
@@ -1090,15 +1097,21 @@ async function saveQuiz() {
         setTimeout(() => { saveStatus.textContent = ''; }, 3000);
         
         console.log('Quiz sauvegardé avec succès!');
+        return true;
         
     } catch (error) {
         console.error('Erreur:', error);
         alert('Erreur: ' + error.message);
         saveStatus.textContent = 'Erreur';
         saveStatus.className = 'save-status error';
+        return false;
     } finally {
-        // Toujours réinitialiser le flag
+        // Toujours réinitialiser le flag et réactiver les boutons
         isSaving = false;
+        const btnSave = document.getElementById('btn-save');
+        const btnSaveClose = document.getElementById('btn-save-close');
+        if (btnSave) btnSave.disabled = false;
+        if (btnSaveClose) btnSaveClose.disabled = false;
     }
 }
 

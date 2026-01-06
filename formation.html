@@ -8,27 +8,62 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- HEADER (chargé dynamiquement) -->
+    <!-- HEADER -->
     <div id="header-placeholder"></div>
 
-    <!-- CONTENU FORMATION -->
-    <section class="formation-detail-section">
-        <div class="container">
-            <nav class="breadcrumb">
-                <a href="index.html">Accueil</a> &gt; 
-                <a href="formations.html">Formations</a> &gt; 
-                <span id="breadcrumb-title">Chargement...</span>
-            </nav>
+    <main>
+        <!-- HERO (chargé dynamiquement) -->
+        <section class="page-hero" id="formation-hero">
+            <div class="page-hero-content">
+                <span class="page-hero-badge">📚 Formation</span>
+                <h1 id="hero-title">Chargement...</h1>
+                <p id="hero-description"></p>
+            </div>
+            <div class="page-hero-decoration">
+                <div class="hero-circle circle-1"></div>
+                <div class="hero-circle circle-2"></div>
+                <div class="hero-circle circle-3"></div>
+            </div>
+        </section>
 
-            <div class="formation-detail" id="formation-detail">
-                <div class="loading-state">
-                    <p>Chargement de la formation...</p>
+        <!-- BREADCRUMB + CONTENU -->
+        <section class="formation-detail-section">
+            <div class="container">
+                <nav class="breadcrumb">
+                    <a href="index.html">Accueil</a>
+                    <span class="breadcrumb-separator">›</span>
+                    <a href="formations.html">Formations</a>
+                    <span class="breadcrumb-separator">›</span>
+                    <span id="breadcrumb-title">Chargement...</span>
+                </nav>
+
+                <div class="formation-detail" id="formation-detail">
+                    <div class="loading-state">
+                        <div class="quiz-loading-spinner"></div>
+                        <p>Chargement de la formation...</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- FOOTER (chargé dynamiquement) -->
+        <!-- CTA -->
+        <section class="page-cta-section">
+            <div class="container">
+                <div class="page-cta-card">
+                    <div class="page-cta-content">
+                        <h2>Cette formation t'a plu ?</h2>
+                        <p>Découvre nos autres formations et webinaires pour continuer ta progression.</p>
+                    </div>
+                    <a href="formations.html" class="page-cta-btn">
+                        Voir toutes les formations
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
     <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
@@ -36,89 +71,122 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
-        // Récupérer l'ID de la formation depuis l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const formationId = urlParams.get('id');
 
-        // Attendre que les composants soient chargés
         document.addEventListener('componentsLoaded', () => {
             initSupabase();
             loadFormation();
         });
 
-        // Charger la formation
         async function loadFormation() {
             if (!formationId) {
                 window.location.href = 'formations.html';
                 return;
             }
 
-            // Charger la formation
-            const { data: formation, error } = await supabaseClient
-                .from('formations')
-                .select('*')
-                .eq('id', formationId)
-                .eq('published', true)
-                .single();
+            try {
+                const { data: formation, error } = await supabaseClient
+                    .from('formations')
+                    .select('*')
+                    .eq('id', formationId)
+                    .eq('published', true)
+                    .single();
 
-            if (error || !formation) {
+                if (error || !formation) throw new Error('Formation non trouvée');
+
+                const { data: modules } = await supabaseClient
+                    .from('modules')
+                    .select('*')
+                    .eq('formation_id', formationId)
+                    .order('ordre', { ascending: true });
+
+                displayFormation(formation, modules || []);
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('hero-title').textContent = 'Formation non trouvée';
                 document.getElementById('formation-detail').innerHTML = `
-                    <div class="error-state">
-                        <p>Formation non trouvée.</p>
-                        <a href="formations.html" class="btn btn-primary">Voir toutes les formations</a>
+                    <div class="page-empty">
+                        <div class="page-empty-icon">😕</div>
+                        <h3>Formation introuvable</h3>
+                        <p>Cette formation n'existe pas ou n'est plus disponible.</p>
+                        <a href="formations.html" class="retry-btn">Voir toutes les formations</a>
                     </div>
                 `;
-                return;
             }
-
-            // Charger les modules
-            const { data: modules } = await supabaseClient
-                .from('modules')
-                .select('*')
-                .eq('formation_id', formationId)
-                .order('ordre', { ascending: true });
-
-            displayFormation(formation, modules || []);
         }
 
-        // Afficher la formation
         function displayFormation(formation, modules) {
+            // Mettre à jour le titre et la meta
             document.title = `${formation.titre} - OP!`;
+            document.getElementById('hero-title').textContent = formation.titre;
+            document.getElementById('hero-description').textContent = formation.description || '';
             document.getElementById('breadcrumb-title').textContent = formation.titre;
 
             const container = document.getElementById('formation-detail');
             container.innerHTML = `
-                <div class="formation-header">
-                    ${formation.image_url ? `<img src="${formation.image_url}" alt="${formation.titre}" class="formation-hero-image">` : ''}
-                    <h1>${formation.titre}</h1>
-                    <p class="formation-description">${formation.description || ''}</p>
-                </div>
+                <div class="formation-content-wrapper">
+                    ${formation.image_url ? `
+                        <div class="formation-cover">
+                            <img src="${formation.image_url}" alt="${formation.titre}">
+                        </div>
+                    ` : ''}
 
-                <div class="modules-list">
-                    <h2>Contenu de la formation</h2>
-                    ${modules.length === 0 ? '<p class="empty">Aucun module disponible.</p>' : ''}
-                    ${modules.map((module, index) => `
-                        <div class="module-item" data-index="${index}">
-                            <div class="module-header" onclick="toggleModule(${index})">
-                                <span class="module-number">${index + 1}</span>
-                                <h3>${module.titre}</h3>
-                                <span class="module-type">${getTypeLabel(module.type)}</span>
-                                <span class="module-toggle">▼</span>
-                            </div>
-                            <div class="module-content" id="module-content-${index}">
-                                ${renderModuleContent(module)}
+                    <div class="formation-info-card">
+                        <div class="formation-info-item">
+                            <span class="info-icon">🎯</span>
+                            <div>
+                                <strong>${modules.length}</strong>
+                                <span>modules</span>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
+                        <div class="formation-info-item">
+                            <span class="info-icon">⏱️</span>
+                            <div>
+                                <strong>À ton rythme</strong>
+                                <span>Sans limite</span>
+                            </div>
+                        </div>
+                        <div class="formation-info-item">
+                            <span class="info-icon">🆓</span>
+                            <div>
+                                <strong>Gratuit</strong>
+                                <span>100% accessible</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="formation-cta">
-                    <a href="formations.html" class="btn btn-secondary">← Retour aux formations</a>
+                    <div class="modules-section">
+                        <h2>📖 Contenu de la formation</h2>
+                        ${modules.length === 0 
+                            ? '<p class="modules-empty">Aucun module disponible pour le moment.</p>' 
+                            : `<div class="modules-list">
+                                ${modules.map((module, index) => `
+                                    <div class="module-item" data-index="${index}">
+                                        <div class="module-header" onclick="toggleModule(${index})">
+                                            <div class="module-number">${index + 1}</div>
+                                            <div class="module-info">
+                                                <h3>${module.titre}</h3>
+                                                <span class="module-type">${getTypeLabel(module.type)}</span>
+                                            </div>
+                                            <span class="module-toggle">
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="module-content" id="module-content-${index}">
+                                            ${renderModuleContent(module)}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>`
+                        }
+                    </div>
                 </div>
             `;
         }
 
-        // Type de module
         function getTypeLabel(type) {
             const labels = {
                 'video': '🎥 Vidéo',
@@ -128,18 +196,15 @@
             return labels[type] || type;
         }
 
-        // Contenu du module
         function renderModuleContent(module) {
             switch (module.type) {
                 case 'video':
-                    const videoUrl = module.contenu_url || '';
-                    // Convertir URL YouTube en embed
-                    let embedUrl = videoUrl;
-                    if (videoUrl.includes('youtube.com/watch')) {
-                        const videoId = new URL(videoUrl).searchParams.get('v');
+                    let embedUrl = module.contenu_url || '';
+                    if (embedUrl.includes('youtube.com/watch')) {
+                        const videoId = new URL(embedUrl).searchParams.get('v');
                         embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                    } else if (videoUrl.includes('youtu.be/')) {
-                        const videoId = videoUrl.split('youtu.be/')[1];
+                    } else if (embedUrl.includes('youtu.be/')) {
+                        const videoId = embedUrl.split('youtu.be/')[1];
                         embedUrl = `https://www.youtube.com/embed/${videoId}`;
                     }
                     return `
@@ -149,24 +214,21 @@
                     `;
                 case 'pdf':
                     return `
-                        <div class="pdf-container">
-                            <a href="${module.contenu_url}" target="_blank" class="btn btn-primary">
-                                📄 Télécharger le PDF
+                        <div class="pdf-download">
+                            <a href="${module.contenu_url}" target="_blank" class="pdf-btn">
+                                <span class="pdf-icon">📄</span>
+                                <span>Télécharger le PDF</span>
+                                <span class="arrow">↓</span>
                             </a>
                         </div>
                     `;
                 case 'texte':
-                    return `
-                        <div class="text-content">
-                            ${module.contenu_texte || ''}
-                        </div>
-                    `;
+                    return `<div class="text-content">${module.contenu_texte || ''}</div>`;
                 default:
                     return '<p>Contenu non disponible</p>';
             }
         }
 
-        // Toggle module
         function toggleModule(index) {
             const content = document.getElementById(`module-content-${index}`);
             const item = document.querySelector(`.module-item[data-index="${index}"]`);

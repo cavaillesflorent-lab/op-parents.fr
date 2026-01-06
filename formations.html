@@ -8,34 +8,83 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <!-- HEADER (chargé dynamiquement) -->
+    <!-- HEADER -->
     <div id="header-placeholder"></div>
 
-    <!-- HERO -->
-    <section class="page-hero">
-        <div class="container">
-            <h1>Nos Formations</h1>
-            <p>Des contenus pédagogiques pour comprendre, organiser et anticiper les finances de votre famille.</p>
-        </div>
-    </section>
+    <main>
+        <!-- HERO -->
+        <section class="page-hero">
+            <div class="page-hero-content">
+                <span class="page-hero-badge">📚 Formations</span>
+                <h1>Nos Formations</h1>
+                <p>Des contenus pédagogiques pour comprendre, organiser et anticiper les finances de votre famille.</p>
+            </div>
+            <div class="page-hero-decoration">
+                <div class="hero-circle circle-1"></div>
+                <div class="hero-circle circle-2"></div>
+                <div class="hero-circle circle-3"></div>
+            </div>
+        </section>
 
-    <!-- LISTE FORMATIONS -->
-    <section class="formations-list-section">
-        <div class="container">
-            <div class="formations-grid" id="formations-grid">
-                <div class="loading-state">
-                    <p>Chargement des formations...</p>
+        <!-- STATS -->
+        <section class="page-stats-section">
+            <div class="page-stats">
+                <div class="page-stat">
+                    <div class="page-stat-icon">📚</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-formations">0</span>
+                        <span class="page-stat-label">Formations</span>
+                    </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">🎯</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-modules">0</span>
+                        <span class="page-stat-label">Modules</span>
+                    </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">🆓</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value">100%</span>
+                        <span class="page-stat-label">Gratuit</span>
+                    </div>
                 </div>
             </div>
-            
-            <div class="empty-state" id="empty-state" style="display: none;">
-                <p>Aucune formation disponible pour le moment.</p>
-                <p>Revenez bientôt !</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- FOOTER (chargé dynamiquement) -->
+        <!-- LISTE -->
+        <section class="page-list-section">
+            <div class="container">
+                <div class="formations-grid" id="formations-grid">
+                    <div class="loading-state">
+                        <div class="quiz-loading-spinner"></div>
+                        <p>Chargement des formations...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="page-cta-section">
+            <div class="container">
+                <div class="page-cta-card">
+                    <div class="page-cta-content">
+                        <h2>Envie d'aller plus loin ?</h2>
+                        <p>Découvre nos webinaires en direct pour approfondir tes connaissances avec des experts.</p>
+                    </div>
+                    <a href="webinaires.html" class="page-cta-btn">
+                        Voir les webinaires
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
     <div id="footer-placeholder"></div>
 
     <!-- Scripts -->
@@ -43,64 +92,88 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
-        // Attendre que les composants soient chargés
         document.addEventListener('componentsLoaded', () => {
             initSupabase();
             loadFormations();
         });
 
-        // Charger les formations
         async function loadFormations() {
-            const { data: formations, error } = await supabaseClient
-                .from('formations')
-                .select('*')
-                .eq('published', true)
-                .order('created_at', { ascending: false });
+            try {
+                const { data: formations, error } = await supabaseClient
+                    .from('formations')
+                    .select('*')
+                    .eq('published', true)
+                    .order('created_at', { ascending: false });
 
-            if (error) {
+                if (error) throw error;
+
+                const { data: modules } = await supabaseClient
+                    .from('modules')
+                    .select('formation_id');
+
+                const moduleCounts = {};
+                let totalModules = 0;
+                modules?.forEach(m => {
+                    moduleCounts[m.formation_id] = (moduleCounts[m.formation_id] || 0) + 1;
+                    totalModules++;
+                });
+
+                // Mettre à jour les stats
+                document.getElementById('stat-formations').textContent = formations?.length || 0;
+                document.getElementById('stat-modules').textContent = totalModules;
+
+                displayFormations(formations || [], moduleCounts);
+            } catch (error) {
                 console.error('Erreur:', error);
-                document.getElementById('formations-grid').innerHTML = '<p class="error">Erreur de chargement</p>';
-                return;
+                document.getElementById('formations-grid').innerHTML = `
+                    <div class="page-empty">
+                        <div class="page-empty-icon">😕</div>
+                        <h3>Erreur de chargement</h3>
+                        <p>Impossible de charger les formations.</p>
+                    </div>
+                `;
             }
-
-            // Charger les modules pour chaque formation
-            const { data: modules } = await supabaseClient
-                .from('modules')
-                .select('formation_id');
-
-            // Compter les modules par formation
-            const moduleCounts = {};
-            modules?.forEach(m => {
-                moduleCounts[m.formation_id] = (moduleCounts[m.formation_id] || 0) + 1;
-            });
-
-            displayFormations(formations || [], moduleCounts);
         }
 
-        // Afficher les formations
         function displayFormations(formations, moduleCounts) {
             const grid = document.getElementById('formations-grid');
-            const emptyState = document.getElementById('empty-state');
             
             if (formations.length === 0) {
-                grid.style.display = 'none';
-                emptyState.style.display = 'block';
+                grid.innerHTML = `
+                    <div class="page-empty">
+                        <div class="page-empty-icon">📚</div>
+                        <h3>Aucune formation disponible</h3>
+                        <p>Les formations arrivent très bientôt, reste connecté !</p>
+                    </div>
+                `;
                 return;
             }
 
             grid.innerHTML = formations.map(formation => `
-                <a href="formation.html?id=${formation.id}" class="formation-card-link">
-                    <div class="formation-card">
-                        ${formation.image_url ? `<img src="${formation.image_url}" alt="${formation.titre}" class="formation-image">` : ''}
-                        <div class="formation-content">
-                            <h3>${formation.titre}</h3>
-                            <p>${formation.description || ''}</p>
-                            <div class="formation-meta">
-                                <span class="module-count">${moduleCounts[formation.id] || 0} module(s)</span>
+                <article class="formation-card">
+                    <a href="formation.html?id=${formation.id}" class="formation-card-link">
+                        <div class="formation-card-image">
+                            ${formation.image_url 
+                                ? `<img src="${formation.image_url}" alt="${formation.titre}" loading="lazy">`
+                                : `<div class="formation-card-placeholder"><span>📚</span></div>`
+                            }
+                            <span class="formation-card-badge">Gratuit</span>
+                        </div>
+                        <div class="formation-card-body">
+                            <h3 class="formation-card-title">${formation.titre}</h3>
+                            ${formation.description ? `<p class="formation-card-description">${formation.description}</p>` : ''}
+                            <div class="formation-card-meta">
+                                <span>🎯 ${moduleCounts[formation.id] || 0} modules</span>
+                            </div>
+                            <div class="formation-card-footer">
+                                <span class="formation-card-btn">
+                                    Découvrir
+                                    <span class="arrow">→</span>
+                                </span>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </article>
             `).join('');
         }
     </script>

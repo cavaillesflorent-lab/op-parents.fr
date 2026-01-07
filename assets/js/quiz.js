@@ -1,6 +1,6 @@
 // ============================================
 // QUIZ ENGINE - OP! Parents
-// Avec sauvegarde de progression localStorage
+// Navigation par séquence avec sommaire
 // ============================================
 
 const STORAGE_KEY = 'op_quiz_progress';
@@ -9,18 +9,14 @@ class QuizEngine {
     constructor() {
         this.quiz = null;
         this.quizSlug = null;
-        this.questions = [];
         this.sequences = [];
         this.profiles = [];
-        this.currentIndex = 0;
-        this.answers = {};
-        this.scores = { A: 0, B: 0, C: 0, D: 0 };
-        this.sequenceScores = {}; // Scores par séquence: { seq_id: { A: 0, B: 0, ... } }
-        this.currentSequenceId = null;
+        this.currentSequenceIndex = -1;
+        this.currentQuestionIndex = 0;
+        this.sequenceProgress = {}; // { seq_id: { answers: {}, scores: {A,B,C,D}, completed: bool, currentIndex: 0 } }
         this.sessionId = this.generateSessionId();
     }
 
-    // Générer un ID de session unique
     generateSessionId() {
         return 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
@@ -29,7 +25,6 @@ class QuizEngine {
     // GESTION DE LA PROGRESSION (localStorage)
     // ============================================
 
-    // Récupérer toutes les progressions
     getAllProgress() {
         try {
             return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
@@ -38,147 +33,81 @@ class QuizEngine {
         }
     }
 
-    // Récupérer la progression pour ce quiz
     getProgress() {
         return this.getAllProgress()[this.quizSlug] || null;
     }
 
-    // Sauvegarder la progression
     saveProgress() {
         const allProgress = this.getAllProgress();
         allProgress[this.quizSlug] = {
-            currentIndex: this.currentIndex,
-            answers: this.answers,
-            scores: this.scores,
-            answeredQuestions: Object.keys(this.answers).length,
-            totalQuestions: this.questions.length,
-            completed: false,
+            sequenceProgress: this.sequenceProgress,
+            completed: this.isQuizCompleted(),
             updatedAt: new Date().toISOString()
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
-        console.log('Progression sauvegardée:', this.currentIndex + 1, '/', this.questions.length);
     }
 
-    // Marquer le quiz comme terminé
-    markCompleted(dominant) {
-        const allProgress = this.getAllProgress();
-        allProgress[this.quizSlug] = {
-            ...allProgress[this.quizSlug],
-            completed: true,
-            dominant: dominant,
-            completedAt: new Date().toISOString()
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+    loadSavedProgress() {
+        const saved = this.getProgress();
+        if (saved && saved.sequenceProgress) {
+            this.sequenceProgress = saved.sequenceProgress;
+            return true;
+        }
+        return false;
     }
 
-    // Effacer la progression (recommencer)
     clearProgress() {
         const allProgress = this.getAllProgress();
         delete allProgress[this.quizSlug];
         localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
+        this.sequenceProgress = {};
     }
 
-    // Restaurer la progression sauvegardée
-    restoreProgress() {
-        const saved = this.getProgress();
-        if (saved && !saved.completed) {
-            this.currentIndex = saved.currentIndex || 0;
-            this.answers = saved.answers || {};
-            this.scores = saved.scores || { A: 0, B: 0, C: 0, D: 0 };
-            return true;
-        }
-        return false;
+    isQuizCompleted() {
+        return this.sequences.every(seq => this.sequenceProgress[seq.id]?.completed);
+    }
+
+    markCompleted(dominantProfile) {
+        const allProgress = this.getAllProgress();
+        allProgress[this.quizSlug] = {
+            ...allProgress[this.quizSlug],
+            completed: true,
+            dominantProfile: dominantProfile,
+            completedAt: new Date().toISOString()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
     }
 
     // ============================================
     // INITIALISATION
     // ============================================
 
-    async init(quizSlug = null) {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            this.quizSlug = quizSlug || urlParams.get('quiz') || 'mindset-financier';
-            this.isPreview = urlParams.get('preview') === 'true';
+    async init(slug, isPreview = false) {
+        this.quizSlug = slug;
+        this.isPreview = isPreview;
 
-            await this.loadQuiz(this.quizSlug);
+        try {
+            await this.loadQuiz(slug);
+            this.loadSavedProgress();
+            this.initializeSequenceProgress();
+            this.showIntro();
             this.bindEvents();
-            
-            // Afficher bandeau preview si mode aperçu
-            if (this.isPreview) {
-                this.showPreviewBanner();
-            }
-            
-            // Vérifier s'il y a une progression à reprendre
-            const hasProgress = this.restoreProgress();
-            
-            if (hasProgress && this.currentIndex > 0) {
-                this.showResumePrompt();
-            } else {
-                this.showIntro();
-            }
         } catch (error) {
             console.error('Erreur initialisation quiz:', error);
-            this.showError('Impossible de charger le quiz. Veuillez réessayer.');
+            this.showError(error.message);
         }
     }
-    
-    // Afficher le bandeau de prévisualisation
-    showPreviewBanner() {
-        const banner = document.createElement('div');
-        banner.className = 'preview-banner';
-        banner.innerHTML = `
-            <span>👁️ Mode aperçu</span>
-            <span>Ce quiz n'est pas encore publié</span>
-            <a href="admin/quizzes.html" class="preview-banner-link">← Retour à l'admin</a>
-        `;
-        document.body.insertBefore(banner, document.body.firstChild);
-    }
 
-    // Afficher le prompt de reprise
-    showResumePrompt() {
-        document.getElementById('quiz-loading').style.display = 'none';
-        document.getElementById('quiz-intro').style.display = 'block';
-        
-        // Remplir les infos de base
-        document.getElementById('quiz-title').textContent = this.quiz.titre;
-        document.getElementById('quiz-description').textContent = this.quiz.description || '';
-        document.getElementById('quiz-questions-count').textContent = this.questions.length;
-        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(this.questions.length * 0.5) + ' min';
-
-        // Afficher le bloc de reprise
-        const resumeBlock = document.getElementById('quiz-resume-block');
-        if (resumeBlock) {
-            resumeBlock.style.display = 'block';
-            document.getElementById('resume-progress-text').textContent = 
-                `Question ${this.currentIndex} sur ${this.questions.length}`;
-            document.getElementById('resume-progress-fill').style.width = 
-                `${(this.currentIndex / this.questions.length) * 100}%`;
-        }
-
-        // Masquer le bouton normal, afficher les boutons de reprise
-        const startBtn = document.getElementById('btn-start');
-        const resumeBtn = document.getElementById('btn-resume');
-        const restartBtn = document.getElementById('btn-restart-fresh');
-        
-        if (startBtn) startBtn.style.display = 'none';
-        if (resumeBtn) resumeBtn.style.display = 'inline-flex';
-        if (restartBtn) restartBtn.style.display = 'inline-flex';
-    }
-
-    // Charger le quiz depuis Supabase
     async loadQuiz(slug) {
-        // Charger le quiz
         let query = supabaseClient
             .from('quizzes')
             .select('*')
             .eq('slug', slug);
-        
-        // En mode normal, filtrer uniquement les quiz publiés
-        // En mode preview, charger même les brouillons
+
         if (!this.isPreview) {
             query = query.eq('published', true);
         }
-        
+
         const { data: quiz, error: quizError } = await query.single();
 
         if (quizError || !quiz) {
@@ -187,7 +116,7 @@ class QuizEngine {
 
         this.quiz = quiz;
 
-        // Charger les profils
+        // Charger les profils globaux
         const { data: profiles } = await supabaseClient
             .from('quiz_profiles')
             .select('*')
@@ -196,81 +125,74 @@ class QuizEngine {
 
         this.profiles = profiles || [];
 
-        // Charger les séquences
+        // Charger les séquences avec leurs questions
         const { data: sequences } = await supabaseClient
             .from('quiz_sequences')
             .select('*')
             .eq('quiz_id', quiz.id)
             .order('numero');
 
-        this.sequences = sequences || [];
-        
-        // Initialiser les scores par séquence
-        this.sequences.forEach(seq => {
-            this.sequenceScores[seq.id] = { A: 0, B: 0, C: 0, D: 0 };
-        });
+        this.sequences = [];
 
-        // Charger les questions
-        const { data: questions } = await supabaseClient
-            .from('quiz_questions')
-            .select(`
-                *,
-                quiz_answers (*)
-            `)
-            .eq('quiz_id', quiz.id)
-            .order('numero');
+        for (const seq of (sequences || [])) {
+            const { data: questions } = await supabaseClient
+                .from('quiz_questions')
+                .select('*, quiz_answers(*)')
+                .eq('sequence_id', seq.id)
+                .order('numero');
 
-        // Associer les séquences aux questions
-        this.questions = (questions || []).map(q => {
-            const sequence = (sequences || []).find(s => s.id === q.sequence_id);
-            return {
-                ...q,
-                sequence: sequence,
-                answers: (q.quiz_answers || []).sort((a, b) => a.ordre - b.ordre)
-            };
-        });
+            this.sequences.push({
+                ...seq,
+                questions: (questions || []).map(q => ({
+                    ...q,
+                    answers: (q.quiz_answers || []).sort((a, b) => a.ordre - b.ordre)
+                }))
+            });
+        }
 
-        console.log('Quiz chargé:', this.quiz.titre, '- Questions:', this.questions.length);
+        console.log('Quiz chargé:', this.quiz.titre, '- Séquences:', this.sequences.length);
     }
 
-    // Afficher l'écran d'accueil
+    initializeSequenceProgress() {
+        this.sequences.forEach(seq => {
+            if (!this.sequenceProgress[seq.id]) {
+                this.sequenceProgress[seq.id] = {
+                    answers: {},
+                    scores: { A: 0, B: 0, C: 0, D: 0 },
+                    completed: false,
+                    currentIndex: 0
+                };
+            }
+        });
+    }
+
+    // ============================================
+    // ÉCRANS
+    // ============================================
+
     showIntro() {
-        document.getElementById('quiz-loading').style.display = 'none';
+        this.hideAllScreens();
         document.getElementById('quiz-intro').style.display = 'block';
-        document.getElementById('quiz-question-screen').style.display = 'none';
-        document.getElementById('quiz-result-screen').style.display = 'none';
 
-        // Masquer le bloc de reprise
-        const resumeBlock = document.getElementById('quiz-resume-block');
-        if (resumeBlock) resumeBlock.style.display = 'none';
-
-        // Afficher le bouton normal
-        const startBtn = document.getElementById('btn-start');
-        const resumeBtn = document.getElementById('btn-resume');
-        const restartBtn = document.getElementById('btn-restart-fresh');
-        
-        if (startBtn) startBtn.style.display = 'inline-flex';
-        if (resumeBtn) resumeBtn.style.display = 'none';
-        if (restartBtn) restartBtn.style.display = 'none';
-
-        // Remplir les infos
         document.getElementById('quiz-title').textContent = this.quiz.titre;
+        document.getElementById('quiz-subtitle').textContent = this.quiz.sous_titre || '';
         document.getElementById('quiz-description').textContent = this.quiz.description || '';
-        
+
         // Image de couverture
         const coverImg = document.getElementById('quiz-cover-image');
         if (coverImg && this.quiz.image_url) {
             coverImg.src = this.quiz.image_url;
             coverImg.style.display = 'block';
         }
-        
+
+        // Stats
         if (this.quiz.intro_stat) {
             document.getElementById('stat-number').textContent = this.quiz.intro_stat;
             document.getElementById('stat-source').textContent = this.quiz.intro_stat_source || '';
             document.getElementById('quiz-stat').style.display = 'block';
         }
 
-        // Afficher les bénéfices
+        // Bénéfices
         const benefitsList = document.getElementById('benefits-list');
         const benefitsContainer = document.getElementById('quiz-benefits');
         if (benefitsList && this.quiz.benefits && this.quiz.benefits.length > 0) {
@@ -280,202 +202,148 @@ class QuizEngine {
             benefitsContainer.style.display = 'none';
         }
 
-        document.getElementById('quiz-questions-count').textContent = this.questions.length;
-        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(this.questions.length * 0.5) + ' min';
-    }
+        // Nombre de questions total
+        const totalQuestions = this.sequences.reduce((sum, seq) => sum + seq.questions.length, 0);
+        document.getElementById('quiz-questions-count').textContent = totalQuestions;
+        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(totalQuestions * 0.5) + ' min';
 
-    // Démarrer le quiz (depuis le début)
-    start() {
-        this.currentIndex = 0;
-        this.answers = {};
-        this.scores = { A: 0, B: 0, C: 0, D: 0 };
-        this.clearProgress();
-        
-        document.getElementById('quiz-intro').style.display = 'none';
-        document.getElementById('quiz-question-screen').style.display = 'block';
-        
-        this.showQuestion();
-    }
+        // Vérifier s'il y a une progression
+        const hasProgress = Object.values(this.sequenceProgress).some(p => Object.keys(p.answers).length > 0);
+        const resumeBlock = document.getElementById('quiz-resume-block');
+        const startBtn = document.getElementById('btn-start');
 
-    // Reprendre où on s'était arrêté
-    resume() {
-        document.getElementById('quiz-intro').style.display = 'none';
-        document.getElementById('quiz-question-screen').style.display = 'block';
-        
-        this.showQuestion();
-    }
-
-    // Recommencer depuis le début (efface la progression)
-    startFresh() {
-        this.currentIndex = 0;
-        this.answers = {};
-        this.scores = { A: 0, B: 0, C: 0, D: 0 };
-        this.clearProgress();
-        
-        document.getElementById('quiz-intro').style.display = 'none';
-        document.getElementById('quiz-question-screen').style.display = 'block';
-        
-        this.showQuestion();
-    }
-
-    // Afficher une question
-    showQuestion() {
-        const question = this.questions[this.currentIndex];
-        if (!question) {
-            this.showResult();
-            return;
-        }
-
-        // Progress
-        const progress = ((this.currentIndex) / this.questions.length) * 100;
-        document.getElementById('progress-fill').style.width = `${progress}%`;
-        document.getElementById('progress-text').textContent = 
-            `Question ${this.currentIndex + 1}/${this.questions.length}`;
-
-        // Context (séquence)
-        const contextEl = document.getElementById('quiz-context');
-        if (question.sequence && question.sequence.contexte) {
-            document.getElementById('context-badge').textContent = 
-                `🔁 ${question.sequence.titre}`;
-            document.getElementById('context-text').textContent = question.sequence.contexte;
-            contextEl.style.display = 'block';
+        if (hasProgress && resumeBlock) {
+            resumeBlock.style.display = 'block';
+            if (startBtn) startBtn.style.display = 'none';
         } else {
-            contextEl.style.display = 'none';
+            if (resumeBlock) resumeBlock.style.display = 'none';
+            if (startBtn) startBtn.style.display = 'flex';
+        }
+    }
+
+    showSummary() {
+        this.hideAllScreens();
+        
+        let summaryScreen = document.getElementById('quiz-summary');
+        if (!summaryScreen) {
+            summaryScreen = document.createElement('div');
+            summaryScreen.id = 'quiz-summary';
+            summaryScreen.className = 'quiz-summary';
+            document.querySelector('.quiz-container').appendChild(summaryScreen);
         }
 
-        // Stat highlight
-        const statEl = document.getElementById('quiz-stat-highlight');
-        if (question.sequence && question.sequence.stat_texte) {
-            document.getElementById('highlight-stat-text').textContent = question.sequence.stat_texte;
-            document.getElementById('highlight-stat-source').textContent = 
-                question.sequence.stat_source || '';
-            statEl.style.display = 'flex';
-        } else {
-            statEl.style.display = 'none';
-        }
+        const completedCount = this.sequences.filter(seq => this.sequenceProgress[seq.id]?.completed).length;
+        const allCompleted = completedCount === this.sequences.length;
 
-        // Question
-        document.getElementById('quiz-question').textContent = question.question;
+        summaryScreen.innerHTML = `
+            <div class="summary-content">
+                <div class="summary-header">
+                    <h2>${this.quiz.titre}</h2>
+                    <p class="summary-progress-text">${completedCount} / ${this.sequences.length} séquences complétées</p>
+                    <div class="summary-progress-bar">
+                        <div class="summary-progress-fill" style="width: ${(completedCount / this.sequences.length) * 100}%"></div>
+                    </div>
+                </div>
 
-        // Answers
-        const answersContainer = document.getElementById('quiz-answers');
-        answersContainer.innerHTML = question.answers.map(answer => `
-            <button class="quiz-answer" data-code="${answer.code}" data-question="${question.id}">
-                <span class="answer-letter">${answer.code}</span>
-                <span class="answer-text">${answer.texte}</span>
-                <span class="answer-profile">${answer.profil_label || ''}</span>
-            </button>
-        `).join('');
+                <div class="summary-sequences">
+                    ${this.sequences.map((seq, index) => this.renderSequenceCard(seq, index)).join('')}
+                </div>
 
-        // Bind answer clicks
-        answersContainer.querySelectorAll('.quiz-answer').forEach(btn => {
-            btn.addEventListener('click', (e) => this.selectAnswer(e.currentTarget));
+                ${allCompleted ? `
+                    <button class="btn-see-results" id="btn-see-results">
+                        Voir mon bilan final
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                ` : ''}
+            </div>
+        `;
+
+        summaryScreen.style.display = 'block';
+
+        // Bind events
+        summaryScreen.querySelectorAll('.sequence-card-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const seqIndex = parseInt(e.currentTarget.dataset.index);
+                this.startSequence(seqIndex);
+            });
         });
 
-        // Hide insight
-        document.getElementById('quiz-insight').style.display = 'none';
+        if (allCompleted) {
+            document.getElementById('btn-see-results').addEventListener('click', () => {
+                this.showFinalResult();
+            });
+        }
 
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Sélectionner une réponse
-    selectAnswer(button) {
-        const code = button.dataset.code;
-        const questionId = button.dataset.question;
-
-        // Visual feedback
-        document.querySelectorAll('.quiz-answer').forEach(btn => btn.classList.remove('selected'));
-        button.classList.add('selected');
-
-        // Save answer
-        this.answers[questionId] = code;
-        this.scores[code]++;
+    renderSequenceCard(seq, index) {
+        const progress = this.sequenceProgress[seq.id] || {};
+        const isCompleted = progress.completed;
+        const answeredCount = Object.keys(progress.answers || {}).length;
+        const totalQuestions = seq.questions.length;
+        const percent = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
         
-        // Mettre à jour le score de la séquence
-        const question = this.questions[this.currentIndex];
-        if (question.sequence_id && this.sequenceScores[question.sequence_id]) {
-            this.sequenceScores[question.sequence_id][code]++;
-        }
+        // Première séquence non complétée = active
+        const firstIncomplete = this.sequences.findIndex(s => !this.sequenceProgress[s.id]?.completed);
+        const isActive = index === firstIncomplete;
+        const isLocked = index > firstIncomplete && firstIncomplete !== -1;
 
-        // Sauvegarder la progression dans localStorage
-        this.saveProgress();
-
-        // Show insight
-        const insightEl = document.getElementById('quiz-insight');
-        
-        if (question.explication || (question.sequence && question.sequence.insight)) {
-            document.getElementById('insight-text').textContent = 
-                question.explication || question.sequence.insight;
-            insightEl.style.display = 'flex';
-        } else {
-            // Auto next after delay
-            setTimeout(() => this.nextQuestion(), 800);
-        }
-    }
-
-    // Question suivante
-    nextQuestion() {
-        const currentQuestion = this.questions[this.currentIndex];
-        const currentSeqId = currentQuestion?.sequence_id;
-        
-        this.currentIndex++;
-        
-        if (this.currentIndex >= this.questions.length) {
-            // Fin du quiz - vérifier s'il y a un bilan de séquence à afficher d'abord
-            if (this.quiz.show_sequence_bilan && currentSeqId) {
-                const sequence = this.sequences.find(s => s.id === currentSeqId);
-                if (sequence && sequence.profiles && Object.keys(sequence.profiles).length > 0) {
-                    this.showSequenceBilan(sequence, () => this.showResult());
-                    return;
-                }
+        // Calculer le profil dominant si complété
+        let bilanText = '';
+        if (isCompleted && progress.scores) {
+            const dominant = this.getDominantProfile(progress.scores, seq);
+            if (dominant) {
+                bilanText = `<span class="sequence-bilan-mini">${dominant.name}</span>`;
             }
-            this.showResult();
-        } else {
-            const nextQuestion = this.questions[this.currentIndex];
-            const nextSeqId = nextQuestion?.sequence_id;
-            
-            // Vérifier si on change de séquence
-            if (this.quiz.show_sequence_bilan && currentSeqId && nextSeqId !== currentSeqId) {
-                const sequence = this.sequences.find(s => s.id === currentSeqId);
-                if (sequence && sequence.profiles && Object.keys(sequence.profiles).length > 0) {
-                    this.showSequenceBilan(sequence, () => {
-                        this.animateToNextQuestion();
-                    });
-                    return;
-                }
-            }
-            
-            this.animateToNextQuestion();
         }
-    }
-    
-    // Animation vers la question suivante
-    animateToNextQuestion() {
-        const container = document.querySelector('.quiz-question-container');
-        container.style.opacity = '0';
-        container.style.transform = 'translateX(-20px)';
-        
-        setTimeout(() => {
-            this.showQuestion();
-            container.style.opacity = '1';
-            container.style.transform = 'translateX(0)';
-        }, 300);
-    }
-    
-    // Afficher le bilan d'une séquence
-    showSequenceBilan(sequence, onContinue) {
-        // Calculer les scores et pourcentages pour cette séquence
-        const seqScores = this.sequenceScores[sequence.id] || { A: 0, B: 0, C: 0, D: 0 };
-        const total = Object.values(seqScores).reduce((a, b) => a + b, 0);
-        
-        if (total === 0) {
-            onContinue();
-            return;
+
+        let statusIcon = '⚪';
+        let statusClass = 'locked';
+        let buttonHtml = '<span class="sequence-locked">🔒 Verrouillé</span>';
+
+        if (isCompleted) {
+            statusIcon = '✅';
+            statusClass = 'completed';
+            buttonHtml = `<button class="sequence-card-btn refaire" data-index="${index}">Refaire</button>`;
+        } else if (isActive || answeredCount > 0) {
+            statusIcon = '🔵';
+            statusClass = 'active';
+            buttonHtml = answeredCount > 0 
+                ? `<button class="sequence-card-btn" data-index="${index}">Continuer →</button>`
+                : `<button class="sequence-card-btn" data-index="${index}">Commencer →</button>`;
         }
-        
-        // Calculer les pourcentages et trier
-        const profileResults = Object.entries(seqScores)
+
+        return `
+            <div class="sequence-summary-card ${statusClass}">
+                <div class="sequence-card-header">
+                    <span class="sequence-status-icon">${statusIcon}</span>
+                    <div class="sequence-card-info">
+                        <span class="sequence-numero">Séquence ${index + 1}</span>
+                        <h3>${seq.titre}</h3>
+                    </div>
+                </div>
+                <div class="sequence-card-progress">
+                    <div class="sequence-progress-bar">
+                        <div class="sequence-progress-fill" style="width: ${percent}%"></div>
+                    </div>
+                    <span class="sequence-progress-text">${answeredCount}/${totalQuestions} questions</span>
+                </div>
+                ${bilanText ? `<div class="sequence-card-bilan">${bilanText}</div>` : ''}
+                <div class="sequence-card-action">
+                    ${buttonHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    getDominantProfile(scores, sequence) {
+        const total = Object.values(scores).reduce((a, b) => a + b, 0);
+        if (total === 0) return null;
+
+        const sorted = Object.entries(scores)
             .map(([code, score]) => ({
                 code,
                 score,
@@ -483,20 +351,190 @@ class QuizEngine {
                 name: sequence.profiles?.[code] || code
             }))
             .filter(p => p.score > 0)
-            .sort((a, b) => b.percent - a.percent);
+            .sort((a, b) => b.score - a.score);
+
+        return sorted[0] || null;
+    }
+
+    startSequence(index) {
+        this.currentSequenceIndex = index;
+        const seq = this.sequences[index];
+        const progress = this.sequenceProgress[seq.id];
         
-        if (profileResults.length === 0) {
-            onContinue();
-            return;
+        // Si refaire, reset la progression de cette séquence
+        if (progress.completed) {
+            this.sequenceProgress[seq.id] = {
+                answers: {},
+                scores: { A: 0, B: 0, C: 0, D: 0 },
+                completed: false,
+                currentIndex: 0
+            };
         }
         
-        // Générer le texte dynamique
-        const bilanText = this.generateBilanText(profileResults);
+        this.currentQuestionIndex = this.sequenceProgress[seq.id].currentIndex || 0;
+        this.showSequenceIntro();
+    }
+
+    showSequenceIntro() {
+        this.hideAllScreens();
+        const seq = this.sequences[this.currentSequenceIndex];
+
+        let introScreen = document.getElementById('quiz-sequence-intro');
+        if (!introScreen) {
+            introScreen = document.createElement('div');
+            introScreen.id = 'quiz-sequence-intro';
+            introScreen.className = 'quiz-sequence-intro';
+            document.querySelector('.quiz-container').appendChild(introScreen);
+        }
+
+        introScreen.innerHTML = `
+            <div class="sequence-intro-content">
+                <span class="sequence-intro-badge">Séquence ${this.currentSequenceIndex + 1}/${this.sequences.length}</span>
+                <h2>${seq.titre}</h2>
+                ${seq.description ? `<p class="sequence-intro-desc">${seq.description}</p>` : ''}
+                ${seq.stat ? `
+                    <div class="sequence-intro-stat">
+                        <span class="stat-text">${seq.stat}</span>
+                        ${seq.stat_source ? `<span class="stat-source">— ${seq.stat_source}</span>` : ''}
+                    </div>
+                ` : ''}
+                <div class="sequence-intro-meta">
+                    <span>📝 ${seq.questions.length} questions</span>
+                </div>
+                <button class="btn-start-sequence" id="btn-start-sequence">
+                    C'est parti !
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        introScreen.style.display = 'block';
+
+        document.getElementById('btn-start-sequence').addEventListener('click', () => {
+            this.showQuestion();
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    showQuestion() {
+        this.hideAllScreens();
+        document.getElementById('quiz-question-screen').style.display = 'block';
+
+        const seq = this.sequences[this.currentSequenceIndex];
+        const question = seq.questions[this.currentQuestionIndex];
+
+        // Progress bar
+        const percent = ((this.currentQuestionIndex + 1) / seq.questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+        document.getElementById('progress-text').textContent = 
+            `Question ${this.currentQuestionIndex + 1}/${seq.questions.length}`;
+
+        // Sequence badge
+        const contextEl = document.getElementById('question-context');
+        if (contextEl) {
+            contextEl.innerHTML = `<span class="sequence-badge">📑 ${seq.titre}</span>`;
+            contextEl.style.display = 'block';
+        }
+
+        // Question
+        document.getElementById('question-text').textContent = question.question;
+
+        // Answers
+        const answersContainer = document.getElementById('quiz-answers');
+        answersContainer.innerHTML = question.answers.map(answer => `
+            <button class="quiz-answer" data-code="${answer.code}" data-question="${question.id}">
+                <span class="answer-letter">${answer.code}</span>
+                <span class="answer-text">${answer.texte}</span>
+            </button>
+        `).join('');
+
+        answersContainer.querySelectorAll('.quiz-answer').forEach(btn => {
+            btn.addEventListener('click', (e) => this.selectAnswer(e.currentTarget));
+        });
+
+        // Hide insight
+        document.getElementById('quiz-insight').style.display = 'none';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    selectAnswer(button) {
+        const code = button.dataset.code;
+        const questionId = button.dataset.question;
+
+        document.querySelectorAll('.quiz-answer').forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+
+        const seq = this.sequences[this.currentSequenceIndex];
+        const progress = this.sequenceProgress[seq.id];
+
+        // Sauvegarder la réponse
+        progress.answers[questionId] = code;
+        progress.scores[code]++;
+        progress.currentIndex = this.currentQuestionIndex;
         
-        // Masquer l'écran de question
-        document.getElementById('quiz-question-screen').style.display = 'none';
-        
-        // Afficher l'écran de bilan de séquence
+        this.saveProgress();
+
+        // Insight
+        const question = seq.questions[this.currentQuestionIndex];
+        const insightEl = document.getElementById('quiz-insight');
+
+        if (question.explication) {
+            document.getElementById('insight-text').textContent = question.explication;
+            insightEl.style.display = 'flex';
+        } else {
+            setTimeout(() => this.nextQuestion(), 600);
+        }
+    }
+
+    nextQuestion() {
+        this.currentQuestionIndex++;
+        const seq = this.sequences[this.currentSequenceIndex];
+
+        if (this.currentQuestionIndex >= seq.questions.length) {
+            // Fin de la séquence
+            this.sequenceProgress[seq.id].completed = true;
+            this.sequenceProgress[seq.id].currentIndex = 0;
+            this.saveProgress();
+            this.showSequenceBilan();
+        } else {
+            this.sequenceProgress[seq.id].currentIndex = this.currentQuestionIndex;
+            this.saveProgress();
+            
+            const container = document.querySelector('.quiz-question-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateX(-20px)';
+
+            setTimeout(() => {
+                this.showQuestion();
+                container.style.opacity = '1';
+                container.style.transform = 'translateX(0)';
+            }, 300);
+        }
+    }
+
+    showSequenceBilan() {
+        this.hideAllScreens();
+        const seq = this.sequences[this.currentSequenceIndex];
+        const progress = this.sequenceProgress[seq.id];
+        const scores = progress.scores;
+
+        const total = Object.values(scores).reduce((a, b) => a + b, 0);
+        const profileResults = Object.entries(scores)
+            .map(([code, score]) => ({
+                code,
+                score,
+                percent: total > 0 ? Math.round((score / total) * 100) : 0,
+                name: seq.profiles?.[code] || code
+            }))
+            .filter(p => p.score > 0)
+            .sort((a, b) => b.percent - a.percent);
+
+        const dominant = profileResults[0];
+
         let bilanScreen = document.getElementById('quiz-sequence-bilan');
         if (!bilanScreen) {
             bilanScreen = document.createElement('div');
@@ -504,31 +542,31 @@ class QuizEngine {
             bilanScreen.className = 'quiz-sequence-bilan';
             document.querySelector('.quiz-container').appendChild(bilanScreen);
         }
-        
-        const dominant = profileResults[0];
-        
+
+        const bilanText = this.generateBilanText(profileResults);
+
         bilanScreen.innerHTML = `
             <div class="sequence-bilan-content">
                 <div class="sequence-bilan-header">
-                    <span class="bilan-badge">📊 ${sequence.bilan_titre || 'Ton profil'}</span>
-                    <h2>${sequence.titre}</h2>
+                    <span class="bilan-badge">✅ Séquence ${this.currentSequenceIndex + 1} terminée</span>
+                    <h2>${seq.titre}</h2>
                 </div>
-                
+
                 <div class="sequence-bilan-result">
                     <div class="bilan-dominant">
                         <span class="bilan-dominant-label">Tu es</span>
-                        <span class="bilan-dominant-name">${dominant.name}</span>
-                        <span class="bilan-dominant-percent">${dominant.percent}%</span>
+                        <span class="bilan-dominant-name">${dominant?.name || 'Indéterminé'}</span>
+                        <span class="bilan-dominant-percent">${dominant?.percent || 0}%</span>
                     </div>
                     ${bilanText ? `<p class="bilan-text">${bilanText}</p>` : ''}
                 </div>
-                
+
                 <div class="sequence-bilan-scores">
                     <p class="scores-title">Répartition de tes réponses</p>
                     <div class="scores-bars">
                         ${['A', 'B', 'C', 'D'].map(code => {
-                            const result = profileResults.find(p => p.code === code) || { percent: 0, name: sequence.profiles?.[code] || code };
-                            const isWinner = code === dominant.code;
+                            const result = profileResults.find(p => p.code === code) || { percent: 0, name: seq.profiles?.[code] || code };
+                            const isWinner = dominant && code === dominant.code;
                             return `
                                 <div class="score-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
                                     <span class="score-label">${code}</span>
@@ -544,256 +582,166 @@ class QuizEngine {
                         }).join('')}
                     </div>
                 </div>
-                
-                <button class="btn-continue-sequence" id="btn-continue-sequence">
-                    Continuer
+
+                <button class="btn-back-summary" id="btn-back-summary">
+                    Retour au sommaire
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </button>
             </div>
         `;
-        
+
         bilanScreen.style.display = 'block';
-        
-        document.getElementById('btn-continue-sequence').addEventListener('click', () => {
-            bilanScreen.style.display = 'none';
-            document.getElementById('quiz-question-screen').style.display = 'block';
-            onContinue();
+
+        document.getElementById('btn-back-summary').addEventListener('click', () => {
+            this.showSummary();
         });
-        
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    
-    // Générer le texte du bilan automatiquement
+
     generateBilanText(profileResults) {
+        if (!profileResults || profileResults.length === 0) return null;
+        
         const dominant = profileResults[0];
         const second = profileResults[1];
         const third = profileResults[2];
-        
-        // Cas 1: Un seul profil ou profil très dominant (> 60%) sans 2ème significatif
+
         if (!second || second.percent < 15 || dominant.percent > 60) {
-            return null; // Pas de phrase, juste le profil dominant
+            return null;
         }
-        
-        // Cas 2: Deux profils proches (écart < 10%)
+
         if ((dominant.percent - second.percent) < 10) {
-            // Vérifier s'il y a un 3ème proche aussi
             if (third && (dominant.percent - third.percent) < 15) {
                 return `Tu combines "${dominant.name}", "${second.name}" et "${third.name}" selon les situations.`;
             }
-            return `Tu oscilles entre "${dominant.name}" et "${second.name}". Cette dualité te permet d'adapter ton approche.`;
+            return `Tu oscilles entre "${dominant.name}" et "${second.name}".`;
         }
-        
-        // Cas 3: Un dominant clair avec un 2ème significatif
+
         if (second.percent >= 20) {
-            return `Profil "${dominant.name}" avec une touche de "${second.name}" qui nuance ton approche.`;
+            return `Profil "${dominant.name}" avec une touche de "${second.name}".`;
         }
-        
-        // Cas 4: Dominant seul (pas assez de 2ème pour en parler)
+
         return null;
     }
 
-    // Calculer et afficher le résultat
-    showResult() {
-        // Trouver le profil dominant
-        const dominant = Object.entries(this.scores)
+    showFinalResult() {
+        this.hideAllScreens();
+
+        // Calculer les scores globaux
+        const globalScores = { A: 0, B: 0, C: 0, D: 0 };
+        this.sequences.forEach(seq => {
+            const progress = this.sequenceProgress[seq.id];
+            if (progress && progress.scores) {
+                Object.entries(progress.scores).forEach(([code, score]) => {
+                    globalScores[code] += score;
+                });
+            }
+        });
+
+        const total = Object.values(globalScores).reduce((a, b) => a + b, 0);
+        const dominant = Object.entries(globalScores)
             .sort((a, b) => b[1] - a[1])[0][0];
 
         const profile = this.profiles.find(p => p.code === dominant) || this.getDefaultProfile(dominant);
 
-        // Marquer comme terminé dans localStorage
         this.markCompleted(dominant);
 
-        // Afficher l'écran de résultat
-        document.getElementById('quiz-question-screen').style.display = 'none';
         document.getElementById('quiz-result-screen').style.display = 'block';
 
-        // Remplir les infos du profil
-        document.getElementById('result-icon').textContent = profile.emoji || '🎯';
-        document.getElementById('result-icon').className = `result-profile-icon profile-${dominant.toLowerCase()}`;
-        document.getElementById('result-profile-name').textContent = profile.nom || profile.titre;
-        document.getElementById('result-profile-subtitle').textContent = profile.titre;
-        document.getElementById('result-description-text').textContent = profile.description || '';
+        // Afficher le profil
+        document.getElementById('result-emoji').textContent = profile.emoji || '🎯';
+        document.getElementById('result-title').textContent = profile.titre || profile.nom || `Profil ${dominant}`;
+        document.getElementById('result-description').textContent = profile.description || '';
 
-        // Forces
-        const forcesList = document.getElementById('result-forces-list');
-        forcesList.innerHTML = (profile.forces || []).map(f => `<li>• ${f}</li>`).join('');
+        // Scores par séquence
+        const sequenceResultsEl = document.getElementById('sequence-results');
+        if (sequenceResultsEl) {
+            sequenceResultsEl.innerHTML = this.sequences.map(seq => {
+                const progress = this.sequenceProgress[seq.id];
+                const dom = this.getDominantProfile(progress?.scores || {}, seq);
+                return `
+                    <div class="sequence-result-mini">
+                        <span class="seq-name">${seq.titre}</span>
+                        <span class="seq-result">${dom?.name || '—'}</span>
+                    </div>
+                `;
+            }).join('');
+        }
 
-        // Vigilances
-        const vigilancesList = document.getElementById('result-vigilances-list');
-        vigilancesList.innerHTML = (profile.vigilances || []).map(v => `<li>• ${v}</li>`).join('');
-
-        // Graphique radar
-        this.renderRadarChart();
-
-        // Sauvegarder le résultat
-        this.saveResult(dominant);
-
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Profil par défaut si non trouvé en DB
     getDefaultProfile(code) {
         const defaults = {
-            A: {
-                code: 'A',
-                emoji: '🔒',
-                nom: 'Sécurité Dominante',
-                titre: 'Profil Sécurité',
-                description: "L'argent est avant tout un bouclier contre l'imprévu, le stress, la perte de contrôle. Il est lié au soulagement plus qu'au plaisir.",
-                forces: ['Prudence développée', 'Capacité d\'anticipation', 'Sens des responsabilités'],
-                vigilances: ['Difficulté à se projeter positivement', 'Tendance à retenir plutôt qu\'à choisir', 'Risque de vivre dans l\'attente permanente']
-            },
-            B: {
-                code: 'B',
-                emoji: '🛡️',
-                nom: 'Prudence / Contrôle',
-                titre: 'Profil Prudence',
-                description: "L'argent est un système à maîtriser. Tu cherches à éviter les erreurs, réduire les risques, garder la main.",
-                forces: ['Organisation solide', 'Rigueur appréciable', 'Sens du cadre'],
-                vigilances: ['Sur-contrôle possible', 'Charge mentale élevée', 'Difficulté à lâcher prise']
-            },
-            C: {
-                code: 'C',
-                emoji: '⚖️',
-                nom: 'Équilibre / Rationalité',
-                titre: 'Profil Équilibre',
-                description: "Tu vois l'argent comme un outil fonctionnel. Ni trop émotionnel, ni totalement détaché.",
-                forces: ['Capacité d\'analyse', 'Décisions posées', 'Vision structurée'],
-                vigilances: ['Peu de lien au plaisir', 'Tendance à intellectualiser', 'Difficulté à écouter l\'émotion']
-            },
-            D: {
-                code: 'D',
-                emoji: '🕊️',
-                nom: 'Liberté / Alignement',
-                titre: 'Profil Liberté',
-                description: "L'argent est un levier de choix : choix de vie, de temps, d'alignement.",
-                forces: ['Vision claire', 'Capacité à investir en toi', 'Projection long terme'],
-                vigilances: ['Sous-estimation des contraintes', 'Besoin de sécuriser sans s\'enfermer', 'Risque de déconnexion du cadre']
-            }
+            A: { emoji: '🛡️', titre: 'Profil A', description: '' },
+            B: { emoji: '⚖️', titre: 'Profil B', description: '' },
+            C: { emoji: '🎯', titre: 'Profil C', description: '' },
+            D: { emoji: '🚀', titre: 'Profil D', description: '' }
         };
-        return defaults[code] || defaults.A;
+        return defaults[code] || { emoji: '❓', titre: `Profil ${code}`, description: '' };
     }
 
-    // Graphique radar
-    renderRadarChart() {
-        const ctx = document.getElementById('result-radar-chart');
-        if (!ctx) return;
-
-        const total = Object.values(this.scores).reduce((a, b) => a + b, 0);
-        const data = {
-            labels: ['Sécurité', 'Prudence', 'Équilibre', 'Liberté'],
-            datasets: [{
-                label: 'Ton profil',
-                data: [
-                    (this.scores.A / total) * 100,
-                    (this.scores.B / total) * 100,
-                    (this.scores.C / total) * 100,
-                    (this.scores.D / total) * 100
-                ],
-                backgroundColor: 'rgba(45, 90, 61, 0.2)',
-                borderColor: 'rgba(45, 90, 61, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(45, 90, 61, 1)'
-            }]
-        };
-
-        new Chart(ctx, {
-            type: 'radar',
-            data: data,
-            options: {
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { display: false }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    }
-
-    // Sauvegarder le résultat en DB
-    async saveResult(dominant) {
-        try {
-            await supabaseClient.from('quiz_results').insert({
-                quiz_id: this.quiz.id,
-                session_id: this.sessionId,
-                profil_dominant: dominant,
-                scores: this.scores,
-                reponses: this.answers
-            });
-            console.log('Résultat sauvegardé');
-        } catch (error) {
-            console.error('Erreur sauvegarde:', error);
-        }
-    }
-
-    // Partager le résultat
-    share() {
-        const dominant = Object.entries(this.scores).sort((a, b) => b[1] - a[1])[0][0];
-        const profile = this.profiles.find(p => p.code === dominant) || this.getDefaultProfile(dominant);
-        
-        const text = `Je viens de découvrir mon profil financier : ${profile.nom} ${profile.emoji}! Et toi, quel est ton mindset par rapport à l'argent ?`;
-        const url = window.location.href;
-
-        if (navigator.share) {
-            navigator.share({ title: 'Mon profil financier - OP!', text, url });
-        } else {
-            // Fallback: copier dans le presse-papier
-            navigator.clipboard.writeText(`${text}\n${url}`);
-            alert('Lien copié dans le presse-papier !');
-        }
-    }
-
-    // Recommencer
-    restart() {
-        this.currentIndex = 0;
-        this.answers = {};
-        this.scores = { A: 0, B: 0, C: 0, D: 0 };
-        this.sessionId = this.generateSessionId();
-        this.showIntro();
-    }
-
-    // Afficher une erreur
     showError(message) {
-        document.getElementById('quiz-loading').innerHTML = `
-            <p class="error">${message}</p>
-            <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+        document.getElementById('quiz-loading').style.display = 'none';
+        const container = document.querySelector('.quiz-container');
+        container.innerHTML = `
+            <div class="quiz-error">
+                <span class="error-icon">😕</span>
+                <h2>Oups !</h2>
+                <p>${message}</p>
+                <a href="quizzes.html" class="btn-back">Voir tous les quiz</a>
+            </div>
         `;
     }
 
-    // Bind events
-    bindEvents() {
-        // Boutons de démarrage
-        const startBtn = document.getElementById('btn-start');
-        const resumeBtn = document.getElementById('btn-resume');
-        const restartFreshBtn = document.getElementById('btn-restart-fresh');
-        
-        if (startBtn) startBtn.addEventListener('click', () => this.start());
-        if (resumeBtn) resumeBtn.addEventListener('click', () => this.resume());
-        if (restartFreshBtn) restartFreshBtn.addEventListener('click', () => this.startFresh());
-        
-        document.getElementById('btn-next').addEventListener('click', () => this.nextQuestion());
-        document.getElementById('btn-share').addEventListener('click', () => this.share());
-        document.getElementById('btn-restart').addEventListener('click', () => this.restart());
+    hideAllScreens() {
+        const screens = [
+            'quiz-loading', 'quiz-intro', 'quiz-question-screen', 
+            'quiz-result-screen', 'quiz-summary', 'quiz-sequence-intro', 
+            'quiz-sequence-bilan'
+        ];
+        screens.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+    }
 
-        // Email form
-        document.getElementById('email-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('result-email').value;
-            if (email) {
-                // Mettre à jour le résultat avec l'email
-                await supabaseClient.from('quiz_results')
-                    .update({ email })
-                    .eq('session_id', this.sessionId);
-                alert('Merci ! Tu recevras ton profil complet par email.');
-            }
+    // ============================================
+    // EVENTS
+    // ============================================
+
+    bindEvents() {
+        // Bouton démarrer
+        document.getElementById('btn-start')?.addEventListener('click', () => {
+            this.clearProgress();
+            this.initializeSequenceProgress();
+            this.showSummary();
+        });
+
+        // Bouton reprendre
+        document.getElementById('btn-resume')?.addEventListener('click', () => {
+            this.showSummary();
+        });
+
+        // Bouton recommencer
+        document.getElementById('btn-restart-fresh')?.addEventListener('click', () => {
+            this.clearProgress();
+            this.initializeSequenceProgress();
+            this.showSummary();
+        });
+
+        // Bouton suivant (après insight)
+        document.getElementById('btn-next')?.addEventListener('click', () => {
+            this.nextQuestion();
+        });
+
+        // Bouton recommencer (résultat final)
+        document.getElementById('btn-restart')?.addEventListener('click', () => {
+            this.clearProgress();
+            this.initializeSequenceProgress();
+            this.showIntro();
         });
     }
 }
@@ -802,17 +750,19 @@ class QuizEngine {
 // INITIALISATION
 // ============================================
 
-document.addEventListener('componentsLoaded', () => {
-    initSupabase();
-    const quiz = new QuizEngine();
-    quiz.init();
-});
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const slug = urlParams.get('quiz') || urlParams.get('slug');
+    const isPreview = urlParams.get('preview') === 'true';
 
-// Si les composants ne se chargent pas (page standalone)
-setTimeout(() => {
-    if (typeof supabaseClient === 'undefined' || supabaseClient === null) {
+    if (slug) {
         initSupabase();
-        const quiz = new QuizEngine();
-        quiz.init();
+        const engine = new QuizEngine();
+        engine.init(slug, isPreview);
+    } else {
+        document.getElementById('quiz-loading').innerHTML = `
+            <p>Aucun quiz spécifié</p>
+            <a href="quizzes.html">Voir tous les quiz</a>
+        `;
     }
-}, 1000);
+});

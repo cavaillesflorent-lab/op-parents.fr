@@ -4261,3 +4261,583 @@ section {
         flex-direction: column;
     }
 }
+
+/* ============================================
+   BILAN DE SÉQUENCE - QUIZ
+   ============================================ */
+
+.quiz-sequence-bilan {
+    display: none;
+    padding: var(--space-xl) var(--space-md);
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--vert-clair) 0%, var(--white) 100%);
+}
+
+.sequence-bilan-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sequence-bilan-header {
+    margin-bottom: var(--space-xl);
+}
+
+.sequence-bilan-header .bilan-badge {
+    display: inline-block;
+    background: var(--vert-fonce);
+    color: var(--white);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+.sequence-bilan-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.sequence-bilan-result {
+    background: var(--white);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.bilan-dominant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: var(--space-md);
+}
+
+.bilan-dominant-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.bilan-dominant-name {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+}
+
+.bilan-dominant-percent {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.bilan-text {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.sequence-bilan-scores {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.scores-title {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    text-align: center;
+}
+
+.scores-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.score-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.score-bar.empty {
+    opacity: 0.4;
+}
+
+.score-bar.winner .score-label {
+    background: var(--vert-fonce);
+    color: var(--white);
+}
+
+.score-label {
+    width: 32px;
+    height: 32px;
+    background: var(--gray-200);
+    color: var(--text-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.score-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.score-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.score-bar.winner .score-name {
+    color: var(--vert-fonce);
+}
+
+.score-track {
+    height: 8px;
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.score-fill {
+    height: 100%;
+    background: var(--gray-400);
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+.score-bar.winner .score-fill {
+    background: linear-gradient(90deg, var(--vert-fonce) 0%, var(--vert-clair) 100%);
+}
+
+.score-value {
+    width: 45px;
+    text-align: right;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.score-bar.winner .score-value {
+    color: var(--vert-fonce);
+    font-weight: 700;
+}
+
+.btn-continue-sequence {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--vert-fonce);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+}
+
+.btn-continue-sequence:hover {
+    background: var(--vert-fonce-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-continue-sequence svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-continue-sequence:hover svg {
+    transform: translateX(5px);
+}
+
+/* ============================================
+   QUIZ - SOMMAIRE DES SÉQUENCES
+   ============================================ */
+
+.quiz-summary {
+    padding: var(--space-lg) var(--space-md);
+    min-height: 100vh;
+    background: var(--gray-50);
+}
+
+.summary-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.summary-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.summary-header h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.summary-progress-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.summary-progress-bar {
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.summary-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--vert-fonce) 0%, var(--vert-clair) 100%);
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+.summary-sequences {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+/* Carte de séquence dans le sommaire */
+.sequence-summary-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--gray-100);
+    transition: all 0.3s ease;
+}
+
+.sequence-summary-card.active {
+    border-color: var(--vert-fonce);
+    box-shadow: var(--shadow-md);
+}
+
+.sequence-summary-card.completed {
+    border-color: var(--vert-clair);
+    background: linear-gradient(135deg, var(--white) 0%, rgba(223, 242, 182, 0.2) 100%);
+}
+
+.sequence-summary-card.locked {
+    opacity: 0.6;
+}
+
+.sequence-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.sequence-status-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.sequence-card-info {
+    flex: 1;
+}
+
+.sequence-numero {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sequence-card-info h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    margin-top: 0.25rem;
+}
+
+.sequence-card-progress {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.sequence-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.sequence-progress-fill {
+    height: 100%;
+    background: var(--vert-fonce);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.sequence-summary-card.completed .sequence-progress-fill {
+    background: linear-gradient(90deg, var(--vert-fonce) 0%, var(--vert-clair) 100%);
+}
+
+.sequence-progress-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.sequence-card-bilan {
+    margin-bottom: var(--space-sm);
+}
+
+.sequence-bilan-mini {
+    display: inline-block;
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.sequence-card-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sequence-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--vert-fonce);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sequence-card-btn:hover {
+    background: var(--vert-fonce-light);
+    transform: translateX(3px);
+}
+
+.sequence-card-btn.refaire {
+    background: var(--gray-200);
+    color: var(--text-primary);
+}
+
+.sequence-card-btn.refaire:hover {
+    background: var(--gray-300);
+}
+
+.sequence-locked {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.btn-see-results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-see-results:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   QUIZ - INTRO DE SÉQUENCE
+   ============================================ */
+
+.quiz-sequence-intro {
+    padding: var(--space-xl) var(--space-md);
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sequence-intro-content {
+    max-width: 500px;
+    text-align: center;
+    color: var(--white);
+}
+
+.sequence-intro-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    backdrop-filter: blur(10px);
+}
+
+.sequence-intro-content h2 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+}
+
+.sequence-intro-desc {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+}
+
+.sequence-intro-stat {
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    backdrop-filter: blur(10px);
+}
+
+.sequence-intro-stat .stat-text {
+    display: block;
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.sequence-intro-stat .stat-source {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.sequence-intro-meta {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    margin-bottom: var(--space-xl);
+}
+
+.btn-start-sequence {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--white);
+    color: var(--vert-fonce);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-start-sequence:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Badge séquence dans question */
+.sequence-badge {
+    display: inline-block;
+    background: var(--vert-clair);
+    color: var(--vert-fonce);
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Bouton retour sommaire */
+.btn-back-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--vert-fonce);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-back-summary:hover {
+    background: var(--vert-fonce-light);
+}
+
+/* Résultats par séquence dans bilan final */
+.sequence-results {
+    margin-top: var(--space-lg);
+}
+
+.sequence-result-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-sm);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.sequence-result-mini:last-child {
+    border-bottom: none;
+}
+
+.sequence-result-mini .seq-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.sequence-result-mini .seq-result {
+    font-weight: 600;
+    color: var(--vert-fonce);
+}

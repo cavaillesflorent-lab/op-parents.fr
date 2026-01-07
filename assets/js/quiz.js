@@ -260,6 +260,16 @@ class QuizEngine {
             document.getElementById('quiz-stat').style.display = 'block';
         }
 
+        // Afficher les bénéfices
+        const benefitsList = document.getElementById('benefits-list');
+        const benefitsContainer = document.getElementById('quiz-benefits');
+        if (benefitsList && this.quiz.benefits && this.quiz.benefits.length > 0) {
+            benefitsList.innerHTML = this.quiz.benefits.map(benefit => `<li>${benefit}</li>`).join('');
+            benefitsContainer.style.display = 'block';
+        } else if (benefitsContainer) {
+            benefitsContainer.style.display = 'none';
+        }
+
         document.getElementById('quiz-questions-count').textContent = this.questions.length;
         document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(this.questions.length * 0.5) + ' min';
     }

@@ -85,13 +85,16 @@ class QuizEngine {
     async init(slug, isPreview = false) {
         this.quizSlug = slug;
         this.isPreview = isPreview;
+        console.log('Quiz init:', slug, 'preview:', isPreview);
 
         try {
             await this.loadQuiz(slug);
+            console.log('Quiz chargé, séquences:', this.sequences.length);
             this.loadSavedProgress();
             this.initializeSequenceProgress();
             this.showIntro();
             this.bindEvents();
+            console.log('Init terminé avec succès');
         } catch (error) {
             console.error('Erreur initialisation quiz:', error);
             this.showError(error.message);
@@ -713,42 +716,65 @@ class QuizEngine {
     // ============================================
 
     bindEvents() {
+        console.log('bindEvents() appelé');
+        
         // Bouton démarrer
-        document.getElementById('btn-start')?.addEventListener('click', () => {
-            this.clearProgress();
-            this.initializeSequenceProgress();
-            this.showSummary();
-        });
+        const startBtn = document.getElementById('btn-start');
+        console.log('btn-start trouvé:', startBtn);
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                console.log('Clic sur btn-start');
+                this.clearProgress();
+                this.initializeSequenceProgress();
+                this.showSummary();
+            });
+        }
 
         // Bouton reprendre
-        document.getElementById('btn-resume')?.addEventListener('click', () => {
-            this.showSummary();
-        });
+        const resumeBtn = document.getElementById('btn-resume');
+        if (resumeBtn) {
+            resumeBtn.addEventListener('click', () => {
+                console.log('Clic sur btn-resume');
+                this.showSummary();
+            });
+        }
 
         // Bouton recommencer
-        document.getElementById('btn-restart-fresh')?.addEventListener('click', () => {
-            this.clearProgress();
-            this.initializeSequenceProgress();
-            this.showSummary();
-        });
+        const restartFreshBtn = document.getElementById('btn-restart-fresh');
+        if (restartFreshBtn) {
+            restartFreshBtn.addEventListener('click', () => {
+                console.log('Clic sur btn-restart-fresh');
+                this.clearProgress();
+                this.initializeSequenceProgress();
+                this.showSummary();
+            });
+        }
 
         // Bouton suivant (après insight)
-        document.getElementById('btn-next')?.addEventListener('click', () => {
-            this.nextQuestion();
-        });
+        const nextBtn = document.getElementById('btn-next');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.nextQuestion();
+            });
+        }
 
         // Bouton recommencer (résultat final)
-        document.getElementById('btn-restart')?.addEventListener('click', () => {
-            this.clearProgress();
-            this.initializeSequenceProgress();
-            this.showIntro();
-        });
+        const restartBtn = document.getElementById('btn-restart');
+        if (restartBtn) {
+            restartBtn.addEventListener('click', () => {
+                this.clearProgress();
+                this.initializeSequenceProgress();
+                this.showIntro();
+            });
+        }
     }
 }
 
 // ============================================
 // INITIALISATION
 // ============================================
+
+let quizEngine = null; // Variable globale pour debug
 
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -757,8 +783,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slug) {
         initSupabase();
-        const engine = new QuizEngine();
-        engine.init(slug, isPreview);
+        quizEngine = new QuizEngine();
+        quizEngine.init(slug, isPreview);
+        window.quizEngine = quizEngine; // Exposer pour debug
     } else {
         document.getElementById('quiz-loading').innerHTML = `
             <p>Aucun quiz spécifié</p>
@@ -766,3 +793,20 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 });
+
+// Fonctions globales pour les boutons (fallback)
+function startQuiz() {
+    console.log('startQuiz() appelé');
+    if (quizEngine) {
+        quizEngine.clearProgress();
+        quizEngine.initializeSequenceProgress();
+        quizEngine.showSummary();
+    }
+}
+
+function resumeQuiz() {
+    console.log('resumeQuiz() appelé');
+    if (quizEngine) {
+        quizEngine.showSummary();
+    }
+}

@@ -516,11 +516,11 @@ class QuizEngine {
                 
                 <div class="sequence-bilan-result">
                     <div class="bilan-dominant">
-                        <span class="bilan-dominant-label">Tu es principalement</span>
+                        <span class="bilan-dominant-label">Tu es</span>
                         <span class="bilan-dominant-name">${dominant.name}</span>
                         <span class="bilan-dominant-percent">${dominant.percent}%</span>
                     </div>
-                    <p class="bilan-text">${bilanText}</p>
+                    ${bilanText ? `<p class="bilan-text">${bilanText}</p>` : ''}
                 </div>
                 
                 <div class="sequence-bilan-scores">
@@ -571,30 +571,27 @@ class QuizEngine {
         const second = profileResults[1];
         const third = profileResults[2];
         
-        // Cas 1: Un profil très dominant (> 50%)
-        if (dominant.percent > 50) {
-            if (second && second.percent >= 20) {
-                return `Tes réponses révèlent un profil clairement orienté "${dominant.name}", avec une sensibilité "${second.name}" qui nuance ton approche.`;
-            }
-            return `Tes réponses montrent un profil "${dominant.name}" très affirmé. C'est ta tendance naturelle dominante.`;
+        // Cas 1: Un seul profil ou profil très dominant (> 60%) sans 2ème significatif
+        if (!second || second.percent < 15 || dominant.percent > 60) {
+            return null; // Pas de phrase, juste le profil dominant
         }
         
         // Cas 2: Deux profils proches (écart < 10%)
-        if (second && (dominant.percent - second.percent) < 10) {
+        if ((dominant.percent - second.percent) < 10) {
             // Vérifier s'il y a un 3ème proche aussi
             if (third && (dominant.percent - third.percent) < 15) {
-                return `Tu as un profil équilibré ! Tu combines "${dominant.name}", "${second.name}" et "${third.name}" selon les situations.`;
+                return `Tu combines "${dominant.name}", "${second.name}" et "${third.name}" selon les situations.`;
             }
-            return `Tu oscilles entre "${dominant.name}" et "${second.name}". Cette dualité te permet d'adapter ton approche selon le contexte.`;
+            return `Tu oscilles entre "${dominant.name}" et "${second.name}". Cette dualité te permet d'adapter ton approche.`;
         }
         
-        // Cas 3: Un dominant clair mais pas écrasant
-        if (second && second.percent >= 15) {
-            return `Tu es principalement "${dominant.name}" (${dominant.percent}%) avec une touche de "${second.name}" (${second.percent}%) qui enrichit ta vision.`;
+        // Cas 3: Un dominant clair avec un 2ème significatif
+        if (second.percent >= 20) {
+            return `Profil "${dominant.name}" avec une touche de "${second.name}" qui nuance ton approche.`;
         }
         
-        // Cas 4: Dominant seul
-        return `Ton profil "${dominant.name}" ressort nettement. C'est ton mode de fonctionnement privilégié.`;
+        // Cas 4: Dominant seul (pas assez de 2ème pour en parler)
+        return null;
     }
 
     // Calculer et afficher le résultat

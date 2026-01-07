@@ -144,6 +144,8 @@ class QuizEngine {
                 .eq('sequence_id', seq.id)
                 .order('numero');
 
+            console.log(`Séquence "${seq.titre}": ${(questions || []).length} questions chargées`);
+
             this.sequences.push({
                 ...seq,
                 questions: (questions || []).map(q => ({
@@ -154,6 +156,9 @@ class QuizEngine {
         }
 
         console.log('Quiz chargé:', this.quiz.titre, '- Séquences:', this.sequences.length);
+        this.sequences.forEach((seq, i) => {
+            console.log(`  Séquence ${i}: "${seq.titre}" - ${seq.questions.length} questions`);
+        });
     }
 
     initializeSequenceProgress() {
@@ -382,12 +387,15 @@ class QuizEngine {
     }
 
     startSequence(index) {
+        console.log('startSequence() appelé avec index:', index);
         this.currentSequenceIndex = index;
         const seq = this.sequences[index];
+        console.log('Séquence:', seq?.titre, '- Questions:', seq?.questions?.length);
+        
         const progress = this.sequenceProgress[seq.id];
         
         // Si refaire, reset la progression de cette séquence
-        if (progress.completed) {
+        if (progress && progress.completed) {
             this.sequenceProgress[seq.id] = {
                 answers: {},
                 scores: { A: 0, B: 0, C: 0, D: 0 },
@@ -396,7 +404,8 @@ class QuizEngine {
             };
         }
         
-        this.currentQuestionIndex = this.sequenceProgress[seq.id].currentIndex || 0;
+        this.currentQuestionIndex = this.sequenceProgress[seq.id]?.currentIndex || 0;
+        console.log('currentQuestionIndex:', this.currentQuestionIndex);
         this.showSequenceIntro();
     }
 
@@ -450,43 +459,70 @@ class QuizEngine {
     }
 
     showQuestion() {
+        console.log('showQuestion() appelé');
+        console.log('currentSequenceIndex:', this.currentSequenceIndex);
+        console.log('currentQuestionIndex:', this.currentQuestionIndex);
+        
         this.hideAllScreens();
-        document.getElementById('quiz-question-screen').style.display = 'block';
+        
+        const questionScreen = document.getElementById('quiz-question-screen');
+        if (!questionScreen) {
+            console.error('quiz-question-screen non trouvé!');
+            return;
+        }
+        questionScreen.style.display = 'block';
 
         const seq = this.sequences[this.currentSequenceIndex];
+        if (!seq) {
+            console.error('Séquence non trouvée à l\'index', this.currentSequenceIndex);
+            return;
+        }
+        
         const question = seq.questions[this.currentQuestionIndex];
+        if (!question) {
+            console.error('Question non trouvée à l\'index', this.currentQuestionIndex, 'dans la séquence', seq.titre);
+            return;
+        }
+        
+        console.log('Question:', question.question);
 
         // Progress bar
         const percent = ((this.currentQuestionIndex + 1) / seq.questions.length) * 100;
-        document.getElementById('progress-fill').style.width = `${percent}%`;
-        document.getElementById('progress-text').textContent = 
-            `Question ${this.currentQuestionIndex + 1}/${seq.questions.length}`;
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        if (progressFill) progressFill.style.width = `${percent}%`;
+        if (progressText) progressText.textContent = `Question ${this.currentQuestionIndex + 1}/${seq.questions.length}`;
 
-        // Sequence badge
-        const contextEl = document.getElementById('question-context');
-        if (contextEl) {
-            contextEl.innerHTML = `<span class="sequence-badge">📑 ${seq.titre}</span>`;
+        // Sequence badge dans le contexte
+        const contextEl = document.getElementById('quiz-context');
+        const contextBadge = document.getElementById('context-badge');
+        if (contextEl && contextBadge) {
+            contextBadge.innerHTML = `📑 ${seq.titre}`;
             contextEl.style.display = 'block';
         }
 
-        // Question
-        document.getElementById('question-text').textContent = question.question;
+        // Question text
+        const questionEl = document.getElementById('quiz-question');
+        if (questionEl) questionEl.textContent = question.question;
 
         // Answers
         const answersContainer = document.getElementById('quiz-answers');
-        answersContainer.innerHTML = question.answers.map(answer => `
-            <button class="quiz-answer" data-code="${answer.code}" data-question="${question.id}">
-                <span class="answer-letter">${answer.code}</span>
-                <span class="answer-text">${answer.texte}</span>
-            </button>
-        `).join('');
+        if (answersContainer) {
+            answersContainer.innerHTML = question.answers.map(answer => `
+                <button class="quiz-answer" data-code="${answer.code}" data-question="${question.id}">
+                    <span class="answer-letter">${answer.code}</span>
+                    <span class="answer-text">${answer.texte}</span>
+                </button>
+            `).join('');
 
-        answersContainer.querySelectorAll('.quiz-answer').forEach(btn => {
-            btn.addEventListener('click', (e) => this.selectAnswer(e.currentTarget));
-        });
+            answersContainer.querySelectorAll('.quiz-answer').forEach(btn => {
+                btn.addEventListener('click', (e) => this.selectAnswer(e.currentTarget));
+            });
+        }
 
         // Hide insight
-        document.getElementById('quiz-insight').style.display = 'none';
+        const insightEl = document.getElementById('quiz-insight');
+        if (insightEl) insightEl.style.display = 'none';
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -511,9 +547,10 @@ class QuizEngine {
         // Insight
         const question = seq.questions[this.currentQuestionIndex];
         const insightEl = document.getElementById('quiz-insight');
+        const insightText = document.getElementById('insight-text');
 
-        if (question.explication) {
-            document.getElementById('insight-text').textContent = question.explication;
+        if (question.explication && insightEl && insightText) {
+            insightText.textContent = question.explication;
             insightEl.style.display = 'flex';
         } else {
             setTimeout(() => this.nextQuestion(), 600);
@@ -685,24 +722,26 @@ class QuizEngine {
 
         document.getElementById('quiz-result-screen').style.display = 'block';
 
-        // Afficher le profil
-        document.getElementById('result-emoji').textContent = profile.emoji || '🎯';
-        document.getElementById('result-title').textContent = profile.titre || profile.nom || `Profil ${dominant}`;
-        document.getElementById('result-description').textContent = profile.description || '';
+        // Afficher le profil (avec les bons IDs du HTML)
+        const resultIcon = document.getElementById('result-icon');
+        const resultName = document.getElementById('result-profile-name');
+        const resultSubtitle = document.getElementById('result-profile-subtitle');
+        const resultDesc = document.getElementById('result-description-text');
+        
+        if (resultIcon) resultIcon.textContent = profile.emoji || '🎯';
+        if (resultName) resultName.textContent = profile.titre || profile.nom || `Profil ${dominant}`;
+        if (resultSubtitle) resultSubtitle.textContent = profile.sous_titre || '';
+        if (resultDesc) resultDesc.textContent = profile.description || '';
 
-        // Scores par séquence
-        const sequenceResultsEl = document.getElementById('sequence-results');
-        if (sequenceResultsEl) {
-            sequenceResultsEl.innerHTML = this.sequences.map(seq => {
-                const progress = this.sequenceProgress[seq.id];
-                const dom = this.getDominantProfile(progress?.scores || {}, seq);
-                return `
-                    <div class="sequence-result-mini">
-                        <span class="seq-name">${seq.titre}</span>
-                        <span class="seq-result">${dom?.name || '—'}</span>
-                    </div>
-                `;
-            }).join('');
+        // Forces et vigilances
+        const forcesList = document.getElementById('result-forces-list');
+        const vigilancesList = document.getElementById('result-vigilances-list');
+        
+        if (forcesList && profile.forces && profile.forces.length > 0) {
+            forcesList.innerHTML = profile.forces.map(f => `<li>${f}</li>`).join('');
+        }
+        if (vigilancesList && profile.vigilances && profile.vigilances.length > 0) {
+            vigilancesList.innerHTML = profile.vigilances.map(v => `<li>${v}</li>`).join('');
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });

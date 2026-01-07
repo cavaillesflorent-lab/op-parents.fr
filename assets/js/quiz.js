@@ -10,10 +10,13 @@ class QuizEngine {
         this.quiz = null;
         this.quizSlug = null;
         this.questions = [];
+        this.sequences = [];
         this.profiles = [];
         this.currentIndex = 0;
         this.answers = {};
         this.scores = { A: 0, B: 0, C: 0, D: 0 };
+        this.sequenceScores = {}; // Scores par séquence: { seq_id: { A: 0, B: 0, ... } }
+        this.currentSequenceId = null;
         this.sessionId = this.generateSessionId();
     }
 
@@ -200,6 +203,13 @@ class QuizEngine {
             .eq('quiz_id', quiz.id)
             .order('numero');
 
+        this.sequences = sequences || [];
+        
+        // Initialiser les scores par séquence
+        this.sequences.forEach(seq => {
+            this.sequenceScores[seq.id] = { A: 0, B: 0, C: 0, D: 0 };
+        });
+
         // Charger les questions
         const { data: questions } = await supabaseClient
             .from('quiz_questions')
@@ -381,12 +391,17 @@ class QuizEngine {
         // Save answer
         this.answers[questionId] = code;
         this.scores[code]++;
+        
+        // Mettre à jour le score de la séquence
+        const question = this.questions[this.currentIndex];
+        if (question.sequence_id && this.sequenceScores[question.sequence_id]) {
+            this.sequenceScores[question.sequence_id][code]++;
+        }
 
         // Sauvegarder la progression dans localStorage
         this.saveProgress();
 
         // Show insight
-        const question = this.questions[this.currentIndex];
         const insightEl = document.getElementById('quiz-insight');
         
         if (question.explication || (question.sequence && question.sequence.insight)) {
@@ -401,22 +416,140 @@ class QuizEngine {
 
     // Question suivante
     nextQuestion() {
+        const currentQuestion = this.questions[this.currentIndex];
+        const currentSeqId = currentQuestion?.sequence_id;
+        
         this.currentIndex++;
         
         if (this.currentIndex >= this.questions.length) {
+            // Fin du quiz - vérifier s'il y a un bilan de séquence à afficher d'abord
+            if (this.quiz.show_sequence_bilan && currentSeqId) {
+                const sequence = this.sequences.find(s => s.id === currentSeqId);
+                if (sequence && sequence.profiles && Object.keys(sequence.profiles).length > 0) {
+                    this.showSequenceBilan(sequence, () => this.showResult());
+                    return;
+                }
+            }
             this.showResult();
         } else {
-            // Animation de transition
-            const container = document.querySelector('.quiz-question-container');
-            container.style.opacity = '0';
-            container.style.transform = 'translateX(-20px)';
+            const nextQuestion = this.questions[this.currentIndex];
+            const nextSeqId = nextQuestion?.sequence_id;
             
-            setTimeout(() => {
-                this.showQuestion();
-                container.style.opacity = '1';
-                container.style.transform = 'translateX(0)';
-            }, 300);
+            // Vérifier si on change de séquence
+            if (this.quiz.show_sequence_bilan && currentSeqId && nextSeqId !== currentSeqId) {
+                const sequence = this.sequences.find(s => s.id === currentSeqId);
+                if (sequence && sequence.profiles && Object.keys(sequence.profiles).length > 0) {
+                    this.showSequenceBilan(sequence, () => {
+                        this.animateToNextQuestion();
+                    });
+                    return;
+                }
+            }
+            
+            this.animateToNextQuestion();
         }
+    }
+    
+    // Animation vers la question suivante
+    animateToNextQuestion() {
+        const container = document.querySelector('.quiz-question-container');
+        container.style.opacity = '0';
+        container.style.transform = 'translateX(-20px)';
+        
+        setTimeout(() => {
+            this.showQuestion();
+            container.style.opacity = '1';
+            container.style.transform = 'translateX(0)';
+        }, 300);
+    }
+    
+    // Afficher le bilan d'une séquence
+    showSequenceBilan(sequence, onContinue) {
+        // Calculer le profil dominant pour cette séquence
+        const seqScores = this.sequenceScores[sequence.id] || { A: 0, B: 0, C: 0, D: 0 };
+        const dominant = Object.entries(seqScores)
+            .filter(([code, score]) => score > 0)
+            .sort((a, b) => b[1] - a[1])[0];
+        
+        if (!dominant) {
+            onContinue();
+            return;
+        }
+        
+        const dominantCode = dominant[0];
+        const profile = sequence.profiles[dominantCode];
+        
+        if (!profile || !profile.name) {
+            onContinue();
+            return;
+        }
+        
+        // Masquer l'écran de question
+        document.getElementById('quiz-question-screen').style.display = 'none';
+        
+        // Afficher l'écran de bilan de séquence
+        let bilanScreen = document.getElementById('quiz-sequence-bilan');
+        if (!bilanScreen) {
+            // Créer l'écran s'il n'existe pas
+            bilanScreen = document.createElement('div');
+            bilanScreen.id = 'quiz-sequence-bilan';
+            bilanScreen.className = 'quiz-sequence-bilan';
+            document.querySelector('.quiz-container').appendChild(bilanScreen);
+        }
+        
+        bilanScreen.innerHTML = `
+            <div class="sequence-bilan-content">
+                <div class="sequence-bilan-header">
+                    <span class="bilan-badge">📊 ${sequence.bilan_titre || 'Bilan de la séquence'}</span>
+                    <h2>${sequence.titre}</h2>
+                </div>
+                
+                <div class="sequence-bilan-result">
+                    <div class="bilan-profile-emoji">${profile.emoji || '🎯'}</div>
+                    <h3 class="bilan-profile-name">${profile.name}</h3>
+                    <p class="bilan-profile-desc">${profile.description || ''}</p>
+                </div>
+                
+                <div class="sequence-bilan-scores">
+                    <p class="scores-title">Répartition de tes réponses :</p>
+                    <div class="scores-bars">
+                        ${Object.entries(seqScores).map(([code, score]) => {
+                            const total = Object.values(seqScores).reduce((a, b) => a + b, 0);
+                            const percent = total > 0 ? Math.round((score / total) * 100) : 0;
+                            const isWinner = code === dominantCode;
+                            return `
+                                <div class="score-bar ${isWinner ? 'winner' : ''}">
+                                    <span class="score-label">${code}</span>
+                                    <div class="score-track">
+                                        <div class="score-fill" style="width: ${percent}%"></div>
+                                    </div>
+                                    <span class="score-value">${percent}%</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                
+                <button class="btn-continue-sequence" id="btn-continue-sequence">
+                    Continuer
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        bilanScreen.style.display = 'block';
+        
+        // Bind du bouton continuer
+        document.getElementById('btn-continue-sequence').addEventListener('click', () => {
+            bilanScreen.style.display = 'none';
+            document.getElementById('quiz-question-screen').style.display = 'block';
+            onContinue();
+        });
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Calculer et afficher le résultat

@@ -392,6 +392,7 @@ async function loadQuizData(quiz) {
             statSource: seq.stat_source || '',
             bilanTitle: seq.bilan_titre || '',
             bilanText: seq.bilan_texte || '',
+            profiles: seq.profiles || {},
             questions: (questions || []).map(q => ({
                 id: q.id,
                 type: q.type || 'single',
@@ -467,36 +468,42 @@ function renderSequences() {
         return;
     }
     
-    container.innerHTML = quizData.sequences.map((seq, index) => `
-        <div class="sequence-card" data-index="${index}">
-            <div class="sequence-card-header">
-                <div class="sequence-info">
-                    <span class="sequence-number">Séquence ${index + 1}</span>
-                    <h3 class="sequence-title">${escapeHtml(seq.title)}</h3>
+    container.innerHTML = quizData.sequences.map((seq, index) => {
+        // Compter les profils configurés
+        const profilesCount = seq.profiles ? Object.keys(seq.profiles).filter(k => seq.profiles[k]?.name).length : 0;
+        const profilesText = profilesCount > 0 ? `📊 ${profilesCount} profil${profilesCount > 1 ? 's' : ''} configuré${profilesCount > 1 ? 's' : ''}` : '<span style="color:#BF604B">⚠️ Aucun profil</span>';
+        
+        return `
+            <div class="sequence-card" data-index="${index}">
+                <div class="sequence-card-header">
+                    <div class="sequence-info">
+                        <span class="sequence-number">Séquence ${index + 1}</span>
+                        <h3 class="sequence-title">${escapeHtml(seq.title)}</h3>
+                    </div>
+                    <div class="sequence-actions">
+                        <button class="btn btn-sm btn-secondary" onclick="editSequence(${index})" title="Modifier">✏️</button>
+                        <button class="btn btn-sm btn-secondary" onclick="duplicateSequence(${index})" title="Dupliquer">📋</button>
+                        <button class="btn btn-sm btn-secondary btn-delete" onclick="deleteSequence(${index})" title="Supprimer">🗑️</button>
+                    </div>
                 </div>
-                <div class="sequence-actions">
-                    <button class="btn btn-sm btn-secondary" onclick="editSequence(${index})" title="Modifier">✏️</button>
-                    <button class="btn btn-sm btn-secondary" onclick="duplicateSequence(${index})" title="Dupliquer">📋</button>
-                    <button class="btn btn-sm btn-secondary btn-delete" onclick="deleteSequence(${index})" title="Supprimer">🗑️</button>
+                <div class="sequence-meta">
+                    <span>❓ ${seq.questions.length} question${seq.questions.length > 1 ? 's' : ''}</span>
+                    ${profilesText}
                 </div>
+                ${seq.questions.length > 0 ? `
+                    <div class="sequence-questions-preview">
+                        ${seq.questions.slice(0, 3).map((q, qi) => `
+                            <div class="question-preview">
+                                <span class="qp-num">Q${qi + 1}</span>
+                                <span class="qp-text">${escapeHtml(q.question.substring(0, 60))}${q.question.length > 60 ? '...' : ''}</span>
+                            </div>
+                        `).join('')}
+                        ${seq.questions.length > 3 ? `<div class="question-preview more">+ ${seq.questions.length - 3} autres questions</div>` : ''}
+                    </div>
+                ` : ''}
             </div>
-            <div class="sequence-meta">
-                <span>❓ ${seq.questions.length} question${seq.questions.length > 1 ? 's' : ''}</span>
-                ${seq.bilanTitle ? '<span>📊 Bilan configuré</span>' : ''}
-            </div>
-            ${seq.questions.length > 0 ? `
-                <div class="sequence-questions-preview">
-                    ${seq.questions.slice(0, 3).map((q, qi) => `
-                        <div class="question-preview">
-                            <span class="qp-num">Q${qi + 1}</span>
-                            <span class="qp-text">${escapeHtml(q.question.substring(0, 60))}${q.question.length > 60 ? '...' : ''}</span>
-                        </div>
-                    `).join('')}
-                    ${seq.questions.length > 3 ? `<div class="question-preview more">+ ${seq.questions.length - 3} autres questions</div>` : ''}
-                </div>
-            ` : ''}
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function openSequenceModal(sequence = null, editIndex = -1) {
@@ -506,13 +513,21 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     document.getElementById('sequence-edit-index').value = editIndex;
     document.getElementById('sequence-modal-title').textContent = editIndex >= 0 ? 'Modifier la séquence' : 'Nouvelle séquence';
     
-    // Reset
+    // Reset infos de base
     document.getElementById('sequence-title').value = sequence?.title || '';
     document.getElementById('sequence-description').value = sequence?.description || '';
     document.getElementById('sequence-stat').value = sequence?.stat || '';
     document.getElementById('sequence-stat-source').value = sequence?.statSource || '';
     document.getElementById('sequence-bilan-title').value = sequence?.bilanTitle || '';
-    document.getElementById('sequence-bilan-text').value = sequence?.bilanText || '';
+    
+    // Reset profils de bilan
+    const profiles = sequence?.profiles || {};
+    ['a', 'b', 'c', 'd'].forEach(letter => {
+        const profile = profiles[letter.toUpperCase()] || {};
+        document.getElementById(`seq-profile-${letter}-name`).value = profile.name || '';
+        document.getElementById(`seq-profile-${letter}-emoji`).value = profile.emoji || '';
+        document.getElementById(`seq-profile-${letter}-desc`).value = profile.description || '';
+    });
     
     // Questions de la séquence
     if (editIndex >= 0 && sequence && sequence.questions) {
@@ -564,13 +579,25 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
+    // Collecter les profils de bilan
+    const profiles = {};
+    ['a', 'b', 'c', 'd'].forEach(letter => {
+        const name = document.getElementById(`seq-profile-${letter}-name`).value.trim();
+        const emoji = document.getElementById(`seq-profile-${letter}-emoji`).value.trim();
+        const description = document.getElementById(`seq-profile-${letter}-desc`).value.trim();
+        
+        if (name || description) {
+            profiles[letter.toUpperCase()] = { name, emoji, description };
+        }
+    });
+    
     const sequenceData = {
         title: document.getElementById('sequence-title').value.trim(),
         description: document.getElementById('sequence-description').value.trim(),
         stat: document.getElementById('sequence-stat').value.trim(),
         statSource: document.getElementById('sequence-stat-source').value.trim(),
         bilanTitle: document.getElementById('sequence-bilan-title').value.trim(),
-        bilanText: document.getElementById('sequence-bilan-text').value.trim(),
+        profiles: profiles,
         questions: editIndex >= 0 ? quizData.sequences[editIndex].questions : tempSequenceQuestions
     };
     
@@ -1062,7 +1089,8 @@ async function saveQuiz() {
                 stat: seq.stat || null,
                 stat_source: seq.statSource || null,
                 bilan_titre: seq.bilanTitle || null,
-                bilan_texte: seq.bilanText || null
+                bilan_texte: seq.bilanText || null,
+                profiles: seq.profiles || null
             };
             console.log('Payload séquence:', seqPayload);
             

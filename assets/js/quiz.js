@@ -465,24 +465,33 @@ class QuizEngine {
     
     // Afficher le bilan d'une séquence
     showSequenceBilan(sequence, onContinue) {
-        // Calculer le profil dominant pour cette séquence
+        // Calculer les scores et pourcentages pour cette séquence
         const seqScores = this.sequenceScores[sequence.id] || { A: 0, B: 0, C: 0, D: 0 };
-        const dominant = Object.entries(seqScores)
-            .filter(([code, score]) => score > 0)
-            .sort((a, b) => b[1] - a[1])[0];
+        const total = Object.values(seqScores).reduce((a, b) => a + b, 0);
         
-        if (!dominant) {
+        if (total === 0) {
             onContinue();
             return;
         }
         
-        const dominantCode = dominant[0];
-        const profile = sequence.profiles[dominantCode];
+        // Calculer les pourcentages et trier
+        const profileResults = Object.entries(seqScores)
+            .map(([code, score]) => ({
+                code,
+                score,
+                percent: Math.round((score / total) * 100),
+                name: sequence.profiles?.[code] || code
+            }))
+            .filter(p => p.score > 0)
+            .sort((a, b) => b.percent - a.percent);
         
-        if (!profile || !profile.name) {
+        if (profileResults.length === 0) {
             onContinue();
             return;
         }
+        
+        // Générer le texte dynamique
+        const bilanText = this.generateBilanText(profileResults);
         
         // Masquer l'écran de question
         document.getElementById('quiz-question-screen').style.display = 'none';
@@ -490,40 +499,46 @@ class QuizEngine {
         // Afficher l'écran de bilan de séquence
         let bilanScreen = document.getElementById('quiz-sequence-bilan');
         if (!bilanScreen) {
-            // Créer l'écran s'il n'existe pas
             bilanScreen = document.createElement('div');
             bilanScreen.id = 'quiz-sequence-bilan';
             bilanScreen.className = 'quiz-sequence-bilan';
             document.querySelector('.quiz-container').appendChild(bilanScreen);
         }
         
+        const dominant = profileResults[0];
+        
         bilanScreen.innerHTML = `
             <div class="sequence-bilan-content">
                 <div class="sequence-bilan-header">
-                    <span class="bilan-badge">📊 ${sequence.bilan_titre || 'Bilan de la séquence'}</span>
+                    <span class="bilan-badge">📊 ${sequence.bilan_titre || 'Ton profil'}</span>
                     <h2>${sequence.titre}</h2>
                 </div>
                 
                 <div class="sequence-bilan-result">
-                    <div class="bilan-profile-emoji">${profile.emoji || '🎯'}</div>
-                    <h3 class="bilan-profile-name">${profile.name}</h3>
-                    <p class="bilan-profile-desc">${profile.description || ''}</p>
+                    <div class="bilan-dominant">
+                        <span class="bilan-dominant-label">Tu es principalement</span>
+                        <span class="bilan-dominant-name">${dominant.name}</span>
+                        <span class="bilan-dominant-percent">${dominant.percent}%</span>
+                    </div>
+                    <p class="bilan-text">${bilanText}</p>
                 </div>
                 
                 <div class="sequence-bilan-scores">
-                    <p class="scores-title">Répartition de tes réponses :</p>
+                    <p class="scores-title">Répartition de tes réponses</p>
                     <div class="scores-bars">
-                        ${Object.entries(seqScores).map(([code, score]) => {
-                            const total = Object.values(seqScores).reduce((a, b) => a + b, 0);
-                            const percent = total > 0 ? Math.round((score / total) * 100) : 0;
-                            const isWinner = code === dominantCode;
+                        ${['A', 'B', 'C', 'D'].map(code => {
+                            const result = profileResults.find(p => p.code === code) || { percent: 0, name: sequence.profiles?.[code] || code };
+                            const isWinner = code === dominant.code;
                             return `
-                                <div class="score-bar ${isWinner ? 'winner' : ''}">
+                                <div class="score-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
                                     <span class="score-label">${code}</span>
-                                    <div class="score-track">
-                                        <div class="score-fill" style="width: ${percent}%"></div>
+                                    <div class="score-info">
+                                        <span class="score-name">${result.name}</span>
+                                        <div class="score-track">
+                                            <div class="score-fill" style="width: ${result.percent}%"></div>
+                                        </div>
                                     </div>
-                                    <span class="score-value">${percent}%</span>
+                                    <span class="score-value">${result.percent}%</span>
                                 </div>
                             `;
                         }).join('')}
@@ -541,15 +556,45 @@ class QuizEngine {
         
         bilanScreen.style.display = 'block';
         
-        // Bind du bouton continuer
         document.getElementById('btn-continue-sequence').addEventListener('click', () => {
             bilanScreen.style.display = 'none';
             document.getElementById('quiz-question-screen').style.display = 'block';
             onContinue();
         });
         
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // Générer le texte du bilan automatiquement
+    generateBilanText(profileResults) {
+        const dominant = profileResults[0];
+        const second = profileResults[1];
+        const third = profileResults[2];
+        
+        // Cas 1: Un profil très dominant (> 50%)
+        if (dominant.percent > 50) {
+            if (second && second.percent >= 20) {
+                return `Tes réponses révèlent un profil clairement orienté "${dominant.name}", avec une sensibilité "${second.name}" qui nuance ton approche.`;
+            }
+            return `Tes réponses montrent un profil "${dominant.name}" très affirmé. C'est ta tendance naturelle dominante.`;
+        }
+        
+        // Cas 2: Deux profils proches (écart < 10%)
+        if (second && (dominant.percent - second.percent) < 10) {
+            // Vérifier s'il y a un 3ème proche aussi
+            if (third && (dominant.percent - third.percent) < 15) {
+                return `Tu as un profil équilibré ! Tu combines "${dominant.name}", "${second.name}" et "${third.name}" selon les situations.`;
+            }
+            return `Tu oscilles entre "${dominant.name}" et "${second.name}". Cette dualité te permet d'adapter ton approche selon le contexte.`;
+        }
+        
+        // Cas 3: Un dominant clair mais pas écrasant
+        if (second && second.percent >= 15) {
+            return `Tu es principalement "${dominant.name}" (${dominant.percent}%) avec une touche de "${second.name}" (${second.percent}%) qui enrichit ta vision.`;
+        }
+        
+        // Cas 4: Dominant seul
+        return `Ton profil "${dominant.name}" ressort nettement. C'est ton mode de fonctionnement privilégié.`;
     }
 
     // Calculer et afficher le résultat

@@ -430,57 +430,35 @@
                     <div class="section-header-flex">
                         <h3>📊 Bilan de la séquence</h3>
                     </div>
-                    <p class="section-desc">Définissez le résultat affiché selon la majorité de réponses (A, B, C ou D). Vous pouvez utiliser du texte libre, des emojis, du formatage...</p>
+                    <p class="section-desc">Donnez un nom à chaque profil. Le texte du bilan sera généré automatiquement selon les réponses.</p>
                     
                     <div class="form-group full-width">
                         <label for="sequence-bilan-title">Titre du bilan (optionnel)</label>
                         <input type="text" id="sequence-bilan-title" placeholder="Ex: Ton profil financier">
                     </div>
                     
-                    <div class="sequence-profiles-simple" id="sequence-profiles">
-                        <!-- Profil A -->
-                        <div class="sequence-profile-simple" data-profile="A">
-                            <div class="profile-simple-header">
-                                <span class="profile-letter">A</span>
-                                <span class="profile-label">Si majorité de A</span>
-                            </div>
-                            <textarea class="profile-content-input" id="seq-profile-a-content" rows="4" placeholder="Ex: 🛡️ Profil Sécuritaire
-
-Tu privilégies la sécurité et la stabilité. Tu préfères les placements garantis même si le rendement est plus faible..."></textarea>
+                    <div class="sequence-profiles-names">
+                        <div class="profile-name-row">
+                            <span class="profile-letter" data-profile="A">A</span>
+                            <input type="text" id="seq-profile-a-name" placeholder="Ex: Sécuritaire 🛡️">
                         </div>
-                        
-                        <!-- Profil B -->
-                        <div class="sequence-profile-simple" data-profile="B">
-                            <div class="profile-simple-header">
-                                <span class="profile-letter">B</span>
-                                <span class="profile-label">Si majorité de B</span>
-                            </div>
-                            <textarea class="profile-content-input" id="seq-profile-b-content" rows="4" placeholder="Ex: ⚖️ Profil Prudent
-
-Tu cherches l'équilibre entre sécurité et rendement..."></textarea>
+                        <div class="profile-name-row">
+                            <span class="profile-letter" data-profile="B">B</span>
+                            <input type="text" id="seq-profile-b-name" placeholder="Ex: Prudent ⚖️">
                         </div>
-                        
-                        <!-- Profil C -->
-                        <div class="sequence-profile-simple" data-profile="C">
-                            <div class="profile-simple-header">
-                                <span class="profile-letter">C</span>
-                                <span class="profile-label">Si majorité de C</span>
-                            </div>
-                            <textarea class="profile-content-input" id="seq-profile-c-content" rows="4" placeholder="Ex: 🎯 Profil Équilibré
-
-Tu sais doser risque et prudence selon tes objectifs..."></textarea>
+                        <div class="profile-name-row">
+                            <span class="profile-letter" data-profile="C">C</span>
+                            <input type="text" id="seq-profile-c-name" placeholder="Ex: Équilibré 🎯">
                         </div>
-                        
-                        <!-- Profil D -->
-                        <div class="sequence-profile-simple" data-profile="D">
-                            <div class="profile-simple-header">
-                                <span class="profile-letter">D</span>
-                                <span class="profile-label">Si majorité de D</span>
-                            </div>
-                            <textarea class="profile-content-input" id="seq-profile-d-content" rows="4" placeholder="Ex: 🚀 Profil Liberté
-
-Tu assumes le risque pour maximiser tes gains potentiels..."></textarea>
+                        <div class="profile-name-row">
+                            <span class="profile-letter" data-profile="D">D</span>
+                            <input type="text" id="seq-profile-d-name" placeholder="Ex: Liberté 🚀">
                         </div>
+                    </div>
+                    
+                    <div class="bilan-preview-info">
+                        <span class="info-icon">💡</span>
+                        <span>Le bilan affichera automatiquement : "Tu es principalement <strong>[Profil dominant]</strong> (X%) avec une touche de <strong>[2ème profil]</strong> (Y%)"</span>
                     </div>
                 </div>
             </div>

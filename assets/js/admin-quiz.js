@@ -518,15 +518,21 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     document.getElementById('sequence-description').value = sequence?.description || '';
     document.getElementById('sequence-stat').value = sequence?.stat || '';
     document.getElementById('sequence-stat-source').value = sequence?.statSource || '';
-    document.getElementById('sequence-bilan-title').value = sequence?.bilanTitle || '';
     
-    // Reset profils de bilan
+    const bilanTitleEl = document.getElementById('sequence-bilan-title');
+    if (bilanTitleEl) bilanTitleEl.value = sequence?.bilanTitle || '';
+    
+    // Reset profils de bilan (avec protection si éléments n'existent pas)
     const profiles = sequence?.profiles || {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
         const profile = profiles[letter.toUpperCase()] || {};
-        document.getElementById(`seq-profile-${letter}-name`).value = profile.name || '';
-        document.getElementById(`seq-profile-${letter}-emoji`).value = profile.emoji || '';
-        document.getElementById(`seq-profile-${letter}-desc`).value = profile.description || '';
+        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
+        const emojiEl = document.getElementById(`seq-profile-${letter}-emoji`);
+        const descEl = document.getElementById(`seq-profile-${letter}-desc`);
+        
+        if (nameEl) nameEl.value = profile.name || '';
+        if (emojiEl) emojiEl.value = profile.emoji || '';
+        if (descEl) descEl.value = profile.description || '';
     });
     
     // Questions de la séquence
@@ -579,24 +585,30 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
-    // Collecter les profils de bilan
+    // Collecter les profils de bilan (avec protection)
     const profiles = {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const name = document.getElementById(`seq-profile-${letter}-name`).value.trim();
-        const emoji = document.getElementById(`seq-profile-${letter}-emoji`).value.trim();
-        const description = document.getElementById(`seq-profile-${letter}-desc`).value.trim();
+        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
+        const emojiEl = document.getElementById(`seq-profile-${letter}-emoji`);
+        const descEl = document.getElementById(`seq-profile-${letter}-desc`);
+        
+        const name = nameEl ? nameEl.value.trim() : '';
+        const emoji = emojiEl ? emojiEl.value.trim() : '';
+        const description = descEl ? descEl.value.trim() : '';
         
         if (name || description) {
             profiles[letter.toUpperCase()] = { name, emoji, description };
         }
     });
     
+    const bilanTitleEl = document.getElementById('sequence-bilan-title');
+    
     const sequenceData = {
         title: document.getElementById('sequence-title').value.trim(),
         description: document.getElementById('sequence-description').value.trim(),
         stat: document.getElementById('sequence-stat').value.trim(),
         statSource: document.getElementById('sequence-stat-source').value.trim(),
-        bilanTitle: document.getElementById('sequence-bilan-title').value.trim(),
+        bilanTitle: bilanTitleEl ? bilanTitleEl.value.trim() : '',
         profiles: profiles,
         questions: editIndex >= 0 ? quizData.sequences[editIndex].questions : tempSequenceQuestions
     };

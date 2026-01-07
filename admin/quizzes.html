@@ -427,16 +427,63 @@
 
                 <!-- Bilan de la séquence -->
                 <div class="form-section">
-                    <h3>📊 Bilan de la séquence</h3>
-                    <p class="section-desc">Message affiché après la dernière question de cette séquence.</p>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="sequence-bilan-title">Titre du bilan</label>
-                            <input type="text" id="sequence-bilan-title" placeholder="Ex: Ce que révèle cette séquence">
+                    <div class="section-header-flex">
+                        <h3>📊 Bilan de la séquence</h3>
+                    </div>
+                    <p class="section-desc">Définissez le résultat affiché selon la majorité de réponses (A, B, C ou D) dans cette séquence.</p>
+                    
+                    <div class="form-group full-width">
+                        <label for="sequence-bilan-title">Titre du bilan</label>
+                        <input type="text" id="sequence-bilan-title" placeholder="Ex: Ton profil financier">
+                    </div>
+                    
+                    <div class="sequence-profiles-grid" id="sequence-profiles">
+                        <!-- Profil A -->
+                        <div class="sequence-profile-card" data-profile="A">
+                            <div class="profile-card-header">
+                                <span class="profile-letter">A</span>
+                                <input type="text" class="profile-name-input" id="seq-profile-a-name" placeholder="Nom du profil A">
+                            </div>
+                            <div class="profile-card-body">
+                                <input type="text" class="profile-emoji-input" id="seq-profile-a-emoji" placeholder="🛡️" maxlength="4">
+                                <textarea class="profile-desc-input" id="seq-profile-a-desc" rows="3" placeholder="Description affichée si majorité de A..."></textarea>
+                            </div>
                         </div>
-                        <div class="form-group full-width">
-                            <label for="sequence-bilan-text">Texte du bilan</label>
-                            <textarea id="sequence-bilan-text" rows="3" placeholder="Ex: Tes réponses montrent que tu as une relation particulière avec..."></textarea>
+                        
+                        <!-- Profil B -->
+                        <div class="sequence-profile-card" data-profile="B">
+                            <div class="profile-card-header">
+                                <span class="profile-letter">B</span>
+                                <input type="text" class="profile-name-input" id="seq-profile-b-name" placeholder="Nom du profil B">
+                            </div>
+                            <div class="profile-card-body">
+                                <input type="text" class="profile-emoji-input" id="seq-profile-b-emoji" placeholder="⚖️" maxlength="4">
+                                <textarea class="profile-desc-input" id="seq-profile-b-desc" rows="3" placeholder="Description affichée si majorité de B..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Profil C -->
+                        <div class="sequence-profile-card" data-profile="C">
+                            <div class="profile-card-header">
+                                <span class="profile-letter">C</span>
+                                <input type="text" class="profile-name-input" id="seq-profile-c-name" placeholder="Nom du profil C">
+                            </div>
+                            <div class="profile-card-body">
+                                <input type="text" class="profile-emoji-input" id="seq-profile-c-emoji" placeholder="🎯" maxlength="4">
+                                <textarea class="profile-desc-input" id="seq-profile-c-desc" rows="3" placeholder="Description affichée si majorité de C..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Profil D -->
+                        <div class="sequence-profile-card" data-profile="D">
+                            <div class="profile-card-header">
+                                <span class="profile-letter">D</span>
+                                <input type="text" class="profile-name-input" id="seq-profile-d-name" placeholder="Nom du profil D">
+                            </div>
+                            <div class="profile-card-body">
+                                <input type="text" class="profile-emoji-input" id="seq-profile-d-emoji" placeholder="🚀" maxlength="4">
+                                <textarea class="profile-desc-input" id="seq-profile-d-desc" rows="3" placeholder="Description affichée si majorité de D..."></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -522,25 +522,18 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     const bilanTitleEl = document.getElementById('sequence-bilan-title');
     if (bilanTitleEl) bilanTitleEl.value = sequence?.bilanTitle || '';
     
-    // Reset profils de bilan (avec protection si éléments n'existent pas)
+    // Reset profils de bilan (1 seul champ content par profil)
     const profiles = sequence?.profiles || {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
         const profile = profiles[letter.toUpperCase()] || {};
-        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
-        const emojiEl = document.getElementById(`seq-profile-${letter}-emoji`);
-        const descEl = document.getElementById(`seq-profile-${letter}-desc`);
-        
-        if (nameEl) nameEl.value = profile.name || '';
-        if (emojiEl) emojiEl.value = profile.emoji || '';
-        if (descEl) descEl.value = profile.description || '';
+        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
+        if (contentEl) contentEl.value = profile.content || '';
     });
     
     // Questions de la séquence
     if (editIndex >= 0 && sequence && sequence.questions) {
-        // Mode édition: utiliser les questions existantes
         renderSequenceQuestions(sequence.questions);
     } else {
-        // Mode création: utiliser les questions temporaires (vide au début)
         renderSequenceQuestions(tempSequenceQuestions);
     }
     
@@ -585,19 +578,14 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
-    // Collecter les profils de bilan (avec protection)
+    // Collecter les profils de bilan (1 seul champ content)
     const profiles = {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
-        const emojiEl = document.getElementById(`seq-profile-${letter}-emoji`);
-        const descEl = document.getElementById(`seq-profile-${letter}-desc`);
+        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
+        const content = contentEl ? contentEl.value.trim() : '';
         
-        const name = nameEl ? nameEl.value.trim() : '';
-        const emoji = emojiEl ? emojiEl.value.trim() : '';
-        const description = descEl ? descEl.value.trim() : '';
-        
-        if (name || description) {
-            profiles[letter.toUpperCase()] = { name, emoji, description };
+        if (content) {
+            profiles[letter.toUpperCase()] = { content };
         }
     });
     
@@ -619,16 +607,12 @@ function saveSequence() {
     }
     
     if (editIndex >= 0) {
-        // Mode édition
         quizData.sequences[editIndex] = { ...quizData.sequences[editIndex], ...sequenceData };
     } else {
-        // Mode création: ajouter la nouvelle séquence
         quizData.sequences.push(sequenceData);
     }
     
     console.log('Séquence sauvegardée:', sequenceData);
-    console.log('Toutes les séquences:', quizData.sequences);
-    
     markAsChanged();
     closeSequenceModal();
     renderSequences();

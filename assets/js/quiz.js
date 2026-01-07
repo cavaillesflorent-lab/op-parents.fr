@@ -177,22 +177,31 @@ class QuizEngine {
         this.hideAllScreens();
         document.getElementById('quiz-intro').style.display = 'block';
 
-        document.getElementById('quiz-title').textContent = this.quiz.titre;
-        document.getElementById('quiz-subtitle').textContent = this.quiz.sous_titre || '';
-        document.getElementById('quiz-description').textContent = this.quiz.description || '';
+        const titleEl = document.getElementById('quiz-title');
+        const descEl = document.getElementById('quiz-description');
+        
+        if (titleEl) titleEl.textContent = this.quiz.titre;
+        if (descEl) descEl.textContent = this.quiz.description || this.quiz.sous_titre || '';
 
         // Image de couverture
         const coverImg = document.getElementById('quiz-cover-image');
+        const coverPlaceholder = document.getElementById('quiz-cover-placeholder');
         if (coverImg && this.quiz.image_url) {
             coverImg.src = this.quiz.image_url;
             coverImg.style.display = 'block';
+            if (coverPlaceholder) coverPlaceholder.style.display = 'none';
         }
 
         // Stats
-        if (this.quiz.intro_stat) {
-            document.getElementById('stat-number').textContent = this.quiz.intro_stat;
-            document.getElementById('stat-source').textContent = this.quiz.intro_stat_source || '';
-            document.getElementById('quiz-stat').style.display = 'block';
+        const statEl = document.getElementById('quiz-stat');
+        const statNumber = document.getElementById('stat-number');
+        const statSource = document.getElementById('stat-source');
+        if (this.quiz.intro_stat && statNumber) {
+            statNumber.textContent = this.quiz.intro_stat;
+            if (statSource) statSource.textContent = this.quiz.intro_stat_source || '';
+            if (statEl) statEl.style.display = 'block';
+        } else if (statEl) {
+            statEl.style.display = 'none';
         }
 
         // Bénéfices
@@ -200,27 +209,35 @@ class QuizEngine {
         const benefitsContainer = document.getElementById('quiz-benefits');
         if (benefitsList && this.quiz.benefits && this.quiz.benefits.length > 0) {
             benefitsList.innerHTML = this.quiz.benefits.map(benefit => `<li>${benefit}</li>`).join('');
-            benefitsContainer.style.display = 'block';
+            if (benefitsContainer) benefitsContainer.style.display = 'block';
         } else if (benefitsContainer) {
             benefitsContainer.style.display = 'none';
         }
 
         // Nombre de questions total
         const totalQuestions = this.sequences.reduce((sum, seq) => sum + seq.questions.length, 0);
-        document.getElementById('quiz-questions-count').textContent = totalQuestions;
-        document.getElementById('quiz-duration').textContent = this.quiz.duree || Math.ceil(totalQuestions * 0.5) + ' min';
+        const questionsCountEl = document.getElementById('quiz-questions-count');
+        const durationEl = document.getElementById('quiz-duration');
+        if (questionsCountEl) questionsCountEl.textContent = totalQuestions;
+        if (durationEl) durationEl.textContent = this.quiz.duree || Math.ceil(totalQuestions * 0.5) + ' min';
 
         // Vérifier s'il y a une progression
         const hasProgress = Object.values(this.sequenceProgress).some(p => Object.keys(p.answers).length > 0);
         const resumeBlock = document.getElementById('quiz-resume-block');
         const startBtn = document.getElementById('btn-start');
+        const resumeBtn = document.getElementById('btn-resume');
+        const restartFreshBtn = document.getElementById('btn-restart-fresh');
 
-        if (hasProgress && resumeBlock) {
-            resumeBlock.style.display = 'block';
+        if (hasProgress) {
+            if (resumeBlock) resumeBlock.style.display = 'block';
             if (startBtn) startBtn.style.display = 'none';
+            if (resumeBtn) resumeBtn.style.display = 'flex';
+            if (restartFreshBtn) restartFreshBtn.style.display = 'block';
         } else {
             if (resumeBlock) resumeBlock.style.display = 'none';
             if (startBtn) startBtn.style.display = 'flex';
+            if (resumeBtn) resumeBtn.style.display = 'none';
+            if (restartFreshBtn) restartFreshBtn.style.display = 'none';
         }
     }
 
@@ -232,7 +249,12 @@ class QuizEngine {
             summaryScreen = document.createElement('div');
             summaryScreen.id = 'quiz-summary';
             summaryScreen.className = 'quiz-summary';
-            document.querySelector('.quiz-container').appendChild(summaryScreen);
+            const container = document.querySelector('.quiz-main');
+            if (container) {
+                container.appendChild(summaryScreen);
+            } else {
+                document.body.appendChild(summaryScreen);
+            }
         }
 
         const completedCount = this.sequences.filter(seq => this.sequenceProgress[seq.id]?.completed).length;
@@ -387,7 +409,12 @@ class QuizEngine {
             introScreen = document.createElement('div');
             introScreen.id = 'quiz-sequence-intro';
             introScreen.className = 'quiz-sequence-intro';
-            document.querySelector('.quiz-container').appendChild(introScreen);
+            const container = document.querySelector('.quiz-main');
+            if (container) {
+                container.appendChild(introScreen);
+            } else {
+                document.body.appendChild(introScreen);
+            }
         }
 
         introScreen.innerHTML = `
@@ -543,7 +570,12 @@ class QuizEngine {
             bilanScreen = document.createElement('div');
             bilanScreen.id = 'quiz-sequence-bilan';
             bilanScreen.className = 'quiz-sequence-bilan';
-            document.querySelector('.quiz-container').appendChild(bilanScreen);
+            const container = document.querySelector('.quiz-main');
+            if (container) {
+                container.appendChild(bilanScreen);
+            } else {
+                document.body.appendChild(bilanScreen);
+            }
         }
 
         const bilanText = this.generateBilanText(profileResults);
@@ -687,16 +719,22 @@ class QuizEngine {
     }
 
     showError(message) {
-        document.getElementById('quiz-loading').style.display = 'none';
-        const container = document.querySelector('.quiz-container');
-        container.innerHTML = `
-            <div class="quiz-error">
-                <span class="error-icon">😕</span>
-                <h2>Oups !</h2>
-                <p>${message}</p>
-                <a href="quizzes.html" class="btn-back">Voir tous les quiz</a>
-            </div>
-        `;
+        const loadingEl = document.getElementById('quiz-loading');
+        if (loadingEl) loadingEl.style.display = 'none';
+        
+        const container = document.querySelector('.quiz-main');
+        if (container) {
+            container.innerHTML = `
+                <div class="quiz-error">
+                    <span class="error-icon">😕</span>
+                    <h2>Oups !</h2>
+                    <p>${message}</p>
+                    <a href="quizzes.html" class="btn-back">Voir tous les quiz</a>
+                </div>
+            `;
+        } else {
+            alert('Erreur: ' + message);
+        }
     }
 
     hideAllScreens() {

@@ -644,18 +644,22 @@ class QuizEngine {
                     <h2>${seq.titre}</h2>
                 </div>
 
-                <div class="sequence-bilan-scores-compact">
-                    <div class="scores-bars-compact">
+                <div class="sequence-bilan-scores">
+                    <p class="scores-title">Répartition de tes réponses</p>
+                    <div class="scores-bars">
                         ${['A', 'B', 'C', 'D'].map(code => {
-                            const result = profileResults.find(p => p.code === code) || { percent: 0 };
+                            const result = profileResults.find(p => p.code === code) || { percent: 0, name: code };
                             const isWinner = dominant && code === dominant.code;
                             return `
-                                <div class="score-bar-compact ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
-                                    <span class="score-letter">${code}</span>
-                                    <div class="score-track-compact">
-                                        <div class="score-fill-compact" style="width: ${result.percent}%"></div>
+                                <div class="score-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
+                                    <span class="score-label">${code}</span>
+                                    <div class="score-info">
+                                        <span class="score-name">${result.name}</span>
+                                        <div class="score-track">
+                                            <div class="score-fill" style="width: ${result.percent}%"></div>
+                                        </div>
                                     </div>
-                                    <span class="score-percent">${result.percent}%</span>
+                                    <span class="score-value">${result.percent}%</span>
                                 </div>
                             `;
                         }).join('')}
@@ -666,15 +670,7 @@ class QuizEngine {
                     <div class="sequence-bilan-profile-content">
                         ${profileContent}
                     </div>
-                ` : `
-                    <div class="sequence-bilan-result">
-                        <div class="bilan-dominant">
-                            <span class="bilan-dominant-label">Tu es</span>
-                            <span class="bilan-dominant-name">${dominant?.name || 'Indéterminé'}</span>
-                            <span class="bilan-dominant-percent">${dominant?.percent || 0}%</span>
-                        </div>
-                    </div>
-                `}
+                ` : ''}
 
                 ${seq.bilan_texte ? `
                     <div class="sequence-bilan-custom-text">

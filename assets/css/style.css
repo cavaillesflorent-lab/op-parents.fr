@@ -249,7 +249,7 @@ section {
    ======================================== */
 
 .header {
-    background: var(--vert-fonce);
+    background: #BF604B;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -271,14 +271,14 @@ section {
 .logo-img {
     height: 48px;
     width: auto;
-    filter: brightness(0) saturate(100%) invert(89%) sepia(25%) saturate(748%) hue-rotate(338deg) brightness(101%) contrast(91%);
+    filter: brightness(0) invert(1);
 }
 
 .logo-text {
     font-family: var(--font-sans);
     font-size: 1rem;
     font-weight: 700;
-    color: var(--jaune-dore);
+    color: var(--white);
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
@@ -290,7 +290,7 @@ section {
 }
 
 .nav a {
-    color: var(--jaune-dore);
+    color: var(--white);
     font-size: 0.95rem;
     font-weight: 500;
     opacity: 1;
@@ -302,7 +302,7 @@ section {
 
 .nav-icon {
     font-size: 0.9rem;
-    filter: grayscale(100%) brightness(10) sepia(100%) hue-rotate(10deg) saturate(5);
+    filter: brightness(0) invert(1);
     opacity: 0.9;
 }
 
@@ -317,7 +317,7 @@ section {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--jaune-dore);
+    background: var(--white);
     transition: width var(--transition);
 }
 
@@ -342,7 +342,7 @@ section {
 .mobile-toggle span {
     width: 24px;
     height: 2px;
-    background: var(--jaune-dore);
+    background: var(--white);
     border-radius: 2px;
     transition: var(--transition);
 }
@@ -1258,7 +1258,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--vert-fonce);
+        background: #BF604B;
         flex-direction: column;
         padding: var(--space-lg);
         gap: var(--space-md);

@@ -1044,3 +1044,131 @@
     display: flex;
     gap: 0.5rem;
 }
+
+/* ============================================
+   WEBINAIRES - ATTENDUS
+   ============================================ */
+
+.attendus-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.attendu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.attendu-item:focus-within {
+    border-color: var(--vert-fonce);
+    box-shadow: 0 0 0 3px rgba(45, 64, 59, 0.1);
+}
+
+.attendu-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.attendu-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 0.25rem;
+}
+
+.attendu-input:focus {
+    outline: none;
+}
+
+.attendu-input::placeholder {
+    color: var(--gray-400);
+}
+
+.btn-remove-attendu {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    padding: 0.25rem;
+}
+
+.btn-remove-attendu:hover {
+    opacity: 1;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+/* Modal large pour webinaires */
+.modal-content.modal-large {
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Section de formulaire */
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.form-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.section-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+/* Amélioration des status badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-a_venir {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-replay {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-termine {
+    background: #f3f4f6;
+    color: #6b7280;
+}

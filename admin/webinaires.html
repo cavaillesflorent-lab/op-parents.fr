@@ -6,6 +6,7 @@
     <title>Webinaires - Admin OP!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-quiz.css">
 </head>
 <body class="admin-body">
     <div class="admin-wrapper">
@@ -82,7 +83,7 @@
     <!-- Modal Formulaire -->
     <div class="modal" id="webinaire-modal">
         <div class="modal-overlay"></div>
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <div class="modal-header">
                 <h2 id="modal-title">Nouveau webinaire</h2>
                 <button class="modal-close" id="modal-close">&times;</button>
@@ -91,41 +92,71 @@
             <form id="webinaire-form" class="admin-form">
                 <input type="hidden" id="webinaire-id">
                 
-                <div class="form-group">
-                    <label for="titre">Titre *</label>
-                    <input type="text" id="titre" name="titre" required placeholder="Ex: Comment préparer l'arrivée de bébé">
-                </div>
-                
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Description du webinaire..."></textarea>
-                </div>
-                
-                <div class="form-row">
+                <!-- Informations principales -->
+                <div class="form-section">
+                    <h3>📝 Informations générales</h3>
+                    
                     <div class="form-group">
-                        <label for="date_heure">Date et heure</label>
-                        <input type="datetime-local" id="date_heure" name="date_heure">
+                        <label for="titre">Titre du webinaire *</label>
+                        <input type="text" id="titre" name="titre" required placeholder="Ex: Comment parler d'argent avec ses enfants ?">
                     </div>
                     
                     <div class="form-group">
-                        <label for="statut">Statut</label>
-                        <select id="statut" name="statut">
-                            <option value="a_venir">À venir</option>
-                            <option value="replay">Replay disponible</option>
-                            <option value="termine">Terminé</option>
-                        </select>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Décrivez le contenu et les objectifs du webinaire..."></textarea>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="lien_meet">Lien Google Meet</label>
-                    <input type="url" id="lien_meet" name="lien_meet" placeholder="https://meet.google.com/xxx-xxx-xxx">
+                <!-- Date et horaire -->
+                <div class="form-section">
+                    <h3>📅 Date et horaire</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date_heure">Date et heure *</label>
+                            <input type="datetime-local" id="date_heure" name="date_heure" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="statut">Statut</label>
+                            <select id="statut" name="statut">
+                                <option value="a_venir">À venir</option>
+                                <option value="replay">Replay disponible</option>
+                                <option value="termine">Terminé</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="image_url">URL de l'image</label>
-                    <input type="url" id="image_url" name="image_url" placeholder="https://...">
-                    <small class="form-hint">Utilisez un service comme Imgur ou Cloudinary pour héberger vos images</small>
+                <!-- Attendus -->
+                <div class="form-section">
+                    <h3>🎯 Ce que les participants vont apprendre</h3>
+                    <p class="section-desc">Listez les points clés que les participants retiendront de ce webinaire.</p>
+                    
+                    <div class="attendus-container" id="attendus-container">
+                        <!-- Les attendus seront ajoutés ici dynamiquement -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-attendu">
+                        + Ajouter un point clé
+                    </button>
+                </div>
+                
+                <!-- Lien et paramètres -->
+                <div class="form-section">
+                    <h3>🔗 Lien de connexion</h3>
+                    
+                    <div class="form-group">
+                        <label for="lien_meet">Lien Google Meet</label>
+                        <input type="url" id="lien_meet" name="lien_meet" placeholder="https://meet.google.com/xxx-xxx-xxx">
+                        <small class="form-hint">Ce lien sera envoyé aux inscrits et affiché au moment du webinaire</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image_url">Image de couverture (URL)</label>
+                        <input type="url" id="image_url" name="image_url" placeholder="https://...">
+                        <small class="form-hint">Utilisez un service comme Imgur ou Cloudinary pour héberger vos images</small>
+                    </div>
                 </div>
                 
                 <div class="form-actions">
@@ -162,6 +193,7 @@
         const client = initSupabase();
 
         let currentDeleteId = null;
+        let attendusCount = 0;
 
         // Écouter les changements d'authentification
         client.auth.onAuthStateChange((event, session) => {
@@ -222,6 +254,49 @@
             return labels[statut] || statut;
         }
 
+        // === GESTION DES ATTENDUS ===
+        
+        function addAttendu(value = '') {
+            attendusCount++;
+            const container = document.getElementById('attendus-container');
+            const div = document.createElement('div');
+            div.className = 'attendu-item';
+            div.innerHTML = `
+                <span class="attendu-icon">✅</span>
+                <input type="text" class="attendu-input" placeholder="Ex: Comprendre les bases de l'éducation financière" value="${value}">
+                <button type="button" class="btn-icon btn-remove-attendu" onclick="removeAttendu(this)">🗑️</button>
+            `;
+            container.appendChild(div);
+        }
+        
+        function removeAttendu(btn) {
+            btn.closest('.attendu-item').remove();
+        }
+        
+        function getAttendus() {
+            const inputs = document.querySelectorAll('.attendu-input');
+            return Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+        }
+        
+        function setAttendus(attendus) {
+            const container = document.getElementById('attendus-container');
+            container.innerHTML = '';
+            attendusCount = 0;
+            
+            if (attendus && attendus.length > 0) {
+                attendus.forEach(att => addAttendu(att));
+            } else {
+                // Ajouter 2 champs vides par défaut
+                addAttendu();
+                addAttendu();
+            }
+        }
+        
+        // Bouton ajouter attendu
+        document.getElementById('btn-add-attendu').addEventListener('click', () => addAttendu());
+
         // Ouvrir le modal
         function openModal(title = 'Nouveau webinaire') {
             document.getElementById('modal-title').textContent = title;
@@ -233,10 +308,12 @@
             document.getElementById('webinaire-modal').classList.remove('active');
             document.getElementById('webinaire-form').reset();
             document.getElementById('webinaire-id').value = '';
+            setAttendus(null); // Reset attendus
         }
 
         // Nouveau webinaire
         document.getElementById('new-webinaire-btn').addEventListener('click', () => {
+            setAttendus(null);
             openModal('Nouveau webinaire');
         });
 
@@ -265,6 +342,9 @@
             document.getElementById('statut').value = data.statut || 'a_venir';
             document.getElementById('lien_meet').value = data.lien_meet || '';
             document.getElementById('image_url').value = data.image_url || '';
+            
+            // Charger les attendus
+            setAttendus(data.attendus || []);
 
             openModal('Modifier le webinaire');
         }
@@ -285,7 +365,8 @@
                 date_heure: document.getElementById('date_heure').value || null,
                 statut: document.getElementById('statut').value,
                 lien_meet: document.getElementById('lien_meet').value,
-                image_url: document.getElementById('image_url').value
+                image_url: document.getElementById('image_url').value,
+                attendus: getAttendus()
             };
 
             let error;

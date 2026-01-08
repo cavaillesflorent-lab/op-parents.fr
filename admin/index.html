@@ -6,6 +6,300 @@
     <title>Dashboard - Admin OP!</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <style>
+        /* Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .welcome-section h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .welcome-date {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid var(--gray-100);
+            transition: all 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-card.webinaires .stat-icon { background: #dbeafe; }
+        .stat-card.quiz .stat-icon { background: #dcfce7; }
+        .stat-card.inscriptions .stat-icon { background: #fef3c7; }
+        
+        .stat-info { flex: 1; }
+        
+        .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .stat-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+            font-weight: 600;
+        }
+        
+        /* Main Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid var(--gray-100);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .card-link {
+            font-size: 0.85rem;
+            color: var(--vert-fonce);
+            font-weight: 500;
+        }
+        
+        .card-link:hover { text-decoration: underline; }
+        
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.25rem 1rem;
+            background: var(--gray-50);
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+        
+        .quick-action-btn:hover {
+            background: var(--vert-clair);
+            border-color: var(--vert-fonce);
+        }
+        
+        .action-icon { font-size: 1.75rem; }
+        
+        .action-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        /* Webinaire List */
+        .webinaire-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .webinaire-item:last-child { border-bottom: none; }
+        
+        .webinaire-date {
+            width: 50px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .date-day {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            line-height: 1;
+        }
+        
+        .date-month {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .webinaire-info { flex: 1; }
+        
+        .webinaire-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .webinaire-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .badge-today {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .webinaire-item.today {
+            background: linear-gradient(90deg, #fef3c7 0%, transparent 100%);
+            margin: 0 -1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+        }
+        
+        /* Quiz List */
+        .quiz-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .quiz-item:last-child { border-bottom: none; }
+        
+        .quiz-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .quiz-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .quiz-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .quiz-status.published { background: #dcfce7; color: #166534; }
+        .quiz-status.draft { background: var(--gray-100); color: var(--text-secondary); }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+        }
+        
+        .empty-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state p { margin-bottom: 1rem; }
+        
+        /* Loading */
+        .loading-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .loading-spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--vert-fonce);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body class="admin-body">
     <div class="admin-layout">
@@ -23,10 +317,6 @@
                 <a href="webinaires.html" class="nav-item">
                     <span class="nav-icon">🎥</span>
                     Webinaires
-                </a>
-                <a href="formations.html" class="nav-item">
-                    <span class="nav-icon">📚</span>
-                    Formations
                 </a>
                 <a href="quizzes.html" class="nav-item">
                     <span class="nav-icon">🧠</span>
@@ -47,54 +337,112 @@
 
         <!-- Main Content -->
         <main class="admin-main">
-            <header class="admin-header">
-                <h1>Dashboard</h1>
-                <div class="user-info">
-                    <span class="user-email">Chargement...</span>
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="welcome-section">
+                    <h1>Bonjour Florent 👋</h1>
+                    <p class="welcome-date" id="current-date"></p>
+                </div>
+                <div class="header-actions">
+                    <a href="webinaires.html" class="btn btn-primary">+ Nouveau webinaire</a>
                 </div>
             </header>
 
-            <div class="admin-content">
-                <!-- Stats Cards -->
-                <div class="stats-cards">
-                    <div class="stat-card">
-                        <div class="stat-icon">🎥</div>
-                        <div class="stat-info">
-                            <span class="stat-number" id="webinaires-count">-</span>
-                            <span class="stat-label">Webinaires</span>
-                        </div>
-                        <span class="stat-badge" id="webinaires-avenir">- à venir</span>
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card webinaires">
+                    <div class="stat-icon">🎥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-webinaires">0</span>
+                        <span class="stat-label">Webinaires</span>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📚</div>
-                        <div class="stat-info">
-                            <span class="stat-number" id="formations-count">-</span>
-                            <span class="stat-label">Formations</span>
+                    <span class="stat-badge" id="stat-webinaires-avenir">0 à venir</span>
+                </div>
+                
+                <div class="stat-card quiz">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-quiz">0</span>
+                        <span class="stat-label">Quiz</span>
+                    </div>
+                    <span class="stat-badge" id="stat-quiz-published">0 publiés</span>
+                </div>
+                
+                <div class="stat-card inscriptions">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-inscriptions">0</span>
+                        <span class="stat-label">Inscriptions</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="dashboard-grid">
+                <!-- Prochains webinaires -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>📅 Prochains webinaires</h2>
+                        <a href="webinaires.html" class="card-link">Voir tout →</a>
+                    </div>
+                    <div id="upcoming-webinaires">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Chargement...</span>
                         </div>
-                        <span class="stat-badge" id="formations-published">- publiées</span>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <h2>Actions rapides</h2>
-                    <div class="actions-grid">
-                        <a href="webinaires.html" class="action-card">
-                            <span class="action-icon">➕</span>
-                            <span>Nouveau webinaire</span>
+                <!-- Actions rapides -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>⚡ Actions rapides</h2>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <a href="webinaires.html" class="quick-action-btn">
+                            <span class="action-icon">🎥</span>
+                            <span class="action-text">Créer un webinaire</span>
                         </a>
-                        <a href="formations.html" class="action-card">
-                            <span class="action-icon">➕</span>
-                            <span>Nouvelle formation</span>
+                        <a href="quizzes.html" class="quick-action-btn">
+                            <span class="action-icon">🧠</span>
+                            <span class="action-text">Créer un quiz</span>
+                        </a>
+                        <a href="../webinaires.html" target="_blank" class="quick-action-btn">
+                            <span class="action-icon">👁️</span>
+                            <span class="action-text">Page webinaires</span>
+                        </a>
+                        <a href="../quiz.html" target="_blank" class="quick-action-btn">
+                            <span class="action-icon">🎯</span>
+                            <span class="action-text">Tester les quiz</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Recent Items -->
-                <div class="recent-section">
-                    <h2>Derniers webinaires</h2>
-                    <div class="recent-list" id="recent-webinaires">
-                        <p class="loading">Chargement...</p>
+                <!-- Quiz -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>🧠 Quiz</h2>
+                        <a href="quizzes.html" class="card-link">Gérer →</a>
+                    </div>
+                    <div id="quiz-list">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Chargement...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Derniers webinaires créés -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>🆕 Derniers webinaires créés</h2>
+                        <a href="webinaires.html" class="card-link">Gérer →</a>
+                    </div>
+                    <div id="recent-webinaires">
+                        <div class="loading-placeholder">
+                            <div class="loading-spinner"></div>
+                            <span>Chargement...</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,61 +452,164 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/js/config.js"></script>
     <script>
-        // Initialiser Supabase
         const client = initSupabase();
 
-        // Écouter les changements d'authentification
         client.auth.onAuthStateChange((event, session) => {
-            console.log('Auth event:', event, session);
             if (!session) {
                 window.location.href = 'login.html';
             } else {
-                document.querySelector('.user-email').textContent = session.user.email;
-                loadStats();
+                loadDashboard();
             }
         });
 
-        // Charger les statistiques
-        async function loadStats() {
-            // Webinaires
-            const { data: webinaires } = await supabaseClient.from('webinaires').select('*');
-            document.getElementById('webinaires-count').textContent = webinaires?.length || 0;
-            
-            const aVenir = webinaires?.filter(w => w.statut === 'a_venir').length || 0;
-            document.getElementById('webinaires-avenir').textContent = aVenir + ' à venir';
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = 
+            new Date().toLocaleDateString('fr-FR', options);
 
-            // Formations
-            const { data: formations } = await supabaseClient.from('formations').select('*');
-            document.getElementById('formations-count').textContent = formations?.length || 0;
-            
-            const published = formations?.filter(f => f.published).length || 0;
-            document.getElementById('formations-published').textContent = published + ' publiées';
-
-            // Derniers webinaires
-            displayRecentWebinaires(webinaires?.slice(0, 5) || []);
+        async function loadDashboard() {
+            await Promise.all([
+                loadStats(),
+                loadUpcomingWebinaires(),
+                loadQuiz(),
+                loadRecentWebinaires()
+            ]);
         }
 
-        // Afficher les derniers webinaires
-        function displayRecentWebinaires(webinaires) {
+        async function loadStats() {
+            try {
+                const { data: webinaires } = await supabaseClient
+                    .from('webinaires').select('id, date_heure');
+                
+                const total = webinaires?.length || 0;
+                const avenir = webinaires?.filter(w => 
+                    w.date_heure && new Date(w.date_heure) > new Date()
+                ).length || 0;
+                
+                document.getElementById('stat-webinaires').textContent = total;
+                document.getElementById('stat-webinaires-avenir').textContent = avenir + ' à venir';
+
+                const { data: quizzes } = await supabaseClient
+                    .from('quizzes').select('id, published');
+                
+                document.getElementById('stat-quiz').textContent = quizzes?.length || 0;
+                document.getElementById('stat-quiz-published').textContent = 
+                    (quizzes?.filter(q => q.published).length || 0) + ' publiés';
+
+                const { count } = await supabaseClient
+                    .from('webinaire_inscriptions')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('stat-inscriptions').textContent = count || 0;
+            } catch (err) {
+                console.error('Erreur stats:', err);
+            }
+        }
+
+        async function loadUpcomingWebinaires() {
+            const container = document.getElementById('upcoming-webinaires');
+            
+            try {
+                const { data: webinaires } = await supabaseClient
+                    .from('webinaires')
+                    .select('*')
+                    .gte('date_heure', new Date().toISOString())
+                    .order('date_heure', { ascending: true })
+                    .limit(4);
+                
+                if (!webinaires?.length) {
+                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">📅</span><p>Aucun webinaire à venir</p><a href="webinaires.html" class="btn btn-sm btn-primary">Créer un webinaire</a></div>';
+                    return;
+                }
+                
+                container.innerHTML = webinaires.map(w => {
+                    const date = new Date(w.date_heure);
+                    const isToday = date.toDateString() === new Date().toDateString();
+                    
+                    return '<div class="webinaire-item ' + (isToday ? 'today' : '') + '">' +
+                        '<div class="webinaire-date">' +
+                            '<span class="date-day">' + date.getDate() + '</span>' +
+                            '<span class="date-month">' + date.toLocaleDateString('fr-FR', { month: 'short' }) + '</span>' +
+                        '</div>' +
+                        '<div class="webinaire-info">' +
+                            '<h4>' + w.titre + '</h4>' +
+                            '<span class="webinaire-time">🕐 ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span>' +
+                        '</div>' +
+                        (isToday ? '<span class="badge-today">Aujourd\'hui</span>' : '') +
+                    '</div>';
+                }).join('');
+            } catch (err) {
+                console.error('Erreur:', err);
+                container.innerHTML = '<p class="error">Erreur de chargement</p>';
+            }
+        }
+
+        async function loadQuiz() {
+            const container = document.getElementById('quiz-list');
+            
+            try {
+                const { data: quizzes } = await supabaseClient
+                    .from('quizzes')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(4);
+                
+                if (!quizzes?.length) {
+                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">🧠</span><p>Aucun quiz créé</p><a href="quizzes.html" class="btn btn-sm btn-primary">Créer un quiz</a></div>';
+                    return;
+                }
+                
+                container.innerHTML = quizzes.map(q => 
+                    '<div class="quiz-item">' +
+                        '<div class="quiz-info">' +
+                            '<h4>' + q.titre + '</h4>' +
+                            '<span class="quiz-meta">' + (q.duree || '5 min') + '</span>' +
+                        '</div>' +
+                        '<span class="quiz-status ' + (q.published ? 'published' : 'draft') + '">' +
+                            (q.published ? '✅ Publié' : '📝 Brouillon') +
+                        '</span>' +
+                    '</div>'
+                ).join('');
+            } catch (err) {
+                console.error('Erreur:', err);
+                container.innerHTML = '<p class="error">Erreur de chargement</p>';
+            }
+        }
+
+        async function loadRecentWebinaires() {
             const container = document.getElementById('recent-webinaires');
             
-            if (webinaires.length === 0) {
-                container.innerHTML = '<p class="empty">Aucun webinaire</p>';
-                return;
+            try {
+                const { data: webinaires } = await supabaseClient
+                    .from('webinaires')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(4);
+                
+                if (!webinaires?.length) {
+                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">🎥</span><p>Aucun webinaire</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = webinaires.map(w => {
+                    const date = w.date_heure ? new Date(w.date_heure) : null;
+                    const isPast = date && date < new Date();
+                    
+                    return '<div class="quiz-item">' +
+                        '<div class="quiz-info">' +
+                            '<h4>' + w.titre + '</h4>' +
+                            '<span class="quiz-meta">' + (date ? date.toLocaleDateString('fr-FR') : 'Date non définie') + '</span>' +
+                        '</div>' +
+                        '<span class="quiz-status ' + (isPast ? 'draft' : 'published') + '">' +
+                            (isPast ? '✅ Passé' : '📅 À venir') +
+                        '</span>' +
+                    '</div>';
+                }).join('');
+            } catch (err) {
+                console.error('Erreur:', err);
+                container.innerHTML = '<p class="error">Erreur de chargement</p>';
             }
-
-            container.innerHTML = webinaires.map(w => `
-                <div class="recent-item">
-                    <div class="recent-info">
-                        <span class="recent-title">${w.titre}</span>
-                        <span class="recent-date">${w.date_heure ? new Date(w.date_heure).toLocaleDateString('fr-FR') : 'Date non définie'}</span>
-                    </div>
-                    <span class="status-badge status-${w.statut}">${w.statut.replace('_', ' ')}</span>
-                </div>
-            `).join('');
         }
 
-        // Déconnexion
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.href = 'login.html';

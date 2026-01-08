@@ -391,7 +391,7 @@ async function loadQuizData(quiz) {
             stat: seq.stat || '',
             statSource: seq.stat_source || '',
             bilanTitle: seq.bilan_titre || '',
-            bilanText: seq.bilan_texte || '',
+            bilanCustomText: seq.bilan_texte || '',
             profiles: seq.profiles || {},
             questions: (questions || []).map(q => ({
                 id: q.id,
@@ -522,12 +522,15 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     const bilanTitleEl = document.getElementById('sequence-bilan-title');
     if (bilanTitleEl) bilanTitleEl.value = sequence?.bilanTitle || '';
     
-    // Reset profils de bilan (1 seul champ content par profil)
+    // Texte personnalisé du bilan
+    const customTextEl = document.getElementById('sequence-bilan-custom-text');
+    if (customTextEl) customTextEl.value = sequence?.bilanCustomText || '';
+    
+    // Reset noms des profils
     const profiles = sequence?.profiles || {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const profile = profiles[letter.toUpperCase()] || {};
-        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
-        if (contentEl) contentEl.value = profile.content || '';
+        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
+        if (nameEl) nameEl.value = profiles[letter.toUpperCase()] || '';
     });
     
     // Questions de la séquence
@@ -578,18 +581,18 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
-    // Collecter les profils de bilan (1 seul champ content)
+    // Collecter les noms des profils
     const profiles = {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
-        const content = contentEl ? contentEl.value.trim() : '';
-        
-        if (content) {
-            profiles[letter.toUpperCase()] = { content };
+        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
+        const name = nameEl ? nameEl.value.trim() : '';
+        if (name) {
+            profiles[letter.toUpperCase()] = name;
         }
     });
     
     const bilanTitleEl = document.getElementById('sequence-bilan-title');
+    const customTextEl = document.getElementById('sequence-bilan-custom-text');
     
     const sequenceData = {
         title: document.getElementById('sequence-title').value.trim(),
@@ -597,6 +600,7 @@ function saveSequence() {
         stat: document.getElementById('sequence-stat').value.trim(),
         statSource: document.getElementById('sequence-stat-source').value.trim(),
         bilanTitle: bilanTitleEl ? bilanTitleEl.value.trim() : '',
+        bilanCustomText: customTextEl ? customTextEl.value.trim() : '',
         profiles: profiles,
         questions: editIndex >= 0 ? quizData.sequences[editIndex].questions : tempSequenceQuestions
     };
@@ -1085,7 +1089,7 @@ async function saveQuiz() {
                 stat: seq.stat || null,
                 stat_source: seq.statSource || null,
                 bilan_titre: seq.bilanTitle || null,
-                bilan_texte: seq.bilanText || null,
+                bilan_texte: seq.bilanCustomText || null,
                 profiles: seq.profiles || null
             };
             console.log('Payload séquence:', seqPayload);

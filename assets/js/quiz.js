@@ -655,6 +655,12 @@ class QuizEngine {
                     </div>
                 </div>
 
+                ${seq.bilan_texte ? `
+                    <div class="sequence-bilan-custom-text">
+                        <p>${seq.bilan_texte.replace(/\n/g, '<br>')}</p>
+                    </div>
+                ` : ''}
+
                 <button class="btn-back-summary" id="btn-back-summary">
                     Retour au sommaire
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

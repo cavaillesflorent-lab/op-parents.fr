@@ -4581,9 +4581,10 @@ section {
 
 .sequence-card-info h3 {
     font-family: var(--font-serif);
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     color: var(--text-primary);
     margin-top: 0.25rem;
+    font-weight: 600;
 }
 
 .sequence-card-progress {
@@ -4840,4 +4841,19 @@ section {
 .sequence-result-mini .seq-result {
     font-weight: 600;
     color: var(--vert-fonce);
+}
+
+/* Texte personnalisé dans le bilan de séquence */
+.sequence-bilan-custom-text {
+    background: var(--vert-clair);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.sequence-bilan-custom-text p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--vert-fonce);
+    margin: 0;
 }

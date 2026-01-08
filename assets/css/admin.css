@@ -7,13 +7,15 @@
     --admin-sidebar-width: 260px;
     --admin-header-height: 70px;
     --admin-bg: #f8f9fa;
-    --admin-sidebar-bg: #2D403B;
+    --admin-sidebar-bg: #bf604B;
     --admin-card-bg: #ffffff;
     --admin-border: #e9ecef;
     --admin-text: #333;
     --admin-text-light: #6c757d;
-    --admin-primary: #2D403B;
-    --admin-success: #28a745;
+    --admin-primary: #bf604B;
+    --admin-primary-light: rgba(191, 96, 75, 0.1);
+    --admin-primary-hover: #a8503d;
+    --admin-success: #bf604B;
     --admin-warning: #F2D680;
     --admin-danger: #dc3545;
 }
@@ -31,7 +33,7 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    background: linear-gradient(135deg, var(--vert-fonce) 0%, #1a2a25 100%);
+    background: linear-gradient(135deg, #bf604B 0%, #8a4435 100%);
 }
 
 .login-card {
@@ -181,7 +183,7 @@
 .nav-item.active {
     background: rgba(255,255,255,0.15);
     color: white;
-    border-left: 3px solid var(--jaune-dore);
+    border-left: 3px solid white;
 }
 
 .nav-icon {
@@ -761,7 +763,7 @@
     display: block;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--vert-fonce);
+    color: #bf604B;
 }
 
 .quiz-stats-bar .stat-label {
@@ -790,12 +792,12 @@
 }
 
 .tab-btn:hover {
-    color: var(--vert-fonce);
+    color: #bf604B;
     background: rgba(45, 90, 61, 0.05);
 }
 
 .tab-btn.active {
-    color: var(--vert-fonce);
+    color: #bf604B;
     background: rgba(45, 90, 61, 0.1);
     font-weight: 600;
 }
@@ -841,7 +843,7 @@
 
 .question-number {
     font-weight: 600;
-    color: var(--vert-fonce);
+    color: #bf604B;
 }
 
 .question-card .form-group {
@@ -885,7 +887,7 @@
 .answer-code {
     width: 30px;
     height: 30px;
-    background: var(--vert-fonce);
+    background: #bf604B;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -936,7 +938,7 @@
 .profile-letter {
     width: 40px;
     height: 40px;
-    background: var(--vert-fonce);
+    background: #bf604B;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -1068,8 +1070,8 @@
 }
 
 .attendu-item:focus-within {
-    border-color: var(--vert-fonce);
-    box-shadow: 0 0 0 3px rgba(45, 64, 59, 0.1);
+    border-color: #bf604B;
+    box-shadow: 0 0 0 3px rgba(191, 96, 75, 0.1);
 }
 
 .attendu-icon {
@@ -1164,8 +1166,8 @@
 }
 
 .status-replay {
-    background: #dcfce7;
-    color: #16a34a;
+    background: #fde8e4;
+    color: #bf604B;
 }
 
 .status-termine {
@@ -1257,7 +1259,7 @@
 
 .upload-progress .progress-fill {
     height: 100%;
-    background: var(--vert-fonce);
+    background: #bf604B;
     border-radius: var(--radius-full);
     transition: width 0.3s ease;
 }

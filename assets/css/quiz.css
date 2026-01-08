@@ -333,10 +333,19 @@
     border-left: 4px solid var(--vert-fonce);
 }
 
+.quiz-context {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
 .context-badge {
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: inline-block;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--vert-fonce);
+    background: var(--vert-clair);
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
     margin-bottom: 0.5rem;
 }
 
@@ -383,10 +392,11 @@
 }
 
 .quiz-question {
-    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
     color: var(--text-primary);
     margin-bottom: 1.5rem;
-    line-height: 1.4;
+    line-height: 1.5;
+    font-weight: 500;
 }
 
 /* Answers */

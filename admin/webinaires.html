@@ -151,11 +151,41 @@
                         <input type="url" id="lien_meet" name="lien_meet" placeholder="https://meet.google.com/xxx-xxx-xxx">
                         <small class="form-hint">Ce lien sera envoyé aux inscrits et affiché au moment du webinaire</small>
                     </div>
+                </div>
+                
+                <!-- Image de couverture -->
+                <div class="form-section">
+                    <h3>🖼️ Image de couverture</h3>
                     
-                    <div class="form-group">
-                        <label for="image_url">Image de couverture (URL)</label>
-                        <input type="url" id="image_url" name="image_url" placeholder="https://...">
-                        <small class="form-hint">Utilisez un service comme Imgur ou Cloudinary pour héberger vos images</small>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="image-preview">
+                            <img id="preview-img" src="" alt="Prévisualisation" style="display: none;">
+                            <div class="image-placeholder" id="image-placeholder">
+                                <span class="placeholder-icon">📷</span>
+                                <span class="placeholder-text">Aucune image</span>
+                            </div>
+                        </div>
+                        
+                        <div class="image-upload-actions">
+                            <input type="file" id="image-file" accept="image/*" style="display: none;">
+                            <input type="hidden" id="image_url" name="image_url">
+                            
+                            <button type="button" class="btn btn-secondary" id="btn-upload-image">
+                                📁 Choisir une image
+                            </button>
+                            <button type="button" class="btn btn-outline btn-sm" id="btn-remove-image" style="display: none;">
+                                🗑️ Supprimer
+                            </button>
+                            
+                            <div class="upload-progress" id="upload-progress" style="display: none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="upload-progress-fill"></div>
+                                </div>
+                                <span class="progress-text">Upload en cours...</span>
+                            </div>
+                            
+                            <small class="form-hint">Formats acceptés : JPG, PNG, GIF, WebP (max 5 Mo)</small>
+                        </div>
                     </div>
                 </div>
                 
@@ -297,6 +327,130 @@
         // Bouton ajouter attendu
         document.getElementById('btn-add-attendu').addEventListener('click', () => addAttendu());
 
+        // === GESTION DE L'UPLOAD D'IMAGE ===
+        
+        let currentImageUrl = null;
+        
+        // Clic sur le bouton d'upload
+        document.getElementById('btn-upload-image').addEventListener('click', () => {
+            document.getElementById('image-file').click();
+        });
+        
+        // Sélection d'un fichier
+        document.getElementById('image-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Vérifier la taille (max 5 Mo)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('L\'image est trop lourde. Maximum 5 Mo.');
+                return;
+            }
+            
+            // Vérifier le type
+            if (!file.type.startsWith('image/')) {
+                alert('Le fichier doit être une image.');
+                return;
+            }
+            
+            // Afficher la prévisualisation locale
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                showImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload vers Supabase Storage
+            await uploadImage(file);
+        });
+        
+        // Upload de l'image vers Supabase Storage
+        async function uploadImage(file) {
+            const progressEl = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('upload-progress-fill');
+            
+            progressEl.style.display = 'block';
+            progressFill.style.width = '30%';
+            
+            try {
+                // Générer un nom unique
+                const timestamp = Date.now();
+                const ext = file.name.split('.').pop();
+                const fileName = `webinaire-${timestamp}.${ext}`;
+                
+                progressFill.style.width = '50%';
+                
+                // Upload vers Supabase Storage
+                const { data, error } = await supabaseClient.storage
+                    .from('webinaires')
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+                
+                if (error) {
+                    console.error('Erreur upload:', error);
+                    alert('Erreur lors de l\'upload: ' + error.message);
+                    progressEl.style.display = 'none';
+                    return;
+                }
+                
+                progressFill.style.width = '80%';
+                
+                // Récupérer l'URL publique
+                const { data: urlData } = supabaseClient.storage
+                    .from('webinaires')
+                    .getPublicUrl(fileName);
+                
+                currentImageUrl = urlData.publicUrl;
+                document.getElementById('image_url').value = currentImageUrl;
+                
+                progressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    progressEl.style.display = 'none';
+                }, 500);
+                
+                console.log('Image uploadée:', currentImageUrl);
+                
+            } catch (err) {
+                console.error('Erreur:', err);
+                alert('Erreur lors de l\'upload');
+                progressEl.style.display = 'none';
+            }
+        }
+        
+        // Afficher la prévisualisation
+        function showImagePreview(src) {
+            const previewImg = document.getElementById('preview-img');
+            const placeholder = document.getElementById('image-placeholder');
+            const removeBtn = document.getElementById('btn-remove-image');
+            
+            previewImg.src = src;
+            previewImg.style.display = 'block';
+            placeholder.style.display = 'none';
+            removeBtn.style.display = 'inline-flex';
+        }
+        
+        // Masquer la prévisualisation
+        function hideImagePreview() {
+            const previewImg = document.getElementById('preview-img');
+            const placeholder = document.getElementById('image-placeholder');
+            const removeBtn = document.getElementById('btn-remove-image');
+            
+            previewImg.src = '';
+            previewImg.style.display = 'none';
+            placeholder.style.display = 'flex';
+            removeBtn.style.display = 'none';
+            
+            document.getElementById('image_url').value = '';
+            document.getElementById('image-file').value = '';
+            currentImageUrl = null;
+        }
+        
+        // Bouton supprimer image
+        document.getElementById('btn-remove-image').addEventListener('click', hideImagePreview);
+
         // Ouvrir le modal
         function openModal(title = 'Nouveau webinaire') {
             document.getElementById('modal-title').textContent = title;
@@ -309,11 +463,13 @@
             document.getElementById('webinaire-form').reset();
             document.getElementById('webinaire-id').value = '';
             setAttendus(null); // Reset attendus
+            hideImagePreview(); // Reset image
         }
 
         // Nouveau webinaire
         document.getElementById('new-webinaire-btn').addEventListener('click', () => {
             setAttendus(null);
+            hideImagePreview();
             openModal('Nouveau webinaire');
         });
 
@@ -345,6 +501,14 @@
             
             // Charger les attendus
             setAttendus(data.attendus || []);
+            
+            // Charger l'image existante
+            if (data.image_url) {
+                showImagePreview(data.image_url);
+                currentImageUrl = data.image_url;
+            } else {
+                hideImagePreview();
+            }
 
             openModal('Modifier le webinaire');
         }

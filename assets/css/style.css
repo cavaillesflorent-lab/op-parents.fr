@@ -14,17 +14,17 @@
 
 :root {
     /* Palette principale */
-    --vert-fonce: #2D403B;
-    --vert-clair: #DFF2B6;
+    --vert-fonce: #BF604B;
+    --vert-clair: #fde8e4;
     --jaune-dore: #F2D680;
     --peche: #F2B47E;
     --terracotta: #BF604B;
     
     /* Nuances */
-    --vert-fonce-light: #3D5550;
-    --vert-clair-dark: #C5E090;
+    --vert-fonce-light: #c97a69;
+    --vert-clair-dark: #f5cdc5;
     --terracotta-dark: #A5503E;
-    --terracotta-light: #D4725F;
+    --terracotta-light: #E8A090;
     
     /* Neutres */
     --white: #FFFFFF;
@@ -36,7 +36,7 @@
     --gray-400: #ADB5B2;
     --gray-500: #6C7A75;
     --gray-600: #4A5854;
-    --gray-700: #2D403B;
+    --gray-700: #4A3530;
     
     /* Couleurs sémantiques */
     --text-primary: var(--vert-fonce);
@@ -4856,4 +4856,161 @@ section {
     line-height: 1.7;
     color: var(--vert-fonce);
     margin: 0;
+}
+
+/* ============================================
+   BILAN SÉQUENCE - BARRES COMPACTES
+   ============================================ */
+
+.sequence-bilan-scores-compact {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.scores-bars-compact {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.score-bar-compact {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.score-bar-compact.empty {
+    opacity: 0.3;
+}
+
+.score-bar-compact .score-letter {
+    width: 28px;
+    height: 28px;
+    background: var(--gray-200);
+    color: var(--text-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.score-bar-compact.winner .score-letter {
+    background: var(--vert-fonce);
+    color: var(--white);
+}
+
+.score-track-compact {
+    width: 100%;
+    height: 6px;
+    background: var(--gray-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.score-fill-compact {
+    height: 100%;
+    background: var(--gray-300);
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+.score-bar-compact.winner .score-fill-compact {
+    background: var(--vert-fonce);
+}
+
+.score-bar-compact .score-percent {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.score-bar-compact.winner .score-percent {
+    color: var(--vert-fonce);
+}
+
+/* ============================================
+   BILAN SÉQUENCE - CONTENU DU PROFIL FORMATÉ
+   ============================================ */
+
+.sequence-bilan-profile-content {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-lg);
+}
+
+.sequence-bilan-profile-content .profile-section-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+    margin: 0 0 var(--space-md) 0;
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--vert-clair);
+}
+
+.sequence-bilan-profile-content .profile-section-title:not(:first-child) {
+    margin-top: var(--space-xl);
+}
+
+.sequence-bilan-profile-content .profile-section-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: var(--space-lg) 0 var(--space-sm) 0;
+}
+
+.sequence-bilan-profile-content .profile-paragraph {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0 0 var(--space-sm) 0;
+}
+
+.sequence-bilan-profile-content .profile-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-md) 0;
+}
+
+.sequence-bilan-profile-content .profile-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.sequence-bilan-profile-content .profile-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--vert-fonce);
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 1.4;
+}
+
+/* Styles spécifiques pour les emojis de section */
+.sequence-bilan-profile-content h3:has(✅),
+.sequence-bilan-profile-content h4:has(✅) {
+    color: #22c55e;
+}
+
+.sequence-bilan-profile-content h3:has(⚠️),
+.sequence-bilan-profile-content h4:has(⚠️) {
+    color: #f59e0b;
+}
+
+.sequence-bilan-profile-content h3:has(🌱),
+.sequence-bilan-profile-content h4:has(🌱) {
+    color: var(--vert-fonce);
 }

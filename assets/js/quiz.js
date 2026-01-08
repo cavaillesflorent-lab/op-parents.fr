@@ -374,12 +374,21 @@ class QuizEngine {
         if (total === 0) return null;
 
         const sorted = Object.entries(scores)
-            .map(([code, score]) => ({
-                code,
-                score,
-                percent: Math.round((score / total) * 100),
-                name: sequence.profiles?.[code] || code
-            }))
+            .map(([code, score]) => {
+                const profileData = sequence.profiles?.[code];
+                let name = code;
+                if (typeof profileData === 'string') {
+                    name = profileData;
+                } else if (profileData && profileData.name) {
+                    name = profileData.name;
+                }
+                return {
+                    code,
+                    score,
+                    percent: Math.round((score / total) * 100),
+                    name: name
+                };
+            })
             .filter(p => p.score > 0)
             .sort((a, b) => b.score - a.score);
 
@@ -591,12 +600,22 @@ class QuizEngine {
 
         const total = Object.values(scores).reduce((a, b) => a + b, 0);
         const profileResults = Object.entries(scores)
-            .map(([code, score]) => ({
-                code,
-                score,
-                percent: total > 0 ? Math.round((score / total) * 100) : 0,
-                name: seq.profiles?.[code] || code
-            }))
+            .map(([code, score]) => {
+                const profileData = seq.profiles?.[code];
+                let name = code;
+                if (typeof profileData === 'string') {
+                    name = profileData;
+                } else if (profileData && profileData.name) {
+                    name = profileData.name;
+                }
+                return {
+                    code,
+                    score,
+                    percent: total > 0 ? Math.round((score / total) * 100) : 0,
+                    name: name,
+                    content: profileData?.content || null
+                };
+            })
             .filter(p => p.score > 0)
             .sort((a, b) => b.percent - a.percent);
 
@@ -615,7 +634,8 @@ class QuizEngine {
             }
         }
 
-        const bilanText = this.generateBilanText(profileResults);
+        // Formater le contenu du profil dominant
+        const profileContent = dominant?.content ? this.formatProfileContent(dominant.content) : '';
 
         bilanScreen.innerHTML = `
             <div class="sequence-bilan-content">
@@ -624,36 +644,37 @@ class QuizEngine {
                     <h2>${seq.titre}</h2>
                 </div>
 
-                <div class="sequence-bilan-result">
-                    <div class="bilan-dominant">
-                        <span class="bilan-dominant-label">Tu es</span>
-                        <span class="bilan-dominant-name">${dominant?.name || 'Indéterminé'}</span>
-                        <span class="bilan-dominant-percent">${dominant?.percent || 0}%</span>
-                    </div>
-                    ${bilanText ? `<p class="bilan-text">${bilanText}</p>` : ''}
-                </div>
-
-                <div class="sequence-bilan-scores">
-                    <p class="scores-title">Répartition de tes réponses</p>
-                    <div class="scores-bars">
+                <div class="sequence-bilan-scores-compact">
+                    <div class="scores-bars-compact">
                         ${['A', 'B', 'C', 'D'].map(code => {
-                            const result = profileResults.find(p => p.code === code) || { percent: 0, name: seq.profiles?.[code] || code };
+                            const result = profileResults.find(p => p.code === code) || { percent: 0 };
                             const isWinner = dominant && code === dominant.code;
                             return `
-                                <div class="score-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
-                                    <span class="score-label">${code}</span>
-                                    <div class="score-info">
-                                        <span class="score-name">${result.name}</span>
-                                        <div class="score-track">
-                                            <div class="score-fill" style="width: ${result.percent}%"></div>
-                                        </div>
+                                <div class="score-bar-compact ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
+                                    <span class="score-letter">${code}</span>
+                                    <div class="score-track-compact">
+                                        <div class="score-fill-compact" style="width: ${result.percent}%"></div>
                                     </div>
-                                    <span class="score-value">${result.percent}%</span>
+                                    <span class="score-percent">${result.percent}%</span>
                                 </div>
                             `;
                         }).join('')}
                     </div>
                 </div>
+
+                ${profileContent ? `
+                    <div class="sequence-bilan-profile-content">
+                        ${profileContent}
+                    </div>
+                ` : `
+                    <div class="sequence-bilan-result">
+                        <div class="bilan-dominant">
+                            <span class="bilan-dominant-label">Tu es</span>
+                            <span class="bilan-dominant-name">${dominant?.name || 'Indéterminé'}</span>
+                            <span class="bilan-dominant-percent">${dominant?.percent || 0}%</span>
+                        </div>
+                    </div>
+                `}
 
                 ${seq.bilan_texte ? `
                     <div class="sequence-bilan-custom-text">
@@ -677,6 +698,63 @@ class QuizEngine {
         });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Formater le contenu du profil en HTML
+    formatProfileContent(content) {
+        if (!content) return '';
+        
+        const lines = content.split('\n');
+        let html = '';
+        let inList = false;
+        
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim();
+            if (!line) {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                continue;
+            }
+            
+            // Détecter les lignes commençant par • ou - (listes)
+            if (line.match(/^[•\-\*]\s+/)) {
+                if (!inList) {
+                    html += '<ul class="profile-list">';
+                    inList = true;
+                }
+                html += `<li>${line.replace(/^[•\-\*]\s+/, '')}</li>`;
+                continue;
+            }
+            
+            // Fermer la liste si on n'est plus dans une liste
+            if (inList) {
+                html += '</ul>';
+                inList = false;
+            }
+            
+            // Détecter les titres (lignes commençant par emoji ou tout en majuscules)
+            const isTitle = line.match(/^[🎯✅⚠️🌱💡🔥💪🎉📌🏆❤️💰📈🛡️⚖️🚀]/);
+            const isAllCaps = line === line.toUpperCase() && line.length > 3 && line.match(/[A-Z]/);
+            
+            if (isTitle || isAllCaps) {
+                // C'est un titre
+                html += `<h3 class="profile-section-title">${line}</h3>`;
+            } else if (line.endsWith(':')) {
+                // C'est un sous-titre (se termine par :)
+                html += `<h4 class="profile-section-subtitle">${line}</h4>`;
+            } else {
+                // C'est un paragraphe normal
+                html += `<p class="profile-paragraph">${line}</p>`;
+            }
+        }
+        
+        if (inList) {
+            html += '</ul>';
+        }
+        
+        return html;
     }
 
     generateBilanText(profileResults) {

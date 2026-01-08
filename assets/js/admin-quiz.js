@@ -526,11 +526,21 @@ function openSequenceModal(sequence = null, editIndex = -1) {
     const customTextEl = document.getElementById('sequence-bilan-custom-text');
     if (customTextEl) customTextEl.value = sequence?.bilanCustomText || '';
     
-    // Reset noms des profils
+    // Reset contenu des profils (nouveau format avec textareas)
     const profiles = sequence?.profiles || {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
-        if (nameEl) nameEl.value = profiles[letter.toUpperCase()] || '';
+        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
+        if (contentEl) {
+            // profiles peut être { A: "nom" } (ancien) ou { A: { content: "..." } } (nouveau)
+            const profileData = profiles[letter.toUpperCase()];
+            if (typeof profileData === 'string') {
+                contentEl.value = profileData; // Ancien format
+            } else if (profileData && profileData.content) {
+                contentEl.value = profileData.content; // Nouveau format
+            } else {
+                contentEl.value = '';
+            }
+        }
     });
     
     // Questions de la séquence
@@ -581,13 +591,19 @@ function getQuestionTypeLabel(type) {
 function saveSequence() {
     const editIndex = parseInt(document.getElementById('sequence-edit-index').value);
     
-    // Collecter les noms des profils
+    // Collecter le contenu des profils (nouveau format avec textareas)
     const profiles = {};
     ['a', 'b', 'c', 'd'].forEach(letter => {
-        const nameEl = document.getElementById(`seq-profile-${letter}-name`);
-        const name = nameEl ? nameEl.value.trim() : '';
-        if (name) {
-            profiles[letter.toUpperCase()] = name;
+        const contentEl = document.getElementById(`seq-profile-${letter}-content`);
+        const content = contentEl ? contentEl.value.trim() : '';
+        if (content) {
+            // Extraire le nom du profil de la première ligne
+            const firstLine = content.split('\n')[0];
+            const name = extractProfileName(firstLine);
+            profiles[letter.toUpperCase()] = {
+                content: content,
+                name: name || `Profil ${letter.toUpperCase()}`
+            };
         }
     });
     
@@ -620,6 +636,19 @@ function saveSequence() {
     markAsChanged();
     closeSequenceModal();
     renderSequences();
+}
+
+// Extraire le nom du profil de la première ligne
+function extractProfileName(firstLine) {
+    if (!firstLine) return null;
+    // Chercher un pattern comme "🎯 PROFIL A — Le Parent Exigeant"
+    // ou "Le Parent Exigeant" ou juste le texte après le tiret
+    const match = firstLine.match(/[—–-]\s*(.+?)(?:\s*\(|$)/);
+    if (match) return match[1].trim();
+    // Sinon, nettoyer les emojis et "PROFIL X"
+    let cleaned = firstLine.replace(/^[^\w]*PROFIL\s*[A-D]\s*[—–-]?\s*/i, '').trim();
+    cleaned = cleaned.replace(/\(.*\)$/, '').trim();
+    return cleaned || firstLine.substring(0, 50);
 }
 
 function closeSequenceModal() {

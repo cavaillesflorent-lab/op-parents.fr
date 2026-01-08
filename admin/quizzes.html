@@ -437,33 +437,65 @@
                         <input type="text" id="sequence-bilan-title" placeholder="Ex: Ton profil financier">
                     </div>
                     
-                    <div class="sequence-profiles-names">
-                        <div class="profile-name-row">
-                            <span class="profile-letter" data-profile="A">A</span>
-                            <input type="text" id="seq-profile-a-name" placeholder="Ex: Sécuritaire 🛡️">
+                    <div class="sequence-profiles-expanded">
+                        <div class="profile-expanded-card" data-profile="A">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="A">A</span>
+                                <span class="profile-label">Profil A (majorité de A)</span>
+                            </div>
+                            <textarea id="seq-profile-a-content" rows="12" placeholder="🎯 PROFIL A — Le Parent Exigeant
+
+Ce que ça révèle
+Pour toi, l'école est un ascenseur...
+
+Comment ça se manifeste
+• Tu regardes les taux de réussite
+• Tu suis de près les résultats
+
+✅ Forces :
+• Implication forte
+• Transmission de la valeur de l'effort
+
+⚠️ Points de vigilance :
+• Risque de pression excessive
+
+🌱 Ta piste d'évolution
+Pose-toi la question..."></textarea>
                         </div>
-                        <div class="profile-name-row">
-                            <span class="profile-letter" data-profile="B">B</span>
-                            <input type="text" id="seq-profile-b-name" placeholder="Ex: Prudent ⚖️">
+                        
+                        <div class="profile-expanded-card" data-profile="B">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="B">B</span>
+                                <span class="profile-label">Profil B (majorité de B)</span>
+                            </div>
+                            <textarea id="seq-profile-b-content" rows="12" placeholder="Décris le profil B..."></textarea>
                         </div>
-                        <div class="profile-name-row">
-                            <span class="profile-letter" data-profile="C">C</span>
-                            <input type="text" id="seq-profile-c-name" placeholder="Ex: Équilibré 🎯">
+                        
+                        <div class="profile-expanded-card" data-profile="C">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="C">C</span>
+                                <span class="profile-label">Profil C (majorité de C)</span>
+                            </div>
+                            <textarea id="seq-profile-c-content" rows="12" placeholder="Décris le profil C..."></textarea>
                         </div>
-                        <div class="profile-name-row">
-                            <span class="profile-letter" data-profile="D">D</span>
-                            <input type="text" id="seq-profile-d-name" placeholder="Ex: Liberté 🚀">
+                        
+                        <div class="profile-expanded-card" data-profile="D">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="D">D</span>
+                                <span class="profile-label">Profil D (majorité de D)</span>
+                            </div>
+                            <textarea id="seq-profile-d-content" rows="12" placeholder="Décris le profil D..."></textarea>
                         </div>
                     </div>
                     
                     <div class="bilan-preview-info">
                         <span class="info-icon">💡</span>
-                        <span>Le bilan affichera automatiquement : "Tu es principalement <strong>[Profil dominant]</strong> (X%) avec une touche de <strong>[2ème profil]</strong> (Y%)"</span>
+                        <span>Le texte sera automatiquement mis en forme : les lignes commençant par un emoji deviennent des titres, les • deviennent des listes à puces.</span>
                     </div>
                     
                     <div class="form-group full-width" style="margin-top: 1.5rem;">
-                        <label for="sequence-bilan-custom-text">Texte personnalisé (affiché en dessous du bilan)</label>
-                        <textarea id="sequence-bilan-custom-text" rows="4" placeholder="Ex: Ce profil révèle ta manière d'aborder les décisions financières. Dans la prochaine séquence, nous allons explorer..."></textarea>
+                        <label for="sequence-bilan-custom-text">Texte commun à tous les profils (optionnel)</label>
+                        <textarea id="sequence-bilan-custom-text" rows="4" placeholder="Ex: Ce texte apparaîtra sous le profil, quelle que soit la réponse dominante..."></textarea>
                     </div>
                 </div>
             </div>

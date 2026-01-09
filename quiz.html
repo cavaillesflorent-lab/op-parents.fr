@@ -67,24 +67,27 @@
                     <span class="meta-item">🔬 Basé sur la science</span>
                 </div>
 
-                <!-- Bouton normal (nouveau quiz) -->
-                <button class="btn-quiz-start" id="btn-start" onclick="startQuiz()">
-                    <span>Commencer le quiz</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </button>
+                <!-- Boutons -->
+                <div class="quiz-intro-actions">
+                    <!-- Bouton normal (nouveau quiz) -->
+                    <button class="btn-quiz-start" id="btn-start" onclick="startQuiz()">
+                        <span>Commencer le quiz</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
 
-                <!-- Boutons de reprise (affichés si progression) -->
-                <button class="btn-quiz-start btn-resume" id="btn-resume" style="display: none;" onclick="resumeQuiz()">
-                    <span>Reprendre où j'en étais</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
-                </button>
-                <button class="btn-quiz-secondary" id="btn-restart-fresh" style="display: none;" onclick="startQuiz()">
-                    <span>Recommencer depuis le début</span>
-                </button>
+                    <!-- Boutons de reprise (affichés si progression) -->
+                    <button class="btn-quiz-start btn-resume" id="btn-resume" style="display: none;" onclick="resumeQuiz()">
+                        <span>Reprendre où j'en étais</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </button>
+                    <button class="btn-quiz-secondary" id="btn-restart-fresh" style="display: none;" onclick="startQuiz()">
+                        <span>Recommencer depuis le début</span>
+                    </button>
+                </div>
 
                 <p class="quiz-disclaimer">100% gratuit • Aucune inscription requise • Résultats immédiats</p>
             </div>

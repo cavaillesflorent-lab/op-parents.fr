@@ -1405,9 +1405,9 @@ section {
 /* Hero de page (Quiz, Webinaires, etc.) */
 .page-hero {
     position: relative;
-    background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 50%, #5A8A6A 100%);
-    color: var(--white);
-    padding: calc(80px + var(--space-3xl)) var(--space-md) var(--space-3xl);
+    background: linear-gradient(135deg, #c5e090 0%, #d4e8a8 50%, #dff2b6 100%);
+    color: var(--vert-fonce);
+    padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);
     text-align: center;
     overflow: hidden;
 }
@@ -1421,8 +1421,9 @@ section {
 
 .page-hero-badge {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(45, 64, 59, 0.12);
     backdrop-filter: blur(10px);
+    color: var(--vert-fonce);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-full);
     font-size: 0.9rem;
@@ -1432,16 +1433,17 @@ section {
 
 .page-hero h1 {
     font-family: var(--font-serif);
-    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
     font-weight: 700;
-    color: var(--white);
-    margin-bottom: var(--space-sm);
+    color: var(--vert-fonce);
+    margin-bottom: var(--space-xs);
     line-height: 1.2;
 }
 
 .page-hero p {
-    font-size: 1.1rem;
-    opacity: 0.9;
+    font-size: 1rem;
+    opacity: 0.8;
+    color: var(--vert-fonce);
     max-width: 550px;
     margin: 0 auto;
     line-height: 1.6;
@@ -1458,7 +1460,7 @@ section {
 .page-hero .hero-circle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(45, 64, 59, 0.05);
 }
 
 .page-hero .hero-circle.circle-1 {
@@ -1676,7 +1678,7 @@ section {
 /* Responsive Hero */
 @media (max-width: 768px) {
     .page-hero {
-        padding: calc(80px + var(--space-xl)) var(--space-sm) var(--space-xl);
+        padding: calc(80px + var(--space-md)) var(--space-sm) var(--space-md);
     }
     
     .page-stats {
@@ -2576,7 +2578,7 @@ section {
 }
 
 .pourquoi-header h2 span {
-   color: var(--peche);
+    color: #E59403;
 }
 
 .pourquoi-header > .pourquoi-header-content > p {

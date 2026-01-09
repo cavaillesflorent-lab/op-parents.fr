@@ -1405,7 +1405,7 @@ section {
 /* Hero de page (Quiz, Webinaires, etc.) */
 .page-hero {
     position: relative;
-    background: linear-gradient(135deg, #c5e090 0%, #d4e8a8 50%, #dff2b6 100%);
+    background: #f8f9fa;
     color: var(--vert-fonce);
     padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);
     text-align: center;

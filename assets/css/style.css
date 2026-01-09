@@ -2576,7 +2576,7 @@ section {
 }
 
 .pourquoi-header h2 span {
-    color: #E59403;
+   background: var(--peche);
 }
 
 .pourquoi-header > .pourquoi-header-content > p {

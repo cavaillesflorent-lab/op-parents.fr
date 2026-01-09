@@ -1407,7 +1407,7 @@ section {
     position: relative;
     background: linear-gradient(135deg, #c5e090 0%, #d4e8a8 50%, #dff2b6 100%);
     color: var(--vert-fonce);
-    padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);
+    padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);
     text-align: center;
     overflow: hidden;
 }
@@ -1678,7 +1678,7 @@ section {
 /* Responsive Hero */
 @media (max-width: 768px) {
     .page-hero {
-        padding: calc(80px + var(--space-md)) var(--space-sm) var(--space-md);
+        padding: calc(80px + var(--space-md)) var(--space-sm) var(--space-lg);
     }
     
     .page-stats {

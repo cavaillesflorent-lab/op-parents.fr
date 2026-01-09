@@ -14,15 +14,15 @@
 
 :root {
     /* Palette principale */
-    --vert-fonce: #BF604B;
-    --vert-clair: #fde8e4;
+    --vert-fonce: #2D403B;
+    --vert-clair: #DFF2B6;
     --jaune-dore: #F2D680;
     --peche: #F2B47E;
     --terracotta: #BF604B;
     
     /* Nuances */
-    --vert-fonce-light: #c97a69;
-    --vert-clair-dark: #f5cdc5;
+    --vert-fonce-light: #3D5550;
+    --vert-clair-dark: #C5E090;
     --terracotta-dark: #A5503E;
     --terracotta-light: #E8A090;
     
@@ -36,7 +36,7 @@
     --gray-400: #ADB5B2;
     --gray-500: #6C7A75;
     --gray-600: #4A5854;
-    --gray-700: #4A3530;
+    --gray-700: #2D403B;
     
     /* Couleurs sémantiques */
     --text-primary: var(--vert-fonce);
@@ -249,7 +249,7 @@ section {
    ======================================== */
 
 .header {
-    background: #BF604B;
+    background: #E59403;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -1258,7 +1258,7 @@ section {
         top: 100%;
         left: 0;
         right: 0;
-        background: #BF604B;
+        background: #E59403;
         flex-direction: column;
         padding: var(--space-lg);
         gap: var(--space-md);

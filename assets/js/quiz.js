@@ -739,20 +739,36 @@ class QuizEngine {
                     </div>
                 ` : ''}
 
-                <button class="btn-back-summary" id="btn-back-summary">
-                    Retour au sommaire
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </button>
+                ${this.isLastSequence() ? `
+                    <button class="btn-continue-sequence" id="btn-go-conclusion">
+                        Découvrir la conclusion
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                ` : `
+                    <button class="btn-back-summary" id="btn-back-summary">
+                        Retour au sommaire
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                `}
             </div>
         `;
 
         bilanScreen.style.display = 'block';
 
-        document.getElementById('btn-back-summary').addEventListener('click', () => {
-            this.showSummary();
-        });
+        // Binding du bouton selon le contexte
+        if (this.isLastSequence()) {
+            document.getElementById('btn-go-conclusion')?.addEventListener('click', () => {
+                this.showConclusionScreen();
+            });
+        } else {
+            document.getElementById('btn-back-summary')?.addEventListener('click', () => {
+                this.showSummary();
+            });
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -837,6 +853,118 @@ class QuizEngine {
         }
 
         return null;
+    }
+
+    // Vérifie si toutes les séquences sont terminées (on est à la dernière)
+    isLastSequence() {
+        return this.sequences.every(seq => this.sequenceProgress[seq.id]?.completed);
+    }
+
+    // Affiche l'écran de conclusion intermédiaire
+    showConclusionScreen() {
+        this.hideAllScreens();
+
+        console.log('=== ÉCRAN CONCLUSION ===');
+
+        const quiz = this.quiz;
+        
+        // Vérifier s'il y a du contenu de conclusion
+        const hasTitle = quiz.conclusion_title;
+        const hasNotList = quiz.conclusion_not && Array.isArray(quiz.conclusion_not) && quiz.conclusion_not.length > 0;
+        const hasIsList = quiz.conclusion_is && Array.isArray(quiz.conclusion_is) && quiz.conclusion_is.length > 0;
+        const hasQuote = quiz.conclusion_quote;
+        const hasCta = quiz.conclusion_cta;
+
+        // Si aucun contenu de conclusion, aller directement au bilan final
+        if (!hasTitle && !hasNotList && !hasIsList && !hasQuote && !hasCta) {
+            console.log('Pas de contenu de conclusion, passage direct au bilan final');
+            this.showFinalResult();
+            return;
+        }
+
+        // Créer ou récupérer l'écran de conclusion
+        let conclusionScreen = document.getElementById('quiz-conclusion-screen');
+        if (!conclusionScreen) {
+            conclusionScreen = document.createElement('div');
+            conclusionScreen.id = 'quiz-conclusion-screen';
+            conclusionScreen.className = 'quiz-conclusion-screen';
+            const container = document.querySelector('.quiz-main');
+            if (container) {
+                container.appendChild(conclusionScreen);
+            } else {
+                document.body.appendChild(conclusionScreen);
+            }
+        }
+
+        // Générer le HTML de la conclusion
+        conclusionScreen.innerHTML = `
+            <div class="conclusion-screen-content">
+                <!-- Header -->
+                <div class="conclusion-screen-header">
+                    <span class="conclusion-badge">🏆 Quiz terminé !</span>
+                    ${hasTitle ? `<h1 class="conclusion-main-title">${quiz.conclusion_title}</h1>` : '<h1 class="conclusion-main-title">Ce qu\'il faut retenir</h1>'}
+                </div>
+
+                <!-- Colonnes Ce que c'est / Ce que ce n'est pas -->
+                ${(hasNotList || hasIsList) ? `
+                    <div class="conclusion-screen-columns">
+                        ${hasNotList ? `
+                            <div class="conclusion-screen-column not-column">
+                                <div class="column-header">
+                                    <span class="column-icon">❌</span>
+                                    <span class="column-label">Ce que ce n'est PAS</span>
+                                </div>
+                                <ul class="column-list">
+                                    ${quiz.conclusion_not.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${hasIsList ? `
+                            <div class="conclusion-screen-column is-column">
+                                <div class="column-header">
+                                    <span class="column-icon">✅</span>
+                                    <span class="column-label">Ce que c'EST</span>
+                                </div>
+                                <ul class="column-list">
+                                    ${quiz.conclusion_is.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+
+                <!-- Citation -->
+                ${hasQuote ? `
+                    <div class="conclusion-screen-quote">
+                        <blockquote>"${quiz.conclusion_quote}"</blockquote>
+                    </div>
+                ` : ''}
+
+                <!-- Message CTA -->
+                ${hasCta ? `
+                    <p class="conclusion-screen-cta-text">${quiz.conclusion_cta}</p>
+                ` : ''}
+
+                <!-- Bouton vers le bilan final -->
+                <button class="btn-see-final-result" id="btn-see-final-result">
+                    🎯 Voir mon bilan complet
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                
+                <a href="quizzes.html" class="btn-back-quizzes-conclusion">← Retour aux quiz</a>
+            </div>
+        `;
+
+        conclusionScreen.style.display = 'block';
+
+        // Binding du bouton
+        document.getElementById('btn-see-final-result')?.addEventListener('click', () => {
+            this.showFinalResult();
+        });
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     showFinalResult() {
@@ -1189,16 +1317,9 @@ class QuizEngine {
                     </div>
                 ` : ''}
 
-                <!-- Message de conclusion -->
-                ${this.quiz.conclusion_quote ? `
-                    <div class="result-quote">
-                        <blockquote>"${this.quiz.conclusion_quote}"</blockquote>
-                    </div>
-                ` : ''}
-
                 <!-- CTA final -->
                 <div class="result-cta">
-                    ${this.quiz.conclusion_cta ? `<p class="cta-text">${this.quiz.conclusion_cta}</p>` : ''}
+                    <p class="cta-text">Bravo pour ce premier pas ! Continue ton parcours :</p>
                     <div class="result-buttons">
                         <a href="webinaires.html" class="btn-result-primary">
                             🎥 Découvrir les webinaires
@@ -1265,6 +1386,69 @@ class QuizEngine {
         return description;
     }
 
+    // Génère la section conclusion (titre + ce que c'est / ce que ce n'est pas)
+    renderConclusionSection() {
+        const quiz = this.quiz;
+        
+        // Vérifier s'il y a du contenu de conclusion à afficher
+        const hasTitle = quiz.conclusion_title;
+        const hasNotList = quiz.conclusion_not && Array.isArray(quiz.conclusion_not) && quiz.conclusion_not.length > 0;
+        const hasIsList = quiz.conclusion_is && Array.isArray(quiz.conclusion_is) && quiz.conclusion_is.length > 0;
+        
+        // Si aucun contenu de conclusion, retourner vide
+        if (!hasTitle && !hasNotList && !hasIsList) {
+            return '';
+        }
+
+        let html = '<div class="result-conclusion-section">';
+        
+        // Titre de conclusion
+        if (hasTitle) {
+            html += `<h3 class="conclusion-section-title">${quiz.conclusion_title}</h3>`;
+        }
+        
+        // Grille des deux colonnes si les deux listes existent
+        if (hasNotList || hasIsList) {
+            html += '<div class="conclusion-columns">';
+            
+            // Colonne "Ce que ce n'est PAS"
+            if (hasNotList) {
+                html += `
+                    <div class="conclusion-column conclusion-not">
+                        <div class="conclusion-column-header">
+                            <span class="conclusion-column-icon">❌</span>
+                            <span class="conclusion-column-label">Ce que ce n'est PAS</span>
+                        </div>
+                        <ul class="conclusion-list">
+                            ${quiz.conclusion_not.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Colonne "Ce que c'EST"
+            if (hasIsList) {
+                html += `
+                    <div class="conclusion-column conclusion-is">
+                        <div class="conclusion-column-header">
+                            <span class="conclusion-column-icon">✅</span>
+                            <span class="conclusion-column-label">Ce que c'EST</span>
+                        </div>
+                        <ul class="conclusion-list">
+                            ${quiz.conclusion_is.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            html += '</div>'; // fin conclusion-columns
+        }
+        
+        html += '</div>'; // fin result-conclusion-section
+        
+        return html;
+    }
+
     getDefaultProfile(code) {
         const defaults = {
             A: { emoji: '🛡️', titre: 'Profil A', description: '' },
@@ -1298,7 +1482,7 @@ class QuizEngine {
         const screens = [
             'quiz-loading', 'quiz-intro', 'quiz-question-screen', 
             'quiz-result-screen', 'quiz-summary', 'quiz-sequence-intro', 
-            'quiz-sequence-bilan'
+            'quiz-sequence-bilan', 'quiz-conclusion-screen'
         ];
         screens.forEach(id => {
             const el = document.getElementById(id);

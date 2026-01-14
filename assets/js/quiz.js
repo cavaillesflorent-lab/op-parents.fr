@@ -858,14 +858,37 @@ class QuizEngine {
         console.log('Scores globaux:', globalScores);
 
         const total = Object.values(globalScores).reduce((a, b) => a + b, 0);
-        const dominantCode = Object.entries(globalScores)
-            .sort((a, b) => b[1] - a[1])[0][0];
+        
+        // Trier les profils par score décroissant
+        const sortedProfiles = Object.entries(globalScores)
+            .map(([code, score]) => ({
+                code,
+                score,
+                percent: total > 0 ? Math.round((score / total) * 100) : 0
+            }))
+            .sort((a, b) => b.percent - a.percent);
 
-        // Chercher le profil global (table quiz_profiles)
-        const globalProfile = this.profiles.find(p => p.code === dominantCode) || this.getDefaultProfile(dominantCode);
-        console.log('Profil global dominant:', globalProfile);
+        const dominant = sortedProfiles[0];
+        const secondary = sortedProfiles[1];
+        const ecart = dominant.percent - secondary.percent;
 
-        // Calculer les pourcentages globaux
+        console.log('Dominant:', dominant, 'Secondary:', secondary, 'Écart:', ecart);
+
+        // Déterminer le type de profil
+        let profileType = 'pure'; // > 20% d'écart
+        if (ecart <= 10 && secondary.percent > 0) {
+            profileType = 'hybrid'; // ≤ 10% d'écart
+        } else if (ecart <= 20 && secondary.percent > 0) {
+            profileType = 'tendency'; // 10-20% d'écart
+        }
+
+        console.log('Type de profil:', profileType);
+
+        // Récupérer les données des profils
+        const dominantProfile = this.profiles.find(p => p.code === dominant.code) || this.getDefaultProfile(dominant.code);
+        const secondaryProfile = this.profiles.find(p => p.code === secondary.code) || this.getDefaultProfile(secondary.code);
+
+        // Calculer les pourcentages pour l'affichage
         const globalResults = Object.entries(globalScores)
             .map(([code, score]) => {
                 const profile = this.profiles.find(p => p.code === code);
@@ -888,11 +911,11 @@ class QuizEngine {
             const seqTotal = Object.values(progress.scores).reduce((a, b) => a + b, 0);
             if (seqTotal === 0) return null;
             
-            const dominant = Object.entries(progress.scores)
+            const seqDominant = Object.entries(progress.scores)
                 .sort((a, b) => b[1] - a[1])[0];
             
-            const profileData = seq.profiles?.[dominant[0]];
-            let profileName = dominant[0];
+            const profileData = seq.profiles?.[seqDominant[0]];
+            let profileName = seqDominant[0];
             if (profileData) {
                 if (typeof profileData === 'string') {
                     profileName = profileData;
@@ -904,13 +927,189 @@ class QuizEngine {
             return {
                 numero: index + 1,
                 titre: seq.titre,
-                dominantCode: dominant[0],
+                dominantCode: seqDominant[0],
                 dominantName: profileName,
-                percent: Math.round((dominant[1] / seqTotal) * 100)
+                percent: Math.round((seqDominant[1] / seqTotal) * 100)
             };
         }).filter(Boolean);
 
-        this.markCompleted(dominantCode);
+        this.markCompleted(dominant.code);
+
+        // Générer le HTML du profil selon le type
+        let profileHTML = '';
+        
+        if (profileType === 'pure') {
+            // Profil pur (> 20% d'écart)
+            profileHTML = `
+                <div class="result-main-profile profile-pure">
+                    <div class="result-profile-badge">Ton profil dominant</div>
+                    <div class="result-profile-icon">${dominantProfile.emoji || '🎯'}</div>
+                    <h2 class="result-profile-name">${dominantProfile.titre || dominantProfile.nom || `Profil ${dominant.code}`}</h2>
+                    ${dominantProfile.sous_titre ? `<p class="result-profile-subtitle">${dominantProfile.sous_titre}</p>` : ''}
+                    <div class="result-profile-percent">
+                        <span class="percent-value">${dominant.percent}%</span>
+                        <span class="percent-label">de tes réponses</span>
+                    </div>
+                </div>
+            `;
+        } else if (profileType === 'tendency') {
+            // Profil + Tendance (10-20% d'écart)
+            profileHTML = `
+                <div class="result-main-profile profile-tendency">
+                    <div class="result-profile-badge">Ton profil dominant</div>
+                    <div class="result-profile-icon">${dominantProfile.emoji || '🎯'}</div>
+                    <h2 class="result-profile-name">${dominantProfile.titre || dominantProfile.nom || `Profil ${dominant.code}`}</h2>
+                    ${dominantProfile.sous_titre ? `<p class="result-profile-subtitle">${dominantProfile.sous_titre}</p>` : ''}
+                    <div class="result-profile-percent">
+                        <span class="percent-value">${dominant.percent}%</span>
+                        <span class="percent-label">de tes réponses</span>
+                    </div>
+                    
+                    <div class="result-tendency">
+                        <div class="tendency-separator"></div>
+                        <div class="tendency-content">
+                            <span class="tendency-icon">${secondaryProfile.emoji || '🎯'}</span>
+                            <div class="tendency-text">
+                                <span class="tendency-label">Avec une tendance</span>
+                                <span class="tendency-name">${secondaryProfile.nom || `Profil ${secondary.code}`}</span>
+                                <span class="tendency-percent">${secondary.percent}% de tes réponses</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            // Profil hybride (≤ 10% d'écart)
+            const combinedPercent = dominant.percent + secondary.percent;
+            profileHTML = `
+                <div class="result-main-profile profile-hybrid">
+                    <div class="result-profile-badge">Ton profil hybride</div>
+                    <div class="result-profile-icons">
+                        <span class="hybrid-icon">${dominantProfile.emoji || '🎯'}</span>
+                        <span class="hybrid-separator">+</span>
+                        <span class="hybrid-icon">${secondaryProfile.emoji || '🎯'}</span>
+                    </div>
+                    <h2 class="result-profile-name hybrid-name">
+                        ${dominantProfile.nom || `Profil ${dominant.code}`}-${secondaryProfile.nom || `Profil ${secondary.code}`}
+                    </h2>
+                    <p class="result-profile-subtitle">
+                        ${dominantProfile.sous_titre || ''} & ${secondaryProfile.sous_titre || ''}
+                    </p>
+                    <div class="result-profile-percent hybrid-percent">
+                        <span class="percent-value">${combinedPercent}%</span>
+                        <span class="percent-label">de tes réponses combinées</span>
+                    </div>
+                    <div class="hybrid-breakdown">
+                        <span class="hybrid-detail">${dominantProfile.nom}: ${dominant.percent}%</span>
+                        <span class="hybrid-detail">${secondaryProfile.nom}: ${secondary.percent}%</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Générer la description selon le type
+        let descriptionHTML = '';
+        if (profileType === 'hybrid') {
+            // Description combinée pour profil hybride
+            descriptionHTML = `
+                <div class="result-description hybrid-description">
+                    <p>${this.generateHybridDescription(dominantProfile, secondaryProfile)}</p>
+                </div>
+            `;
+        } else if (profileType === 'tendency') {
+            // Description principale + note sur la tendance
+            descriptionHTML = `
+                <div class="result-description">
+                    <p>${dominantProfile.description || ''}</p>
+                    ${secondaryProfile.description ? `
+                        <div class="tendency-note">
+                            <strong>Ta tendance ${secondaryProfile.nom} signifie aussi :</strong> 
+                            ${this.extractTendencyNote(secondaryProfile.description)}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        } else {
+            // Description simple
+            descriptionHTML = dominantProfile.description ? `
+                <div class="result-description">
+                    <p>${dominantProfile.description}</p>
+                </div>
+            ` : '';
+        }
+
+        // Générer les forces/vigilances selon le type
+        let traitsHTML = '';
+        if (profileType === 'hybrid') {
+            // Combiner les forces et vigilances des deux profils
+            const combinedForces = [
+                ...(dominantProfile.forces || []).slice(0, 3),
+                ...(secondaryProfile.forces || []).slice(0, 2)
+            ];
+            const combinedVigilances = [
+                ...(dominantProfile.vigilances || []).slice(0, 2),
+                ...(secondaryProfile.vigilances || []).slice(0, 2)
+            ];
+            
+            if (combinedForces.length > 0 || combinedVigilances.length > 0) {
+                traitsHTML = `
+                    <div class="result-traits">
+                        ${combinedForces.length > 0 ? `
+                            <div class="trait-card forces">
+                                <div class="trait-header">
+                                    <span class="trait-icon">💪</span>
+                                    <h3>Tes forces combinées</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${combinedForces.map(f => `<li>${f}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${combinedVigilances.length > 0 ? `
+                            <div class="trait-card vigilances">
+                                <div class="trait-header">
+                                    <span class="trait-icon">⚠️</span>
+                                    <h3>Points de vigilance</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${combinedVigilances.map(v => `<li>${v}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+        } else {
+            // Forces et vigilances du profil dominant
+            if ((dominantProfile.forces?.length > 0 || dominantProfile.vigilances?.length > 0)) {
+                traitsHTML = `
+                    <div class="result-traits">
+                        ${dominantProfile.forces?.length > 0 ? `
+                            <div class="trait-card forces">
+                                <div class="trait-header">
+                                    <span class="trait-icon">💪</span>
+                                    <h3>Tes forces</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${dominantProfile.forces.map(f => `<li>${f}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${dominantProfile.vigilances?.length > 0 ? `
+                            <div class="trait-card vigilances">
+                                <div class="trait-header">
+                                    <span class="trait-icon">⚠️</span>
+                                    <h3>Points de vigilance</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${dominantProfile.vigilances.map(v => `<li>${v}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+        }
 
         // Créer ou récupérer l'écran de résultat
         let resultScreen = document.getElementById('quiz-result-screen');
@@ -936,69 +1135,32 @@ class QuizEngine {
                     <p class="result-quiz-title">${this.quiz.titre}</p>
                 </div>
 
-                <!-- Profil dominant global -->
-                <div class="result-main-profile">
-                    <div class="result-profile-badge">Ton profil dominant</div>
-                    <div class="result-profile-icon">${globalProfile.emoji || '🎯'}</div>
-                    <h2 class="result-profile-name">${globalProfile.titre || globalProfile.nom || `Profil ${dominantCode}`}</h2>
-                    ${globalProfile.sous_titre ? `<p class="result-profile-subtitle">${globalProfile.sous_titre}</p>` : ''}
-                    <div class="result-profile-percent">
-                        <span class="percent-value">${globalResults[0]?.percent || 0}%</span>
-                        <span class="percent-label">de tes réponses</span>
-                    </div>
-                </div>
+                <!-- Profil (pur, tendance ou hybride) -->
+                ${profileHTML}
 
-                <!-- Description du profil -->
-                ${globalProfile.description ? `
-                    <div class="result-description">
-                        <p>${globalProfile.description}</p>
-                    </div>
-                ` : ''}
+                <!-- Description -->
+                ${descriptionHTML}
 
                 <!-- Forces et vigilances -->
-                ${(globalProfile.forces?.length > 0 || globalProfile.vigilances?.length > 0) ? `
-                    <div class="result-traits">
-                        ${globalProfile.forces?.length > 0 ? `
-                            <div class="trait-card forces">
-                                <div class="trait-header">
-                                    <span class="trait-icon">💪</span>
-                                    <h3>Tes forces</h3>
-                                </div>
-                                <ul class="trait-list">
-                                    ${globalProfile.forces.map(f => `<li>${f}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        ${globalProfile.vigilances?.length > 0 ? `
-                            <div class="trait-card vigilances">
-                                <div class="trait-header">
-                                    <span class="trait-icon">⚠️</span>
-                                    <h3>Points de vigilance</h3>
-                                </div>
-                                <ul class="trait-list">
-                                    ${globalProfile.vigilances.map(v => `<li>${v}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                    </div>
-                ` : ''}
+                ${traitsHTML}
 
                 <!-- Répartition globale -->
                 <div class="result-distribution">
-                    <h3>📊 Répartition globale</h3>
+                    <h3>📊 Répartition de tes réponses</h3>
                     <div class="distribution-bars">
                         ${['A', 'B', 'C', 'D'].map(code => {
                             const result = globalResults.find(p => p.code === code) || { percent: 0, name: `Profil ${code}` };
-                            const isWinner = code === dominantCode;
+                            const isWinner = code === dominant.code;
+                            const isSecondary = code === secondary.code && profileType !== 'pure';
                             return `
-                                <div class="distribution-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
+                                <div class="distribution-bar ${isWinner ? 'winner' : ''} ${isSecondary ? 'secondary' : ''} ${result.percent === 0 ? 'empty' : ''}">
                                     <div class="dist-header">
-                                        <span class="dist-letter ${isWinner ? 'winner' : ''}">${code}</span>
+                                        <span class="dist-letter ${isWinner ? 'winner' : ''} ${isSecondary ? 'secondary' : ''}">${code}</span>
                                         <span class="dist-name">${result.name}</span>
                                         <span class="dist-percent">${result.percent}%</span>
                                     </div>
                                     <div class="dist-track">
-                                        <div class="dist-fill" style="width: ${result.percent}%"></div>
+                                        <div class="dist-fill ${isSecondary ? 'secondary' : ''}" style="width: ${result.percent}%"></div>
                                     </div>
                                 </div>
                             `;
@@ -1060,6 +1222,47 @@ class QuizEngine {
         });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Génère une description hybride combinant deux profils
+    generateHybridDescription(profile1, profile2) {
+        const name1 = profile1.nom || 'Premier profil';
+        const name2 = profile2.nom || 'Second profil';
+        
+        // Extraire la première phrase de chaque description
+        const desc1 = profile1.description ? profile1.description.split('.')[0] + '.' : '';
+        const desc2 = profile2.description ? profile2.description.split('.')[0] + '.' : '';
+        
+        if (!desc1 && !desc2) {
+            return `Tu combines les qualités du profil ${name1} et du profil ${name2}, ce qui te donne une approche équilibrée et nuancée de l'éducation financière.`;
+        }
+        
+        // Connecteurs pour lier les deux descriptions
+        const connectors = [
+            'En même temps,',
+            'Parallèlement,',
+            'Tu sais aussi que',
+            'Cette approche se combine avec le fait que'
+        ];
+        const connector = connectors[Math.floor(Math.random() * connectors.length)];
+        
+        return `${desc1} ${connector.toLowerCase()} ${desc2.charAt(0).toLowerCase() + desc2.slice(1)}`;
+    }
+
+    // Extrait une note courte d'une description pour la tendance
+    extractTendencyNote(description) {
+        if (!description) return '';
+        
+        // Prendre la deuxième phrase ou tronquer la première
+        const sentences = description.split('.');
+        if (sentences.length > 1 && sentences[1].trim()) {
+            return sentences[1].trim() + '.';
+        }
+        // Si une seule phrase, la tronquer
+        if (description.length > 100) {
+            return description.substring(0, 100) + '...';
+        }
+        return description;
     }
 
     getDefaultProfile(code) {

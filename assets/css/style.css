@@ -5614,3 +5614,203 @@ section {
         justify-content: space-between;
     }
 }
+
+/* ============================================
+   PROFIL AVEC TENDANCE
+   ============================================ */
+
+.result-main-profile.profile-tendency {
+    padding-bottom: var(--space-md);
+}
+
+.result-tendency {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    position: relative;
+}
+
+.tendency-separator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+}
+
+.tendency-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--vert-clair) 100%);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+}
+
+.tendency-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.tendency-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.tendency-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.tendency-name {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+}
+
+.tendency-percent {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.tendency-note {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--vert-fonce);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.tendency-note strong {
+    display: block;
+    margin-bottom: var(--space-xs);
+    color: var(--vert-fonce);
+}
+
+/* ============================================
+   PROFIL HYBRIDE
+   ============================================ */
+
+.result-main-profile.profile-hybrid {
+    background: linear-gradient(135deg, var(--white) 0%, var(--vert-clair) 100%);
+}
+
+.result-main-profile.profile-hybrid::before {
+    background: linear-gradient(90deg, var(--vert-fonce) 0%, var(--jaune-dore) 50%, var(--peche) 100%);
+}
+
+.result-profile-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.hybrid-icon {
+    font-size: 3rem;
+}
+
+.hybrid-separator {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+.hybrid-name {
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, var(--vert-fonce) 0%, var(--terracotta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hybrid-percent {
+    background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
+}
+
+.hybrid-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-sm);
+}
+
+.hybrid-detail {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--white);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+}
+
+.hybrid-description {
+    background: linear-gradient(135deg, var(--white) 0%, rgba(223, 242, 182, 0.3) 100%);
+    border-left: 4px solid var(--vert-fonce);
+}
+
+.hybrid-description p {
+    text-align: left;
+}
+
+/* ============================================
+   BARRES DE DISTRIBUTION - STYLE SECONDAIRE
+   ============================================ */
+
+.distribution-bar.secondary .dist-letter {
+    background: var(--peche);
+    color: var(--vert-fonce);
+}
+
+.distribution-bar.secondary .dist-name {
+    color: var(--terracotta);
+    font-weight: 500;
+}
+
+.distribution-bar.secondary .dist-percent {
+    color: var(--terracotta);
+}
+
+.distribution-bar.secondary .dist-fill,
+.dist-fill.secondary {
+    background: linear-gradient(90deg, var(--peche) 0%, var(--jaune-dore) 100%);
+}
+
+/* ============================================
+   RESPONSIVE TENDANCE & HYBRIDE
+   ============================================ */
+
+@media (max-width: 480px) {
+    .tendency-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tendency-text {
+        text-align: center;
+    }
+    
+    .result-profile-icons {
+        gap: var(--space-xs);
+    }
+    
+    .hybrid-icon {
+        font-size: 2.5rem;
+    }
+    
+    .hybrid-breakdown {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .hybrid-name {
+        font-size: 1.3rem;
+    }
+}

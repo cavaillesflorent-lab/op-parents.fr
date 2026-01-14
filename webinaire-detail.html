@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webinaire - OP! Éducation financière des parents</title>
+    <meta name="description" content="Découvrez ce webinaire sur la gestion financière familiale.">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ============================================
+           PAGE WEBINAIRE DETAIL - STYLES SPÉCIFIQUES
+           ============================================ */
+        
+        .webinaire-detail-section {
+            padding: var(--space-lg) 0 var(--space-3xl);
+            background: var(--gray-50);
+            min-height: 80vh;
+        }
+        
+        .webinaire-detail-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /* Breadcrumb */
+        .webinaire-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .webinaire-breadcrumb a {
+            color: var(--vert-fonce);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+        
+        .webinaire-breadcrumb a:hover {
+            opacity: 0.7;
+        }
+        
+        .webinaire-breadcrumb .separator {
+            color: var(--gray-400);
+        }
+        
+        .webinaire-breadcrumb .current {
+            color: var(--text-secondary);
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Carte principale */
+        .webinaire-detail-card {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        /* Header de la carte */
+        .webinaire-detail-header {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            padding: var(--space-xl);
+            color: var(--white);
+            position: relative;
+        }
+        
+        .webinaire-detail-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--vert-clair) 0%, var(--jaune-dore) 50%, var(--peche) 100%);
+        }
+        
+        .webinaire-detail-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+        }
+        
+        .webinaire-detail-badge.status-a_venir {
+            background: var(--jaune-dore);
+            color: var(--vert-fonce);
+        }
+        
+        .webinaire-detail-badge.status-replay {
+            background: var(--peche);
+            color: var(--vert-fonce);
+        }
+        
+        .webinaire-detail-badge.status-termine {
+            background: var(--gray-300);
+            color: var(--gray-700);
+        }
+        
+        .webinaire-detail-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            color: var(--white);
+            margin: 0 0 var(--space-md) 0;
+            line-height: 1.3;
+        }
+        
+        .webinaire-detail-date {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .webinaire-detail-date .date-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Corps de la carte */
+        .webinaire-detail-body {
+            padding: var(--space-xl);
+        }
+        
+        /* Section intervenant */
+        .webinaire-detail-speaker {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            padding: var(--space-lg);
+            background: #FDF8F3;
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .speaker-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+        }
+        
+        .speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .speaker-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .speaker-info {
+            flex: 1;
+        }
+        
+        .speaker-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .speaker-name {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .speaker-title {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .speaker-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Description */
+        .webinaire-detail-description {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .webinaire-detail-description h2 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .webinaire-detail-description p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        /* Points clés */
+        .webinaire-detail-points {
+            background: var(--vert-clair);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .webinaire-detail-points h3 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .webinaire-detail-points ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .webinaire-detail-points li {
+            position: relative;
+            padding-left: 1.75rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--vert-fonce);
+            margin-bottom: 0.75rem;
+        }
+        
+        .webinaire-detail-points li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .webinaire-detail-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--vert-fonce);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        /* Section vidéo */
+        .webinaire-detail-video {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .webinaire-detail-video h3 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: var(--radius-xl);
+            background: var(--gray-100);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-external-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            border-radius: var(--radius-xl);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .video-external-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Section inscription */
+        .webinaire-detail-inscription {
+            background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .inscription-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .inscription-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .inscription-date {
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+            opacity: 0.9;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .inscription-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--vert-fonce);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        
+        .inscription-btn:hover {
+            background: var(--vert-fonce-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .inscription-note {
+            font-size: 0.9rem;
+            color: var(--vert-fonce);
+            opacity: 0.8;
+            margin-top: var(--space-md);
+        }
+        
+        /* Section non dispo */
+        .webinaire-detail-unavailable {
+            background: var(--gray-100);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .unavailable-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .unavailable-title {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .unavailable-text {
+            color: var(--text-secondary);
+        }
+        
+        /* Webinaires associés */
+        .webinaire-related-section {
+            padding: var(--space-xl) 0;
+        }
+        
+        .related-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .related-card {
+            background: #FDF8F3;
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .related-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .related-badge {
+            display: inline-block;
+            width: fit-content;
+            padding: 0.3rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .related-badge.status-a_venir {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+        
+        .related-badge.status-replay {
+            background: var(--peche);
+            color: var(--vert-fonce);
+        }
+        
+        .related-card h4 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+            margin: 0;
+        }
+        
+        .related-speaker {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .related-arrow {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+            margin-top: auto;
+        }
+        
+        /* CTA final */
+        .webinaire-detail-cta {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .webinaire-detail-cta h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .webinaire-detail-cta p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .webinaire-detail-cta .btn {
+            margin: 0 var(--space-sm);
+        }
+        
+        /* Loading & Error states */
+        .webinaire-loading,
+        .webinaire-error {
+            text-align: center;
+            padding: var(--space-3xl);
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+        }
+        
+        .webinaire-loading .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--vert-fonce);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto var(--space-md);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .webinaire-error .error-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .webinaire-error h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .webinaire-error p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .webinaire-detail-speaker {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .speaker-avatar {
+                margin: 0 auto;
+            }
+            
+            .speaker-info {
+                text-align: center;
+            }
+            
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .webinaire-detail-cta .btn {
+                display: block;
+                width: 100%;
+                margin: var(--space-sm) 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER (chargé dynamiquement) -->
+    <div id="header-placeholder"></div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <section class="webinaire-detail-section">
+        <div class="container">
+            <div class="webinaire-detail-wrapper" id="webinaire-content">
+                <!-- Loading state -->
+                <div class="webinaire-loading" id="loading-state">
+                    <div class="spinner"></div>
+                    <p>Chargement du webinaire...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (chargé dynamiquement) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
+    <script>
+        let webinaire = null;
+
+        // Récupérer l'ID depuis l'URL
+        function getWebinaireId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // Attendre que les composants soient chargés
+        document.addEventListener('componentsLoaded', () => {
+            initSupabase();
+            loadWebinaire();
+        });
+
+        // Charger le webinaire
+        async function loadWebinaire() {
+            const container = document.getElementById('webinaire-content');
+            const webinaireId = getWebinaireId();
+
+            if (!webinaireId) {
+                showError('Aucun webinaire spécifié');
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('webinaires')
+                    .select('*')
+                    .eq('id', webinaireId)
+                    .single();
+
+                if (error) throw error;
+                if (!data) throw new Error('Webinaire non trouvé');
+
+                webinaire = data;
+                
+                // Mettre à jour le titre de la page
+                document.title = `${webinaire.titre} - OP! Webinaires`;
+                
+                // Afficher le webinaire
+                displayWebinaire();
+                
+                // Charger les webinaires associés
+                loadRelatedWebinaires();
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Impossible de charger ce webinaire');
+            }
+        }
+
+        // Afficher l'erreur
+        function showError(message) {
+            const container = document.getElementById('webinaire-content');
+            container.innerHTML = `
+                <div class="webinaire-error">
+                    <div class="error-icon">😕</div>
+                    <h2>Oups !</h2>
+                    <p>${message}</p>
+                    <a href="webinaires.html" class="btn btn-primary">← Retour aux webinaires</a>
+                </div>
+            `;
+        }
+
+        // Afficher le webinaire
+        function displayWebinaire() {
+            const container = document.getElementById('webinaire-content');
+            const status = webinaire.statut || 'replay';
+            const statusLabels = {
+                'a_venir': 'À venir',
+                'replay': 'Replay disponible',
+                'termine': 'Terminé'
+            };
+
+            // Formater la date
+            let dateHTML = '';
+            if (webinaire.date_heure) {
+                const date = new Date(webinaire.date_heure);
+                const options = { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                const formattedDate = date.toLocaleDateString('fr-FR', options);
+                dateHTML = `
+                    <div class="webinaire-detail-date">
+                        <span class="date-icon">📅</span>
+                        <span>${formattedDate}</span>
+                    </div>
+                `;
+            }
+
+            // Bloc intervenant
+            let speakerHTML = '';
+            const speakerName = webinaire.speaker_name || webinaire.intervenant || '';
+            const speakerTitle = webinaire.speaker_title || webinaire.intervenant_titre || '';
+            const speakerBio = webinaire.speaker_bio || webinaire.intervenant_bio || '';
+            const speakerAvatar = webinaire.speaker_avatar || webinaire.intervenant_photo || null;
+
+            if (speakerName) {
+                const avatarContent = speakerAvatar 
+                    ? `<img src="${speakerAvatar}" alt="${speakerName}">`
+                    : `<div class="speaker-avatar-placeholder">👤</div>`;
+                
+                speakerHTML = `
+                    <div class="webinaire-detail-speaker">
+                        <div class="speaker-avatar">
+                            ${avatarContent}
+                        </div>
+                        <div class="speaker-info">
+                            <div class="speaker-label">Animé par</div>
+                            <div class="speaker-name">${speakerName}</div>
+                            ${speakerTitle ? `<div class="speaker-title">${speakerTitle}</div>` : ''}
+                            ${speakerBio ? `<p class="speaker-bio">${speakerBio}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Description
+            let descriptionHTML = '';
+            if (webinaire.description) {
+                descriptionHTML = `
+                    <div class="webinaire-detail-description">
+                        <h2>À propos de ce webinaire</h2>
+                        <p>${webinaire.description}</p>
+                    </div>
+                `;
+            }
+
+            // Points clés
+            let pointsHTML = '';
+            if (webinaire.points_cles) {
+                let pointsList = [];
+                
+                // Gérer si c'est un JSON ou du texte
+                if (typeof webinaire.points_cles === 'string') {
+                    try {
+                        pointsList = JSON.parse(webinaire.points_cles);
+                    } catch {
+                        pointsList = webinaire.points_cles.split('\n').filter(p => p.trim());
+                    }
+                } else if (Array.isArray(webinaire.points_cles)) {
+                    pointsList = webinaire.points_cles;
+                }
+
+                if (pointsList.length > 0) {
+                    pointsHTML = `
+                        <div class="webinaire-detail-points">
+                            <h3>🎯 Ce que vous allez apprendre</h3>
+                            <ul>
+                                ${pointsList.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+
+            // Section action (vidéo, inscription, ou non dispo)
+            let actionHTML = '';
+            
+            if (status === 'replay') {
+                const videoUrl = webinaire.lien_replay || webinaire.video_url || webinaire.lien_meet;
+                if (videoUrl) {
+                    const embedHTML = getVideoEmbed(videoUrl);
+                    actionHTML = `
+                        <div class="webinaire-detail-video">
+                            <h3>▶️ Regarder le replay</h3>
+                            ${embedHTML}
+                        </div>
+                    `;
+                }
+            } else if (status === 'a_venir') {
+                const inscriptionUrl = webinaire.lien_inscription || webinaire.lien_meet || '#';
+                const dateText = webinaire.date_heure 
+                    ? new Date(webinaire.date_heure).toLocaleDateString('fr-FR', { 
+                        weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
+                    })
+                    : 'Date à confirmer';
+                
+                actionHTML = `
+                    <div class="webinaire-detail-inscription">
+                        <div class="inscription-icon">🎫</div>
+                        <h3 class="inscription-title">Participez à ce webinaire !</h3>
+                        <p class="inscription-date">${dateText}</p>
+                        <a href="${inscriptionUrl}" target="_blank" class="inscription-btn">
+                            S'inscrire gratuitement
+                            <span>→</span>
+                        </a>
+                        <p class="inscription-note">Places limitées • Gratuit</p>
+                    </div>
+                `;
+            } else {
+                actionHTML = `
+                    <div class="webinaire-detail-unavailable">
+                        <div class="unavailable-icon">📭</div>
+                        <h3 class="unavailable-title">Replay non disponible</h3>
+                        <p class="unavailable-text">Ce webinaire a eu lieu mais le replay n'est pas encore disponible.</p>
+                    </div>
+                `;
+            }
+
+            // Assembler la page
+            container.innerHTML = `
+                <!-- Breadcrumb -->
+                <nav class="webinaire-breadcrumb">
+                    <a href="index.html">Accueil</a>
+                    <span class="separator">›</span>
+                    <a href="webinaires.html">Webinaires</a>
+                    <span class="separator">›</span>
+                    <span class="current">${webinaire.titre}</span>
+                </nav>
+                
+                <!-- Carte principale -->
+                <div class="webinaire-detail-card">
+                    <!-- Header -->
+                    <div class="webinaire-detail-header">
+                        <span class="webinaire-detail-badge status-${status}">${statusLabels[status]}</span>
+                        <h1 class="webinaire-detail-title">${webinaire.titre}</h1>
+                        ${dateHTML}
+                    </div>
+                    
+                    <!-- Corps -->
+                    <div class="webinaire-detail-body">
+                        ${speakerHTML}
+                        ${descriptionHTML}
+                        ${pointsHTML}
+                        ${actionHTML}
+                    </div>
+                </div>
+                
+                <!-- Webinaires associés -->
+                <div class="webinaire-related-section">
+                    <h2 class="related-title">Autres webinaires</h2>
+                    <div class="related-grid" id="related-webinaires">
+                        <div class="webinaire-loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CTA -->
+                <div class="webinaire-detail-cta">
+                    <h3>Une idée de webinaire ?</h3>
+                    <p>Propose-nous un sujet qui t'intéresse, on le traitera peut-être dans un prochain live !</p>
+                    <a href="contact.html" class="btn btn-primary">Proposer un sujet</a>
+                    <a href="webinaires.html" class="btn btn-secondary">Voir tous les webinaires</a>
+                </div>
+            `;
+        }
+
+        // Générer l'embed vidéo
+        function getVideoEmbed(url) {
+            if (!url) return '';
+
+            // YouTube
+            let youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+            if (youtubeMatch) {
+                return `
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/${youtubeMatch[1]}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </div>
+                `;
+            }
+
+            // Vimeo
+            let vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+            if (vimeoMatch) {
+                return `
+                    <div class="video-container">
+                        <iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" 
+                                allow="autoplay; fullscreen; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </div>
+                `;
+            }
+
+            // Loom
+            let loomMatch = url.match(/loom\.com\/(?:share|embed)\/([a-zA-Z0-9]+)/);
+            if (loomMatch) {
+                return `
+                    <div class="video-container">
+                        <iframe src="https://www.loom.com/embed/${loomMatch[1]}" 
+                                allowfullscreen></iframe>
+                    </div>
+                `;
+            }
+
+            // URL externe (lien direct)
+            return `
+                <a href="${url}" target="_blank" class="video-external-link">
+                    ▶️ Accéder au replay
+                    <span>→</span>
+                </a>
+            `;
+        }
+
+        // Charger les webinaires associés
+        async function loadRelatedWebinaires() {
+            const container = document.getElementById('related-webinaires');
+            if (!container || !webinaire) return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('webinaires')
+                    .select('*')
+                    .neq('id', webinaire.id)
+                    .limit(3)
+                    .order('date_heure', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = `
+                        <p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">
+                            Aucun autre webinaire pour le moment.
+                        </p>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = data.map(w => generateRelatedCard(w)).join('');
+
+            } catch (error) {
+                console.error('Erreur chargement related:', error);
+                container.innerHTML = '';
+            }
+        }
+
+        // Générer une carte webinaire associé
+        function generateRelatedCard(w) {
+            const status = w.statut || 'replay';
+            const statusLabels = { 'a_venir': 'À venir', 'replay': 'Replay', 'termine': 'Terminé' };
+            const speakerName = w.speaker_name || w.intervenant || '';
+
+            return `
+                <a href="webinaire-detail.html?id=${w.id}" class="related-card">
+                    <span class="related-badge status-${status}">${statusLabels[status]}</span>
+                    <h4>${w.titre}</h4>
+                    ${speakerName ? `<span class="related-speaker">Avec ${speakerName}</span>` : ''}
+                    <span class="related-arrow">
+                        Voir le webinaire
+                        <span>→</span>
+                    </span>
+                </a>
+            `;
+        }
+    </script>
+</body>
+</html>

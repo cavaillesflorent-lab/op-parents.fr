@@ -13,31 +13,85 @@
 
     <!-- HERO -->
     <section class="page-hero">
+        <div class="page-hero-decoration">
+            <div class="hero-circle circle-1"></div>
+            <div class="hero-circle circle-2"></div>
+            <div class="hero-circle circle-3"></div>
+        </div>
         <div class="container">
-            <h1>Nos Webinaires</h1>
-            <p>Des sessions en direct et en replay pour approfondir vos connaissances financières.</p>
+            <div class="page-hero-content">
+                <span class="page-hero-badge">🎥 Webinaires</span>
+                <h1>Nos Webinaires</h1>
+                <p>Des sessions en direct et en replay pour approfondir vos connaissances financières en famille.</p>
+            </div>
         </div>
     </section>
 
-    <!-- FILTRES + LISTE -->
-    <section class="webinaires-list-section">
+    <!-- STATS -->
+    <section class="page-stats-section">
         <div class="container">
-            <!-- Filtres -->
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all">Tous</button>
-                <button class="filter-btn" data-filter="a_venir">À venir</button>
-                <button class="filter-btn" data-filter="replay">Replays</button>
+            <div class="page-stats">
+                <div class="page-stat">
+                    <span class="page-stat-icon">🎬</span>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-total">-</span>
+                        <span class="page-stat-label">Webinaires</span>
+                    </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <span class="page-stat-icon">▶️</span>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-replays">-</span>
+                        <span class="page-stat-label">Replays dispos</span>
+                    </div>
+                </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <span class="page-stat-icon">📅</span>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-avenir">-</span>
+                        <span class="page-stat-label">À venir</span>
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
 
+    <!-- FILTRES -->
+    <section class="page-filters-section">
+        <div class="container">
+            <div class="page-filters">
+                <button class="page-filter-btn active" data-filter="all">Tous</button>
+                <button class="page-filter-btn" data-filter="a_venir">À venir</button>
+                <button class="page-filter-btn" data-filter="replay">Replays</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LISTE -->
+    <section class="page-list-section">
+        <div class="container">
             <div class="webinaires-grid" id="webinaires-grid">
                 <div class="loading-state">
+                    <div class="quiz-loading-spinner"></div>
                     <p>Chargement des webinaires...</p>
                 </div>
             </div>
-            
-            <div class="empty-state" id="empty-state" style="display: none;">
-                <p>Aucun webinaire disponible pour le moment.</p>
-                <p>Revenez bientôt !</p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="page-cta-section">
+        <div class="container">
+            <div class="page-cta-card">
+                <div class="page-cta-content">
+                    <h2>Une idée de webinaire ?</h2>
+                    <p>Propose-nous un sujet qui t'intéresse, on le traitera peut-être dans un prochain live !</p>
+                </div>
+                <a href="contact.html" class="page-cta-btn">
+                    Proposer un sujet <span class="arrow">→</span>
+                </a>
             </div>
         </div>
     </section>
@@ -60,27 +114,141 @@
             initFilters();
         });
 
-        // Charger les webinaires
-        async function loadWebinaires() {
-            const { data, error } = await supabaseClient
-                .from('webinaires')
-                .select('*')
-                .order('date_heure', { ascending: true });
+        // Générer une carte webinaire (nouveau design)
+        function generateWebinaireCard(webinaire) {
+            const status = webinaire.statut || 'replay';
+            const statusLabels = {
+                'a_venir': 'À venir',
+                'replay': 'Replay',
+                'termine': 'Terminé'
+            };
+            const statusLabel = statusLabels[status] || 'Replay';
 
-            if (error) {
-                console.error('Erreur:', error);
-                document.getElementById('webinaires-grid').innerHTML = '<p class="error">Erreur de chargement</p>';
-                return;
+            // Date pour les webinaires à venir
+            let dateBlock = '';
+            if (status === 'a_venir' && webinaire.date_heure) {
+                const date = new Date(webinaire.date_heure);
+                const options = { 
+                    weekday: 'long', 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                const formattedDate = date.toLocaleDateString('fr-FR', options);
+                dateBlock = `
+                    <div class="webinaire-date-block">
+                        <span class="webinaire-date-icon">📅</span>
+                        <span class="webinaire-date-text">${formattedDate}</span>
+                    </div>
+                `;
             }
 
-            allWebinaires = data || [];
-            displayWebinaires();
+            // Bloc intervenant
+            let speakerBlock = '';
+            const speakerName = webinaire.speaker_name || webinaire.intervenant || '';
+            const speakerTitle = webinaire.speaker_title || webinaire.intervenant_titre || '';
+            const speakerAvatar = webinaire.speaker_avatar || webinaire.intervenant_photo || null;
+            
+            if (speakerName) {
+                const avatarContent = speakerAvatar 
+                    ? `<img src="${speakerAvatar}" alt="${speakerName}">`
+                    : `<div class="webinaire-speaker-avatar-placeholder">👤</div>`;
+                
+                speakerBlock = `
+                    <div class="webinaire-speaker">
+                        <div class="webinaire-speaker-avatar">
+                            ${avatarContent}
+                        </div>
+                        <div class="webinaire-speaker-info">
+                            <span class="webinaire-speaker-prefix">Avec</span>
+                            <span class="webinaire-speaker-name">${speakerName}</span>
+                            ${speakerTitle ? `<span class="webinaire-speaker-title">${speakerTitle}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Bouton selon le statut
+            let buttonHTML = '';
+            switch(status) {
+                case 'a_venir':
+                    const inscriptionUrl = webinaire.lien_inscription || webinaire.lien_meet || '#';
+                    buttonHTML = `
+                        <a href="${inscriptionUrl}" class="webinaire-btn upcoming" target="_blank">
+                            S'inscrire gratuitement
+                        </a>
+                    `;
+                    break;
+                case 'replay':
+                    const replayUrl = webinaire.lien_replay || webinaire.lien_meet || '#';
+                    buttonHTML = `
+                        <a href="${replayUrl}" class="webinaire-btn replay" target="_blank">
+                            Voir le webinaire
+                        </a>
+                    `;
+                    break;
+                case 'termine':
+                default:
+                    buttonHTML = `
+                        <span class="webinaire-btn disabled">
+                            Replay non disponible
+                        </span>
+                    `;
+                    break;
+            }
+
+            // Assembler la carte
+            return `
+                <div class="webinaire-card" data-status="${status}">
+                    <span class="webinaire-badge status-${status}">${statusLabel}</span>
+                    <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>
+                    ${dateBlock}
+                    ${speakerBlock}
+                    ${webinaire.description ? `<p class="webinaire-description">${webinaire.description}</p>` : ''}
+                    ${buttonHTML}
+                </div>
+            `;
         }
 
-        // Afficher les webinaires
+        // Charger les webinaires
+        async function loadWebinaires() {
+            const grid = document.getElementById('webinaires-grid');
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('webinaires')
+                    .select('*')
+                    .order('date_heure', { ascending: false });
+
+                if (error) throw error;
+
+                allWebinaires = data || [];
+                
+                // Mettre à jour les stats
+                document.getElementById('stat-total').textContent = allWebinaires.length;
+                document.getElementById('stat-replays').textContent = allWebinaires.filter(w => w.statut === 'replay').length;
+                document.getElementById('stat-avenir').textContent = allWebinaires.filter(w => w.statut === 'a_venir').length;
+
+                displayWebinaires();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                grid.innerHTML = `
+                    <div class="page-empty">
+                        <span class="page-empty-icon">😕</span>
+                        <h3>Erreur de chargement</h3>
+                        <p>Impossible de charger les webinaires.</p>
+                        <button class="btn btn-primary" onclick="loadWebinaires()">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Afficher les webinaires filtrés
         function displayWebinaires() {
             const grid = document.getElementById('webinaires-grid');
-            const emptyState = document.getElementById('empty-state');
             
             let filtered = allWebinaires;
             if (currentFilter !== 'all') {
@@ -88,56 +256,24 @@
             }
 
             if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.style.display = 'block';
+                grid.innerHTML = `
+                    <div class="page-empty">
+                        <span class="page-empty-icon">🎥</span>
+                        <h3>Aucun webinaire</h3>
+                        <p>${currentFilter === 'a_venir' ? 'Aucun webinaire prévu pour le moment.' : 'Aucun webinaire dans cette catégorie.'}</p>
+                    </div>
+                `;
                 return;
             }
 
-            emptyState.style.display = 'none';
-            grid.innerHTML = filtered.map(webinaire => {
-                const date = webinaire.date_heure ? new Date(webinaire.date_heure) : null;
-                const dateStr = date ? date.toLocaleDateString('fr-FR', { 
-                    weekday: 'long', 
-                    day: 'numeric', 
-                    month: 'long',
-                    year: 'numeric'
-                }) : 'Date à définir';
-                const timeStr = date ? date.toLocaleTimeString('fr-FR', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                }) : '';
-
-                const statusClass = webinaire.statut || 'a_venir';
-                const statusLabel = {
-                    'a_venir': 'À venir',
-                    'replay': 'Replay disponible',
-                    'termine': 'Terminé'
-                }[statusClass] || statusClass;
-
-                return `
-                    <div class="webinaire-card">
-                        ${webinaire.image_url ? `<img src="${webinaire.image_url}" alt="${webinaire.titre}" class="webinaire-image">` : ''}
-                        <div class="webinaire-content">
-                            <span class="webinaire-status status-${statusClass}">${statusLabel}</span>
-                            <h3>${webinaire.titre}</h3>
-                            <p class="webinaire-date">📅 ${dateStr}${timeStr ? ` à ${timeStr}` : ''}</p>
-                            <p class="webinaire-description">${webinaire.description || ''}</p>
-                            ${webinaire.lien_meet && webinaire.statut === 'a_venir' ? 
-                                `<a href="${webinaire.lien_meet}" target="_blank" class="btn btn-primary">S'inscrire</a>` : 
-                                webinaire.statut === 'replay' ? 
-                                `<a href="${webinaire.lien_meet || '#'}" target="_blank" class="btn btn-soft">Voir le replay</a>` : ''
-                            }
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            grid.innerHTML = filtered.map(w => generateWebinaireCard(w)).join('');
         }
 
         // Initialiser les filtres
         function initFilters() {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+            document.querySelectorAll('.page-filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.page-filter-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentFilter = btn.dataset.filter;
                     displayWebinaires();

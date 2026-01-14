@@ -709,31 +709,33 @@
                 `;
             }
 
-            // Description
+            // Description (priorité à description_longue, sinon description courte)
             let descriptionHTML = '';
-            if (webinaire.description) {
+            const descriptionText = webinaire.description_longue || webinaire.description;
+            if (descriptionText) {
                 descriptionHTML = `
                     <div class="webinaire-detail-description">
                         <h2>À propos de ce webinaire</h2>
-                        <p>${webinaire.description}</p>
+                        <p>${descriptionText}</p>
                     </div>
                 `;
             }
 
-            // Points clés
+            // Points clés (compatibilité avec "points_cles" et ancien "attendus")
             let pointsHTML = '';
-            if (webinaire.points_cles) {
+            const rawPoints = webinaire.points_cles || webinaire.attendus;
+            if (rawPoints) {
                 let pointsList = [];
                 
                 // Gérer si c'est un JSON ou du texte
-                if (typeof webinaire.points_cles === 'string') {
+                if (typeof rawPoints === 'string') {
                     try {
-                        pointsList = JSON.parse(webinaire.points_cles);
+                        pointsList = JSON.parse(rawPoints);
                     } catch {
-                        pointsList = webinaire.points_cles.split('\n').filter(p => p.trim());
+                        pointsList = rawPoints.split('\n').filter(p => p.trim());
                     }
-                } else if (Array.isArray(webinaire.points_cles)) {
-                    pointsList = webinaire.points_cles;
+                } else if (Array.isArray(rawPoints)) {
+                    pointsList = rawPoints;
                 }
 
                 if (pointsList.length > 0) {
@@ -779,7 +781,7 @@
                             S'inscrire gratuitement
                             <span>→</span>
                         </a>
-                        <p class="inscription-note">Places limitées • Gratuit</p>
+                        <p class="inscription-note">Gratuit • Places limitées</p>
                     </div>
                 `;
             } else {

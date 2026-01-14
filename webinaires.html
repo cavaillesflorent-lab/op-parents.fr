@@ -170,21 +170,21 @@
                 `;
             }
 
-            // Bouton selon le statut
+            // Bouton → TOUJOURS vers la page détail
             let buttonHTML = '';
+            const detailUrl = `webinaire-detail.html?id=${webinaire.id}`;
+            
             switch(status) {
                 case 'a_venir':
-                    const inscriptionUrl = webinaire.lien_inscription || webinaire.lien_meet || '#';
                     buttonHTML = `
-                        <a href="${inscriptionUrl}" class="webinaire-btn upcoming" target="_blank">
-                            S'inscrire gratuitement
+                        <a href="${detailUrl}" class="webinaire-btn upcoming">
+                            Voir les détails & s'inscrire
                         </a>
                     `;
                     break;
                 case 'replay':
-                    const replayUrl = webinaire.lien_replay || webinaire.lien_meet || '#';
                     buttonHTML = `
-                        <a href="${replayUrl}" class="webinaire-btn replay" target="_blank">
+                        <a href="${detailUrl}" class="webinaire-btn replay">
                             Voir le webinaire
                         </a>
                     `;
@@ -192,23 +192,25 @@
                 case 'termine':
                 default:
                     buttonHTML = `
-                        <span class="webinaire-btn disabled">
-                            Replay non disponible
-                        </span>
+                        <a href="${detailUrl}" class="webinaire-btn disabled">
+                            Voir les détails
+                        </a>
                     `;
                     break;
             }
 
-            // Assembler la carte
+            // Assembler la carte (cliquable entièrement)
             return `
-                <div class="webinaire-card" data-status="${status}">
-                    <span class="webinaire-badge status-${status}">${statusLabel}</span>
-                    <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>
-                    ${dateBlock}
-                    ${speakerBlock}
-                    ${webinaire.description ? `<p class="webinaire-description">${webinaire.description}</p>` : ''}
-                    ${buttonHTML}
-                </div>
+                <a href="${detailUrl}" class="webinaire-card-link">
+                    <div class="webinaire-card" data-status="${status}">
+                        <span class="webinaire-badge status-${status}">${statusLabel}</span>
+                        <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>
+                        ${dateBlock}
+                        ${speakerBlock}
+                        ${webinaire.description ? `<p class="webinaire-description">${webinaire.description}</p>` : ''}
+                        ${buttonHTML}
+                    </div>
+                </a>
             `;
         }
 

@@ -7,6 +7,272 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
     <link rel="stylesheet" href="../assets/css/admin-quiz.css">
+    <style>
+        /* Styles supplémentaires pour le formulaire enrichi */
+        .form-section {
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .section-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--space-md);
+        }
+        
+        @media (max-width: 768px) {
+            .form-row, .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Attendus / Points clés */
+        .attendu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            background: var(--white);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .attendu-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .attendu-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+        }
+        
+        .attendu-input:focus {
+            outline: none;
+            border-color: var(--vert-fonce);
+        }
+        
+        .btn-remove-attendu {
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-remove-attendu:hover {
+            opacity: 1;
+        }
+        
+        /* Image upload */
+        .image-upload-container {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: flex-start;
+        }
+        
+        .image-preview {
+            width: 200px;
+            height: 120px;
+            background: var(--gray-100);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--gray-400);
+        }
+        
+        .placeholder-icon {
+            font-size: 2rem;
+        }
+        
+        .placeholder-text {
+            font-size: 0.85rem;
+        }
+        
+        .image-upload-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .upload-progress {
+            margin-top: var(--space-sm);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--vert-fonce);
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Intervenant section */
+        .speaker-preview {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--gray-200);
+            margin-bottom: var(--space-md);
+        }
+        
+        .speaker-preview-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .speaker-preview-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .speaker-preview-info {
+            flex: 1;
+        }
+        
+        .speaker-preview-name {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .speaker-preview-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .speaker-preview-empty {
+            color: var(--gray-400);
+            font-style: italic;
+        }
+        
+        /* Liens conditionnels */
+        .conditional-field {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .conditional-field.visible {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Textarea plus grand */
+        .textarea-large {
+            min-height: 150px;
+        }
+        
+        /* Info box */
+        .info-box {
+            background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
+            border-left: 4px solid var(--vert-fonce);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+        }
+        
+        .info-box p {
+            font-size: 0.9rem;
+            color: var(--vert-fonce);
+            margin: 0;
+        }
+        
+        /* Tabs pour liens */
+        .links-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+        
+        .link-tab {
+            padding: var(--space-sm) var(--space-md);
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .link-tab:hover {
+            border-color: var(--vert-fonce);
+        }
+        
+        .link-tab.active {
+            background: var(--vert-fonce);
+            border-color: var(--vert-fonce);
+            color: var(--white);
+        }
+    </style>
 </head>
 <body class="admin-body">
     <div class="admin-wrapper">
@@ -60,6 +326,7 @@
                         <thead>
                             <tr>
                                 <th>Titre</th>
+                                <th>Intervenant</th>
                                 <th>Date</th>
                                 <th>Statut</th>
                                 <th>Actions</th>
@@ -67,7 +334,7 @@
                         </thead>
                         <tbody id="webinaires-list">
                             <tr>
-                                <td colspan="4" class="loading">Chargement...</td>
+                                <td colspan="5" class="loading">Chargement...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -88,7 +355,9 @@
             <form id="webinaire-form" class="admin-form">
                 <input type="hidden" id="webinaire-id">
                 
-                <!-- Informations principales -->
+                <!-- ============================================
+                     SECTION 1 : INFORMATIONS GÉNÉRALES
+                     ============================================ -->
                 <div class="form-section">
                     <h3>📝 Informations générales</h3>
                     
@@ -98,14 +367,23 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="4" placeholder="Décrivez le contenu et les objectifs du webinaire..."></textarea>
+                        <label for="description">Description courte</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Résumé en 1-2 phrases pour la liste des webinaires..."></textarea>
+                        <small class="form-hint">Affichée sur la carte du webinaire dans la liste</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description_longue">Description détaillée</label>
+                        <textarea id="description_longue" name="description_longue" rows="6" class="textarea-large" placeholder="Description complète du webinaire : contexte, objectifs, ce qui sera abordé..."></textarea>
+                        <small class="form-hint">Affichée sur la page détail du webinaire</small>
                     </div>
                 </div>
                 
-                <!-- Date et horaire -->
+                <!-- ============================================
+                     SECTION 2 : DATE ET STATUT
+                     ============================================ -->
                 <div class="form-section">
-                    <h3>📅 Date et horaire</h3>
+                    <h3>📅 Date et statut</h3>
                     
                     <div class="form-row">
                         <div class="form-group">
@@ -116,15 +394,59 @@
                         <div class="form-group">
                             <label for="statut">Statut</label>
                             <select id="statut" name="statut">
-                                <option value="a_venir">À venir</option>
-                                <option value="replay">Replay disponible</option>
-                                <option value="termine">Terminé</option>
+                                <option value="a_venir">📅 À venir</option>
+                                <option value="replay">▶️ Replay disponible</option>
+                                <option value="termine">✅ Terminé (sans replay)</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Attendus -->
+                <!-- ============================================
+                     SECTION 3 : INTERVENANT
+                     ============================================ -->
+                <div class="form-section">
+                    <h3>👤 Intervenant</h3>
+                    <p class="section-desc">Informations sur la personne qui anime le webinaire.</p>
+                    
+                    <!-- Prévisualisation -->
+                    <div class="speaker-preview" id="speaker-preview">
+                        <div class="speaker-preview-avatar" id="speaker-preview-avatar">
+                            👤
+                        </div>
+                        <div class="speaker-preview-info">
+                            <div class="speaker-preview-name" id="speaker-preview-name">Nom de l'intervenant</div>
+                            <div class="speaker-preview-title" id="speaker-preview-title">Titre / Fonction</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="speaker_name">Nom de l'intervenant</label>
+                            <input type="text" id="speaker_name" name="speaker_name" placeholder="Ex: Florent Cavaillès">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="speaker_title">Titre / Fonction</label>
+                            <input type="text" id="speaker_title" name="speaker_title" placeholder="Ex: Ingénieur Patrimonial">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="speaker_bio">Biographie courte</label>
+                        <textarea id="speaker_bio" name="speaker_bio" rows="3" placeholder="Quelques lignes sur l'expertise et le parcours de l'intervenant..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="speaker_avatar">Photo de l'intervenant (URL)</label>
+                        <input type="url" id="speaker_avatar" name="speaker_avatar" placeholder="https://exemple.com/photo.jpg">
+                        <small class="form-hint">Lien vers une image carrée de préférence</small>
+                    </div>
+                </div>
+                
+                <!-- ============================================
+                     SECTION 4 : POINTS CLÉS
+                     ============================================ -->
                 <div class="form-section">
                     <h3>🎯 Ce que les participants vont apprendre</h3>
                     <p class="section-desc">Listez les points clés que les participants retiendront de ce webinaire.</p>
@@ -138,18 +460,41 @@
                     </button>
                 </div>
                 
-                <!-- Lien et paramètres -->
+                <!-- ============================================
+                     SECTION 5 : LIENS
+                     ============================================ -->
                 <div class="form-section">
-                    <h3>🔗 Lien de connexion</h3>
+                    <h3>🔗 Liens</h3>
                     
+                    <div class="info-box">
+                        <p>💡 <strong>Conseil :</strong> Remplissez les liens selon le statut du webinaire. Le lien d'inscription pour les webinaires à venir, le lien replay pour les replays disponibles.</p>
+                    </div>
+                    
+                    <!-- Lien d'inscription (pour webinaires à venir) -->
+                    <div class="form-group conditional-field" id="field-inscription">
+                        <label for="lien_inscription">🎫 Lien d'inscription</label>
+                        <input type="url" id="lien_inscription" name="lien_inscription" placeholder="https://calendly.com/... ou https://forms.google.com/...">
+                        <small class="form-hint">Lien vers le formulaire d'inscription (Calendly, Google Forms, etc.)</small>
+                    </div>
+                    
+                    <!-- Lien replay (pour replays) -->
+                    <div class="form-group conditional-field" id="field-replay">
+                        <label for="lien_replay">▶️ Lien du replay</label>
+                        <input type="url" id="lien_replay" name="lien_replay" placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/...">
+                        <small class="form-hint">YouTube, Vimeo, Loom ou lien direct vers la vidéo</small>
+                    </div>
+                    
+                    <!-- Lien Meet (toujours visible) -->
                     <div class="form-group">
-                        <label for="lien_meet">Lien Google Meet</label>
+                        <label for="lien_meet">📹 Lien Google Meet / Zoom</label>
                         <input type="url" id="lien_meet" name="lien_meet" placeholder="https://meet.google.com/xxx-xxx-xxx">
-                        <small class="form-hint">Ce lien sera envoyé aux inscrits et affiché au moment du webinaire</small>
+                        <small class="form-hint">Lien de connexion pour le jour J (facultatif)</small>
                     </div>
                 </div>
                 
-                <!-- Image de couverture -->
+                <!-- ============================================
+                     SECTION 6 : IMAGE DE COUVERTURE
+                     ============================================ -->
                 <div class="form-section">
                     <h3>🖼️ Image de couverture</h3>
                     
@@ -185,6 +530,7 @@
                     </div>
                 </div>
                 
+                <!-- Actions -->
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancel-btn">Annuler</button>
                     <button type="submit" class="btn btn-primary">
@@ -250,7 +596,7 @@
             const tbody = document.getElementById('webinaires-list');
             
             if (webinaires.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="empty">Aucun webinaire. Créez-en un !</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" class="empty">Aucun webinaire. Créez-en un !</td></tr>';
                 return;
             }
 
@@ -260,10 +606,12 @@
                         <strong>${w.titre}</strong>
                         ${w.description ? `<br><small>${w.description.substring(0, 50)}...</small>` : ''}
                     </td>
+                    <td>${w.speaker_name || '-'}</td>
                     <td>${w.date_heure ? new Date(w.date_heure).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
                     <td><span class="status-badge status-${w.statut}">${formatStatut(w.statut)}</span></td>
                     <td class="actions-cell">
                         <button class="btn-icon" onclick="editWebinaire('${w.id}')" title="Modifier">✏️</button>
+                        <a href="../webinaire-detail.html?id=${w.id}" class="btn-icon" target="_blank" title="Voir">👁️</a>
                         <button class="btn-icon btn-danger" onclick="confirmDelete('${w.id}')" title="Supprimer">🗑️</button>
                     </td>
                 </tr>
@@ -273,14 +621,29 @@
         // Formater le statut
         function formatStatut(statut) {
             const labels = {
-                'a_venir': 'À venir',
-                'replay': 'Replay',
-                'termine': 'Terminé'
+                'a_venir': '📅 À venir',
+                'replay': '▶️ Replay',
+                'termine': '✅ Terminé'
             };
             return labels[statut] || statut;
         }
 
-        // === GESTION DES ATTENDUS ===
+        // === GESTION DES CHAMPS CONDITIONNELS ===
+        
+        function updateConditionalFields() {
+            const statut = document.getElementById('statut').value;
+            const fieldInscription = document.getElementById('field-inscription');
+            const fieldReplay = document.getElementById('field-replay');
+            
+            // Afficher/masquer selon le statut
+            fieldInscription.classList.toggle('visible', statut === 'a_venir');
+            fieldReplay.classList.toggle('visible', statut === 'replay');
+        }
+        
+        // Écouter le changement de statut
+        document.getElementById('statut').addEventListener('change', updateConditionalFields);
+
+        // === GESTION DES ATTENDUS (Points clés) ===
         
         function addAttendu(value = '') {
             attendusCount++;
@@ -322,6 +685,29 @@
         
         // Bouton ajouter attendu
         document.getElementById('btn-add-attendu').addEventListener('click', () => addAttendu());
+
+        // === PRÉVISUALISATION INTERVENANT ===
+        
+        function updateSpeakerPreview() {
+            const name = document.getElementById('speaker_name').value || 'Nom de l\'intervenant';
+            const title = document.getElementById('speaker_title').value || 'Titre / Fonction';
+            const avatar = document.getElementById('speaker_avatar').value;
+            
+            document.getElementById('speaker-preview-name').textContent = name;
+            document.getElementById('speaker-preview-title').textContent = title;
+            
+            const avatarEl = document.getElementById('speaker-preview-avatar');
+            if (avatar) {
+                avatarEl.innerHTML = `<img src="${avatar}" alt="${name}">`;
+            } else {
+                avatarEl.innerHTML = '👤';
+            }
+        }
+        
+        // Écouter les changements sur les champs intervenant
+        document.getElementById('speaker_name').addEventListener('input', updateSpeakerPreview);
+        document.getElementById('speaker_title').addEventListener('input', updateSpeakerPreview);
+        document.getElementById('speaker_avatar').addEventListener('input', updateSpeakerPreview);
 
         // === GESTION DE L'UPLOAD D'IMAGE ===
         
@@ -451,6 +837,8 @@
         function openModal(title = 'Nouveau webinaire') {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('webinaire-modal').classList.add('active');
+            updateConditionalFields();
+            updateSpeakerPreview();
         }
 
         // Fermer le modal
@@ -458,8 +846,9 @@
             document.getElementById('webinaire-modal').classList.remove('active');
             document.getElementById('webinaire-form').reset();
             document.getElementById('webinaire-id').value = '';
-            setAttendus(null); // Reset attendus
-            hideImagePreview(); // Reset image
+            setAttendus(null);
+            hideImagePreview();
+            updateSpeakerPreview();
         }
 
         // Nouveau webinaire
@@ -487,16 +876,32 @@
                 return;
             }
 
+            // Remplir les champs
             document.getElementById('webinaire-id').value = data.id;
             document.getElementById('titre').value = data.titre || '';
             document.getElementById('description').value = data.description || '';
+            document.getElementById('description_longue').value = data.description_longue || '';
             document.getElementById('date_heure').value = data.date_heure ? data.date_heure.slice(0, 16) : '';
             document.getElementById('statut').value = data.statut || 'a_venir';
+            
+            // Intervenant
+            document.getElementById('speaker_name').value = data.speaker_name || '';
+            document.getElementById('speaker_title').value = data.speaker_title || '';
+            document.getElementById('speaker_bio').value = data.speaker_bio || '';
+            document.getElementById('speaker_avatar').value = data.speaker_avatar || '';
+            
+            // Liens
+            document.getElementById('lien_inscription').value = data.lien_inscription || '';
+            document.getElementById('lien_replay').value = data.lien_replay || '';
             document.getElementById('lien_meet').value = data.lien_meet || '';
+            
+            // Image
             document.getElementById('image_url').value = data.image_url || '';
             
-            // Charger les attendus
-            setAttendus(data.attendus || []);
+            // Charger les attendus (points clés)
+            // Compatibilité avec l'ancien champ "attendus" et nouveau "points_cles"
+            const pointsCles = data.points_cles || data.attendus || [];
+            setAttendus(pointsCles);
             
             // Charger l'image existante
             if (data.image_url) {
@@ -519,14 +924,28 @@
             btnLoader.style.display = 'inline';
 
             const id = document.getElementById('webinaire-id').value;
+            
             const webinaire = {
                 titre: document.getElementById('titre').value,
                 description: document.getElementById('description').value,
+                description_longue: document.getElementById('description_longue').value,
                 date_heure: document.getElementById('date_heure').value || null,
                 statut: document.getElementById('statut').value,
+                
+                // Intervenant
+                speaker_name: document.getElementById('speaker_name').value,
+                speaker_title: document.getElementById('speaker_title').value,
+                speaker_bio: document.getElementById('speaker_bio').value,
+                speaker_avatar: document.getElementById('speaker_avatar').value,
+                
+                // Liens
+                lien_inscription: document.getElementById('lien_inscription').value,
+                lien_replay: document.getElementById('lien_replay').value,
                 lien_meet: document.getElementById('lien_meet').value,
+                
+                // Image et points clés
                 image_url: document.getElementById('image_url').value,
-                attendus: getAttendus()
+                points_cles: getAttendus()
             };
 
             let error;

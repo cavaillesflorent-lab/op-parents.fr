@@ -107,15 +107,39 @@
             }
         }
 
+        /**
+         * Calcule la progression d'un quiz
+         * Compatible avec la structure sequenceProgress du quiz-engine
+         */
         function getQuizProgress(quizSlug, totalQuestions) {
             const progress = getProgress()[quizSlug];
-            if (!progress) return { percent: 0, status: 'not-started', currentQuestion: 0 };
             
+            // Pas de progression sauvegardée
+            if (!progress) {
+                return { percent: 0, status: 'not-started', currentQuestion: 0 };
+            }
+            
+            // Quiz terminé
             if (progress.completed) {
                 return { percent: 100, status: 'completed', currentQuestion: totalQuestions };
             }
             
-            const answered = progress.answeredQuestions || 0;
+            // Calculer le nombre de réponses depuis sequenceProgress
+            let answered = 0;
+            
+            // Méthode 1: Utiliser answeredQuestions si disponible (nouveau format)
+            if (typeof progress.answeredQuestions === 'number') {
+                answered = progress.answeredQuestions;
+            }
+            // Méthode 2: Compter depuis sequenceProgress (ancien format)
+            else if (progress.sequenceProgress) {
+                Object.values(progress.sequenceProgress).forEach(seqProgress => {
+                    if (seqProgress && seqProgress.answers) {
+                        answered += Object.keys(seqProgress.answers).length;
+                    }
+                });
+            }
+            
             const percent = totalQuestions > 0 ? Math.round((answered / totalQuestions) * 100) : 0;
             
             return {
@@ -195,6 +219,7 @@
 
                 if (error) throw error;
 
+                // Charger le nombre de questions par quiz
                 const { data: questions } = await supabaseClient
                     .from('quiz_questions')
                     .select('quiz_id');

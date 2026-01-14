@@ -39,10 +39,25 @@ class QuizEngine {
 
     saveProgress() {
         const allProgress = this.getAllProgress();
+        
+        // Calculer le nombre total de réponses pour compatibilité avec quizzes.html
+        let totalAnswered = 0;
+        let totalQuestions = 0;
+        this.sequences.forEach(seq => {
+            const seqProgress = this.sequenceProgress[seq.id];
+            if (seqProgress && seqProgress.answers) {
+                totalAnswered += Object.keys(seqProgress.answers).length;
+            }
+            totalQuestions += seq.questions.length;
+        });
+        
         allProgress[this.quizSlug] = {
             sequenceProgress: this.sequenceProgress,
             completed: this.isQuizCompleted(),
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
+            // Champs pour compatibilité avec quizzes.html
+            answeredQuestions: totalAnswered,
+            totalQuestions: totalQuestions
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(allProgress));
     }
@@ -402,8 +417,9 @@ class QuizEngine {
         console.log('Séquence:', seq?.titre, '- Questions:', seq?.questions?.length);
         
         const progress = this.sequenceProgress[seq.id];
+        const answeredCount = Object.keys(progress?.answers || {}).length;
         
-        // Si refaire, reset la progression de cette séquence
+        // Si refaire (séquence complétée), reset la progression de cette séquence
         if (progress && progress.completed) {
             this.sequenceProgress[seq.id] = {
                 answers: {},
@@ -411,11 +427,21 @@ class QuizEngine {
                 completed: false,
                 currentIndex: 0
             };
+            this.currentQuestionIndex = 0;
+            // Montrer l'intro car on recommence
+            this.showSequenceIntro();
+        } 
+        // Si séquence déjà commencée (a des réponses mais pas complétée) → reprendre directement
+        else if (answeredCount > 0) {
+            this.currentQuestionIndex = progress.currentIndex || answeredCount;
+            console.log('Reprise directe à la question:', this.currentQuestionIndex);
+            this.showQuestion();
         }
-        
-        this.currentQuestionIndex = this.sequenceProgress[seq.id]?.currentIndex || 0;
-        console.log('currentQuestionIndex:', this.currentQuestionIndex);
-        this.showSequenceIntro();
+        // Sinon, nouvelle séquence → montrer l'intro
+        else {
+            this.currentQuestionIndex = 0;
+            this.showSequenceIntro();
+        }
     }
 
     showSequenceIntro() {

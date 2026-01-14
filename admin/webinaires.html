@@ -211,6 +211,43 @@
             font-style: italic;
         }
         
+        /* Upload photo intervenant */
+        .speaker-upload-container {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
+        
+        .speaker-upload-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gray-100);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 3px solid var(--gray-200);
+        }
+        
+        .speaker-upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .speaker-upload-placeholder {
+            font-size: 2rem;
+            color: var(--gray-400);
+        }
+        
+        .speaker-upload-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        
         /* Liens conditionnels */
         .conditional-field {
             display: none;
@@ -438,9 +475,36 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="speaker_avatar">Photo de l'intervenant (URL)</label>
-                        <input type="url" id="speaker_avatar" name="speaker_avatar" placeholder="https://exemple.com/photo.jpg">
-                        <small class="form-hint">Lien vers une image carrée de préférence</small>
+                        <label>Photo de l'intervenant</label>
+                        <div class="speaker-upload-container">
+                            <div class="speaker-upload-preview" id="speaker-upload-preview">
+                                <img id="speaker-preview-img" src="" alt="Photo intervenant" style="display: none;">
+                                <div class="speaker-upload-placeholder" id="speaker-upload-placeholder">
+                                    <span>👤</span>
+                                </div>
+                            </div>
+                            
+                            <div class="speaker-upload-actions">
+                                <input type="file" id="speaker-file" accept="image/*" style="display: none;">
+                                <input type="hidden" id="speaker_avatar" name="speaker_avatar">
+                                
+                                <button type="button" class="btn btn-secondary btn-sm" id="btn-upload-speaker">
+                                    📁 Choisir une photo
+                                </button>
+                                <button type="button" class="btn btn-outline btn-sm" id="btn-remove-speaker" style="display: none;">
+                                    🗑️ Supprimer
+                                </button>
+                                
+                                <div class="upload-progress" id="speaker-upload-progress" style="display: none;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="speaker-upload-fill"></div>
+                                    </div>
+                                    <span class="progress-text">Upload en cours...</span>
+                                </div>
+                                
+                                <small class="form-hint">Photo carrée recommandée (JPG, PNG)</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -707,7 +771,6 @@
         // Écouter les changements sur les champs intervenant
         document.getElementById('speaker_name').addEventListener('input', updateSpeakerPreview);
         document.getElementById('speaker_title').addEventListener('input', updateSpeakerPreview);
-        document.getElementById('speaker_avatar').addEventListener('input', updateSpeakerPreview);
 
         // === GESTION DE L'UPLOAD D'IMAGE ===
         
@@ -833,6 +896,136 @@
         // Bouton supprimer image
         document.getElementById('btn-remove-image').addEventListener('click', hideImagePreview);
 
+        // === GESTION DE L'UPLOAD PHOTO INTERVENANT ===
+        
+        let currentSpeakerUrl = null;
+        
+        // Clic sur le bouton d'upload speaker
+        document.getElementById('btn-upload-speaker').addEventListener('click', () => {
+            document.getElementById('speaker-file').click();
+        });
+        
+        // Sélection d'un fichier speaker
+        document.getElementById('speaker-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Vérifier la taille (max 2 Mo pour une photo de profil)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('L\'image est trop lourde. Maximum 2 Mo.');
+                return;
+            }
+            
+            // Vérifier le type
+            if (!file.type.startsWith('image/')) {
+                alert('Le fichier doit être une image.');
+                return;
+            }
+            
+            // Afficher la prévisualisation locale
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                showSpeakerPreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload vers Supabase Storage
+            await uploadSpeakerImage(file);
+        });
+        
+        // Upload de l'image speaker vers Supabase Storage
+        async function uploadSpeakerImage(file) {
+            const progressEl = document.getElementById('speaker-upload-progress');
+            const progressFill = document.getElementById('speaker-upload-fill');
+            
+            progressEl.style.display = 'block';
+            progressFill.style.width = '30%';
+            
+            try {
+                // Générer un nom unique
+                const timestamp = Date.now();
+                const ext = file.name.split('.').pop();
+                const fileName = `speaker-${timestamp}.${ext}`;
+                
+                progressFill.style.width = '50%';
+                
+                // Upload vers Supabase Storage (bucket "speakers")
+                const { data, error } = await supabaseClient.storage
+                    .from('speakers')
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+                
+                if (error) {
+                    console.error('Erreur upload speaker:', error);
+                    alert('Erreur lors de l\'upload: ' + error.message);
+                    progressEl.style.display = 'none';
+                    return;
+                }
+                
+                progressFill.style.width = '80%';
+                
+                // Récupérer l'URL publique
+                const { data: urlData } = supabaseClient.storage
+                    .from('speakers')
+                    .getPublicUrl(fileName);
+                
+                currentSpeakerUrl = urlData.publicUrl;
+                document.getElementById('speaker_avatar').value = currentSpeakerUrl;
+                
+                progressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    progressEl.style.display = 'none';
+                }, 500);
+                
+                // Mettre à jour la prévisualisation dans la section intervenant
+                updateSpeakerPreview();
+                
+                console.log('Photo intervenant uploadée:', currentSpeakerUrl);
+                
+            } catch (err) {
+                console.error('Erreur:', err);
+                alert('Erreur lors de l\'upload');
+                progressEl.style.display = 'none';
+            }
+        }
+        
+        // Afficher la prévisualisation speaker
+        function showSpeakerPreview(src) {
+            const previewImg = document.getElementById('speaker-preview-img');
+            const placeholder = document.getElementById('speaker-upload-placeholder');
+            const removeBtn = document.getElementById('btn-remove-speaker');
+            
+            previewImg.src = src;
+            previewImg.style.display = 'block';
+            placeholder.style.display = 'none';
+            removeBtn.style.display = 'inline-flex';
+        }
+        
+        // Masquer la prévisualisation speaker
+        function hideSpeakerPreview() {
+            const previewImg = document.getElementById('speaker-preview-img');
+            const placeholder = document.getElementById('speaker-upload-placeholder');
+            const removeBtn = document.getElementById('btn-remove-speaker');
+            
+            previewImg.src = '';
+            previewImg.style.display = 'none';
+            placeholder.style.display = 'flex';
+            removeBtn.style.display = 'none';
+            
+            document.getElementById('speaker_avatar').value = '';
+            document.getElementById('speaker-file').value = '';
+            currentSpeakerUrl = null;
+            
+            // Mettre à jour la prévisualisation dans la section intervenant
+            updateSpeakerPreview();
+        }
+        
+        // Bouton supprimer photo speaker
+        document.getElementById('btn-remove-speaker').addEventListener('click', hideSpeakerPreview);
+
         // Ouvrir le modal
         function openModal(title = 'Nouveau webinaire') {
             document.getElementById('modal-title').textContent = title;
@@ -848,6 +1041,7 @@
             document.getElementById('webinaire-id').value = '';
             setAttendus(null);
             hideImagePreview();
+            hideSpeakerPreview();
             updateSpeakerPreview();
         }
 
@@ -855,6 +1049,7 @@
         document.getElementById('new-webinaire-btn').addEventListener('click', () => {
             setAttendus(null);
             hideImagePreview();
+            hideSpeakerPreview();
             openModal('Nouveau webinaire');
         });
 
@@ -909,6 +1104,14 @@
                 currentImageUrl = data.image_url;
             } else {
                 hideImagePreview();
+            }
+            
+            // Charger la photo speaker existante
+            if (data.speaker_avatar) {
+                showSpeakerPreview(data.speaker_avatar);
+                currentSpeakerUrl = data.speaker_avatar;
+            } else {
+                hideSpeakerPreview();
             }
 
             openModal('Modifier le webinaire');

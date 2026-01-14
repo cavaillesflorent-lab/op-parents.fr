@@ -393,13 +393,20 @@ section {
 .hero-tagline {
     display: inline-block;
     background: rgba(255, 255, 255, 0.95);
-    color: #E59403;
+    color: #2D403B;
     font-size: 0.9rem;
     font-weight: 600;
     padding: var(--space-xs) var(--space-md);
     border-radius: var(--radius-full);
     margin-bottom: var(--space-lg);
     box-shadow: var(--shadow-md);
+}
+
+/* Mots mis en avant dans le titre hero (Quiz, webinaires) */
+.hero-content h1 span,
+.hero-highlight {
+    color: #2D403B;
+    text-shadow: none;
 }
 
 .hero-content h1 {

@@ -392,11 +392,15 @@ class QuizEngine {
             .map(([code, score]) => {
                 const profileData = sequence.profiles?.[code];
                 let name = code;
-                if (typeof profileData === 'string') {
-                    name = profileData;
-                } else if (profileData && profileData.name) {
-                    name = profileData.name;
+                
+                if (profileData) {
+                    if (typeof profileData === 'string') {
+                        name = profileData;
+                    } else if (typeof profileData === 'object') {
+                        name = profileData.name || profileData.titre || code;
+                    }
                 }
+                
                 return {
                     code,
                     score,
@@ -624,28 +628,45 @@ class QuizEngine {
         const progress = this.sequenceProgress[seq.id];
         const scores = progress.scores;
 
+        console.log('=== BILAN SÉQUENCE ===');
+        console.log('Séquence:', seq.titre);
+        console.log('Scores:', scores);
+        console.log('Profils de la séquence:', seq.profiles);
+
         const total = Object.values(scores).reduce((a, b) => a + b, 0);
         const profileResults = Object.entries(scores)
             .map(([code, score]) => {
                 const profileData = seq.profiles?.[code];
+                console.log(`Profil ${code}:`, profileData);
+                
                 let name = code;
-                if (typeof profileData === 'string') {
-                    name = profileData;
-                } else if (profileData && profileData.name) {
-                    name = profileData.name;
+                let content = null;
+                
+                if (profileData) {
+                    if (typeof profileData === 'string') {
+                        // Ancien format: juste le nom
+                        name = profileData;
+                    } else if (typeof profileData === 'object') {
+                        // Nouveau format: { name: "...", content: "..." }
+                        name = profileData.name || profileData.titre || code;
+                        content = profileData.content || profileData.description || null;
+                    }
                 }
+                
                 return {
                     code,
                     score,
                     percent: total > 0 ? Math.round((score / total) * 100) : 0,
                     name: name,
-                    content: profileData?.content || null
+                    content: content
                 };
             })
             .filter(p => p.score > 0)
             .sort((a, b) => b.percent - a.percent);
 
+        console.log('Résultats profils:', profileResults);
         const dominant = profileResults[0];
+        console.log('Dominant:', dominant);
 
         let bilanScreen = document.getElementById('quiz-sequence-bilan');
         if (!bilanScreen) {
@@ -662,6 +683,9 @@ class QuizEngine {
 
         // Formater le contenu du profil dominant
         const profileContent = dominant?.content ? this.formatProfileContent(dominant.content) : '';
+        
+        // Message si profil dominant mais pas de contenu
+        const dominantTitle = dominant ? `<h3 class="dominant-profile-title">Ton profil : ${dominant.name}</h3>` : '';
 
         bilanScreen.innerHTML = `
             <div class="sequence-bilan-content">
@@ -669,6 +693,17 @@ class QuizEngine {
                     <span class="bilan-badge">✅ Séquence ${this.currentSequenceIndex + 1} terminée</span>
                     <h2>${seq.titre}</h2>
                 </div>
+
+                ${dominant ? `
+                    <div class="sequence-bilan-dominant">
+                        <span class="dominant-emoji">🎯</span>
+                        <div class="dominant-info">
+                            <span class="dominant-label">Ton profil dominant</span>
+                            <span class="dominant-name">${dominant.name}</span>
+                            <span class="dominant-percent">${dominant.percent}% de tes réponses</span>
+                        </div>
+                    </div>
+                ` : ''}
 
                 <div class="sequence-bilan-scores">
                     <p class="scores-title">Répartition de tes réponses</p>

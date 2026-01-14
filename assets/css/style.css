@@ -4992,3 +4992,63 @@ section {
 .sequence-bilan-profile-content h4:has(🌱) {
     color: var(--vert-fonce);
 }
+/* ============================================
+   BILAN SÉQUENCE - BLOC PROFIL DOMINANT
+   À AJOUTER dans style.css AVANT la section
+   "BILAN SÉQUENCE - CONTENU DU PROFIL FORMATÉ"
+   ============================================ */
+
+.sequence-bilan-dominant {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-lg);
+    text-align: left;
+}
+
+.sequence-bilan-dominant .dominant-emoji {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.sequence-bilan-dominant .dominant-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.sequence-bilan-dominant .dominant-label {
+    font-size: 0.85rem;
+    color: var(--vert-fonce);
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.sequence-bilan-dominant .dominant-name {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+    line-height: 1.2;
+}
+
+.sequence-bilan-dominant .dominant-percent {
+    font-size: 0.9rem;
+    color: var(--vert-fonce);
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+@media (max-width: 480px) {
+    .sequence-bilan-dominant {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .sequence-bilan-dominant .dominant-info {
+        align-items: center;
+    }
+}

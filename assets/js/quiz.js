@@ -842,6 +842,8 @@ class QuizEngine {
     showFinalResult() {
         this.hideAllScreens();
 
+        console.log('=== BILAN FINAL ===');
+
         // Calculer les scores globaux
         const globalScores = { A: 0, B: 0, C: 0, D: 0 };
         this.sequences.forEach(seq => {
@@ -853,37 +855,209 @@ class QuizEngine {
             }
         });
 
+        console.log('Scores globaux:', globalScores);
+
         const total = Object.values(globalScores).reduce((a, b) => a + b, 0);
-        const dominant = Object.entries(globalScores)
+        const dominantCode = Object.entries(globalScores)
             .sort((a, b) => b[1] - a[1])[0][0];
 
-        const profile = this.profiles.find(p => p.code === dominant) || this.getDefaultProfile(dominant);
+        // Chercher le profil global (table quiz_profiles)
+        const globalProfile = this.profiles.find(p => p.code === dominantCode) || this.getDefaultProfile(dominantCode);
+        console.log('Profil global dominant:', globalProfile);
 
-        this.markCompleted(dominant);
+        // Calculer les pourcentages globaux
+        const globalResults = Object.entries(globalScores)
+            .map(([code, score]) => {
+                const profile = this.profiles.find(p => p.code === code);
+                return {
+                    code,
+                    score,
+                    percent: total > 0 ? Math.round((score / total) * 100) : 0,
+                    name: profile?.nom || profile?.titre || `Profil ${code}`,
+                    emoji: profile?.emoji || '🎯'
+                };
+            })
+            .filter(p => p.score > 0)
+            .sort((a, b) => b.percent - a.percent);
 
-        document.getElementById('quiz-result-screen').style.display = 'block';
+        // Préparer le récapitulatif par séquence
+        const sequenceResults = this.sequences.map((seq, index) => {
+            const progress = this.sequenceProgress[seq.id];
+            if (!progress || !progress.scores) return null;
+            
+            const seqTotal = Object.values(progress.scores).reduce((a, b) => a + b, 0);
+            if (seqTotal === 0) return null;
+            
+            const dominant = Object.entries(progress.scores)
+                .sort((a, b) => b[1] - a[1])[0];
+            
+            const profileData = seq.profiles?.[dominant[0]];
+            let profileName = dominant[0];
+            if (profileData) {
+                if (typeof profileData === 'string') {
+                    profileName = profileData;
+                } else if (profileData.name) {
+                    profileName = profileData.name;
+                }
+            }
+            
+            return {
+                numero: index + 1,
+                titre: seq.titre,
+                dominantCode: dominant[0],
+                dominantName: profileName,
+                percent: Math.round((dominant[1] / seqTotal) * 100)
+            };
+        }).filter(Boolean);
 
-        // Afficher le profil (avec les bons IDs du HTML)
-        const resultIcon = document.getElementById('result-icon');
-        const resultName = document.getElementById('result-profile-name');
-        const resultSubtitle = document.getElementById('result-profile-subtitle');
-        const resultDesc = document.getElementById('result-description-text');
-        
-        if (resultIcon) resultIcon.textContent = profile.emoji || '🎯';
-        if (resultName) resultName.textContent = profile.titre || profile.nom || `Profil ${dominant}`;
-        if (resultSubtitle) resultSubtitle.textContent = profile.sous_titre || '';
-        if (resultDesc) resultDesc.textContent = profile.description || '';
+        this.markCompleted(dominantCode);
 
-        // Forces et vigilances
-        const forcesList = document.getElementById('result-forces-list');
-        const vigilancesList = document.getElementById('result-vigilances-list');
-        
-        if (forcesList && profile.forces && profile.forces.length > 0) {
-            forcesList.innerHTML = profile.forces.map(f => `<li>${f}</li>`).join('');
+        // Créer ou récupérer l'écran de résultat
+        let resultScreen = document.getElementById('quiz-result-screen');
+        if (!resultScreen) {
+            resultScreen = document.createElement('div');
+            resultScreen.id = 'quiz-result-screen';
+            resultScreen.className = 'quiz-result-screen';
+            const container = document.querySelector('.quiz-main');
+            if (container) {
+                container.appendChild(resultScreen);
+            } else {
+                document.body.appendChild(resultScreen);
+            }
         }
-        if (vigilancesList && profile.vigilances && profile.vigilances.length > 0) {
-            vigilancesList.innerHTML = profile.vigilances.map(v => `<li>${v}</li>`).join('');
-        }
+
+        // Générer le HTML complet
+        resultScreen.innerHTML = `
+            <div class="result-content">
+                <!-- Header célébration -->
+                <div class="result-celebration">
+                    <span class="celebration-emoji">🎉</span>
+                    <h1>Quiz terminé !</h1>
+                    <p class="result-quiz-title">${this.quiz.titre}</p>
+                </div>
+
+                <!-- Profil dominant global -->
+                <div class="result-main-profile">
+                    <div class="result-profile-badge">Ton profil dominant</div>
+                    <div class="result-profile-icon">${globalProfile.emoji || '🎯'}</div>
+                    <h2 class="result-profile-name">${globalProfile.titre || globalProfile.nom || `Profil ${dominantCode}`}</h2>
+                    ${globalProfile.sous_titre ? `<p class="result-profile-subtitle">${globalProfile.sous_titre}</p>` : ''}
+                    <div class="result-profile-percent">
+                        <span class="percent-value">${globalResults[0]?.percent || 0}%</span>
+                        <span class="percent-label">de tes réponses</span>
+                    </div>
+                </div>
+
+                <!-- Description du profil -->
+                ${globalProfile.description ? `
+                    <div class="result-description">
+                        <p>${globalProfile.description}</p>
+                    </div>
+                ` : ''}
+
+                <!-- Forces et vigilances -->
+                ${(globalProfile.forces?.length > 0 || globalProfile.vigilances?.length > 0) ? `
+                    <div class="result-traits">
+                        ${globalProfile.forces?.length > 0 ? `
+                            <div class="trait-card forces">
+                                <div class="trait-header">
+                                    <span class="trait-icon">💪</span>
+                                    <h3>Tes forces</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${globalProfile.forces.map(f => `<li>${f}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        ${globalProfile.vigilances?.length > 0 ? `
+                            <div class="trait-card vigilances">
+                                <div class="trait-header">
+                                    <span class="trait-icon">⚠️</span>
+                                    <h3>Points de vigilance</h3>
+                                </div>
+                                <ul class="trait-list">
+                                    ${globalProfile.vigilances.map(v => `<li>${v}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+
+                <!-- Répartition globale -->
+                <div class="result-distribution">
+                    <h3>📊 Répartition globale</h3>
+                    <div class="distribution-bars">
+                        ${['A', 'B', 'C', 'D'].map(code => {
+                            const result = globalResults.find(p => p.code === code) || { percent: 0, name: `Profil ${code}` };
+                            const isWinner = code === dominantCode;
+                            return `
+                                <div class="distribution-bar ${isWinner ? 'winner' : ''} ${result.percent === 0 ? 'empty' : ''}">
+                                    <div class="dist-header">
+                                        <span class="dist-letter ${isWinner ? 'winner' : ''}">${code}</span>
+                                        <span class="dist-name">${result.name}</span>
+                                        <span class="dist-percent">${result.percent}%</span>
+                                    </div>
+                                    <div class="dist-track">
+                                        <div class="dist-fill" style="width: ${result.percent}%"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Récapitulatif par séquence -->
+                ${sequenceResults.length > 0 ? `
+                    <div class="result-sequences-recap">
+                        <h3>📑 Tes résultats par séquence</h3>
+                        <div class="sequences-recap-grid">
+                            ${sequenceResults.map(seq => `
+                                <div class="sequence-recap-card">
+                                    <div class="recap-seq-header">
+                                        <span class="recap-seq-num">Séq. ${seq.numero}</span>
+                                        <span class="recap-seq-title">${seq.titre}</span>
+                                    </div>
+                                    <div class="recap-seq-result">
+                                        <span class="recap-profile-name">${seq.dominantName}</span>
+                                        <span class="recap-profile-percent">${seq.percent}%</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Message de conclusion -->
+                ${this.quiz.conclusion_quote ? `
+                    <div class="result-quote">
+                        <blockquote>"${this.quiz.conclusion_quote}"</blockquote>
+                    </div>
+                ` : ''}
+
+                <!-- CTA final -->
+                <div class="result-cta">
+                    ${this.quiz.conclusion_cta ? `<p class="cta-text">${this.quiz.conclusion_cta}</p>` : ''}
+                    <div class="result-buttons">
+                        <a href="webinaires.html" class="btn-result-primary">
+                            🎥 Découvrir les webinaires
+                        </a>
+                        <button class="btn-result-secondary" id="btn-restart-quiz">
+                            🔄 Refaire le quiz
+                        </button>
+                    </div>
+                    <a href="quizzes.html" class="btn-back-quizzes">← Retour aux quiz</a>
+                </div>
+            </div>
+        `;
+
+        resultScreen.style.display = 'block';
+
+        // Bind du bouton refaire
+        document.getElementById('btn-restart-quiz')?.addEventListener('click', () => {
+            this.clearProgress();
+            this.initializeSequenceProgress();
+            this.showIntro();
+        });
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }

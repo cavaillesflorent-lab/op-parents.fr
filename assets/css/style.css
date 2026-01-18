@@ -6389,3 +6389,15 @@ section {
     flex-direction: column;
     gap: var(--space-md);
 }
+
+/* Carte webinaire cliquable */
+.webinaire-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.webinaire-card-link:hover .webinaire-card {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(45, 64, 59, 0.15);
+}

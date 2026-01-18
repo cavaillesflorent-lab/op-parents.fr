@@ -36,10 +36,10 @@
             line-height: 1.7;
         }
         
-        /* Section Constat */
+        /* Section Constat - Fond Saumon */
         .mission-constat {
             padding: var(--space-3xl) 0;
-            background: var(--white);
+            background: #F2B47E;
         }
         
         .constat-content {
@@ -58,7 +58,7 @@
         .constat-text {
             font-size: 1.15rem;
             line-height: 1.9;
-            color: var(--text-secondary);
+            color: var(--vert-fonce);
             margin-bottom: var(--space-lg);
         }
         
@@ -67,15 +67,16 @@
             font-weight: 600;
             color: var(--vert-fonce);
             padding: var(--space-lg);
-            background: var(--vert-clair);
+            background: var(--white);
             border-radius: var(--radius-xl);
             margin-top: var(--space-xl);
+            box-shadow: var(--shadow-sm);
         }
         
-        /* Section Vision */
+        /* Section Vision - Fond Blanc */
         .mission-vision {
             padding: var(--space-3xl) 0;
-            background: #FDF8F3;
+            background: var(--white);
         }
         
         .vision-content {
@@ -113,7 +114,7 @@
             align-items: center;
             gap: var(--space-md);
             padding: var(--space-md) var(--space-lg);
-            background: var(--white);
+            background: #DFF2B6;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-sm);
         }
@@ -140,10 +141,10 @@
             color: var(--vert-fonce);
         }
         
-        /* Section Questions */
+        /* Section Questions - Fond Jaune */
         .mission-questions {
             padding: var(--space-3xl) 0;
-            background: var(--white);
+            background: #F2D680;
         }
         
         .questions-content {
@@ -171,16 +172,16 @@
             align-items: center;
             gap: var(--space-md);
             padding: var(--space-md) var(--space-lg);
-            background: var(--gray-50);
+            background: var(--white);
             border-radius: var(--radius-lg);
-            border-left: 4px solid var(--peche);
+            border-left: 4px solid var(--vert-fonce);
             transition: all 0.2s ease;
         }
         
         .question-card:hover {
             transform: translateX(5px);
-            border-left-color: var(--vert-fonce);
-            background: var(--vert-clair);
+            border-left-color: var(--terracotta);
+            background: rgba(255, 255, 255, 0.8);
         }
         
         .question-card-icon {
@@ -197,20 +198,14 @@
         .questions-conclusion {
             text-align: center;
             font-size: 1.1rem;
-            color: var(--text-secondary);
+            color: var(--vert-fonce);
             padding-top: var(--space-md);
-            border-top: 2px dashed var(--gray-200);
         }
         
-        /* Section Concret */
+        /* Section Concret - Fond Vert */
         .mission-concrete {
             padding: var(--space-3xl) 0;
-            background: var(--vert-clair);
-        }
-        
-        .concrete-content {
-            max-width: 900px;
-            margin: 0 auto;
+            background: #DFF2B6;
         }
         
         .concrete-content h2 {
@@ -262,15 +257,26 @@
         
         .concrete-promise {
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--vert-fonce);
             font-weight: 600;
+            background: var(--white);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            display: inline-block;
+            box-shadow: var(--shadow-sm);
         }
         
-        /* Section Fondateurs */
+        .concrete-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        /* Section Fondateurs - Fond Saumon léger */
         .mission-founders {
             padding: var(--space-3xl) 0;
-            background: var(--white);
+            background: #F2B47E;
         }
         
         .founders-content {
@@ -297,11 +303,12 @@
             display: flex;
             gap: var(--space-xl);
             align-items: center;
-            background: var(--gray-50);
+            background: var(--white);
             border-radius: var(--radius-2xl);
             padding: var(--space-xl);
             text-align: left;
             margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-sm);
         }
         
         .founders-avatars {

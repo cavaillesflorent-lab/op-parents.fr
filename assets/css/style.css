@@ -698,7 +698,7 @@ section {
 }
 
 .stat-card {
-    background: var(--jaune-dore);
+    background: #DFF2B6;
     padding: var(--space-xl);
     border-radius: var(--radius-xl);
     text-align: center;

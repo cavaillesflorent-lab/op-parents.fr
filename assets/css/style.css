@@ -1104,7 +1104,7 @@ section {
 }
 
 .cta-final h2 {
-    color: var(--white);
+    color: var(--vert-fonce);
     margin-bottom: var(--space-xl);
 }
 
@@ -1125,8 +1125,8 @@ section {
 }
 
 .cta-final .btn-secondary {
-    border-color: var(--white);
-    color: var(--white);
+    border-color: var(--vert-fonce);
+    color: var(--vert-fonce);
 }
 
 .cta-final .btn-secondary:hover {

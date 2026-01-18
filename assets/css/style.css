@@ -1098,7 +1098,7 @@ section {
    ======================================== */
 
 .cta-final {
-    background: var(--vert-fonce);
+    background: #FDF8F3;
     text-align: center;
     padding: var(--space-4xl) 0;
 }

@@ -105,6 +105,15 @@
             justify-content: center;
             font-size: 4rem;
             flex-shrink: 0;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .expert-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
         }
         
         .expert-info h2 {
@@ -465,6 +474,11 @@
                 text-align: center;
             }
             
+            .expert-avatar {
+                width: 120px;
+                height: 120px;
+            }
+            
             .expert-badges {
                 justify-content: center;
             }
@@ -545,7 +559,7 @@
             <div class="container">
                 <div class="expert-card">
                     <div class="expert-avatar">
-                        <span>👔</span>
+                        <img src="assets/images/florent.png" alt="Florent">
                     </div>
                     <div class="expert-info">
                         <h2>Florent</h2>

@@ -7,6 +7,434 @@
     <meta name="description" content="OP! est le repère financier de confiance pour les parents. Accessible, ludique, fiable. Découvrez notre mission.">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="canonical" href="https://op-parents.fr/mission.html">
+    <style>
+        /* Styles spécifiques page Mission */
+        
+        /* Hero Mission - Plus impactant */
+        .mission-hero {
+            padding: var(--space-3xl) 0;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .mission-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .mission-hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: var(--space-md);
+        }
+        
+        .mission-hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+        
+        /* Section Constat */
+        .mission-constat {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .constat-content {
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .constat-content h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .constat-text {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .constat-highlight {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+            padding: var(--space-lg);
+            background: var(--vert-clair);
+            border-radius: var(--radius-xl);
+            margin-top: var(--space-xl);
+        }
+        
+        /* Section Vision */
+        .mission-vision {
+            padding: var(--space-3xl) 0;
+            background: #FDF8F3;
+        }
+        
+        .vision-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .vision-content h2 {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-md);
+        }
+        
+        .vision-tagline {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--terracotta);
+            font-weight: 600;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .vision-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto var(--space-xl);
+        }
+        
+        .vision-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .vision-item-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .vision-item-text {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+        }
+        
+        .vision-conclusion {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        
+        .vision-conclusion strong {
+            color: var(--vert-fonce);
+        }
+        
+        /* Section Questions */
+        .mission-questions {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .questions-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .questions-content h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-xl);
+            text-align: center;
+        }
+        
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .question-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--peche);
+            transition: all 0.2s ease;
+        }
+        
+        .question-card:hover {
+            transform: translateX(5px);
+            border-left-color: var(--vert-fonce);
+            background: var(--vert-clair);
+        }
+        
+        .question-card-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        
+        .question-card-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .questions-conclusion {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            padding-top: var(--space-md);
+            border-top: 2px dashed var(--gray-200);
+        }
+        
+        /* Section Concret */
+        .mission-concrete {
+            padding: var(--space-3xl) 0;
+            background: var(--vert-clair);
+        }
+        
+        .concrete-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .concrete-content h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-xl);
+            text-align: center;
+        }
+        
+        .concrete-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .concrete-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .concrete-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .concrete-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .concrete-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .concrete-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .concrete-promise {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+            font-weight: 600;
+        }
+        
+        /* Section Fondateurs */
+        .mission-founders {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .founders-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .founders-content h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .founders-subtitle {
+            font-size: 1.1rem;
+            color: var(--terracotta);
+            font-weight: 600;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .founders-card {
+            display: flex;
+            gap: var(--space-xl);
+            align-items: center;
+            background: var(--gray-50);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            text-align: left;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .founders-avatars {
+            display: flex;
+            flex-shrink: 0;
+        }
+        
+        .founder-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid var(--white);
+        }
+        
+        .founder-avatar.florent {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            z-index: 1;
+        }
+        
+        .founder-avatar.charlene {
+            background: linear-gradient(135deg, var(--peche) 0%, var(--jaune-dore) 100%);
+            margin-left: -20px;
+        }
+        
+        .founders-text {
+            flex: 1;
+        }
+        
+        .founders-text p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        /* CTA Final */
+        .mission-cta {
+            padding: var(--space-3xl) 0;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+        }
+        
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            color: var(--white);
+        }
+        
+        .cta-content h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .cta-btn.primary {
+            background: var(--white);
+            color: var(--vert-fonce);
+        }
+        
+        .cta-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .cta-btn.secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .cta-btn.secondary:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-btn.tertiary {
+            background: var(--peche);
+            color: var(--vert-fonce);
+        }
+        
+        .cta-btn.tertiary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .questions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .concrete-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .founders-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -14,193 +442,173 @@
 
     <main>
         <!-- HERO -->
-        <section class="page-hero">
-            <div class="page-hero-content">
-                <span class="page-hero-badge">🧭 Notre Mission</span>
-                <h1>Et si vous n'aviez rien à regretter ?</h1>
-                <p>Les voyages qu'on repousse. La sécurité qu'on n'a jamais vraiment. Le temps qu'on passe à courir sans savoir où. OP! existe pour que vous puissiez enfin faire une pause, y voir clair, et construire la vie que vous voulez vraiment.</p>
+        <section class="mission-hero">
+            <div class="container">
+                <div class="mission-hero-content">
+                    <h1>Et si vous n'aviez rien à regretter ?</h1>
+                    <p class="mission-hero-subtitle">Les voyages qu'on repousse. La sécurité qu'on n'a jamais vraiment. Le temps qu'on passe à courir sans savoir où. OP! existe pour que vous puissiez enfin faire une pause, y voir clair, et construire la vie que vous voulez vraiment.</p>
+                </div>
             </div>
         </section>
 
-    <!-- LE PROBLÈME -->
-    <section class="mission-problem">
-        <div class="container">
-            <div class="problem-card">
-                <h2><span class="emoji">😤</span> Le problème qu'on veut résoudre</h2>
-                <div class="problem-grid">
-                    <div class="problem-item">
-                        <span class="emoji">🤷</span>
-                        <div>
-                            <strong>Pas de repères.</strong>
-                            <p>Vers qui se tourner ? Le banquier ? Un conseiller ? Lequel ?</p>
-                        </div>
-                    </div>
-                    <div class="problem-item">
-                        <span class="emoji">😰</span>
-                        <div>
-                            <strong>La peur de se faire avoir.</strong>
-                            <p>Trop d'histoires de mauvais conseils, de frais cachés, de produits inadaptés.</p>
-                        </div>
-                    </div>
-                    <div class="problem-item">
-                        <span class="emoji">🤯</span>
-                        <div>
-                            <strong>Un sujet opaque.</strong>
-                            <p>Jargon, complexité, sentiment de ne pas être légitime.</p>
-                        </div>
-                    </div>
-                    <div class="problem-item">
-                        <span class="emoji">🚪</span>
-                        <div>
-                            <strong>Un monde inaccessible.</strong>
-                            <p>Les conseillers en patrimoine ? "C'est pas pour nous."</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="problem-result">Résultat : les parents <strong>n'agissent pas</strong>, <strong>reportent</strong>, ou <strong>font des erreurs</strong> qu'ils auraient pu éviter.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- LA SOLUTION -->
-    <section class="mission-solution">
-        <div class="container">
-            <div class="solution-card">
-                <h2><span class="emoji">💡</span> Notre réponse : OP!</h2>
-                <p class="solution-tagline">Le repère financier de confiance pour les parents.</p>
-                <p class="solution-description">Une plateforme qui démystifie les finances familiales. Pas pour te vendre des produits. Pour te donner les clés de compréhension et t'accompagner dans la durée.</p>
-                
-                <div class="solution-pillars">
-                    <div class="pillar">
-                        <div class="pillar-icon">📖</div>
-                        <h3>Accessible</h3>
-                        <p>Zéro jargon, tout est expliqué simplement</p>
-                    </div>
-                    <div class="pillar">
-                        <div class="pillar-icon">🎮</div>
-                        <h3>Ludique</h3>
-                        <p>Apprendre sans s'ennuyer, avancer à son rythme</p>
-                    </div>
-                    <div class="pillar">
-                        <div class="pillar-icon">🤝</div>
-                        <h3>De confiance</h3>
-                        <p>Indépendant, transparent, dans ton intérêt</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONCRÈTEMENT -->
-    <section class="mission-concrete">
-        <div class="container">
-            <h2><span class="emoji">📱</span> Concrètement, OP! c'est quoi ?</h2>
-            <div class="concrete-grid">
-                <div class="concrete-item">
-                    <span class="concrete-icon">🎓</span>
-                    <div>
-                        <h3>Des formations</h3>
-                        <p>Pour comprendre les bases et aller plus loin, à ton rythme</p>
-                    </div>
-                </div>
-                <div class="concrete-item">
-                    <span class="concrete-icon">🎥</span>
-                    <div>
-                        <h3>Des webinaires</h3>
-                        <p>En live avec Florent pour poser tes questions</p>
-                    </div>
-                </div>
-                <div class="concrete-item">
-                    <span class="concrete-icon">🎯</span>
-                    <div>
-                        <h3>Des missions</h3>
-                        <p>Des actions concrètes à faire, étape par étape</p>
-                    </div>
-                </div>
-                <div class="concrete-item">
-                    <span class="concrete-icon">💬</span>
-                    <div>
-                        <h3>Un accompagnement</h3>
-                        <p>La possibilité d'échanger avec un vrai expert si besoin</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FONDATEURS -->
-    <section class="mission-founders">
-        <div class="container">
-            <p class="founders-intro">Derrière OP!, il y a nous : <strong>Florent & Charlène</strong>, parents de deux enfants.</p>
-            
-            <div class="founders-grid">
-                <div class="founder-card">
-                    <div class="founder-avatar florent">👔</div>
-                    <div class="founder-info">
-                        <h3>Florent</h3>
-                        <span class="founder-role">Ingénieur patrimonial</span>
-                    </div>
-                    <p class="founder-bio">Depuis des années, il accompagne des familles dans leurs choix financiers. Ce qu'il a vu sur le terrain : des parents intelligents mais perdus, des décisions prises sans vraie compréhension. <strong>Son rôle dans OP!</strong> : rendre accessible ce qui ne l'est pas toujours.</p>
-                </div>
-                
-                <div class="founder-card">
-                    <div class="founder-avatar charlene">✊</div>
-                    <div class="founder-info">
-                        <h3>Charlène</h3>
-                        <span class="founder-role">Co-fondatrice</span>
-                    </div>
-                    <p class="founder-bio">Féministe dans l'âme, elle veut que les femmes reprennent leur place dans les décisions financières. Trop longtemps, elles se sont senties illégitimes face à l'argent. <strong>Son rôle dans OP!</strong> : s'assurer que tout soit clair, humain et vraiment utile.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- POUR QUI -->
-    <section class="mission-for-who">
-        <div class="container">
-            <h2><span class="emoji">💛</span> OP!, c'est pour qui ?</h2>
-            <div class="for-who-grid">
-                <div class="for-who-item">
-                    <span class="for-who-icon">🙋</span>
-                    <p>Les parents qui veulent <strong>des repères fiables</strong> sans y passer des heures</p>
-                </div>
-                <div class="for-who-item">
-                    <span class="for-who-icon">🤔</span>
-                    <p>Ceux qui veulent <strong>comprendre avant de décider</strong> (et pas l'inverse)</p>
-                </div>
-                <div class="for-who-item">
-                    <span class="for-who-icon">👨‍👩‍👧</span>
-                    <p>Les familles qui veulent transmettre <strong>une relation saine à l'argent</strong></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- QUOTE -->
-    <section class="mission-quote">
-        <div class="container">
-            <blockquote>
-                <p>OP!, c'est le repère que tout parent devrait avoir.</p>
-                <span>À portée de main, pour toute la vie. 💛</span>
-            </blockquote>
-        </div>
-    </section>
-
-    <!-- CTA FINAL -->
-        <section class="page-cta-section">
+        <!-- LE CONSTAT -->
+        <section class="mission-constat">
             <div class="container">
-                <div class="page-cta-card">
-                    <div class="page-cta-content">
-                        <h2>Prêt à avoir enfin des repères ?</h2>
-                        <p>Rejoins OP! et reprends le contrôle sur tes finances familiales.</p>
+                <div class="constat-content">
+                    <h2>Le constat</h2>
+                    
+                    <p class="constat-text">
+                        On court. On gère le quotidien. On se dit qu'on verra plus tard.
+                    </p>
+                    
+                    <p class="constat-text">
+                        Et un jour on réalise qu'on a laissé filer des années sans prendre le temps de se poser les bonnes questions : qu'est-ce qu'on veut vraiment ? Est-ce qu'on est sur la bonne trajectoire ? Est-ce que nos choix d'aujourd'hui nous rapprochent de la vie qu'on imagine — ou nous en éloignent ?
+                    </p>
+                    
+                    <div class="constat-highlight">
+                        L'argent n'est pas une fin. Mais c'est un levier.<br>
+                        <strong>Mal compris, il nous bloque. Bien utilisé, il nous libère.</strong>
                     </div>
-                    <div class="page-cta-buttons">
-                        <a href="formations.html" class="page-cta-btn">
-                            📚 Voir les formations
-                            <span class="arrow">→</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CE QU'ON VEUT POUR VOUS -->
+        <section class="mission-vision">
+            <div class="container">
+                <div class="vision-content">
+                    <h2>Ce qu'on veut pour vous</h2>
+                    <p class="vision-tagline">Une vie riche. Dans tous les sens du terme.</p>
+                    
+                    <div class="vision-list">
+                        <div class="vision-item">
+                            <span class="vision-item-icon">🛡️</span>
+                            <span class="vision-item-text">La sécurité pour votre famille</span>
+                        </div>
+                        <div class="vision-item">
+                            <span class="vision-item-icon">🕊️</span>
+                            <span class="vision-item-text">La liberté de faire des choix</span>
+                        </div>
+                        <div class="vision-item">
+                            <span class="vision-item-icon">🎯</span>
+                            <span class="vision-item-text">Les projets qu'on concrétise au lieu de les rêver</span>
+                        </div>
+                        <div class="vision-item">
+                            <span class="vision-item-icon">💭</span>
+                            <span class="vision-item-text">Ne pas arriver dans 20 ans en se disant "j'aurais dû"</span>
+                        </div>
+                    </div>
+                    
+                    <p class="vision-conclusion">
+                        <strong>OP! est là pour ça.</strong> Vous aider à vous poser, à comprendre où vous en êtes, et à faire des choix éclairés — pour devenir la meilleure version de vous-même.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- OU PEUT-ÊTRE UNE QUESTION SIMPLE -->
+        <section class="mission-questions">
+            <div class="container">
+                <div class="questions-content">
+                    <h2>Ou peut-être une question toute simple</h2>
+                    
+                    <div class="questions-grid">
+                        <div class="question-card">
+                            <span class="question-card-icon">💰</span>
+                            <span class="question-card-text">"J'ai de l'épargne qui dort, je fais quoi ?"</span>
+                        </div>
+                        <div class="question-card">
+                            <span class="question-card-icon">🎯</span>
+                            <span class="question-card-text">"Le PER, c'est intéressant pour moi ?"</span>
+                        </div>
+                        <div class="question-card">
+                            <span class="question-card-icon">👨‍👩‍👧</span>
+                            <span class="question-card-text">"Comment protéger ma famille si je disparais ?"</span>
+                        </div>
+                        <div class="question-card">
+                            <span class="question-card-icon">🏠</span>
+                            <span class="question-card-text">"On achète ou on continue de louer ?"</span>
+                        </div>
+                        <div class="question-card">
+                            <span class="question-card-icon">📋</span>
+                            <span class="question-card-text">"Mon assurance-vie date de 2012, elle tient encore la route ?"</span>
+                        </div>
+                    </div>
+                    
+                    <p class="questions-conclusion">
+                        Pas besoin d'une grande réflexion existentielle pour venir nous voir.<br>
+                        <strong>Une question concrète, c'est déjà une bonne raison.</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CE QU'ON FAIT CONCRÈTEMENT -->
+        <section class="mission-concrete">
+            <div class="container">
+                <div class="concrete-content">
+                    <h2>Ce qu'on fait concrètement</h2>
+                    
+                    <div class="concrete-grid">
+                        <div class="concrete-card">
+                            <div class="concrete-card-icon">🧠</div>
+                            <h3>Des quiz</h3>
+                            <p>Pour faire le point sur ta situation et identifier tes priorités</p>
+                        </div>
+                        <div class="concrete-card">
+                            <div class="concrete-card-icon">🎥</div>
+                            <h3>Des webinaires</h3>
+                            <p>Pour comprendre ce qu'on n'a jamais appris à l'école</p>
+                        </div>
+                        <div class="concrete-card">
+                            <div class="concrete-card-icon">💬</div>
+                            <h3>Un accompagnement</h3>
+                            <p>Quand tu as besoin d'un regard expert sur ta situation</p>
+                        </div>
+                    </div>
+                    
+                    <p class="concrete-promise">
+                        Pas de jargon. Pas de pression. Juste un repère fiable pour avancer.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUI SOMMES-NOUS -->
+        <section class="mission-founders">
+            <div class="container">
+                <div class="founders-content">
+                    <h2>Qui sommes-nous</h2>
+                    <p class="founders-subtitle">Florent & Charlène — parents de deux enfants</p>
+                    
+                    <div class="founders-card">
+                        <div class="founders-avatars">
+                            <div class="founder-avatar florent">👔</div>
+                            <div class="founder-avatar charlene">✊</div>
+                        </div>
+                        <div class="founders-text">
+                            <p>On a créé OP! parce qu'on sait à quel point c'est difficile de trouver des réponses fiables sur l'argent. On voulait un repère de confiance. <strong>Il n'existait pas, alors on l'a construit.</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="mission-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Par où commencer ?</h2>
+                    
+                    <div class="cta-buttons">
+                        <a href="quiz.html" class="cta-btn primary">
+                            <span>🧠</span> Faire un quiz
                         </a>
-                        <a href="webinaires.html" class="page-cta-btn-secondary">
-                            🎥 Voir les webinaires
+                        <a href="webinaires.html" class="cta-btn secondary">
+                            <span>🎥</span> Voir les webinaires
+                        </a>
+                        <a href="investir.html" class="cta-btn tertiary">
+                            <span>💬</span> Parler à Florent
                         </a>
                     </div>
                 </div>

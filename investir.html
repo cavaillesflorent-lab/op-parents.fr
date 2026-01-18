@@ -6,6 +6,488 @@
     <title>Investir - OP! Accompagnement patrimonial personnalisé</title>
     <meta name="description" content="Bénéficiez d'un accompagnement personnalisé avec Florent, ingénieur patrimonial. Structurez vos finances et investissez en toute confiance.">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Styles spécifiques page Investir */
+        
+        /* Section Pourquoi consulter */
+        .investir-why-section {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .why-card {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .why-card h2 {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-md);
+            text-align: center;
+        }
+        
+        .why-intro {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            line-height: 1.7;
+        }
+        
+        .why-questions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .why-question {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            background: #FDF8F3;
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--peche);
+            transition: all 0.2s ease;
+        }
+        
+        .why-question:hover {
+            transform: translateX(5px);
+            border-left-color: var(--vert-fonce);
+        }
+        
+        .why-question-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        
+        .why-question-text {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .why-conclusion {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        
+        /* Section Expert améliorée */
+        .investir-expert-section {
+            padding: var(--space-3xl) 0;
+            background: var(--vert-clair);
+        }
+        
+        .expert-card {
+            display: flex;
+            gap: var(--space-xl);
+            align-items: center;
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .expert-avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            flex-shrink: 0;
+        }
+        
+        .expert-info h2 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .expert-subtitle {
+            font-size: 1rem;
+            color: var(--terracotta);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+        
+        .expert-bio {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .expert-bio strong {
+            color: var(--vert-fonce);
+        }
+        
+        .expert-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        
+        .expert-badges .badge {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Section Services améliorée */
+        .investir-services-section {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: var(--gray-50);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--vert-clair);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+        
+        .service-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Section Process améliorée */
+        .investir-process-section {
+            padding: var(--space-3xl) 0;
+            background: var(--gray-50);
+        }
+        
+        .process-steps {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .process-step {
+            display: flex;
+            gap: var(--space-lg);
+            align-items: flex-start;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--vert-fonce);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-xs);
+        }
+        
+        .step-content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .step-tag {
+            display: inline-block;
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: var(--space-sm);
+        }
+        
+        .process-connector {
+            width: 3px;
+            height: 30px;
+            background: var(--vert-clair);
+            margin-left: calc(var(--space-lg) + 23px);
+        }
+        
+        /* Section Rémunération (nouvelle) */
+        .investir-pricing-section {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .pricing-card-simple {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            color: var(--white);
+        }
+        
+        .pricing-card-simple h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--white);
+            margin-bottom: var(--space-md);
+            text-align: center;
+        }
+        
+        .pricing-intro {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: var(--space-lg);
+            opacity: 0.95;
+        }
+        
+        .pricing-description {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .pricing-highlight {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .pricing-highlight-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--vert-clair);
+            margin-bottom: var(--space-md);
+        }
+        
+        .pricing-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .pricing-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: var(--space-sm);
+            opacity: 0.95;
+        }
+        
+        .pricing-points li:last-child {
+            margin-bottom: 0;
+        }
+        
+        .pricing-points li::before {
+            content: '✓';
+            color: var(--vert-clair);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        /* Témoignages */
+        .investir-testimonials-section {
+            padding: var(--space-3xl) 0;
+            background: #FDF8F3;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .testimonial-stars {
+            font-size: 0.9rem;
+            margin-bottom: var(--space-md);
+            letter-spacing: 2px;
+        }
+        
+        .testimonial-text {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-md);
+        }
+        
+        .testimonial-author {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        
+        /* CTA Final */
+        .investir-cta-section {
+            padding: var(--space-3xl) 0;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
+        }
+        
+        .investir-cta-card {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--white);
+        }
+        
+        .investir-cta-card h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .investir-cta-card > p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        
+        .investir-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .investir-cta-btn.primary {
+            background: var(--white);
+            color: var(--vert-fonce);
+        }
+        
+        .investir-cta-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .investir-cta-btn.secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .investir-cta-btn.secondary:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-note {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .expert-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .expert-badges {
+                justify-content: center;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .investir-cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -14,27 +496,51 @@
     <main>
         <!-- HERO -->
         <section class="page-hero">
-            <div class="page-hero-content">
-                <span class="page-hero-badge">💼 Accompagnement</span>
-                <h1>Quand les quiz et webinaires ne suffisent plus</h1>
-                <p>Tu as compris les bases. Maintenant tu as besoin d'un regard expert sur ta situation — quelqu'un qui prend le temps d'expliquer avant de proposer.</p>
+            <div class="page-hero-decoration">
+                <div class="hero-circle circle-1"></div>
+                <div class="hero-circle circle-2"></div>
+                <div class="hero-circle circle-3"></div>
+            </div>
+            <div class="container">
+                <div class="page-hero-content">
+                    <span class="page-hero-badge">💼 Accompagnement</span>
+                    <h1>Quand les quiz et webinaires ne suffisent plus</h1>
+                    <p>Tu as compris les bases. Maintenant tu as besoin d'un regard expert sur ta situation — quelqu'un qui prend le temps d'expliquer avant de proposer.</p>
+                </div>
             </div>
         </section>
 
-        <!-- INTRO -->
-        <section class="investir-intro-section">
+        <!-- POURQUOI CONSULTER -->
+        <section class="investir-why-section">
             <div class="container">
-                <div class="investir-intro">
-                    <div class="investir-intro-text">
-                        <h2>Pourquoi un accompagnement ?</h2>
-                        <p>Les formations et webinaires te donnent les bases. Mais parfois, tu as besoin d'un regard expert sur <strong>ta situation personnelle</strong>.</p>
-                        <p>C'est là que Florent intervient : il t'aide à y voir clair, à structurer tes finances et à prendre les bonnes décisions pour ta famille.</p>
-                    </div>
-                    <div class="investir-intro-image">
-                        <div class="intro-image-placeholder">
-                            <span>👔</span>
+                <div class="why-card">
+                    <h2>À quel moment consulter ?</h2>
+                    <p class="why-intro">Les quiz t'ont aidé à te situer. Les webinaires t'ont donné les clés.<br>Mais face à certaines décisions, tu as besoin de quelqu'un qui regarde <strong>ton cas</strong> :</p>
+                    
+                    <div class="why-questions">
+                        <div class="why-question">
+                            <span class="why-question-icon">💰</span>
+                            <span class="why-question-text">"J'ai de l'épargne qui dort, je fais quoi ?"</span>
+                        </div>
+                        <div class="why-question">
+                            <span class="why-question-icon">🏠</span>
+                            <span class="why-question-text">"On achète ou on continue de louer ?"</span>
+                        </div>
+                        <div class="why-question">
+                            <span class="why-question-icon">👨‍👩‍👧</span>
+                            <span class="why-question-text">"Comment protéger ma famille si je disparais ?"</span>
+                        </div>
+                        <div class="why-question">
+                            <span class="why-question-icon">📋</span>
+                            <span class="why-question-text">"Mon assurance-vie date de 2012, elle est encore bien ?"</span>
+                        </div>
+                        <div class="why-question">
+                            <span class="why-question-icon">🎯</span>
+                            <span class="why-question-text">"Le PER, c'est vraiment intéressant pour moi ?"</span>
                         </div>
                     </div>
+                    
+                    <p class="why-conclusion">C'est là que Florent intervient.</p>
                 </div>
             </div>
         </section>
@@ -47,13 +553,13 @@
                         <span>👔</span>
                     </div>
                     <div class="expert-info">
-                        <h2>Florent, ton expert patrimonial</h2>
-                        <p class="expert-title">Ingénieur en gestion de patrimoine • Co-fondateur d'OP!</p>
-                        <p class="expert-bio">Ancien militaire devenu expert patrimonial, Florent accompagne depuis plus de 10 ans des familles dans leurs décisions financières. Il a créé OP! pour démocratiser l'accès à une vraie éducation financière, sans conflits d'intérêts.</p>
+                        <h2>Florent</h2>
+                        <p class="expert-subtitle">Ingénieur patrimonial · Fondateur d'OP!</p>
+                        <p class="expert-bio"><strong>Ton copilote financier.</strong> Florent a créé OP! après des années à conseiller des familles et à constater le même problème : personne ne prend le temps d'expliquer. Son approche est simple — comprendre ta situation, répondre à tes questions, t'aider à y voir clair. Il te dira clairement quelle est la meilleure option pour <strong>TOI</strong>, pas pour lui !</p>
                         <div class="expert-badges">
                             <span class="badge">🏅 Certifié ORIAS</span>
                             <span class="badge">📚 +150 familles accompagnées</span>
-                            <span class="badge">🤝 100% indépendant</span>
+                            <span class="badge">🎯 Conseil personnalisé</span>
                         </div>
                     </div>
                 </div>
@@ -63,51 +569,31 @@
         <!-- SERVICES -->
         <section class="investir-services-section">
             <div class="container">
-                <h2 class="section-title">Ce que Florent peut faire pour toi</h2>
+                <h2 class="section-title">Sur quoi Florent peut t'aider</h2>
                 
                 <div class="services-grid">
                     <div class="service-card">
                         <div class="service-icon">🔍</div>
                         <h3>Bilan patrimonial</h3>
-                        <p>Un état des lieux complet de ta situation financière : revenus, charges, épargne, crédits, assurances...</p>
-                        <ul class="service-features">
-                            <li>Analyse personnalisée</li>
-                            <li>Identification des priorités</li>
-                            <li>Plan d'action concret</li>
-                        </ul>
+                        <p>Où tu en es vraiment ? Revenus, charges, épargne, crédits, assurances... On pose tout à plat pour y voir clair et identifier les priorités.</p>
                     </div>
 
                     <div class="service-card">
                         <div class="service-icon">📈</div>
                         <h3>Stratégie d'investissement</h3>
-                        <p>Définir ensemble comment faire fructifier ton épargne selon tes objectifs et ta tolérance au risque.</p>
-                        <ul class="service-features">
-                            <li>Assurance-vie</li>
-                            <li>PEA / Compte-titres</li>
-                            <li>Immobilier (SCPI, locatif)</li>
-                        </ul>
+                        <p>Assurance-vie, PEA, PER, SCPI... Qu'est-ce qui a du sens pour toi ? On définit ensemble une stratégie adaptée à tes objectifs et ton horizon.</p>
                     </div>
 
                     <div class="service-card">
                         <div class="service-icon">🏠</div>
                         <h3>Projet immobilier</h3>
-                        <p>T'accompagner dans ton achat, ta renégociation de prêt ou ton investissement locatif.</p>
-                        <ul class="service-features">
-                            <li>Simulation de capacité</li>
-                            <li>Optimisation fiscale</li>
-                            <li>Choix du montage</li>
-                        </ul>
+                        <p>Acheter sa résidence, renégocier son prêt, se lancer dans le locatif... Les simulations, les pièges à éviter, le bon montage pour ta situation.</p>
                     </div>
 
                     <div class="service-card">
                         <div class="service-icon">👨‍👩‍👧‍👦</div>
                         <h3>Protection de la famille</h3>
-                        <p>Anticiper pour protéger tes proches : succession, donation, prévoyance.</p>
-                        <ul class="service-features">
-                            <li>Testament & donation</li>
-                            <li>Assurance décès</li>
-                            <li>Transmission optimisée</li>
-                        </ul>
+                        <p>Le sujet qu'on repousse toujours. Succession, donation, prévoyance : on en parle simplement pour que tes proches soient protégés quoi qu'il arrive.</p>
                     </div>
                 </div>
             </div>
@@ -116,14 +602,14 @@
         <!-- COMMENT ÇA MARCHE -->
         <section class="investir-process-section">
             <div class="container">
-                <h2 class="section-title">Comment ça se passe ?</h2>
+                <h2 class="section-title">Comment ça se passe</h2>
                 
                 <div class="process-steps">
                     <div class="process-step">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h3>Premier échange gratuit</h3>
-                            <p>Un appel de 15-20 minutes pour faire connaissance et comprendre ta situation.</p>
+                            <h3>Premier appel gratuit <span class="step-tag">15-20 min</span></h3>
+                            <p>On fait connaissance, tu m'expliques ta situation et tes questions. Zéro engagement.</p>
                         </div>
                     </div>
 
@@ -132,8 +618,8 @@
                     <div class="process-step">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h3>Analyse approfondie</h3>
-                            <p>Je prends le temps d'étudier ta situation et de préparer des recommandations personnalisées.</p>
+                            <h3>Analyse personnalisée</h3>
+                            <p>Je prends le temps d'étudier ton cas et de préparer des pistes concrètes adaptées à ta situation.</p>
                         </div>
                     </div>
 
@@ -142,8 +628,8 @@
                     <div class="process-step">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h3>Restitution & plan d'action</h3>
-                            <p>On se retrouve pour parcourir ensemble les solutions et définir les prochaines étapes.</p>
+                            <h3>Restitution & explications</h3>
+                            <p>On parcourt ensemble les options. Je t'explique tout, tu poses tes questions, tu repars avec une vision claire.</p>
                         </div>
                     </div>
 
@@ -152,67 +638,35 @@
                     <div class="process-step">
                         <div class="step-number">4</div>
                         <div class="step-content">
-                            <h3>Accompagnement dans la durée</h3>
-                            <p>Je reste disponible pour t'aider à mettre en œuvre et ajuster au fil du temps.</p>
+                            <h3>Mise en place <span class="step-tag">si tu le souhaites</span></h3>
+                            <p>Si tu décides d'avancer, je t'accompagne dans la mise en œuvre. Sinon, tu repars avec les infos — c'est déjà ça de gagné.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- TARIFS -->
+        <!-- RÉMUNÉRATION -->
         <section class="investir-pricing-section">
             <div class="container">
-                <h2 class="section-title">Tarifs transparents</h2>
-                <p class="section-subtitle">Pas de frais cachés, pas de commissions sur les produits. Tu paies pour mon temps et mon expertise.</p>
-                
-                <div class="pricing-grid">
-                    <div class="pricing-card">
-                        <div class="pricing-header">
-                            <h3>Consultation ponctuelle</h3>
-                            <div class="pricing-price">
-                                <span class="price">150€</span>
-                                <span class="period">/ séance</span>
-                            </div>
+                <div class="pricing-card-simple">
+                    <h2>Comment ça fonctionne côté rémunération</h2>
+                    
+                    <p class="pricing-intro">Le premier échange est <strong>gratuit</strong>, sans engagement.</p>
+                    
+                    <p class="pricing-description">
+                        Si tu décides de mettre en place des solutions (assurance-vie, PER, SCPI...), Florent est rémunéré par les partenaires financiers — comme tout conseiller en gestion de patrimoine.
+                    </p>
+                    
+                    <div class="pricing-highlight">
+                        <div class="pricing-highlight-title">
+                            <span>✨</span>
+                            Ce qui change avec OP!
                         </div>
-                        <p class="pricing-description">Pour une question précise ou un avis sur un projet spécifique.</p>
-                        <ul class="pricing-features">
-                            <li>1h de consultation</li>
-                            <li>Analyse de ta question</li>
-                            <li>Recommandations écrites</li>
-                        </ul>
-                    </div>
-
-                    <div class="pricing-card featured">
-                        <div class="pricing-badge">Le plus choisi</div>
-                        <div class="pricing-header">
-                            <h3>Bilan complet</h3>
-                            <div class="pricing-price">
-                                <span class="price">450€</span>
-                                <span class="period">forfait</span>
-                            </div>
-                        </div>
-                        <p class="pricing-description">Un accompagnement complet pour poser les bases de ta stratégie.</p>
-                        <ul class="pricing-features">
-                            <li>Audit patrimonial complet</li>
-                            <li>2 à 3 séances de travail</li>
-                            <li>Plan d'action personnalisé</li>
-                            <li>Suivi à 3 mois inclus</li>
-                        </ul>
-                    </div>
-
-                    <div class="pricing-card">
-                        <div class="pricing-header">
-                            <h3>Accompagnement annuel</h3>
-                            <div class="pricing-price">
-                                <span class="price">Sur devis</span>
-                            </div>
-                        </div>
-                        <p class="pricing-description">Pour un suivi régulier et une optimisation continue.</p>
-                        <ul class="pricing-features">
-                            <li>Points trimestriels</li>
-                            <li>Ajustements continus</li>
-                            <li>Disponibilité illimitée</li>
+                        <ul class="pricing-points">
+                            <li>On t'explique d'abord, tu décides ensuite</li>
+                            <li>Jamais de pression, jamais de produit "miracle"</li>
+                            <li>Si après analyse ta meilleure option c'est de ne rien faire, on te le dit</li>
                         </ul>
                     </div>
                 </div>
@@ -222,24 +676,24 @@
         <!-- TÉMOIGNAGES -->
         <section class="investir-testimonials-section">
             <div class="container">
-                <h2 class="section-title">Ce qu'ils en disent</h2>
+                <h2 class="section-title">Ce que les parents en disent</h2>
                 
-                <div class="testimonials-slider">
+                <div class="testimonials-grid">
                     <div class="testimonial-card">
                         <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">« Florent a pris le temps de comprendre notre situation. Pas de jargon, pas de pression pour vendre des produits. Juste des conseils clairs et adaptés à notre famille. »</p>
+                        <p class="testimonial-text">« Florent a pris le temps de comprendre notre situation. Pas de jargon, pas de pression. Il nous a expliqué les options et on a décidé ensemble. »</p>
                         <p class="testimonial-author">— Marine & Thomas, parents de 2 enfants</p>
                     </div>
                     
                     <div class="testimonial-card">
                         <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">« J'avais 30 000€ qui dormaient sur un livret A sans savoir quoi en faire. Grâce à Florent, j'ai enfin un plan cohérent pour l'avenir de mes enfants. »</p>
+                        <p class="testimonial-text">« J'avais 30 000€ qui dormaient sur un livret A sans savoir quoi en faire. Florent m'a expliqué les options possibles et m'a aidée à construire un plan cohérent pour mes enfants. »</p>
                         <p class="testimonial-author">— Sophie, maman solo</p>
                     </div>
                     
                     <div class="testimonial-card">
                         <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">« Le premier RDV gratuit m'a convaincu. Florent est pédagogue, patient, et surtout il n'a rien à vendre. Ça change tout. »</p>
+                        <p class="testimonial-text">« Le premier appel gratuit m'a convaincu. Florent est pédagogue, patient, et il prend le temps d'expliquer avant de proposer quoi que ce soit. »</p>
                         <p class="testimonial-author">— Julien, papa de 3 enfants</p>
                     </div>
                 </div>
@@ -250,17 +704,17 @@
         <section class="investir-cta-section">
             <div class="container">
                 <div class="investir-cta-card">
-                    <h2>Prêt à passer à l'action ?</h2>
-                    <p>Réserve ton premier échange gratuit avec Florent. 15 minutes pour faire connaissance et voir si on peut t'aider.</p>
+                    <h2>Une question sur ta situation ?</h2>
+                    <p>Réserve un premier échange gratuit. 15-20 minutes pour faire le point et voir si Florent peut t'aider.</p>
                     <div class="cta-buttons">
                         <a href="https://calendly.com/florent-op" target="_blank" class="investir-cta-btn primary">
                             <span>📅</span> Réserver un appel gratuit
                         </a>
                         <a href="contact.html" class="investir-cta-btn secondary">
-                            <span>💬</span> Poser une question
+                            <span>💬</span> Poser une question par email
                         </a>
                     </div>
-                    <p class="cta-note">🔒 Sans engagement • Réponse sous 24h</p>
+                    <p class="cta-note">🔒 Sans engagement · Réponse sous 48h</p>
                 </div>
             </div>
         </section>

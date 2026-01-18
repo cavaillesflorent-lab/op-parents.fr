@@ -10,32 +10,6 @@
     <style>
         /* Styles spécifiques page Mission */
         
-        /* Hero Mission - Plus impactant */
-        .mission-hero {
-            padding: var(--space-3xl) 0;
-            background: var(--white);
-            color: var(--vert-foncee);
-            text-align: center;
-        }
-        
-        .mission-hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .mission-hero h1 {
-            font-family: var(--font-serif);
-            font-size: clamp(2rem, 5vw, 3rem);
-            line-height: 1.2;
-            margin-bottom: var(--space-md);
-        }
-        
-        .mission-hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            line-height: 1.7;
-        }
-        
         /* Section Constat - Fond Saumon */
         .mission-constat {
             padding: var(--space-3xl) 0;
@@ -350,7 +324,7 @@
         /* CTA Final */
         .mission-cta {
             padding: var(--space-3xl) 0;
-            background: var(--white);;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
         }
         
         .cta-content {
@@ -449,11 +423,17 @@
 
     <main>
         <!-- HERO -->
-        <section class="mission-hero">
+        <section class="page-hero">
+            <div class="page-hero-decoration">
+                <div class="hero-circle circle-1"></div>
+                <div class="hero-circle circle-2"></div>
+                <div class="hero-circle circle-3"></div>
+            </div>
             <div class="container">
-                <div class="mission-hero-content">
+                <div class="page-hero-content">
+                    <span class="page-hero-badge">🧭 Notre Mission</span>
                     <h1>Et si vous n'aviez rien à regretter ?</h1>
-                    <p class="mission-hero-subtitle">Les voyages qu'on repousse. La sécurité qu'on n'a jamais vraiment. Le temps qu'on passe à courir sans savoir où. OP! existe pour que vous puissiez enfin faire une pause, y voir clair, et construire la vie que vous voulez vraiment.</p>
+                    <p>Les voyages qu'on repousse. La sécurité qu'on n'a jamais vraiment. Le temps qu'on passe à courir sans savoir où. OP! existe pour que vous puissiez enfin faire une pause, y voir clair, et construire la vie que vous voulez vraiment.</p>
                 </div>
             </div>
         </section>

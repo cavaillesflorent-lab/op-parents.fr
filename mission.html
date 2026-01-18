@@ -10,10 +10,10 @@
     <style>
         /* Styles spécifiques page Mission */
         
-        /* Section Constat - Fond Saumon */
+        /* Section Constat - Fond Vert */
         .mission-constat {
             padding: var(--space-3xl) 0;
-            background:  #DFF2B6;
+            background: #DFF2B6;
         }
         
         .constat-content {
@@ -176,7 +176,7 @@
             padding-top: var(--space-md);
         }
         
-        /* Section Concret - Fond Vert */
+        /* Section Concret - Fond Crème */
         .mission-concrete {
             padding: var(--space-3xl) 0;
             background: #FDF8F3;
@@ -247,7 +247,7 @@
             text-align: center;
         }
         
-        /* Section Fondateurs - Fond Saumon léger */
+        /* Section Fondateurs - Fond Saumon */
         .mission-founders {
             padding: var(--space-3xl) 0;
             background: #F2B47E;
@@ -291,24 +291,33 @@
         }
         
         .founder-avatar {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            border: 3px solid var(--white);
+            border: 4px solid var(--white);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .founder-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
         }
         
         .founder-avatar.florent {
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
-            z-index: 1;
+            background: var(--vert-fonce);
+            z-index: 2;
         }
         
         .founder-avatar.charlene {
-            background: linear-gradient(135deg, var(--peche) 0%, var(--jaune-dore) 100%);
-            margin-left: -20px;
+            background: var(--peche);
+            margin-left: -25px;
+            z-index: 1;
         }
         
         .founders-text {
@@ -324,20 +333,20 @@
         /* CTA Final */
         .mission-cta {
             padding: var(--space-3xl) 0;
-            background: #FDF8F3;;
+            background: #FDF8F3;
         }
         
         .cta-content {
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
-            color: var(--white);
         }
         
         .cta-content h2 {
             font-family: var(--font-serif);
             font-size: 2rem;
             margin-bottom: var(--space-xl);
+            color: var(--vert-fonce);
         }
         
         .cta-buttons {
@@ -360,8 +369,8 @@
         }
         
         .cta-btn.primary {
-            background: var(--white);
-            color: var(--vert-fonce);
+            background: var(--vert-fonce);
+            color: var(--white);
         }
         
         .cta-btn.primary:hover {
@@ -372,15 +381,16 @@
         .cta-btn.secondary {
             background: var(--white);
             color: var(--vert-fonce);
+            border: 2px solid var(--vert-fonce);
         }
         
         .cta-btn.secondary:hover {
-            border-color: var(--white);
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--vert-fonce);
+            color: var(--white);
         }
         
         .cta-btn.tertiary {
-            background: var(--white);
+            background: var(--peche);
             color: var(--vert-fonce);
         }
         
@@ -402,6 +412,11 @@
             .founders-card {
                 flex-direction: column;
                 text-align: center;
+            }
+            
+            .founder-avatar {
+                width: 80px;
+                height: 80px;
             }
             
             .cta-buttons {
@@ -564,8 +579,12 @@
                     
                     <div class="founders-card">
                         <div class="founders-avatars">
-                            <div class="founder-avatar florent">👔</div>
-                            <div class="founder-avatar charlene">✊</div>
+                            <div class="founder-avatar florent">
+                                <img src="assets/images/florent.png" alt="Florent">
+                            </div>
+                            <div class="founder-avatar charlene">
+                                <img src="assets/images/charlene.jpg" alt="Charlène">
+                            </div>
                         </div>
                         <div class="founders-text">
                             <p>On a créé OP! parce qu'on sait à quel point c'est difficile de trouver des réponses fiables sur l'argent. On voulait un repère de confiance. <strong>Il n'existait pas, alors on l'a construit.</strong></p>

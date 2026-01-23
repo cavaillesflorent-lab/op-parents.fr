@@ -21,23 +21,18 @@
         
         .webinaire-cover {
             width: calc(100% + 2 * var(--space-lg));
-            height: 160px;
+            aspect-ratio: 16 / 9;
             border-radius: var(--radius-lg) var(--radius-lg) 0 0;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
             margin: calc(-1 * var(--space-lg));
             margin-bottom: var(--space-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .webinaire-cover img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            object-position: center;
-            padding: var(--space-sm);
+            object-fit: cover;
+            object-position: center center;
         }
         
         .webinaire-cover-placeholder {
@@ -48,6 +43,7 @@
             justify-content: center;
             font-size: 3rem;
             opacity: 0.5;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
         }
     </style>
 </head>

@@ -288,11 +288,12 @@
         .founders-avatars {
             display: flex;
             flex-shrink: 0;
+            gap: var(--space-md);
         }
         
         .founder-avatar {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -311,13 +312,10 @@
         
         .founder-avatar.florent {
             background: var(--vert-fonce);
-            z-index: 2;
         }
         
         .founder-avatar.charlene {
             background: var(--peche);
-            margin-left: -30px;
-            z-index: 1;
         }
         
         .founders-text {
@@ -414,9 +412,13 @@
                 text-align: center;
             }
             
+            .founders-avatars {
+                justify-content: center;
+            }
+            
             .founder-avatar {
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 120px;
             }
             
             .cta-buttons {

@@ -6,6 +6,45 @@
     <title>Webinaires - OP! Éducation financière des parents</title>
     <meta name="description" content="Participez à nos webinaires gratuits sur la gestion financière familiale. En direct ou en replay.">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Style pour l'image de couverture dans les cartes */
+        .webinaire-card-link {
+            text-decoration: none;
+            display: block;
+        }
+        
+        .webinaire-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .webinaire-cover {
+            width: calc(100% + 2 * var(--space-lg));
+            height: 180px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+            margin: calc(-1 * var(--space-lg));
+            margin-bottom: var(--space-md);
+        }
+        
+        .webinaire-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .webinaire-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER (chargé dynamiquement) -->
@@ -82,11 +121,11 @@
             <div class="page-cta-card">
                 <div class="page-cta-content">
                    <h2>Envie d'aller plus loin ?</h2>
-<p>Les webinaires t'ont donné les bases. Pour un regard expert sur ta situation, échange avec Florent.</p>
-<a href="investir.html" class="page-cta-btn">
-    Parler à Florent <span class="arrow">→</span>
-</a>
-                </a>
+                    <p>Les webinaires t'ont donné les bases. Pour un regard expert sur ta situation, échange avec Florent.</p>
+                    <a href="investir.html" class="page-cta-btn">
+                        Parler à Florent <span class="arrow">→</span>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -109,7 +148,7 @@
             initFilters();
         });
 
-        // Générer une carte webinaire (nouveau design)
+        // Générer une carte webinaire (avec image de couverture)
         function generateWebinaireCard(webinaire) {
             const status = webinaire.statut || 'replay';
             const statusLabels = {
@@ -118,6 +157,22 @@
                 'termine': 'Terminé'
             };
             const statusLabel = statusLabels[status] || 'Replay';
+
+            // Image de couverture
+            let coverBlock = '';
+            if (webinaire.image_url) {
+                coverBlock = `
+                    <div class="webinaire-cover">
+                        <img src="${webinaire.image_url}" alt="${webinaire.titre}">
+                    </div>
+                `;
+            } else {
+                coverBlock = `
+                    <div class="webinaire-cover">
+                        <div class="webinaire-cover-placeholder">🎥</div>
+                    </div>
+                `;
+            }
 
             // Date pour les webinaires à venir
             let dateBlock = '';
@@ -198,6 +253,7 @@
             return `
                 <a href="${detailUrl}" class="webinaire-card-link">
                     <div class="webinaire-card" data-status="${status}">
+                        ${coverBlock}
                         <span class="webinaire-badge status-${status}">${statusLabel}</span>
                         <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>
                         ${dateBlock}

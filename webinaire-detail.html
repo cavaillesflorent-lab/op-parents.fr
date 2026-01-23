@@ -64,6 +64,30 @@
             margin-bottom: var(--space-xl);
         }
         
+        /* Image de couverture */
+        .webinaire-detail-cover {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+        }
+        
+        .webinaire-detail-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .webinaire-detail-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            opacity: 0.4;
+        }
+        
         /* Header de la carte */
         .webinaire-detail-header {
             background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
@@ -537,6 +561,10 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .webinaire-detail-cover {
+                height: 200px;
+            }
+            
             .webinaire-detail-speaker {
                 flex-direction: column;
                 text-align: center;
@@ -660,6 +688,22 @@
                 'replay': 'Replay disponible',
                 'termine': 'Terminé'
             };
+
+            // Image de couverture
+            let coverHTML = '';
+            if (webinaire.image_url) {
+                coverHTML = `
+                    <div class="webinaire-detail-cover">
+                        <img src="${webinaire.image_url}" alt="${webinaire.titre}">
+                    </div>
+                `;
+            } else {
+                coverHTML = `
+                    <div class="webinaire-detail-cover">
+                        <div class="webinaire-detail-cover-placeholder">🎥</div>
+                    </div>
+                `;
+            }
 
             // Formater la date
             let dateHTML = '';
@@ -807,6 +851,9 @@
                 
                 <!-- Carte principale -->
                 <div class="webinaire-detail-card">
+                    <!-- Image de couverture -->
+                    ${coverHTML}
+                    
                     <!-- Header -->
                     <div class="webinaire-detail-header">
                         <span class="webinaire-detail-badge status-${status}">${statusLabels[status]}</span>
@@ -835,9 +882,9 @@
                 
                 <!-- CTA -->
                 <div class="webinaire-detail-cta">
-                    <h3>Une idée de webinaire ?</h3>
-                    <p>Propose-nous un sujet qui t'intéresse, on le traitera peut-être dans un prochain live !</p>
-                    <a href="contact.html" class="btn btn-primary">Proposer un sujet</a>
+                    <h3>Envie d'aller plus loin ?</h3>
+                    <p>Pour un regard expert sur ta situation, échange directement avec Florent.</p>
+                    <a href="investir.html" class="btn btn-primary">Parler à Florent</a>
                     <a href="webinaires.html" class="btn btn-secondary">Voir tous les webinaires</a>
                 </div>
             `;

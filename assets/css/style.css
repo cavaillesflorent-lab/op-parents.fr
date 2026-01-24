@@ -1769,7 +1769,7 @@ section {
    ======================================== */
 
 .webinaire-card {
-    background: var(--white);
+    background: var(--vert-clair);
     border-radius: var(--radius-xl);
     overflow: hidden;
     box-shadow: var(--shadow-md);

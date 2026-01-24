@@ -64,31 +64,6 @@
             margin-bottom: var(--space-xl);
         }
         
-        /* Image de couverture */
-        .webinaire-detail-cover {
-            width: 100%;
-            aspect-ratio: 21 / 9;
-            overflow: hidden;
-        }
-        
-        .webinaire-detail-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center center;
-        }
-        
-        .webinaire-detail-cover-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            opacity: 0.4;
-            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
-        }
-        
         /* Header de la carte */
         .webinaire-detail-header {
             background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
@@ -687,22 +662,6 @@
                 'termine': 'Terminé'
             };
 
-            // Image de couverture
-            let coverHTML = '';
-            if (webinaire.image_url) {
-                coverHTML = `
-                    <div class="webinaire-detail-cover">
-                        <img src="${webinaire.image_url}" alt="${webinaire.titre}">
-                    </div>
-                `;
-            } else {
-                coverHTML = `
-                    <div class="webinaire-detail-cover">
-                        <div class="webinaire-detail-cover-placeholder">🎥</div>
-                    </div>
-                `;
-            }
-
             // Formater la date
             let dateHTML = '';
             if (webinaire.date_heure) {
@@ -849,9 +808,6 @@
                 
                 <!-- Carte principale -->
                 <div class="webinaire-detail-card">
-                    <!-- Image de couverture -->
-                    ${coverHTML}
-                    
                     <!-- Header -->
                     <div class="webinaire-detail-header">
                         <span class="webinaire-detail-badge status-${status}">${statusLabels[status]}</span>

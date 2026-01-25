@@ -1,7 +1,7 @@
 // ============================================
 // ADMIN QUIZ - ÉDITEUR DE BLOCS
 // OP! Parents
-// VERSION: 2.0 - avec auto-save et collecte des données
+// VERSION: 3.0 - Corrections: perte de données, boucle infinie, erreur 409
 // ============================================
 
 let currentQuizId = null;
@@ -269,10 +269,12 @@ async function loadQuizzesList() {
 // ============================================
 
 async function openEditor(quizId) {
+    // Réinitialiser l'auto-save
+    resetAutoSave();
+    
     currentQuizId = quizId;
     blocks = [];
     isDirty = false;
-    lastSavedData = null;
     
     // Reset le formulaire
     document.getElementById('quiz-title').value = '';
@@ -351,12 +353,8 @@ async function loadQuizData(quizId) {
 }
 
 function closeEditor() {
-    // Annuler l'auto-save en cours
-    if (autoSaveTimeout) {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = null;
-    }
-    lastSavedData = null;
+    // Annuler et réinitialiser l'auto-save
+    resetAutoSave();
     
     document.getElementById('quiz-editor-modal').classList.remove('active');
     currentQuizId = null;
@@ -467,10 +465,21 @@ function renderBlock(block, index) {
     blockEl.dataset.index = index;
     
     // Remplir les champs avec les données
+    // IMPORTANT: Utiliser setAttribute pour les inputs et textContent pour les textareas
+    // car .value n'est pas capturé par outerHTML
     blockEl.querySelectorAll('.block-field').forEach(field => {
         const fieldName = field.dataset.field;
         if (block.data && block.data[fieldName] !== undefined) {
-            field.value = block.data[fieldName];
+            const value = block.data[fieldName];
+            if (field.tagName === 'TEXTAREA') {
+                field.textContent = value;
+            } else if (field.tagName === 'INPUT') {
+                field.setAttribute('value', value);
+            } else if (field.tagName === 'SELECT') {
+                // Pour les select, on doit marquer l'option selected
+                const option = field.querySelector(`option[value="${value}"]`);
+                if (option) option.setAttribute('selected', 'selected');
+            }
         }
     });
     
@@ -482,11 +491,13 @@ function renderBlock(block, index) {
                 const letter = String.fromCharCode(65 + i); // A, B, C...
                 const isCorrect = opt.correct ? 'correct' : '';
                 const marker = block.type === 'poll' ? '□' : letter;
+                // Échapper les guillemets dans le texte
+                const escapedText = (opt.text || '').replace(/"/g, '&quot;');
                 
                 return `
                     <div class="option-item ${isCorrect}">
                         <span class="option-marker">${marker}</span>
-                        <input type="text" value="${opt.text || ''}" placeholder="Option ${i + 1}">
+                        <input type="text" value="${escapedText}" placeholder="Option ${i + 1}">
                         ${block.type === 'quiz' ? `<button class="option-correct-toggle" title="Bonne réponse">✓</button>` : ''}
                         <button class="option-delete" title="Supprimer">×</button>
                     </div>
@@ -806,23 +817,43 @@ async function saveQuiz() {
                 .select()
                 .single();
         } else {
-            // Création
-            quizData.created_at = new Date().toISOString();
-            quizData.view_count = 0;
-            result = await supabaseClient
+            // Vérifier si un quiz avec ce slug existe déjà
+            const { data: existing } = await supabaseClient
                 .from('quizzes')
-                .insert(quizData)
-                .select()
-                .single();
+                .select('id')
+                .eq('slug', slug)
+                .maybeSingle();
             
-            if (result.data) {
-                currentQuizId = result.data.id;
+            if (existing) {
+                // Le slug existe déjà, utiliser cet ID pour update
+                currentQuizId = existing.id;
+                result = await supabaseClient
+                    .from('quizzes')
+                    .update(quizData)
+                    .eq('id', currentQuizId)
+                    .select()
+                    .single();
+            } else {
+                // Création
+                quizData.created_at = new Date().toISOString();
+                quizData.view_count = 0;
+                result = await supabaseClient
+                    .from('quizzes')
+                    .insert(quizData)
+                    .select()
+                    .single();
+                
+                if (result.data) {
+                    currentQuizId = result.data.id;
+                }
             }
         }
         
         if (result.error) throw result.error;
         
         isDirty = false;
+        autoSaveErrorCount = 0; // Reset le compteur d'erreurs
+        lastSavedData = JSON.stringify({ blocks, title, slug });
         updateSaveStatus('saved');
         
     } catch (error) {
@@ -994,8 +1025,22 @@ function removeImage(silent = false) {
 
 let autoSaveTimeout = null;
 let lastSavedData = null;
+let autoSaveInProgress = false;
+let autoSaveErrorCount = 0;
+const MAX_AUTO_SAVE_ERRORS = 3;
 
 function autoSave() {
+    // Ne pas lancer si déjà en cours ou trop d'erreurs
+    if (autoSaveInProgress) {
+        console.log('⏳ Auto-save déjà en cours, ignoré');
+        return;
+    }
+    
+    if (autoSaveErrorCount >= MAX_AUTO_SAVE_ERRORS) {
+        console.log('❌ Trop d\'erreurs auto-save, désactivé. Utilisez le bouton Enregistrer.');
+        return;
+    }
+    
     // Annuler le timeout précédent
     if (autoSaveTimeout) {
         clearTimeout(autoSaveTimeout);
@@ -1008,7 +1053,8 @@ function autoSave() {
         const slug = document.getElementById('quiz-slug').value.trim();
         
         if (!title || !slug) {
-            // Pas assez d'infos pour sauvegarder
+            // Pas assez d'infos pour sauvegarder - pas une erreur
+            console.log('⏸️ Auto-save: titre ou slug manquant');
             return;
         }
         
@@ -1018,8 +1064,12 @@ function autoSave() {
         // Vérifier si les données ont changé
         const currentData = JSON.stringify({ blocks, title, slug });
         if (currentData === lastSavedData) {
+            console.log('⏸️ Auto-save: aucun changement');
             return; // Rien n'a changé
         }
+        
+        // Marquer comme en cours
+        autoSaveInProgress = true;
         
         // Sauvegarder
         try {
@@ -1042,6 +1092,7 @@ function autoSave() {
             
             let result;
             if (currentQuizId) {
+                // Mode UPDATE
                 result = await supabaseClient
                     .from('quizzes')
                     .update(quizData)
@@ -1049,16 +1100,35 @@ function autoSave() {
                     .select()
                     .single();
             } else {
-                quizData.created_at = new Date().toISOString();
-                quizData.view_count = 0;
-                result = await supabaseClient
+                // Mode INSERT - vérifier d'abord si le slug existe
+                const { data: existing } = await supabaseClient
                     .from('quizzes')
-                    .insert(quizData)
-                    .select()
-                    .single();
+                    .select('id')
+                    .eq('slug', slug)
+                    .maybeSingle();
                 
-                if (result.data) {
-                    currentQuizId = result.data.id;
+                if (existing) {
+                    // Le slug existe déjà, utiliser cet ID pour update
+                    currentQuizId = existing.id;
+                    result = await supabaseClient
+                        .from('quizzes')
+                        .update(quizData)
+                        .eq('id', currentQuizId)
+                        .select()
+                        .single();
+                } else {
+                    // Nouveau quiz
+                    quizData.created_at = new Date().toISOString();
+                    quizData.view_count = 0;
+                    result = await supabaseClient
+                        .from('quizzes')
+                        .insert(quizData)
+                        .select()
+                        .single();
+                    
+                    if (result.data) {
+                        currentQuizId = result.data.id;
+                    }
                 }
             }
             
@@ -1066,13 +1136,35 @@ function autoSave() {
             
             lastSavedData = currentData;
             isDirty = false;
+            autoSaveErrorCount = 0; // Reset le compteur d'erreurs
             updateSaveStatus('saved');
+            console.log('✅ Auto-save réussi');
             
         } catch (error) {
             console.error('Erreur auto-save:', error);
-            updateSaveStatus('error');
+            autoSaveErrorCount++;
+            
+            if (autoSaveErrorCount >= MAX_AUTO_SAVE_ERRORS) {
+                updateSaveStatus('error');
+                console.error('❌ Auto-save désactivé après', MAX_AUTO_SAVE_ERRORS, 'erreurs');
+            } else {
+                updateSaveStatus('error');
+            }
+        } finally {
+            autoSaveInProgress = false;
         }
     }, 2000);
+}
+
+// Réinitialiser l'auto-save (appelé quand on ouvre/ferme l'éditeur)
+function resetAutoSave() {
+    if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = null;
+    }
+    lastSavedData = null;
+    autoSaveInProgress = false;
+    autoSaveErrorCount = 0;
 }
 
 // ============================================

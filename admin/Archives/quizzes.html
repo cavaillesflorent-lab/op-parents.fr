@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Quiz - Admin OP!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-quiz.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
+                <span>Administration</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="webinaires.html" class="nav-item">
+                    <span class="nav-icon">🎥</span>
+                    Webinaires
+                </a>
+                <a href="quizzes.html" class="nav-item active">
+                    <span class="nav-icon">🧠</span>
+                    Quiz
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../index.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    Voir le site
+                </a>
+                <button class="nav-item logout-btn" id="logout-btn">
+                    <span class="nav-icon">🚪</span>
+                    Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Gestion des Quiz</h1>
+                <button class="btn btn-primary" id="new-quiz-btn">
+                    ➕ Nouveau quiz
+                </button>
+            </header>
+
+            <div class="admin-content">
+                <!-- Stats rapides -->
+                <div class="quiz-stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-quizzes">-</span>
+                        <span class="stat-label">Quiz créés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-responses">-</span>
+                        <span class="stat-label">Réponses totales</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="published-quizzes">-</span>
+                        <span class="stat-label">Quiz publiés</span>
+                    </div>
+                </div>
+
+                <!-- Liste des quiz -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Séquences</th>
+                                <th>Questions</th>
+                                <th>Réponses</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quizzes-list">
+                            <tr>
+                                <td colspan="6" class="loading">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL CRÉATION/ÉDITION QUIZ (Plein écran) -->
+    <div class="quiz-editor-modal" id="quiz-editor-modal">
+        <div class="quiz-editor">
+            <!-- Header -->
+            <header class="editor-header">
+                <div class="editor-header-left">
+                    <button class="btn-back" id="btn-back">
+                        ← Retour
+                    </button>
+                    <h1 id="editor-title">Nouveau Quiz</h1>
+                </div>
+                <div class="editor-header-right">
+                    <span class="save-status" id="save-status"></span>
+                    <button class="btn btn-secondary" id="btn-preview">
+                        👁️ Aperçu
+                    </button>
+                    <button class="btn btn-secondary" id="btn-save">
+                        💾 Enregistrer
+                    </button>
+                    <button class="btn btn-primary" id="btn-save-close">
+                        ✅ Enregistrer et quitter
+                    </button>
+                </div>
+            </header>
+
+            <!-- Navigation Onglets -->
+            <nav class="editor-tabs">
+                <button class="tab-btn active" data-tab="intro">
+                    <span class="tab-icon">🎯</span>
+                    <span class="tab-label">Introduction</span>
+                </button>
+                <button class="tab-btn" data-tab="sequences">
+                    <span class="tab-icon">📑</span>
+                    <span class="tab-label">Séquences</span>
+                </button>
+                <button class="tab-btn" data-tab="profiles">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-label">Profils</span>
+                </button>
+                <button class="tab-btn" data-tab="conclusion">
+                    <span class="tab-icon">🏆</span>
+                    <span class="tab-label">Conclusion</span>
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <span class="tab-icon">⚙️</span>
+                    <span class="tab-label">Paramètres</span>
+                </button>
+            </nav>
+
+            <!-- Contenu des onglets -->
+            <div class="editor-content">
+                
+                <!-- TAB: Introduction -->
+                <div class="tab-panel active" id="panel-intro">
+                    <div class="panel-section">
+                        <h2>Présentation du Quiz</h2>
+                        <p class="section-desc">Ces informations seront affichées sur l'écran d'accueil du quiz.</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="quiz-title">Titre du quiz *</label>
+                                <input type="text" id="quiz-title" placeholder="Ex: Quel est ton mindset par rapport à l'argent ?">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="quiz-subtitle">Sous-titre / Accroche</label>
+                                <input type="text" id="quiz-subtitle" placeholder="Ex: Découvre ton profil financier en 5 minutes">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="quiz-description">Description</label>
+                                <textarea id="quiz-description" rows="3" placeholder="Courte description du quiz..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Statistique d'accroche</h2>
+                        <p class="section-desc">Une statistique impactante pour capter l'attention.</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="intro-stat">Statistique</label>
+                                <input type="text" id="intro-stat" placeholder="Ex: 67% des Français reproduisent les habitudes financières de leurs parents">
+                            </div>
+                            <div class="form-group">
+                                <label for="intro-stat-source">Source</label>
+                                <input type="text" id="intro-stat-source" placeholder="Ex: Étude IFOP 2024">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Ce que l'utilisateur va apprendre</h2>
+                        <p class="section-desc">Liste affichée sous "À la fin de ce quiz, tu sauras :"</p>
+                        
+                        <div class="dynamic-list" id="benefits-list">
+                            <div class="dynamic-item">
+                                <span class="item-icon">✓</span>
+                                <input type="text" placeholder="Ex: Si ton rapport à l'argent est dominé par la sécurité ou la liberté">
+                                <button class="btn-remove-item" title="Supprimer">×</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="add-benefit-btn">
+                            + Ajouter un bénéfice
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB: Séquences -->
+                <div class="tab-panel" id="panel-sequences">
+                    <div class="sequences-header">
+                        <div>
+                            <h2>Séquences du Quiz</h2>
+                            <p class="section-desc">Organisez votre quiz en séquences thématiques. Chaque séquence contient plusieurs questions et un bilan.</p>
+                        </div>
+                        <button class="btn btn-primary" id="add-sequence-btn">
+                            ➕ Ajouter une séquence
+                        </button>
+                    </div>
+
+                    <div class="sequences-container" id="sequences-container">
+                        <div class="empty-state">
+                            <div class="empty-icon">📑</div>
+                            <h3>Aucune séquence</h3>
+                            <p>Cliquez sur "Ajouter une séquence" pour structurer votre quiz.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Profils -->
+                <div class="tab-panel" id="panel-profiles">
+                    <div class="panel-section">
+                        <h2>Profils de Résultat</h2>
+                        <p class="section-desc">Définissez les différents profils. Chaque réponse sera associée à un de ces profils.</p>
+                        
+                        <div class="profiles-container" id="profiles-container">
+                            <!-- Les profils seront ajoutés ici -->
+                        </div>
+                        
+                        <button class="btn btn-secondary" id="add-profile-btn">
+                            ➕ Ajouter un profil
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB: Conclusion -->
+                <div class="tab-panel" id="panel-conclusion">
+                    <div class="panel-section">
+                        <h2>Message de conclusion</h2>
+                        <p class="section-desc">Ce message s'affiche après le résultat du quiz.</p>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-title">Titre de conclusion</label>
+                            <input type="text" id="conclusion-title" placeholder="Ex: Le Vrai Changement de Mindset">
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Ce que ce n'est PAS</label>
+                                <div class="dynamic-list" id="conclusion-not-list">
+                                    <div class="dynamic-item">
+                                        <span class="item-icon">❌</span>
+                                        <input type="text" placeholder="Ex: Gagner plus">
+                                        <button class="btn-remove-item">×</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-ghost add-dynamic-item" data-target="conclusion-not-list" data-icon="❌">+ Ajouter</button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Ce que c'EST</label>
+                                <div class="dynamic-list" id="conclusion-is-list">
+                                    <div class="dynamic-item">
+                                        <span class="item-icon">✅</span>
+                                        <input type="text" placeholder="Ex: Te sentir légitime">
+                                        <button class="btn-remove-item">×</button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-ghost add-dynamic-item" data-target="conclusion-is-list" data-icon="✅">+ Ajouter</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Message final</h2>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-quote">Citation / Message clé</label>
+                            <input type="text" id="conclusion-quote" placeholder="Ex: La liberté financière commence par la liberté de décision">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label for="conclusion-cta">Texte Call-to-Action</label>
+                            <input type="text" id="conclusion-cta" placeholder="Ex: Tu viens de faire le premier pas. Maintenant, on passe à l'action ?">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Paramètres -->
+                <div class="tab-panel" id="panel-settings">
+                    <div class="panel-section">
+                        <h2>Paramètres généraux</h2>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="quiz-slug">Slug (URL) *</label>
+                                <input type="text" id="quiz-slug" placeholder="mindset-financier">
+                                <small class="form-hint">URL: /quiz.html?quiz=<strong id="slug-preview">mindset-financier</strong></small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="quiz-duration">Durée estimée</label>
+                                <input type="text" id="quiz-duration" placeholder="5 min" value="5 min">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Image de couverture</label>
+                            <div class="image-upload-zone">
+                                <div class="image-upload-input">
+                                    <input type="file" id="quiz-image-file" accept="image/*" class="file-input">
+                                    <label for="quiz-image-file" class="file-label">
+                                        <span class="file-icon">📁</span>
+                                        <span>Choisir une image depuis l'ordinateur</span>
+                                    </label>
+                                </div>
+                                <div class="image-or">ou</div>
+                                <input type="url" id="quiz-image" placeholder="Coller une URL d'image (https://...)">
+                            </div>
+                            <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                                <img src="" alt="Aperçu" id="image-preview" class="image-preview">
+                                <button type="button" class="btn-remove-image" id="remove-image-btn">✕ Supprimer</button>
+                            </div>
+                            <small class="form-hint">Formats acceptés: JPG, PNG, WebP. Max 5MB.</small>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h2>Publication</h2>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-published">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Quiz publié (visible sur le site)</span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-collect-email">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Proposer de collecter l'email à la fin</span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-show-progress" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Afficher la barre de progression</span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="quiz-show-sequence-bilan" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-label">Afficher le bilan après chaque séquence</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SÉQUENCE -->
+    <div class="modal" id="sequence-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h2 id="sequence-modal-title">Nouvelle Séquence</h2>
+                <button class="modal-close" id="sequence-modal-close">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <input type="hidden" id="sequence-edit-index" value="-1">
+                
+                <!-- Info séquence -->
+                <div class="form-section">
+                    <h3>📑 Informations de la séquence</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="sequence-title">Titre de la séquence *</label>
+                            <input type="text" id="sequence-title" placeholder="Ex: Mon mindset financier">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="sequence-description">Description / Contexte</label>
+                            <textarea id="sequence-description" rows="2" placeholder="Ex: Dans cette séquence, nous allons explorer ta relation à l'argent..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="sequence-stat">Statistique (optionnel)</label>
+                            <input type="text" id="sequence-stat" placeholder="Ex: 90% des adultes...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sequence-stat-source">Source</label>
+                            <input type="text" id="sequence-stat-source" placeholder="Ex: IFOP 2024">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions de la séquence -->
+                <div class="form-section">
+                    <div class="section-header-flex">
+                        <h3>❓ Questions de la séquence</h3>
+                        <button class="btn btn-secondary btn-sm" id="add-seq-question-btn">
+                            ➕ Ajouter une question
+                        </button>
+                    </div>
+                    
+                    <div class="sequence-questions" id="sequence-questions">
+                        <div class="empty-state-small">
+                            <p>Aucune question. Cliquez sur "Ajouter une question".</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bilan de la séquence -->
+                <div class="form-section">
+                    <div class="section-header-flex">
+                        <h3>📊 Bilan de la séquence</h3>
+                    </div>
+                    <p class="section-desc">Donnez un nom à chaque profil. Le texte du bilan sera généré automatiquement selon les réponses.</p>
+                    
+                    <div class="form-group full-width">
+                        <label for="sequence-bilan-title">Titre du bilan (optionnel)</label>
+                        <input type="text" id="sequence-bilan-title" placeholder="Ex: Ton profil financier">
+                    </div>
+                    
+                    <div class="sequence-profiles-expanded">
+                        <div class="profile-expanded-card" data-profile="A">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="A">A</span>
+                                <span class="profile-label">Profil A (majorité de A)</span>
+                            </div>
+                            <textarea id="seq-profile-a-content" rows="12" placeholder="🎯 PROFIL A — Le Parent Exigeant
+
+Ce que ça révèle
+Pour toi, l'école est un ascenseur...
+
+Comment ça se manifeste
+• Tu regardes les taux de réussite
+• Tu suis de près les résultats
+
+✅ Forces :
+• Implication forte
+• Transmission de la valeur de l'effort
+
+⚠️ Points de vigilance :
+• Risque de pression excessive
+
+🌱 Ta piste d'évolution
+Pose-toi la question..."></textarea>
+                        </div>
+                        
+                        <div class="profile-expanded-card" data-profile="B">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="B">B</span>
+                                <span class="profile-label">Profil B (majorité de B)</span>
+                            </div>
+                            <textarea id="seq-profile-b-content" rows="12" placeholder="Décris le profil B..."></textarea>
+                        </div>
+                        
+                        <div class="profile-expanded-card" data-profile="C">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="C">C</span>
+                                <span class="profile-label">Profil C (majorité de C)</span>
+                            </div>
+                            <textarea id="seq-profile-c-content" rows="12" placeholder="Décris le profil C..."></textarea>
+                        </div>
+                        
+                        <div class="profile-expanded-card" data-profile="D">
+                            <div class="profile-expanded-header">
+                                <span class="profile-letter" data-profile="D">D</span>
+                                <span class="profile-label">Profil D (majorité de D)</span>
+                            </div>
+                            <textarea id="seq-profile-d-content" rows="12" placeholder="Décris le profil D..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="bilan-preview-info">
+                        <span class="info-icon">💡</span>
+                        <span>Le texte sera automatiquement mis en forme : les lignes commençant par un emoji deviennent des titres, les • deviennent des listes à puces.</span>
+                    </div>
+                    
+                    <div class="form-group full-width" style="margin-top: 1.5rem;">
+                        <label for="sequence-bilan-custom-text">Texte commun à tous les profils (optionnel)</label>
+                        <textarea id="sequence-bilan-custom-text" rows="4" placeholder="Ex: Ce texte apparaîtra sous le profil, quelle que soit la réponse dominante..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="sequence-cancel-btn">Annuler</button>
+                <button class="btn btn-primary" id="sequence-save-btn">Enregistrer la séquence</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL QUESTION -->
+    <div class="modal" id="question-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="question-modal-title">Nouvelle Question</h2>
+                <button class="modal-close" id="question-modal-close">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <input type="hidden" id="question-edit-index" value="-1">
+                
+                <!-- Type de question -->
+                <div class="question-type-selector">
+                    <label>Type de question</label>
+                    <div class="type-options">
+                        <label class="type-option">
+                            <input type="radio" name="question-type" value="single" checked>
+                            <span class="type-card">
+                                <span class="type-icon">◉</span>
+                                <span class="type-name">Choix unique</span>
+                            </span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="question-type" value="multiple">
+                            <span class="type-card">
+                                <span class="type-icon">☑️</span>
+                                <span class="type-name">Choix multiple</span>
+                            </span>
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="question-type" value="profile">
+                            <span class="type-card">
+                                <span class="type-icon">👤</span>
+                                <span class="type-name">Profil</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="question-text">Texte de la question *</label>
+                        <textarea id="question-text" rows="2" placeholder="Ex: Quand tu étais enfant, l'argent était surtout..." required></textarea>
+                    </div>
+                </div>
+
+                <!-- Réponses -->
+                <div class="form-section">
+                    <div class="section-header-flex">
+                        <h3>💬 Réponses</h3>
+                        <button class="btn btn-secondary btn-sm" id="add-answer-btn">
+                            ➕ Ajouter
+                        </button>
+                    </div>
+                    
+                    <div class="answers-builder" id="answers-builder">
+                        <!-- Les réponses seront ajoutées ici -->
+                    </div>
+                </div>
+
+                <!-- Feedback -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="question-insight">💡 Insight après réponse (optionnel)</label>
+                        <textarea id="question-insight" rows="2" placeholder="Ex: Le ressenti n'est pas lié au montant, mais à la signification émotionnelle..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="question-cancel-btn">Annuler</button>
+                <button class="btn btn-primary" id="question-save-btn">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Suppression -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirmer la suppression</h2>
+                <button class="modal-close" id="delete-modal-close">×</button>
+            </div>
+            <p>Êtes-vous sûr de vouloir supprimer ce quiz ? Cette action est irréversible.</p>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
+                <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-quiz.js"></script>
+</body>
+</html>

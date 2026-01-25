@@ -1443,32 +1443,48 @@
         let guideData = null;
         let quizCorrectCount = 0;
         let scrollObserver = null;
+        let isPreviewMode = false;
         
         document.addEventListener('DOMContentLoaded', async () => {
             initSupabase();
             const params = new URLSearchParams(window.location.search);
             const slug = params.get('slug');
+            isPreviewMode = params.get('preview') === 'true';
             if (!slug) { showError(); return; }
             await loadGuide(slug);
         });
         
         async function loadGuide(slug) {
             try {
-                const { data: guide, error } = await supabaseClient
+                let query = supabaseClient
                     .from('quizzes')
                     .select('*')
-                    .eq('slug', slug)
-                    .eq('published', true)
-                    .single();
+                    .eq('slug', slug);
+                
+                // En mode preview, on ne filtre pas sur published
+                if (!isPreviewMode) {
+                    query = query.eq('published', true);
+                }
+                
+                const { data: guide, error } = await query.single();
                 
                 if (error || !guide) { showError(); return; }
                 
                 guideData = guide;
-                supabaseClient.from('quizzes').update({ view_count: (guide.view_count || 0) + 1 }).eq('id', guide.id).then(() => {});
+                
+                // Ne pas incrémenter les vues en mode preview
+                if (!isPreviewMode) {
+                    supabaseClient.from('quizzes').update({ view_count: (guide.view_count || 0) + 1 }).eq('id', guide.id).then(() => {});
+                }
                 
                 document.title = `${guide.titre} - OP! Parents`;
                 renderHero(guide);
                 renderBlocks(guide.blocks || []);
+                
+                // Afficher un badge "Preview" si mode preview
+                if (isPreviewMode) {
+                    showPreviewBadge();
+                }
                 
                 setTimeout(() => {
                     document.getElementById('loading-screen').classList.add('hidden');
@@ -1478,6 +1494,26 @@
                 console.error('Erreur:', error);
                 showError();
             }
+        }
+        
+        function showPreviewBadge() {
+            const badge = document.createElement('div');
+            badge.innerHTML = '👁️ Mode Preview';
+            badge.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--corail);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: var(--radius-full);
+                font-size: 0.85rem;
+                font-weight: 600;
+                z-index: 1000;
+                box-shadow: var(--shadow-lg);
+            `;
+            document.body.appendChild(badge);
         }
         
         function renderHero(guide) {

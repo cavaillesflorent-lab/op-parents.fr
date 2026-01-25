@@ -1248,15 +1248,18 @@ function previewQuiz() {
         return;
     }
     
+    // URL avec mode preview
+    const previewUrl = `../guide.html?slug=${slug}&preview=true`;
+    
     // Sauvegarder d'abord si des modifications
     if (isDirty) {
         if (confirm('Sauvegarder les modifications avant l\'aperçu ?')) {
             saveQuiz().then(() => {
-                window.open(`../guide.html?slug=${slug}`, '_blank');
+                window.open(previewUrl, '_blank');
             });
         }
     } else {
-        window.open(`../guide.html?slug=${slug}`, '_blank');
+        window.open(previewUrl, '_blank');
     }
 }
 

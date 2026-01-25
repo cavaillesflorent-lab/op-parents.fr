@@ -6,6 +6,7 @@
 let currentQuizId = null;
 let blocks = [];
 let isDirty = false;
+let eventsInitialized = false;
 
 // Types de blocs disponibles
 const BLOCK_TYPES = {
@@ -28,18 +29,17 @@ const BLOCK_TYPES = {
 // ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Init Supabase (utilise la fonction de config.js)
-    const client = initSupabase();
+    initSupabase();
     
-    // Event listeners (attachés immédiatement)
-    initEventListeners();
-    
-    // Vérifier l'auth et charger les données
-    client.auth.onAuthStateChange((event, session) => {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
         if (!session) {
             window.location.href = 'login.html';
         } else {
             loadQuizzesList();
+            if (!eventsInitialized) {
+                initEventListeners();
+                eventsInitialized = true;
+            }
         }
     });
 });

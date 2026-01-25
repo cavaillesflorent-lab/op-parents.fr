@@ -89,8 +89,8 @@
     }
     
     /* ===== HEADER & NAVIGATION ===== */
-    .nav {
-        display: none;
+    .header .nav {
+        display: none !important;
         position: fixed;
         top: 0;
         left: 0;
@@ -106,9 +106,9 @@
     }
     
     /* Fix : Support des deux classes pour le menu */
-    .nav.active,
-    .nav.nav-open {
-        display: flex;
+    .header .nav.active,
+    .header .nav.nav-open {
+        display: flex !important;
     }
     
     .nav a {
@@ -116,8 +116,9 @@
         padding: var(--space-sm);
     }
     
-    .mobile-toggle {
-        display: flex;
+    /* Bouton hamburger - toujours visible sur mobile */
+    .header .mobile-toggle {
+        display: flex !important;
     }
     
     .logo {

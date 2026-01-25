@@ -73,12 +73,142 @@ class ComponentLoader {
         const toggle = document.querySelector('.mobile-toggle');
         const nav = document.querySelector('.nav');
         
-        if (toggle && nav) {
-            toggle.addEventListener('click', () => {
-                nav.classList.toggle('nav-open');
-                toggle.classList.toggle('active');
-            });
+        if (!toggle || !nav) {
+            console.warn('Menu mobile: éléments non trouvés');
+            return;
         }
+
+        // Injecte les styles critiques pour le menu mobile (fallback)
+        this.injectMobileStyles();
+        
+        // Gestion du clic sur le hamburger
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isOpen = nav.classList.contains('nav-open');
+            
+            if (isOpen) {
+                nav.classList.remove('nav-open', 'active');
+                toggle.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                nav.classList.add('nav-open', 'active');
+                toggle.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Empêche le scroll
+            }
+        });
+
+        // Ferme le menu si on clique sur un lien
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open', 'active');
+                toggle.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Ferme le menu si on clique en dehors
+        document.addEventListener('click', (e) => {
+            if (nav.classList.contains('nav-open') && 
+                !nav.contains(e.target) && 
+                !toggle.contains(e.target)) {
+                nav.classList.remove('nav-open', 'active');
+                toggle.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // Injecte les styles critiques pour le menu mobile
+    injectMobileStyles() {
+        // Vérifie si les styles sont déjà injectés
+        if (document.getElementById('mobile-menu-styles')) return;
+
+        const styles = document.createElement('style');
+        styles.id = 'mobile-menu-styles';
+        styles.textContent = `
+            /* Menu mobile - styles critiques */
+            @media (max-width: 768px) {
+                .header .mobile-toggle {
+                    display: flex !important;
+                    flex-direction: column;
+                    gap: 5px;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    padding: 5px;
+                    z-index: 1001;
+                }
+
+                .header .mobile-toggle span {
+                    width: 24px;
+                    height: 2px;
+                    background: #fff;
+                    border-radius: 2px;
+                    transition: all 0.3s ease;
+                }
+
+                /* Animation hamburger vers X */
+                .header .mobile-toggle.active span:nth-child(1) {
+                    transform: rotate(45deg) translate(5px, 5px);
+                }
+
+                .header .mobile-toggle.active span:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .header .mobile-toggle.active span:nth-child(3) {
+                    transform: rotate(-45deg) translate(5px, -5px);
+                }
+
+                .header .nav {
+                    display: none !important;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: #F0D075;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 2rem;
+                    gap: 1.5rem;
+                    z-index: 1000;
+                }
+
+                .header .nav.nav-open,
+                .header .nav.active {
+                    display: flex !important;
+                }
+
+                .header .nav a {
+                    font-size: 1.3rem;
+                    padding: 0.75rem 1rem;
+                    color: #fff;
+                }
+
+                .header .nav a::after {
+                    display: none;
+                }
+            }
+
+            @media (min-width: 769px) {
+                .header .mobile-toggle {
+                    display: none !important;
+                }
+
+                .header .nav {
+                    display: flex !important;
+                    position: static;
+                    background: transparent;
+                    flex-direction: row;
+                    padding: 0;
+                }
+            }
+        `;
+        document.head.appendChild(styles);
     }
 
     // Charge header et footer

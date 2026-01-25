@@ -6,6 +6,7 @@
 class ComponentLoader {
     constructor() {
         this.basePath = this.getBasePath();
+        this.mobileMenuInitialized = false; // Flag pour éviter double init
     }
 
     getBasePath() {
@@ -37,10 +38,12 @@ class ComponentLoader {
             
             this.setActivePage();
             
-            // Initialise le menu mobile APRÈS un court délai pour s'assurer que le DOM est prêt
-            setTimeout(() => {
-                this.initMobileMenu();
-            }, 100);
+            // Initialise le menu mobile SEULEMENT pour le header
+            if (componentName === 'header' && !this.mobileMenuInitialized) {
+                setTimeout(() => {
+                    this.initMobileMenu();
+                }, 100);
+            }
             
         } catch (error) {
             console.error(`Erreur chargement ${componentName}:`, error);
@@ -65,6 +68,12 @@ class ComponentLoader {
     }
 
     initMobileMenu() {
+        // Évite la double initialisation
+        if (this.mobileMenuInitialized) {
+            console.log('Menu mobile: déjà initialisé, skip');
+            return;
+        }
+
         const toggle = document.querySelector('.mobile-toggle');
         const nav = document.querySelector('.nav');
         
@@ -73,10 +82,14 @@ class ComponentLoader {
             return;
         }
 
+        this.mobileMenuInitialized = true;
         console.log('Menu mobile: initialisation...');
 
         // Détecte si on est sur mobile
         const isMobile = () => window.innerWidth <= 768;
+
+        // État du menu
+        let isMenuOpen = false;
 
         // Applique les styles du toggle pour mobile
         const applyMobileStyles = () => {
@@ -106,11 +119,9 @@ class ComponentLoader {
                     `;
                 });
 
-                // Cache la nav par défaut sur mobile
-                if (!nav.classList.contains('nav-open')) {
-                    nav.style.cssText = `
-                        display: none !important;
-                    `;
+                // Cache la nav par défaut sur mobile (seulement si pas ouverte)
+                if (!isMenuOpen) {
+                    nav.style.cssText = `display: none !important;`;
                 }
             } else {
                 // Desktop : reset les styles
@@ -123,96 +134,121 @@ class ComponentLoader {
                     align-items: center;
                     gap: 2rem;
                 `;
-            }
-        };
-
-        // Ouvre/ferme le menu
-        const toggleMenu = () => {
-            const isOpen = nav.classList.contains('nav-open');
-            
-            if (isOpen) {
-                // Fermer
-                nav.classList.remove('nav-open');
-                toggle.classList.remove('active');
-                nav.style.cssText = `display: none !important;`;
-                document.body.style.overflow = '';
-                
-                // Reset animation hamburger
-                const spans = toggle.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-                
-            } else {
-                // Ouvrir
-                nav.classList.add('nav-open');
-                toggle.classList.add('active');
-                nav.style.cssText = `
-                    display: flex !important;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: #F0D075;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 2rem;
-                    gap: 1.5rem;
-                    z-index: 1000;
-                `;
-                document.body.style.overflow = 'hidden';
-                
-                // Style des liens dans le menu ouvert
+                // Reset les styles des liens pour desktop
                 nav.querySelectorAll('a').forEach(link => {
-                    link.style.cssText = `
-                        font-size: 1.3rem;
-                        padding: 0.75rem 1rem;
-                        color: #fff;
-                        text-decoration: none;
-                    `;
+                    link.style.cssText = '';
                 });
-                
-                // Animation hamburger vers X
-                const spans = toggle.querySelectorAll('span');
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+                isMenuOpen = false;
             }
         };
 
-        // Event listeners
+        // Ouvre le menu
+        const openMenu = () => {
+            if (isMenuOpen) return;
+            
+            isMenuOpen = true;
+            nav.classList.add('nav-open');
+            toggle.classList.add('active');
+            
+            nav.style.cssText = `
+                display: flex !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #F0D075;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 2rem;
+                gap: 1.5rem;
+                z-index: 1000;
+            `;
+            
+            document.body.style.overflow = 'hidden';
+            
+            // Style des liens dans le menu ouvert
+            nav.querySelectorAll('a').forEach(link => {
+                link.style.cssText = `
+                    font-size: 1.3rem;
+                    padding: 0.75rem 1rem;
+                    color: #fff;
+                    text-decoration: none;
+                `;
+            });
+            
+            // Animation hamburger vers X
+            const spans = toggle.querySelectorAll('span');
+            spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            
+            console.log('Menu ouvert');
+        };
+
+        // Ferme le menu
+        const closeMenu = () => {
+            if (!isMenuOpen) return;
+            
+            isMenuOpen = false;
+            nav.classList.remove('nav-open');
+            toggle.classList.remove('active');
+            
+            nav.style.cssText = `display: none !important;`;
+            document.body.style.overflow = '';
+            
+            // Reset animation hamburger
+            const spans = toggle.querySelectorAll('span');
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+            
+            console.log('Menu fermé');
+        };
+
+        // Toggle le menu
+        const toggleMenu = () => {
+            if (isMenuOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        };
+
+        // Event listener sur le bouton hamburger
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Toggle cliqué!');
+            console.log('Toggle cliqué! État actuel:', isMenuOpen ? 'ouvert' : 'fermé');
             toggleMenu();
         });
 
         // Ferme si clic sur un lien
         nav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                if (isMobile() && nav.classList.contains('nav-open')) {
-                    toggleMenu();
+                if (isMobile() && isMenuOpen) {
+                    closeMenu();
                 }
             });
         });
 
-        // Ferme si clic en dehors
+        // Ferme si clic en dehors (avec délai pour éviter conflit)
         document.addEventListener('click', (e) => {
-            if (isMobile() && nav.classList.contains('nav-open')) {
+            if (isMobile() && isMenuOpen) {
                 if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-                    toggleMenu();
+                    closeMenu();
                 }
             }
         });
 
         // Réapplique les styles au resize
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            if (!nav.classList.contains('nav-open')) {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
                 applyMobileStyles();
-            }
+            }, 100);
         });
 
         // Applique les styles initiaux

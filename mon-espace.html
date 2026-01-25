@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace - OP! Parents</title>
+    <meta name="description" content="Retrouvez toutes vos données et votre progression">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+    
+    <style>
+        :root {
+            --vert-fonce: #2D403B;
+            --vert-clair: #DFF2B6;
+            --dore: #F0D075;
+            --peche: #F5E1DA;
+            --blanc: #FFFFFF;
+            --gris-50: #F9FAFB;
+            --gris-100: #F3F4F6;
+            --gris-200: #E5E7EB;
+            --gris-400: #9CA3AF;
+            --gris-500: #6B7280;
+            --gris-600: #4B5563;
+            --gris-700: #374151;
+            --gris-800: #1F2937;
+            --corail: #BF604B;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gris-50);
+            color: var(--gris-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--blanc);
+            border-bottom: 1px solid var(--gris-200);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            text-decoration: none;
+        }
+        
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .nav-link {
+            color: var(--gris-600);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover { background: var(--gris-100); }
+        
+        .btn-logout {
+            background: var(--gris-100);
+            color: var(--gris-700);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-logout:hover { background: var(--gris-200); }
+        
+        /* Main */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        /* Welcome */
+        .welcome {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #1a2a26 100%);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-text {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        
+        .welcome-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .welcome-stat {
+            text-align: center;
+        }
+        
+        .welcome-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dore);
+        }
+        
+        .welcome-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gris-800);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Guide cards */
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .guide-card {
+            background: var(--blanc);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gris-200);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .guide-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--vert-clair);
+        }
+        
+        .guide-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .guide-card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--vert-clair);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .guide-card-info { flex: 1; }
+        
+        .guide-card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--gris-800);
+            margin-bottom: 0.25rem;
+        }
+        
+        .guide-card-date {
+            font-size: 0.8rem;
+            color: var(--gris-500);
+        }
+        
+        .guide-card-badge {
+            padding: 0.25rem 0.6rem;
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        
+        .guide-card-badge.incomplete {
+            background: var(--peche);
+            color: var(--corail);
+        }
+        
+        /* Responses */
+        .responses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .response-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--gris-50);
+            border-radius: var(--radius-md);
+        }
+        
+        .response-label {
+            font-size: 0.9rem;
+            color: var(--gris-600);
+        }
+        
+        .response-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            background: var(--blanc);
+            border-radius: var(--radius-xl);
+            border: 2px dashed var(--gris-200);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gris-800);
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-text {
+            color: var(--gris-500);
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--vert-fonce);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover { background: #1a2a26; }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gris-500);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gris-200);
+            border-top-color: var(--vert-fonce);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        
+        .modal {
+            background: var(--blanc);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gris-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--gris-100);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--gris-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover { background: var(--gris-200); }
+        
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--gris-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        
+        .btn-secondary {
+            padding: 0.6rem 1rem;
+            background: var(--gris-100);
+            color: var(--gris-700);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover { background: var(--gris-200); }
+        
+        .btn-danger {
+            padding: 0.6rem 1rem;
+            background: #FEE2E2;
+            color: #DC2626;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-danger:hover { background: #FECACA; }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .welcome-stats { gap: 1rem; }
+            .welcome-stat-value { font-size: 1.5rem; }
+            .header-nav { gap: 0.5rem; }
+            .nav-link { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="header-logo">OP!</a>
+            <nav class="header-nav">
+                <a href="formations.html" class="nav-link">Guides</a>
+                <button class="btn-logout" onclick="logout()">Déconnexion</button>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Chargement...</p>
+        </div>
+        
+        <div id="content" style="display: none;">
+            <!-- Welcome -->
+            <div class="welcome">
+                <h1 class="welcome-title">Bonjour <span id="user-name">!</span> 👋</h1>
+                <p class="welcome-text">Retrouvez ici vos guides et données personnelles</p>
+                <div class="welcome-stats">
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="stat-guides">0</div>
+                        <div class="welcome-stat-label">guides commencés</div>
+                    </div>
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="stat-completed">0</div>
+                        <div class="welcome-stat-label">terminés</div>
+                    </div>
+                    <div class="welcome-stat">
+                        <div class="welcome-stat-value" id="stat-fields">0</div>
+                        <div class="welcome-stat-label">données sauvées</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Guides -->
+            <section class="section">
+                <h2 class="section-title">📚 Mes guides</h2>
+                <div id="guides-container"></div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Modal détail -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Guide</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn-danger" onclick="deleteGuideData()">Supprimer mes données</button>
+                <a href="#" class="btn-primary" id="modal-link">Continuer le guide →</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    
+    <script>
+        let currentUser = null;
+        let userResponses = [];
+        let selectedGuide = null;
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            initSupabase();
+            await checkAuth();
+        });
+        
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (!session) {
+                window.location.href = 'auth.html?redirect=mon-espace.html';
+                return;
+            }
+            
+            currentUser = session.user;
+            await loadUserData();
+        }
+        
+        async function loadUserData() {
+            try {
+                // Get user responses
+                const { data, error } = await supabaseClient
+                    .from('user_responses')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('updated_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                userResponses = data || [];
+                renderPage();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = '<p>Erreur de chargement</p>';
+            }
+        }
+        
+        function renderPage() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            // User name
+            const name = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+            document.getElementById('user-name').textContent = name;
+            
+            // Stats
+            const completedCount = userResponses.filter(r => r.completed).length;
+            const totalFields = userResponses.reduce((acc, r) => acc + Object.keys(r.responses || {}).length, 0);
+            
+            document.getElementById('stat-guides').textContent = userResponses.length;
+            document.getElementById('stat-completed').textContent = completedCount;
+            document.getElementById('stat-fields').textContent = totalFields;
+            
+            // Guides
+            renderGuides();
+        }
+        
+        function renderGuides() {
+            const container = document.getElementById('guides-container');
+            
+            if (userResponses.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <h3 class="empty-title">Aucun guide commencé</h3>
+                        <p class="empty-text">Découvrez nos guides d'éducation financière et commencez à sauvegarder vos données personnelles.</p>
+                        <a href="formations.html" class="btn-primary">Découvrir les guides →</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="guide-list">
+                    ${userResponses.map(guide => {
+                        const responseCount = Object.keys(guide.responses || {}).length;
+                        const date = new Date(guide.updated_at).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+                        
+                        return `
+                            <div class="guide-card" onclick="openGuideDetail('${guide.quiz_slug}')">
+                                <div class="guide-card-header">
+                                    <div class="guide-card-icon">${guide.quiz_icon || '📖'}</div>
+                                    <div class="guide-card-info">
+                                        <h4 class="guide-card-title">${escapeHtml(guide.quiz_title || guide.quiz_slug)}</h4>
+                                        <p class="guide-card-date">Mis à jour le ${date} • ${responseCount} donnée${responseCount > 1 ? 's' : ''}</p>
+                                    </div>
+                                    <span class="guide-card-badge ${guide.completed ? '' : 'incomplete'}">
+                                        ${guide.completed ? 'Terminé' : 'En cours'}
+                                    </span>
+                                </div>
+                                ${responseCount > 0 ? `
+                                    <div class="responses-list">
+                                        ${Object.entries(guide.responses).slice(0, 3).map(([key, value]) => `
+                                            <div class="response-item">
+                                                <span class="response-label">${formatKey(key)}</span>
+                                                <span class="response-value">${escapeHtml(String(value))}</span>
+                                            </div>
+                                        `).join('')}
+                                        ${responseCount > 3 ? `<p style="text-align: center; font-size: 0.8rem; color: var(--gris-500); padding: 0.5rem;">+ ${responseCount - 3} autres données</p>` : ''}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function openGuideDetail(slug) {
+            selectedGuide = userResponses.find(r => r.quiz_slug === slug);
+            if (!selectedGuide) return;
+            
+            const modal = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+            const link = document.getElementById('modal-link');
+            
+            title.innerHTML = `${selectedGuide.quiz_icon || '📖'} ${escapeHtml(selectedGuide.quiz_title || slug)}`;
+            link.href = `guide.html?slug=${slug}`;
+            
+            const responses = selectedGuide.responses || {};
+            const entries = Object.entries(responses);
+            
+            if (entries.length === 0) {
+                body.innerHTML = '<p style="color: var(--gris-500); text-align: center;">Aucune donnée personnelle enregistrée</p>';
+            } else {
+                body.innerHTML = `
+                    <div class="responses-list">
+                        ${entries.map(([key, value]) => `
+                            <div class="response-item">
+                                <span class="response-label">${formatKey(key)}</span>
+                                <span class="response-value">${escapeHtml(String(value))}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            modal.classList.add('visible');
+        }
+        
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('modal-overlay').classList.remove('visible');
+            selectedGuide = null;
+        }
+        
+        async function deleteGuideData() {
+            if (!selectedGuide) return;
+            if (!confirm('Supprimer toutes vos données pour ce guide ?')) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('user_responses')
+                    .delete()
+                    .eq('id', selectedGuide.id);
+                
+                if (error) throw error;
+                
+                closeModal();
+                await loadUserData();
+            } catch (error) {
+                alert('Erreur lors de la suppression');
+                console.error(error);
+            }
+        }
+        
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        }
+        
+        // Helpers
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function formatKey(key) {
+            return key
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+        }
+    </script>
+</body>
+</html>

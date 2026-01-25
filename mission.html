@@ -182,6 +182,12 @@
             background: #FDF8F3;
         }
         
+        .concrete-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
         .concrete-content h2 {
             font-family: var(--font-serif);
             font-size: 1.5rem;
@@ -200,25 +206,45 @@
         .concrete-card {
             background: var(--white);
             border-radius: var(--radius-xl);
-            padding: var(--space-xl);
+            overflow: hidden;
             text-align: center;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
         }
         
         .concrete-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
         }
         
-        .concrete-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
+        /* Image container - hauteur fixe uniforme */
+        .concrete-card-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .concrete-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transition: transform 0.4s ease;
+        }
+        
+        .concrete-card:hover .concrete-card-image img {
+            transform: scale(1.05);
+        }
+        
+        /* Contenu texte */
+        .concrete-card-body {
+            padding: var(--space-lg);
         }
         
         .concrete-card h3 {
             font-family: var(--font-serif);
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             color: var(--vert-fonce);
             margin-bottom: var(--space-sm);
         }
@@ -227,6 +253,7 @@
             font-size: 0.95rem;
             color: var(--text-secondary);
             line-height: 1.6;
+            margin: 0;
         }
         
         .concrete-promise {
@@ -239,12 +266,6 @@
             border-radius: var(--radius-lg);
             display: inline-block;
             box-shadow: var(--shadow-sm);
-        }
-        
-        .concrete-content {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
         }
         
         /* Section Fondateurs - Fond Saumon */
@@ -405,6 +426,13 @@
             
             .concrete-grid {
                 grid-template-columns: 1fr;
+                max-width: 350px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .concrete-card-image {
+                height: 200px;
             }
             
             .founders-card {
@@ -549,19 +577,33 @@
                     
                     <div class="concrete-grid">
                         <div class="concrete-card">
-                            <img src="assets/images/quiz.jpg" alt="Florent">
-                            <h3>Des quiz</h3>
-                            <p>Pour faire le point sur ta situation et identifier tes priorités</p>
+                            <div class="concrete-card-image">
+                                <img src="assets/images/quiz.jpg" alt="Quiz financier">
+                            </div>
+                            <div class="concrete-card-body">
+                                <h3>Des quiz</h3>
+                                <p>Pour faire le point sur ta situation et identifier tes priorités</p>
+                            </div>
                         </div>
+                        
                         <div class="concrete-card">
-                            <img src="assets/images/webinaire.jpg" alt="Florent">
-                            <h3>Des webinaires</h3>
-                            <p>Pour comprendre ce qu'on n'a jamais appris à l'école</p>
+                            <div class="concrete-card-image">
+                                <img src="assets/images/webinaire.jpg" alt="Webinaires éducatifs">
+                            </div>
+                            <div class="concrete-card-body">
+                                <h3>Des webinaires</h3>
+                                <p>Pour comprendre ce qu'on n'a jamais appris à l'école</p>
+                            </div>
                         </div>
+                        
                         <div class="concrete-card">
-                            <img src="assets/images/florent.png" alt="Florent">
-                            <h3>Un accompagnement</h3>
-                            <p>Quand tu as besoin d'un regard expert sur ta situation</p>
+                            <div class="concrete-card-image">
+                                <img src="assets/images/florent.png" alt="Accompagnement par Florent">
+                            </div>
+                            <div class="concrete-card-body">
+                                <h3>Un accompagnement</h3>
+                                <p>Quand tu as besoin d'un regard expert sur ta situation</p>
+                            </div>
                         </div>
                     </div>
                     

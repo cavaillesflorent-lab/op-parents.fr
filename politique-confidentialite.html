@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Politique de confidentialité de l'application OP! Parents - Protection de vos données personnelles.">
+    <title>Politique de confidentialité - OP! Parents</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+    
+    <style>
+        :root {
+            --vert-fonce: #2D403B;
+            --vert-clair: #DFF2B6;
+            --dore: #F0D075;
+            --peche: #F5E1DA;
+            --blanc: #FFFFFF;
+            --gris-50: #F9FAFB;
+            --gris-100: #F3F4F6;
+            --gris-200: #E5E7EB;
+            --gris-300: #D1D5DB;
+            --gris-400: #9CA3AF;
+            --gris-500: #6B7280;
+            --gris-600: #4B5563;
+            --gris-700: #374151;
+            --gris-800: #1F2937;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --max-width: 800px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--gris-50);
+            color: var(--gris-700);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--blanc);
+            border-bottom: 1px solid var(--gris-200);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-logo {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            text-decoration: none;
+        }
+        
+        .header-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gris-600);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: var(--gris-100);
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+        
+        .header-back:hover {
+            background: var(--gris-200);
+            color: var(--vert-fonce);
+        }
+        
+        /* Main Content */
+        .main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid var(--gris-200);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 5vw, 2.25rem);
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.75rem;
+        }
+        
+        .hero-update {
+            font-size: 0.9rem;
+            color: var(--gris-500);
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-intro {
+            font-size: 1rem;
+            color: var(--gris-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Articles */
+        .article {
+            background: var(--blanc);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gris-200);
+        }
+        
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .article-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--vert-fonce);
+            color: var(--blanc);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .article-content {
+            font-size: 0.95rem;
+            color: var(--gris-700);
+        }
+        
+        .article-content p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .article-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .article-content ul {
+            list-style: none;
+            margin: 0.75rem 0;
+        }
+        
+        .article-content ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-content ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--vert-fonce);
+            font-weight: 700;
+        }
+        
+        .article-content strong {
+            color: var(--gris-800);
+        }
+        
+        /* Sub-section */
+        .sub-section {
+            background: var(--gris-50);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+        
+        .sub-section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
+            border-left: 4px solid var(--vert-fonce);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-box.privacy {
+            background: linear-gradient(135deg, #DBEAFE 0%, rgba(219, 234, 254, 0.5) 100%);
+            border-left-color: #3B82F6;
+        }
+        
+        /* Rights Grid */
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        
+        .right-item {
+            background: var(--gris-50);
+            border-radius: var(--radius-md);
+            padding: 0.875rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .right-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .right-content {
+            font-size: 0.85rem;
+        }
+        
+        .right-name {
+            font-weight: 600;
+            color: var(--gris-800);
+            margin-bottom: 0.25rem;
+        }
+        
+        .right-desc {
+            color: var(--gris-600);
+        }
+        
+        /* Contact Box */
+        .contact-box {
+            background: var(--vert-fonce);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .contact-box-text {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        .contact-box-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--dore);
+            color: var(--vert-fonce);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .contact-box-link:hover {
+            opacity: 0.9;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: var(--vert-fonce);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--blanc);
+        }
+        
+        .contact-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--blanc);
+        }
+        
+        .contact-info {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.8;
+        }
+        
+        .contact-info strong {
+            color: var(--dore);
+        }
+        
+        .contact-info a {
+            color: var(--dore);
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--blanc);
+            border-top: 1px solid var(--gris-200);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-link {
+            color: var(--gris-600);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .footer-link:hover {
+            color: var(--vert-fonce);
+        }
+        
+        .footer-link.active {
+            color: var(--vert-fonce);
+            font-weight: 600;
+        }
+        
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--gris-500);
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .article {
+                padding: 1.25rem;
+            }
+            
+            .contact-section {
+                padding: 1.5rem;
+            }
+            
+            .rights-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="header-logo">OP!</a>
+            <a href="index.html" class="header-back">← Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-icon">🔒</div>
+            <h1 class="hero-title">Politique de confidentialité</h1>
+            <p class="hero-update">Dernière mise à jour : 22 janvier 2026</p>
+            <p class="hero-intro">La présente politique décrit comment OCCITEA PATRIMOINE collecte, utilise et protège vos données personnelles lorsque vous utilisez l'application OP! Parents.</p>
+        </section>
+
+        <!-- Article 1 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">1</span>
+                Responsable du traitement
+            </h2>
+            <div class="article-content">
+                <p><strong>SARL Florent Cavailles</strong></p>
+                <p>Nom commercial : Occitea Patrimoine</p>
+                <p>504 Route des Gaux, 81290 Labruguière</p>
+                <p>Email : <a href="mailto:florent@occitea-ip.fr" style="color: var(--vert-fonce);">florent@occitea-ip.fr</a></p>
+            </div>
+        </article>
+
+        <!-- Article 2 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">2</span>
+                Données collectées
+            </h2>
+            <div class="article-content">
+                <p>Nous collectons les données suivantes :</p>
+                
+                <div class="sub-section">
+                    <div class="sub-section-title">📋 Données d'identification</div>
+                    <ul>
+                        <li>Nom et prénom</li>
+                        <li>Adresse email</li>
+                        <li>Numéro de téléphone</li>
+                    </ul>
+                </div>
+                
+                <div class="sub-section">
+                    <div class="sub-section-title">🌐 Données de connexion</div>
+                    <ul>
+                        <li>Adresse IP</li>
+                        <li>Données de navigation</li>
+                    </ul>
+                </div>
+                
+                <div class="sub-section">
+                    <div class="sub-section-title">✉️ Données de contact</div>
+                    <ul>
+                        <li>Informations transmises via les formulaires</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 3 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">3</span>
+                Confidentialité de vos informations
+            </h2>
+            <div class="article-content">
+                <div class="highlight-box privacy">
+                    <p><strong>🛡️ Vos données personnelles sont protégées</strong></p>
+                    <p>Les informations que vous renseignez dans l'application (quiz, simulateurs, outils) sont <strong>strictement confidentielles</strong>.</p>
+                </div>
+                <p>OCCITEA PATRIMOINE <strong>n'a pas accès</strong> à ces données. Elles restent stockées de manière sécurisée et ne sont accessibles que par vous.</p>
+            </div>
+        </article>
+
+        <!-- Article 4 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">4</span>
+                Utilisation des données
+            </h2>
+            <div class="article-content">
+                <p>Vos données sont utilisées pour :</p>
+                <ul>
+                    <li>Créer et gérer votre compte</li>
+                    <li>Vous mettre en relation avec un conseiller (si vous le demandez)</li>
+                    <li>Vous envoyer des communications (avec votre accord)</li>
+                    <li>Améliorer nos services</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Article 5 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">5</span>
+                Base juridique
+            </h2>
+            <div class="article-content">
+                <p>Nos traitements sont fondés sur :</p>
+                <ul>
+                    <li><strong>Votre consentement</strong></li>
+                    <li><strong>L'exécution du contrat</strong> (CGU)</li>
+                    <li><strong>Notre intérêt légitime</strong> (amélioration des services)</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Article 6 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">6</span>
+                Destinataires
+            </h2>
+            <div class="article-content">
+                <p>Vos données sont destinées uniquement à <strong>OCCITEA PATRIMOINE</strong>.</p>
+                <div class="highlight-box">
+                    <strong>Nous ne vendons ni ne louons vos données.</strong>
+                </div>
+                <p>Seuls nos prestataires techniques (hébergeur) peuvent y accéder dans le cadre de leurs missions.</p>
+            </div>
+        </article>
+
+        <!-- Article 7 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">7</span>
+                Durée de conservation
+            </h2>
+            <div class="article-content">
+                <ul>
+                    <li><strong>Données de compte :</strong> durée du compte + 3 ans</li>
+                    <li><strong>Données de contact :</strong> 3 ans après le dernier échange</li>
+                    <li><strong>Cookies :</strong> 13 mois maximum</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Article 8 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">8</span>
+                Vos droits
+            </h2>
+            <div class="article-content">
+                <p>Conformément au <strong>RGPD</strong>, vous disposez des droits suivants :</p>
+                
+                <div class="rights-grid">
+                    <div class="right-item">
+                        <span class="right-icon">👁️</span>
+                        <div class="right-content">
+                            <div class="right-name">Accès</div>
+                            <div class="right-desc">Obtenir une copie de vos données</div>
+                        </div>
+                    </div>
+                    <div class="right-item">
+                        <span class="right-icon">✏️</span>
+                        <div class="right-content">
+                            <div class="right-name">Rectification</div>
+                            <div class="right-desc">Corriger des données inexactes</div>
+                        </div>
+                    </div>
+                    <div class="right-item">
+                        <span class="right-icon">🗑️</span>
+                        <div class="right-content">
+                            <div class="right-name">Effacement</div>
+                            <div class="right-desc">Demander la suppression</div>
+                        </div>
+                    </div>
+                    <div class="right-item">
+                        <span class="right-icon">⏸️</span>
+                        <div class="right-content">
+                            <div class="right-name">Limitation</div>
+                            <div class="right-desc">Restreindre le traitement</div>
+                        </div>
+                    </div>
+                    <div class="right-item">
+                        <span class="right-icon">📦</span>
+                        <div class="right-content">
+                            <div class="right-name">Portabilité</div>
+                            <div class="right-desc">Recevoir vos données</div>
+                        </div>
+                    </div>
+                    <div class="right-item">
+                        <span class="right-icon">🚫</span>
+                        <div class="right-content">
+                            <div class="right-name">Opposition</div>
+                            <div class="right-desc">Refuser certains traitements</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <span class="contact-box-text">Pour exercer ces droits :</span>
+                    <a href="mailto:donnees@occitea-ip.fr" class="contact-box-link">📧 donnees@occitea-ip.fr</a>
+                </div>
+                
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--gris-500);">
+                    En cas de réclamation : <a href="https://www.cnil.fr" target="_blank" rel="noopener" style="color: var(--vert-fonce);">www.cnil.fr</a>
+                </p>
+            </div>
+        </article>
+
+        <!-- Article 9 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">9</span>
+                Cookies
+            </h2>
+            <div class="article-content">
+                <p>Nous utilisons des cookies pour :</p>
+                <ul>
+                    <li><strong>Le fonctionnement du site</strong> (cookies essentiels)</li>
+                    <li><strong>Mesurer l'audience</strong> (cookies analytics)</li>
+                </ul>
+                <p>Vous pouvez gérer vos préférences via le bandeau cookies ou les paramètres de votre navigateur.</p>
+            </div>
+        </article>
+
+        <!-- Article 10 -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">10</span>
+                Modifications
+            </h2>
+            <div class="article-content">
+                <p>Cette politique peut être modifiée à tout moment. La date de mise à jour est indiquée en haut du document.</p>
+            </div>
+        </article>
+
+        <!-- Contact -->
+        <section class="contact-section">
+            <h2 class="contact-title">📬 Questions sur vos données ?</h2>
+            <div class="contact-info">
+                <p><strong>SARL Florent Cavailles</strong></p>
+                <p>Nom commercial : Occitea Patrimoine</p>
+                <p>504 Route des Gaux, 81290 Labruguière</p>
+                <p>Données personnelles : <a href="mailto:donnees@occitea-ip.fr">donnees@occitea-ip.fr</a></p>
+                <p>Contact général : <a href="mailto:florent@occitea-ip.fr">florent@occitea-ip.fr</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <nav class="footer-links">
+            <a href="index.html" class="footer-link">Accueil</a>
+            <a href="cgu.html" class="footer-link">CGU</a>
+            <a href="mentions-legales.html" class="footer-link">Mentions légales</a>
+            <a href="politique-confidentialite.html" class="footer-link active">Confidentialité</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+        </nav>
+        <p class="footer-copy">© 2026 OP! Parents — EURL Florent Cavailles</p>
+    </footer>
+</body>
+</html>

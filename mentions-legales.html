@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mentions légales du site OP! Parents - Informations sur l'éditeur, les activités réglementées et l'hébergement.">
+    <title>Mentions légales - OP! Parents</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+    
+    <style>
+        :root {
+            --vert-fonce: #2D403B;
+            --vert-clair: #DFF2B6;
+            --dore: #F0D075;
+            --peche: #F5E1DA;
+            --blanc: #FFFFFF;
+            --gris-50: #F9FAFB;
+            --gris-100: #F3F4F6;
+            --gris-200: #E5E7EB;
+            --gris-300: #D1D5DB;
+            --gris-400: #9CA3AF;
+            --gris-500: #6B7280;
+            --gris-600: #4B5563;
+            --gris-700: #374151;
+            --gris-800: #1F2937;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --max-width: 800px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--gris-50);
+            color: var(--gris-700);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--blanc);
+            border-bottom: 1px solid var(--gris-200);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-logo {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            text-decoration: none;
+        }
+        
+        .header-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gris-600);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: var(--gris-100);
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+        
+        .header-back:hover {
+            background: var(--gris-200);
+            color: var(--vert-fonce);
+        }
+        
+        /* Main Content */
+        .main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            border-bottom: 1px solid var(--gris-200);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 5vw, 2.25rem);
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.75rem;
+        }
+        
+        .hero-update {
+            font-size: 0.9rem;
+            color: var(--gris-500);
+        }
+        
+        /* Articles */
+        .article {
+            background: var(--blanc);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gris-200);
+        }
+        
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .article-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--dore) 0%, #E5C35A 100%);
+            color: var(--vert-fonce);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .article-content {
+            font-size: 0.95rem;
+            color: var(--gris-700);
+        }
+        
+        .article-content p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .article-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .article-content ul {
+            list-style: none;
+            margin: 0.75rem 0;
+        }
+        
+        .article-content ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-content ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0.5rem;
+            color: var(--vert-fonce);
+            font-weight: 700;
+        }
+        
+        .article-content strong {
+            color: var(--gris-800);
+        }
+        
+        .article-content a {
+            color: var(--vert-fonce);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .article-content a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Info Card */
+        .info-card {
+            background: var(--gris-50);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--vert-fonce);
+        }
+        
+        .info-card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-card-content {
+            font-size: 0.9rem;
+            color: var(--gris-600);
+            line-height: 1.6;
+        }
+        
+        .info-card-content p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-card-content p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* ORIAS Badge */
+        .orias-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .orias-badge strong {
+            color: var(--vert-fonce);
+        }
+        
+        .orias-badge a {
+            color: var(--vert-fonce);
+            font-weight: 600;
+        }
+        
+        /* Activity Cards */
+        .activity-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        
+        .activity-card {
+            background: var(--blanc);
+            border: 2px solid var(--gris-200);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .activity-card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-card-code {
+            font-size: 0.75rem;
+            color: var(--gris-500);
+        }
+        
+        /* Authority Box */
+        .authority-box {
+            background: var(--vert-fonce);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+        
+        .authority-box-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--dore);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .authority-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .authority-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.85rem;
+        }
+        
+        .authority-item strong {
+            color: var(--blanc);
+        }
+        
+        .authority-item a {
+            color: var(--dore);
+        }
+        
+        /* Insurance Box */
+        .insurance-box {
+            background: linear-gradient(135deg, #DBEAFE 0%, rgba(219, 234, 254, 0.5) 100%);
+            border-left: 4px solid #3B82F6;
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+        
+        .insurance-box-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .insurance-box-content {
+            font-size: 0.9rem;
+            color: var(--gris-700);
+        }
+        
+        /* Hosting Box */
+        .hosting-box {
+            background: var(--gris-50);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .hosting-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--blanc);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid var(--gris-200);
+        }
+        
+        .hosting-content {
+            font-size: 0.9rem;
+        }
+        
+        .hosting-name {
+            font-weight: 700;
+            color: var(--gris-800);
+            margin-bottom: 0.25rem;
+        }
+        
+        .hosting-address {
+            color: var(--gris-600);
+            margin-bottom: 0.25rem;
+        }
+        
+        .hosting-link {
+            color: var(--vert-fonce);
+            font-weight: 500;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
+            border-left: 4px solid var(--vert-fonce);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: var(--vert-fonce);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--blanc);
+        }
+        
+        .contact-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--blanc);
+        }
+        
+        .contact-info {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.8;
+        }
+        
+        .contact-info strong {
+            color: var(--dore);
+        }
+        
+        .contact-info a {
+            color: var(--dore);
+            text-decoration: none;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--blanc);
+            border-top: 1px solid var(--gris-200);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-link {
+            color: var(--gris-600);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .footer-link:hover {
+            color: var(--vert-fonce);
+        }
+        
+        .footer-link.active {
+            color: var(--vert-fonce);
+            font-weight: 600;
+        }
+        
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--gris-500);
+        }
+        
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .article {
+                padding: 1.25rem;
+            }
+            
+            .contact-section {
+                padding: 1.5rem;
+            }
+            
+            .activity-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .hosting-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="header-logo">OP!</a>
+            <a href="index.html" class="header-back">← Retour à l'accueil</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-icon">⚖️</div>
+            <h1 class="hero-title">Mentions légales</h1>
+            <p class="hero-update">Dernière mise à jour : 22 janvier 2026</p>
+        </section>
+
+        <!-- Article 1 - Éditeur -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">1</span>
+                Éditeur du site
+            </h2>
+            <div class="article-content">
+                <p>Le site <strong>op-parents.fr</strong> est édité par :</p>
+                
+                <div class="info-card">
+                    <div class="info-card-title">🏢 EURL Florent Cavailles</div>
+                    <div class="info-card-content">
+                        <ul>
+                            <li><strong>Capital social :</strong> 20 000 €</li>
+                            <li><strong>Nom commercial :</strong> Occitea Patrimoine</li>
+                            <li><strong>RCS Castres :</strong> 903 529 386</li>
+                            <li><strong>Siège social :</strong> 504 Route des Gaux, 81290 Labruguière</li>
+                            <li><strong>Code NAF :</strong> 6622Z</li>
+                            <li><strong>Représentant légal :</strong> Florent CAVAILLES, Gérant</li>
+                            <li><strong>Email :</strong> <a href="mailto:florent@occitea-ip.fr">florent@occitea-ip.fr</a></li>
+                            <li><strong>Téléphone :</strong> <a href="tel:+33607963135">06 07 96 31 35</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 2 - Activités réglementées -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">2</span>
+                Activités réglementées
+            </h2>
+            <div class="article-content">
+                <p>La société Florent Cavailles est immatriculée à l'ORIAS au titre des activités suivantes :</p>
+                
+                <div class="orias-badge">
+                    ✅ <strong>ORIAS n° 21008193</strong> — Vérifiable sur <a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>
+                </div>
+                
+                <div class="activity-cards">
+                    <div class="activity-card">
+                        <div class="activity-card-icon">📊</div>
+                        <div class="activity-card-title">Conseiller en Investissements Financiers</div>
+                        <div class="activity-card-code">CIF</div>
+                    </div>
+                    <div class="activity-card">
+                        <div class="activity-card-icon">🛡️</div>
+                        <div class="activity-card-title">Courtier d'Assurance</div>
+                        <div class="activity-card-code">COA</div>
+                    </div>
+                </div>
+                
+                <p>Adhérent de l'<strong>ANACOFI-CIF</strong>, association agréée par l'Autorité des Marchés Financiers (AMF), et de l'<strong>ANACOFI COURTAGE</strong>, association agréée par l'ACPR.</p>
+                
+                <div class="authority-box">
+                    <div class="authority-box-title">🏛️ Autorités de contrôle</div>
+                    <div class="authority-list">
+                        <div class="authority-item">
+                            <strong>ACPR :</strong> 4 Place de Budapest, 75436 Paris — <a href="https://acpr.banque-france.fr" target="_blank" rel="noopener">acpr.banque-france.fr</a>
+                        </div>
+                        <div class="authority-item">
+                            <strong>AMF :</strong> 17 Place de la Bourse, 75002 Paris — <a href="https://www.amf-france.org" target="_blank" rel="noopener">amf-france.org</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 3 - Assurance -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">3</span>
+                Assurance professionnelle
+            </h2>
+            <div class="article-content">
+                <p>Responsabilité Civile Professionnelle souscrite auprès de :</p>
+                
+                <div class="insurance-box">
+                    <div class="insurance-box-title">🛡️ MMA IARD Assurances Mutuelles / MMA IARD</div>
+                    <div class="insurance-box-content">
+                        <p>160 rue Henri Champion, 72030 Le Mans Cedex 9</p>
+                        <p><strong>Contrat n° 114240090</strong> — Adhérent n° 233122</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 4 - Hébergement -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">4</span>
+                Hébergement
+            </h2>
+            <div class="article-content">
+                <p>Le site est hébergé par :</p>
+                
+                <div class="hosting-box">
+                    <div class="hosting-icon">🖥️</div>
+                    <div class="hosting-content">
+                        <div class="hosting-name">o2switch</div>
+                        <div class="hosting-address">Chem. des Pardiaux, 63000 Clermont-Ferrand, France</div>
+                        <a href="https://www.o2switch.fr" target="_blank" rel="noopener" class="hosting-link">www.o2switch.fr</a>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 5 - Propriété intellectuelle -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">5</span>
+                Propriété intellectuelle
+            </h2>
+            <div class="article-content">
+                <p>L'ensemble des contenus présents sur ce site (textes, images, vidéos, graphismes, logo, icônes) est protégé par les lois relatives à la propriété intellectuelle.</p>
+                
+                <div class="highlight-box">
+                    <strong>⚠️ Toute reproduction ou représentation, totale ou partielle, est interdite</strong> sans autorisation écrite préalable de la société Florent Cavailles.
+                </div>
+            </div>
+        </article>
+
+        <!-- Article 6 - Crédits -->
+        <article class="article">
+            <h2 class="article-title">
+                <span class="article-number">6</span>
+                Crédits
+            </h2>
+            <div class="article-content">
+                <p><strong>Conception et réalisation :</strong> EURL Florent Cavailles</p>
+            </div>
+        </article>
+
+        <!-- Contact -->
+        <section class="contact-section">
+            <h2 class="contact-title">📬 Contact</h2>
+            <div class="contact-info">
+                <p><strong>EURL Florent Cavailles</strong></p>
+                <p>Nom commercial : Occitea Patrimoine</p>
+                <p>504 Route des Gaux, 81290 Labruguière</p>
+                <p>Email : <a href="mailto:florent@occitea-ip.fr">florent@occitea-ip.fr</a></p>
+                <p>Téléphone : <a href="tel:+33607963135">06 07 96 31 35</a></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <nav class="footer-links">
+            <a href="index.html" class="footer-link">Accueil</a>
+            <a href="cgu.html" class="footer-link">CGU</a>
+            <a href="mentions-legales.html" class="footer-link active">Mentions légales</a>
+            <a href="politique-confidentialite.html" class="footer-link">Confidentialité</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+        </nav>
+        <p class="footer-copy">© 2026 OP! Parents — EURL Florent Cavailles</p>
+    </footer>
+</body>
+</html>

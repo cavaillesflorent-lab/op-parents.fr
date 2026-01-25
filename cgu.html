@@ -9,339 +9,104 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="icon" href="assets/images/favicon.png" type="image/png">
     
     <style>
-        :root {
-            --vert-fonce: #2D403B;
-            --vert-clair: #DFF2B6;
-            --dore: #F0D075;
-            --peche: #F5E1DA;
-            --blanc: #FFFFFF;
-            --gris-50: #F9FAFB;
-            --gris-100: #F3F4F6;
-            --gris-200: #E5E7EB;
-            --gris-300: #D1D5DB;
-            --gris-400: #9CA3AF;
-            --gris-500: #6B7280;
-            --gris-600: #4B5563;
-            --gris-700: #374151;
-            --gris-800: #1F2937;
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-serif: 'Playfair Display', Georgia, serif;
-            --max-width: 800px;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: var(--font-sans);
-            background: var(--gris-50);
-            color: var(--gris-700);
-            line-height: 1.7;
-            min-height: 100vh;
-        }
-        
-        /* Header */
-        .header {
-            background: var(--blanc);
-            border-bottom: 1px solid var(--gris-200);
-            padding: 1rem 1.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .header-logo {
-            font-family: var(--font-serif);
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-            text-decoration: none;
-        }
-        
-        .header-back {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gris-600);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            background: var(--gris-100);
-            border-radius: var(--radius-md);
-            transition: all 0.2s ease;
-        }
-        
-        .header-back:hover {
-            background: var(--gris-200);
-            color: var(--vert-fonce);
-        }
-        
-        /* Main Content */
-        .main {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-        }
-        
-        /* Hero */
-        .hero {
+        .legal-hero {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #1F2E29 100%);
+            padding: 4rem 1.5rem;
             text-align: center;
-            padding: 2rem 0 3rem;
-            border-bottom: 1px solid var(--gris-200);
-            margin-bottom: 2rem;
+            color: var(--blanc);
         }
+        .legal-hero-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .legal-hero-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 0.75rem; }
+        .legal-hero-update { font-size: 0.9rem; color: rgba(255,255,255,0.7); }
         
-        .hero-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+        .legal-content { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
         
-        .hero-title {
-            font-family: var(--font-serif);
-            font-size: clamp(1.75rem, 5vw, 2.25rem);
-            font-weight: 700;
-            color: var(--vert-fonce);
-            margin-bottom: 0.75rem;
-        }
-        
-        .hero-update {
-            font-size: 0.9rem;
-            color: var(--gris-500);
-        }
-        
-        /* Articles */
-        .article {
+        .legal-article {
             background: var(--blanc);
-            border-radius: var(--radius-lg);
+            border-radius: 16px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             border: 1px solid var(--gris-200);
         }
+        .legal-article-title { font-size: 1.1rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .legal-article-number { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--dore); color: var(--vert-fonce); border-radius: 50%; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .legal-article-content { font-size: 0.95rem; color: var(--gris-700); line-height: 1.8; }
+        .legal-article-content p { margin-bottom: 0.75rem; }
+        .legal-article-content p:last-child { margin-bottom: 0; }
+        .legal-article-content ul { list-style: none; margin: 0.75rem 0; padding: 0; }
+        .legal-article-content ul li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+        .legal-article-content ul li::before { content: '•'; position: absolute; left: 0.5rem; color: var(--vert-fonce); font-weight: 700; }
+        .legal-article-content strong { color: var(--gris-800); }
         
-        .article-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+        .legal-highlight { background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%); border-left: 4px solid var(--vert-fonce); padding: 1rem 1.25rem; border-radius: 12px; margin: 1rem 0; font-size: 0.9rem; }
+        .legal-warning { background: linear-gradient(135deg, #FEF3C7 0%, rgba(254, 243, 199, 0.5) 100%); border-left-color: #F59E0B; }
         
-        .article-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            background: var(--dore);
-            color: var(--vert-fonce);
-            border-radius: 50%;
-            font-size: 0.8rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
+        .legal-contact-card { background: var(--vert-fonce); border-radius: 16px; padding: 2rem; margin-top: 2rem; text-align: center; color: var(--blanc); }
+        .legal-contact-card h3 { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .legal-contact-card p { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.8; margin-bottom: 0.25rem; }
+        .legal-contact-card strong { color: var(--dore); }
+        .legal-contact-card a { color: var(--dore); text-decoration: none; }
+        .legal-contact-card a:hover { text-decoration: underline; }
         
-        .article-content {
-            font-size: 0.95rem;
-            color: var(--gris-700);
-        }
-        
-        .article-content p {
-            margin-bottom: 0.75rem;
-        }
-        
-        .article-content p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .article-content ul {
-            list-style: none;
-            margin: 0.75rem 0;
-        }
-        
-        .article-content ul li {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .article-content ul li::before {
-            content: '•';
-            position: absolute;
-            left: 0.5rem;
-            color: var(--vert-fonce);
-            font-weight: 700;
-        }
-        
-        .article-content strong {
-            color: var(--gris-800);
-        }
-        
-        /* Highlight Box */
-        .highlight-box {
-            background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%);
-            border-left: 4px solid var(--vert-fonce);
-            padding: 1rem 1.25rem;
-            border-radius: var(--radius-md);
-            margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-        
-        .warning-box {
-            background: linear-gradient(135deg, #FEF3C7 0%, rgba(254, 243, 199, 0.5) 100%);
-            border-left: 4px solid #F59E0B;
-        }
-        
-        /* Contact Section */
-        .contact-section {
-            background: var(--vert-fonce);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin-top: 2rem;
-            text-align: center;
-            color: var(--blanc);
-        }
-        
-        .contact-title {
-            font-family: var(--font-serif);
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--blanc);
-        }
-        
-        .contact-info {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.9);
-            line-height: 1.8;
-        }
-        
-        .contact-info strong {
-            color: var(--dore);
-        }
-        
-        .contact-info a {
-            color: var(--dore);
-            text-decoration: none;
-        }
-        
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        .footer {
-            background: var(--blanc);
-            border-top: 1px solid var(--gris-200);
-            padding: 1.5rem;
-            text-align: center;
-            margin-top: 3rem;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        
-        .footer-link {
-            color: var(--gris-600);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .footer-link:hover {
-            color: var(--vert-fonce);
-        }
-        
-        .footer-link.active {
-            color: var(--vert-fonce);
-            font-weight: 600;
-        }
-        
-        .footer-copy {
-            font-size: 0.8rem;
-            color: var(--gris-500);
-        }
-        
-        /* Responsive */
-        @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .article {
-                padding: 1.25rem;
-            }
-            
-            .contact-section {
-                padding: 1.5rem;
-            }
+        @media (max-width: 768px) {
+            .legal-hero { padding: 3rem 1rem; }
+            .legal-content { padding: 2rem 1rem; }
+            .legal-article { padding: 1.25rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- HEADER COMPONENT -->
     <header class="header">
-        <div class="header-content">
-            <a href="index.html" class="header-logo">OP!</a>
-            <a href="index.html" class="header-back">← Retour à l'accueil</a>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
+                    </a>
+                    <span class="logo-text">booste tes finances !</span>
+                </div>
+                <nav class="nav">
+                    <a href="quizzes.html" data-page="quizzes"><span class="nav-icon">🧠</span> Quiz</a>
+                    <a href="webinaires.html" data-page="webinaires"><span class="nav-icon">🎥</span> Webinaires</a>
+                    <a href="investir.html" data-page="investir"><span class="nav-icon">💰</span> Investir</a>
+                    <a href="mission.html" data-page="mission"><span class="nav-icon">🚀</span> Le Concept!</a>
+                    <a href="contact.html" data-page="contact"><span class="nav-icon">✉️</span> Contact</a>
+                </nav>
+                <button class="mobile-toggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <!-- Hero -->
-        <section class="hero">
-            <div class="hero-icon">📜</div>
-            <h1 class="hero-title">Conditions Générales d'Utilisation</h1>
-            <p class="hero-update">Dernière mise à jour : 22 janvier 2026</p>
-        </section>
+    <!-- Hero -->
+    <section class="legal-hero">
+        <div class="legal-hero-icon">📜</div>
+        <h1 class="legal-hero-title">Conditions Générales d'Utilisation</h1>
+        <p class="legal-hero-update">Dernière mise à jour : 22 janvier 2026</p>
+    </section>
 
-        <!-- Article 1 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">1</span>
-                Objet
-            </h2>
-            <div class="article-content">
+    <!-- Content -->
+    <main class="legal-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">1</span>Objet</h2>
+            <div class="legal-article-content">
                 <p>Les présentes Conditions Générales d'Utilisation définissent les modalités d'utilisation de l'application <strong>OP! Parents</strong> (op-parents.fr) éditée par la EURL Florent Cavailles.</p>
-                <div class="highlight-box">
-                    L'utilisation de l'application implique l'acceptation pleine et entière des présentes CGU.
-                </div>
+                <div class="legal-highlight">L'utilisation de l'application implique l'acceptation pleine et entière des présentes CGU.</div>
             </div>
         </article>
 
-        <!-- Article 2 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">2</span>
-                Services proposés
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">2</span>Services proposés</h2>
+            <div class="legal-article-content">
                 <p>L'application OP! Parents propose :</p>
                 <ul>
                     <li>Des contenus éducatifs gratuits sur les finances personnelles (guides, articles)</li>
@@ -352,42 +117,28 @@
             </div>
         </article>
 
-        <!-- Article 3 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">3</span>
-                Création de compte
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">3</span>Création de compte</h2>
+            <div class="legal-article-content">
                 <p>L'accès à certaines fonctionnalités nécessite la création d'un compte.</p>
                 <p>Vous vous engagez à fournir des informations exactes et à jour. Vous êtes responsable de la confidentialité de vos identifiants.</p>
             </div>
         </article>
 
-        <!-- Article 4 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">4</span>
-                Mise en relation avec un conseiller
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">4</span>Mise en relation avec un conseiller</h2>
+            <div class="legal-article-content">
                 <p>L'application permet d'être mis en relation avec <strong>Florent Cavailles</strong>, société de conseil en gestion de patrimoine immatriculée à l'ORIAS (n° 21008193).</p>
-                <div class="highlight-box">
-                    Cette mise en relation est <strong>entièrement gratuite</strong>.
-                </div>
+                <div class="legal-highlight">Cette mise en relation est <strong>entièrement gratuite</strong>.</div>
                 <p>Les prestations de conseil qui pourraient suivre sont régies par les conditions propres à OCCITEA PATRIMOINE, communiquées avant tout engagement.</p>
             </div>
         </article>
 
-        <!-- Article 5 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">5</span>
-                Nature des contenus
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">5</span>Nature des contenus</h2>
+            <div class="legal-article-content">
                 <p>Les contenus proposés ont une vocation purement <strong>informative et pédagogique</strong>.</p>
-                <div class="highlight-box warning-box">
+                <div class="legal-highlight legal-warning">
                     <p><strong>Ils ne constituent en aucun cas :</strong></p>
                     <ul>
                         <li>Un conseil en investissement personnalisé</li>
@@ -399,13 +150,9 @@
             </div>
         </article>
 
-        <!-- Article 6 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">6</span>
-                Responsabilités
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">6</span>Responsabilités</h2>
+            <div class="legal-article-content">
                 <p>OCCITEA PATRIMOINE s'efforce d'assurer l'exactitude des informations mais ne peut la garantir.</p>
                 <p>OCCITEA PATRIMOINE ne saurait être responsable :</p>
                 <ul>
@@ -416,13 +163,9 @@
             </div>
         </article>
 
-        <!-- Article 7 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">7</span>
-                Obligations de l'utilisateur
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">7</span>Obligations de l'utilisateur</h2>
+            <div class="legal-article-content">
                 <p>Vous vous engagez à :</p>
                 <ul>
                     <li>Utiliser l'application conformément à sa destination</li>
@@ -433,62 +176,80 @@
             </div>
         </article>
 
-        <!-- Article 8 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">8</span>
-                Propriété intellectuelle
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">8</span>Propriété intellectuelle</h2>
+            <div class="legal-article-content">
                 <p>Tous les contenus de l'application sont protégés par le droit de la propriété intellectuelle et restent la propriété d'<strong>OCCITEA PATRIMOINE</strong>.</p>
             </div>
         </article>
 
-        <!-- Article 9 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">9</span>
-                Modification des CGU
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">9</span>Modification des CGU</h2>
+            <div class="legal-article-content">
                 <p>OCCITEA PATRIMOINE peut modifier les présentes CGU à tout moment. Vous serez informé de toute modification. L'utilisation après modification vaut acceptation.</p>
             </div>
         </article>
 
-        <!-- Article 10 -->
-        <article class="article">
-            <h2 class="article-title">
-                <span class="article-number">10</span>
-                Droit applicable
-            </h2>
-            <div class="article-content">
+        <article class="legal-article">
+            <h2 class="legal-article-title"><span class="legal-article-number">10</span>Droit applicable</h2>
+            <div class="legal-article-content">
                 <p>Les présentes CGU sont soumises au <strong>droit français</strong>.</p>
                 <p>En cas de litige, les parties rechercheront une solution amiable. À défaut, les tribunaux de <strong>Toulouse</strong> seront compétents.</p>
             </div>
         </article>
 
-        <!-- Contact -->
-        <section class="contact-section">
-            <h2 class="contact-title">📬 Contact</h2>
-            <div class="contact-info">
-                <p><strong>EURL Florent Cavailles</strong></p>
-                <p>Nom commercial : Occitea Patrimoine</p>
-                <p>504 Route des Gaux, 81290 Labruguière</p>
-                <p><a href="mailto:florent@occitea-ip.fr">florent@occitea-ip.fr</a></p>
-            </div>
-        </section>
+        <div class="legal-contact-card">
+            <h3>📬 Contact</h3>
+            <p><strong>EURL Florent Cavailles</strong></p>
+            <p>Nom commercial : Occitea Patrimoine</p>
+            <p>504 Route des Gaux, 81290 Labruguière</p>
+            <p><a href="mailto:florent@occitea-ip.fr">florent@occitea-ip.fr</a></p>
+        </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <nav class="footer-links">
-            <a href="index.html" class="footer-link">Accueil</a>
-            <a href="cgu.html" class="footer-link active">CGU</a>
-            <a href="mentions-legales.html" class="footer-link">Mentions légales</a>
-            <a href="politique-confidentialite.html" class="footer-link">Confidentialité</a>
-            <a href="contact.html" class="footer-link">Contact</a>
-        </nav>
-        <p class="footer-copy">© 2026 OP! Parents — EURL Florent Cavailles</p>
+    <!-- FOOTER COMPONENT -->
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
+                        <span class="footer-tagline">booste tes finances !</span>
+                    </div>
+                    <p>L'application d'éducation financière dédiée aux parents.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="quizzes.html">Quiz</a></li>
+                        <li><a href="webinaires.html">Webinaires</a></li>
+                        <li><a href="investir.html">Investir</a></li>
+                        <li><a href="mission.html">Le Concept!</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Suivez-nous</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
+                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 <a href="admin/login.html" class="admin-link">OP!</a> - Tous droits réservés</p>
+                <div class="footer-legal">
+                    <a href="cgu.html">CGU</a>
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="politique-confidentialite.html">Confidentialité</a>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

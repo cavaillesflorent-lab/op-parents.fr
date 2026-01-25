@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Quiz - Admin OP!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <style>
+        /* ============================================
+           ADMIN QUIZ - ÉDITEUR DE BLOCS
+           ============================================ */
+        
+        .quiz-editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gray-50);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .quiz-editor-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .quiz-editor {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+        
+        .editor-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn-back {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .btn-back:hover {
+            color: var(--vert-fonce);
+        }
+        
+        .editor-header h1 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+        
+        .editor-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .save-status {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Layout principal */
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* Sidebar gauche - Types de blocs */
+        .blocks-sidebar {
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .blocks-sidebar h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .block-types-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        
+        .block-type-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 0.5rem;
+            background: var(--gray-50);
+            border: 2px solid transparent;
+            border-radius: var(--radius-lg);
+            cursor: grab;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+        }
+        
+        .block-type-btn:hover {
+            background: var(--vert-clair);
+            border-color: var(--vert-fonce);
+        }
+        
+        .block-type-btn .block-icon {
+            font-size: 1.5rem;
+        }
+        
+        .block-type-btn .block-name {
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        /* Zone centrale - Canvas */
+        .editor-canvas {
+            background: var(--gray-100);
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .canvas-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100%;
+        }
+        
+        /* Bloc dans le canvas */
+        .block-item {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .block-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .block-item.selected {
+            border-color: var(--vert-fonce);
+        }
+        
+        .block-item.dragging {
+            opacity: 0.5;
+        }
+        
+        .block-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            border-bottom: 1px solid var(--gray-200);
+            cursor: grab;
+        }
+        
+        .block-drag-handle {
+            color: var(--text-secondary);
+            cursor: grab;
+        }
+        
+        .block-type-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        
+        .block-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 0.25rem;
+        }
+        
+        .block-action-btn {
+            background: none;
+            border: none;
+            padding: 0.35rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+        }
+        
+        .block-action-btn:hover {
+            background: var(--gray-200);
+            color: var(--text-primary);
+        }
+        
+        .block-action-btn.delete:hover {
+            background: #fdeaea;
+            color: var(--terracotta);
+        }
+        
+        .block-content {
+            padding: 1rem;
+        }
+        
+        /* Formulaires dans les blocs */
+        .block-form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .block-form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .block-form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+        }
+        
+        .block-form-group input,
+        .block-form-group textarea,
+        .block-form-group select {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+        
+        .block-form-group input:focus,
+        .block-form-group textarea:focus,
+        .block-form-group select:focus {
+            outline: none;
+            border-color: var(--vert-fonce);
+        }
+        
+        .block-form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .block-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        /* Options de quiz/sondage */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+        }
+        
+        .option-item .option-marker {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+        
+        .option-item.correct .option-marker {
+            background: var(--vert-clair);
+            border-color: var(--vert-fonce);
+            color: var(--vert-fonce);
+        }
+        
+        .option-item input[type="text"] {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.35rem;
+        }
+        
+        .option-item input[type="text"]:focus {
+            outline: none;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+        }
+        
+        .option-correct-toggle {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            background: var(--gray-200);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .option-item.correct .option-correct-toggle {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+        
+        .option-delete {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .option-delete:hover {
+            color: var(--terracotta);
+        }
+        
+        .add-option-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: none;
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .add-option-btn:hover {
+            border-color: var(--vert-fonce);
+            color: var(--vert-fonce);
+            background: var(--vert-clair);
+        }
+        
+        /* Champs d'exercice */
+        .exercise-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .exercise-field {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+        }
+        
+        .exercise-field input {
+            flex: 1;
+            border: none;
+            background: transparent;
+        }
+        
+        /* Tableau éditable */
+        .table-editor {
+            overflow-x: auto;
+        }
+        
+        .table-editor table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table-editor th,
+        .table-editor td {
+            border: 1px solid var(--gray-300);
+            padding: 0.5rem;
+        }
+        
+        .table-editor th {
+            background: var(--gray-100);
+        }
+        
+        .table-editor input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+        }
+        
+        .table-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Sidebar droite - Paramètres */
+        .settings-sidebar {
+            background: var(--white);
+            border-left: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+        
+        .settings-section h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .settings-group {
+            margin-bottom: 1rem;
+        }
+        
+        .settings-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+        }
+        
+        .settings-group input,
+        .settings-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+        }
+        
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--vert-fonce);
+        }
+        
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .toggle-label {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        
+        /* Empty state */
+        .canvas-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--white);
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-xl);
+        }
+        
+        .canvas-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .canvas-empty h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .canvas-empty p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* Drop zone indicator */
+        .drop-zone {
+            height: 4px;
+            background: var(--vert-fonce);
+            border-radius: 2px;
+            margin: 0.5rem 0;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .drop-zone.active {
+            opacity: 1;
+        }
+        
+        /* Stats bar */
+        .quiz-stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Table liste */
+        .data-table-container {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .data-table th {
+            background: var(--gray-50);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+        
+        .quiz-title-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .quiz-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--vert-clair);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .quiz-info h4 {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .quiz-info small {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-badge.published {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+        
+        .status-badge.draft {
+            background: var(--gray-200);
+            color: var(--text-secondary);
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--gray-100);
+            color: var(--text-secondary);
+        }
+        
+        .btn-icon:hover {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+        
+        .btn-icon.delete:hover {
+            background: #fdeaea;
+            color: var(--terracotta);
+        }
+        
+        /* Modal suppression */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            position: relative;
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .modal-content h2 {
+            margin: 0 0 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .editor-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .blocks-sidebar,
+            .settings-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
+                <span>Administration</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="webinaires.html" class="nav-item">
+                    <span class="nav-icon">🎥</span>
+                    Webinaires
+                </a>
+                <a href="quizzes.html" class="nav-item active">
+                    <span class="nav-icon">🧠</span>
+                    Quiz / Guides
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../index.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    Voir le site
+                </a>
+                <button class="nav-item logout-btn" id="logout-btn">
+                    <span class="nav-icon">🚪</span>
+                    Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1>Guides & Quiz Éducatifs</h1>
+                <button class="btn btn-primary" id="new-quiz-btn">
+                    ➕ Nouveau guide
+                </button>
+            </header>
+
+            <div class="admin-content">
+                <!-- Stats rapides -->
+                <div class="quiz-stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-quizzes">-</span>
+                        <span class="stat-label">Guides créés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-responses">-</span>
+                        <span class="stat-label">Vues totales</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="published-quizzes">-</span>
+                        <span class="stat-label">Publiés</span>
+                    </div>
+                </div>
+
+                <!-- Liste des quiz -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Guide</th>
+                                <th>Blocs</th>
+                                <th>Vues</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quizzes-list">
+                            <tr>
+                                <td colspan="5" class="loading">Chargement...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL ÉDITEUR DE BLOCS (Plein écran) -->
+    <div class="quiz-editor-modal" id="quiz-editor-modal">
+        <div class="quiz-editor">
+            <!-- Header -->
+            <header class="editor-header">
+                <div class="editor-header-left">
+                    <button class="btn-back" id="btn-back">← Retour</button>
+                    <h1 id="editor-title">Nouveau Guide</h1>
+                </div>
+                <div class="editor-header-right">
+                    <span class="save-status" id="save-status"></span>
+                    <button class="btn btn-secondary" id="btn-preview">👁️ Aperçu</button>
+                    <button class="btn btn-primary" id="btn-save">💾 Enregistrer</button>
+                </div>
+            </header>
+
+            <!-- Layout 3 colonnes -->
+            <div class="editor-layout">
+                
+                <!-- Sidebar gauche - Types de blocs -->
+                <aside class="blocks-sidebar">
+                    <h3>📦 Blocs disponibles</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Cliquez ou glissez un bloc vers le canvas
+                    </p>
+                    
+                    <div class="block-types-grid">
+                        <button class="block-type-btn" data-type="section-title">
+                            <span class="block-icon">📑</span>
+                            <span class="block-name">Titre section</span>
+                        </button>
+                        <button class="block-type-btn" data-type="narrative">
+                            <span class="block-icon">📖</span>
+                            <span class="block-name">Narratif</span>
+                        </button>
+                        <button class="block-type-btn" data-type="info-box">
+                            <span class="block-icon">📋</span>
+                            <span class="block-name">Encadré info</span>
+                        </button>
+                        <button class="block-type-btn" data-type="stat">
+                            <span class="block-icon">📊</span>
+                            <span class="block-name">Statistique</span>
+                        </button>
+                        <button class="block-type-btn" data-type="poll">
+                            <span class="block-icon">🗳️</span>
+                            <span class="block-name">Sondage</span>
+                        </button>
+                        <button class="block-type-btn" data-type="quiz">
+                            <span class="block-icon">❓</span>
+                            <span class="block-name">Quiz</span>
+                        </button>
+                        <button class="block-type-btn" data-type="focus">
+                            <span class="block-icon">🔍</span>
+                            <span class="block-name">Focus</span>
+                        </button>
+                        <button class="block-type-btn" data-type="table">
+                            <span class="block-icon">📈</span>
+                            <span class="block-name">Tableau</span>
+                        </button>
+                        <button class="block-type-btn" data-type="exercise">
+                            <span class="block-icon">✍️</span>
+                            <span class="block-name">Exercice</span>
+                        </button>
+                        <button class="block-type-btn" data-type="summary">
+                            <span class="block-icon">📝</span>
+                            <span class="block-name">Résumé</span>
+                        </button>
+                        <button class="block-type-btn" data-type="cta">
+                            <span class="block-icon">🎯</span>
+                            <span class="block-name">CTA</span>
+                        </button>
+                        <button class="block-type-btn" data-type="image">
+                            <span class="block-icon">🖼️</span>
+                            <span class="block-name">Image</span>
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Zone centrale - Canvas -->
+                <main class="editor-canvas" id="editor-canvas">
+                    <div class="canvas-inner" id="canvas-inner">
+                        <div class="canvas-empty" id="canvas-empty">
+                            <div class="canvas-empty-icon">📝</div>
+                            <h3>Commencez votre guide</h3>
+                            <p>Cliquez sur un type de bloc à gauche ou glissez-le ici</p>
+                        </div>
+                        
+                        <!-- Les blocs seront insérés ici -->
+                        <div id="blocks-container"></div>
+                    </div>
+                </main>
+
+                <!-- Sidebar droite - Paramètres -->
+                <aside class="settings-sidebar">
+                    <div class="settings-section">
+                        <h3>⚙️ Paramètres du guide</h3>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-title">Titre *</label>
+                            <input type="text" id="quiz-title" placeholder="Ex: Le budget familial">
+                        </div>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-subtitle">Sous-titre</label>
+                            <input type="text" id="quiz-subtitle" placeholder="Ex: Comprendre où passe ton argent">
+                        </div>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-slug">Slug (URL)</label>
+                            <input type="text" id="quiz-slug" placeholder="budget-familial">
+                        </div>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-duration">Durée estimée</label>
+                            <input type="text" id="quiz-duration" placeholder="10 min" value="10 min">
+                        </div>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-icon">Emoji icône</label>
+                            <input type="text" id="quiz-icon" placeholder="💰" value="💰" maxlength="4">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>📤 Publication</h3>
+                        
+                        <div class="settings-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="quiz-published">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">Guide publié</span>
+                        </div>
+                        
+                        <div class="settings-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="quiz-collect-email">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">Collecter email à la fin</span>
+                        </div>
+                        
+                        <div class="settings-toggle">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="quiz-show-progress" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label">Barre de progression</span>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>🎨 Apparence</h3>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-category">Catégorie</label>
+                            <select id="quiz-category">
+                                <option value="budget">💰 Budget</option>
+                                <option value="epargne">🛡️ Épargne</option>
+                                <option value="investissement">📈 Investissement</option>
+                                <option value="mindset">🧠 Mindset</option>
+                                <option value="famille">👨‍👩‍👧 Famille</option>
+                            </select>
+                        </div>
+                        
+                        <div class="settings-group">
+                            <label for="quiz-image">Image de couverture (URL)</label>
+                            <input type="url" id="quiz-image" placeholder="https://...">
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal suppression -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h2>Supprimer ce guide ?</h2>
+            <p>Cette action est irréversible. Toutes les données seront perdues.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="delete-cancel">Annuler</button>
+                <button class="btn btn-danger" id="delete-confirm">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEMPLATES DES BLOCS -->
+    <template id="template-section-title">
+        <div class="block-item" data-type="section-title">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📑 Titre de section</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre de la section</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Étape 1 : regarder la réalité en face 👀">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-narrative">
+        <div class="block-item" data-type="narrative">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📖 Narratif</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Accroche / Titre (optionnel)</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Samedi matin, 10h47 🛒">
+                </div>
+                <div class="block-form-group">
+                    <label>Texte narratif</label>
+                    <textarea class="block-field" data-field="content" rows="6" placeholder="Tu es au supermarché avec les enfants..."></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-info-box">
+        <div class="block-item" data-type="info-box">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📋 Encadré info</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre de l'encadré (optionnel)</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Ce qu'ils pensaient dépenser vs la réalité">
+                </div>
+                <div class="block-form-group">
+                    <label>Contenu (utilisez • pour les listes)</label>
+                    <textarea class="block-field" data-field="content" rows="6" placeholder="• Point 1&#10;• Point 2&#10;• Point 3"></textarea>
+                </div>
+                <div class="block-form-group">
+                    <label>Style</label>
+                    <select class="block-field" data-field="style">
+                        <option value="default">Par défaut</option>
+                        <option value="highlight">Mis en avant (fond coloré)</option>
+                        <option value="warning">Attention</option>
+                        <option value="tip">Astuce</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-stat">
+        <div class="block-item" data-type="stat">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📊 Statistique</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Statistique</label>
+                    <textarea class="block-field" data-field="stat" rows="2" placeholder="Ex: 52% des Français seraient incapables de faire face à une dépense imprévue de 1 000 €"></textarea>
+                </div>
+                <div class="block-form-group">
+                    <label>Source</label>
+                    <input type="text" class="block-field" data-field="source" placeholder="Ex: Baromètre COFIDIS 2024">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-poll">
+        <div class="block-item" data-type="poll">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">🗳️ Sondage</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre du sondage</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Un sondage ! 🕵️">
+                </div>
+                <div class="block-form-group">
+                    <label>Question</label>
+                    <textarea class="block-field" data-field="question" rows="2" placeholder="Ex: Honnêtement, tu sais combien tu dépenses en courses chaque mois ?"></textarea>
+                </div>
+                <div class="block-form-group">
+                    <label>Options (pas de bonne réponse)</label>
+                    <div class="options-list" data-field="options">
+                        <div class="option-item">
+                            <span class="option-marker">□</span>
+                            <input type="text" placeholder="Option 1">
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                        <div class="option-item">
+                            <span class="option-marker">□</span>
+                            <input type="text" placeholder="Option 2">
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                        <div class="option-item">
+                            <span class="option-marker">□</span>
+                            <input type="text" placeholder="Option 3">
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                    </div>
+                    <button class="add-option-btn">+ Ajouter une option</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-quiz">
+        <div class="block-item" data-type="quiz">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">❓ Quiz</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre (optionnel)</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Hop, un quiz ! ❓">
+                </div>
+                <div class="block-form-group">
+                    <label>Question</label>
+                    <textarea class="block-field" data-field="question" rows="2" placeholder="Ex: L'épargne de précaution sert à :"></textarea>
+                </div>
+                <div class="block-form-group">
+                    <label>Options (cliquez sur ✓ pour marquer la bonne réponse)</label>
+                    <div class="options-list" data-field="options">
+                        <div class="option-item">
+                            <span class="option-marker">A</span>
+                            <input type="text" placeholder="Réponse A">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                        <div class="option-item">
+                            <span class="option-marker">B</span>
+                            <input type="text" placeholder="Réponse B">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                        <div class="option-item">
+                            <span class="option-marker">C</span>
+                            <input type="text" placeholder="Réponse C">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
+                            <button class="option-delete" title="Supprimer">×</button>
+                        </div>
+                    </div>
+                    <button class="add-option-btn">+ Ajouter une option</button>
+                </div>
+                <div class="block-form-group">
+                    <label>Explication de la bonne réponse</label>
+                    <textarea class="block-field" data-field="explanation" rows="4" placeholder="Ex: ✅ Réponse : Faire face aux imprévus...&#10;&#10;L'épargne de précaution n'est pas une épargne « projet »..."></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-focus">
+        <div class="block-item" data-type="focus">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">🔍 Focus</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre du focus</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: C'est quoi une dépense « invisible » ? 🤔">
+                </div>
+                <div class="block-form-group">
+                    <label>Définition / Explication</label>
+                    <textarea class="block-field" data-field="content" rows="4" placeholder="C'est une dépense que tu fais sans y penser..."></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-table">
+        <div class="block-item" data-type="table">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📈 Tableau</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre du tableau (optionnel)</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Les imprévus qui arrivent à tout le monde">
+                </div>
+                <div class="block-form-group">
+                    <label>Données (format CSV simplifié)</label>
+                    <textarea class="block-field" data-field="data" rows="6" placeholder="Type d'imprévu | Coût moyen | Fréquence
+Réparation voiture | 300 à 1 500 € | Tous les 1-2 ans
+Électroménager en panne | 200 à 800 € | Tous les 2-3 ans"></textarea>
+                    <small style="color: var(--text-secondary);">Séparez les colonnes par | et les lignes par entrée</small>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-exercise">
+        <div class="block-item" data-type="exercise">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">✍️ Exercice</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre de l'exercice</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: 📝 Fiche à remplir">
+                </div>
+                <div class="block-form-group">
+                    <label>Champs à remplir (un par ligne)</label>
+                    <textarea class="block-field" data-field="fields" rows="6" placeholder="MES REVENUS MENSUELS : ___ €
+MES DÉPENSES AUTOMATIQUES : ___ €
+MON RESTE À VIVRE : ___ €"></textarea>
+                    <small style="color: var(--text-secondary);">Utilisez ___ pour indiquer où l'utilisateur doit remplir</small>
+                </div>
+                <div class="block-form-group">
+                    <label>Instructions / Aide (optionnel)</label>
+                    <textarea class="block-field" data-field="instructions" rows="2" placeholder="Ex: Prends tes 3 derniers relevés de compte..."></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-summary">
+        <div class="block-item" data-type="summary">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">📝 Résumé</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre du résumé</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: En résumé 📝">
+                </div>
+                <div class="block-form-group">
+                    <label>Points clés (un par ligne, commence par emoji ou numéro)</label>
+                    <textarea class="block-field" data-field="points" rows="8" placeholder="1️⃣ REGARDER
+Tes relevés bancaires, pas ta mémoire.
+
+2️⃣ TRIER
+L'automatique d'un côté, le reste de l'autre.
+
+3️⃣ ANTICIPER
+Les gros mois (rentrée, Noël, vacances)."></textarea>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-cta">
+        <div class="block-item" data-type="cta">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">🎯 Call-to-Action</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Envie d'aller plus loin ?">
+                </div>
+                <div class="block-form-group">
+                    <label>Texte</label>
+                    <textarea class="block-field" data-field="content" rows="3" placeholder="Ex: OP! Parents t'accompagne avec des webinaires..."></textarea>
+                </div>
+                <div class="block-form-row">
+                    <div class="block-form-group">
+                        <label>Texte du bouton</label>
+                        <input type="text" class="block-field" data-field="button_text" placeholder="Ex: Découvrir →">
+                    </div>
+                    <div class="block-form-group">
+                        <label>Lien du bouton</label>
+                        <input type="text" class="block-field" data-field="button_url" placeholder="Ex: /webinaires.html">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-image">
+        <div class="block-item" data-type="image">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge">🖼️ Image</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>URL de l'image</label>
+                    <input type="url" class="block-field" data-field="url" placeholder="https://...">
+                </div>
+                <div class="block-form-group">
+                    <label>Légende (optionnel)</label>
+                    <input type="text" class="block-field" data-field="caption" placeholder="Description de l'image">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/admin-quiz-blocks.js"></script>
+</body>
+</html>

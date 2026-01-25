@@ -65,7 +65,7 @@
         }
         
         .stat-card.webinaires .stat-icon { background: #fde8e4; }
-        .stat-card.quiz .stat-icon { background: #fde8e4; }
+        .stat-card.quiz .stat-icon { background: #e8f5e9; }
         .stat-card.inscriptions .stat-icon { background: #fef3c7; }
         
         .stat-info { flex: 1; }
@@ -91,6 +91,11 @@
             background: #fde8e4;
             color: #bf604B;
             font-weight: 600;
+        }
+        
+        .stat-card.quiz .stat-badge {
+            background: #e8f5e9;
+            color: var(--vert-fonce);
         }
         
         /* Main Grid */
@@ -259,7 +264,7 @@
             font-weight: 600;
         }
         
-        .quiz-status.published { background: #fde8e4; color: #bf604B; }
+        .quiz-status.published { background: #e8f5e9; color: var(--vert-fonce); }
         .quiz-status.draft { background: var(--gray-100); color: var(--text-secondary); }
         
         /* Empty State */
@@ -319,8 +324,8 @@
                     Webinaires
                 </a>
                 <a href="quizzes.html" class="nav-item">
-                    <span class="nav-icon">🧠</span>
-                    Quiz
+                    <span class="nav-icon">📚</span>
+                    Guides & Quiz
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -360,10 +365,10 @@
                 </div>
                 
                 <div class="stat-card quiz">
-                    <div class="stat-icon">🧠</div>
+                    <div class="stat-icon">📚</div>
                     <div class="stat-info">
                         <span class="stat-value" id="stat-quiz">0</span>
-                        <span class="stat-label">Quiz</span>
+                        <span class="stat-label">Guides</span>
                     </div>
                     <span class="stat-badge" id="stat-quiz-published">0 publiés</span>
                 </div>
@@ -404,24 +409,24 @@
                             <span class="action-text">Créer un webinaire</span>
                         </a>
                         <a href="quizzes.html" class="quick-action-btn">
-                            <span class="action-icon">🧠</span>
-                            <span class="action-text">Créer un quiz</span>
+                            <span class="action-icon">📚</span>
+                            <span class="action-text">Créer un guide</span>
                         </a>
                         <a href="../webinaires.html" target="_blank" class="quick-action-btn">
                             <span class="action-icon">👁️</span>
                             <span class="action-text">Page webinaires</span>
                         </a>
-                        <a href="../quiz.html" target="_blank" class="quick-action-btn">
+                        <a href="../formations.html" target="_blank" class="quick-action-btn">
                             <span class="action-icon">🎯</span>
-                            <span class="action-text">Tester les quiz</span>
+                            <span class="action-text">Page formations</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Quiz -->
+                <!-- Guides & Quiz -->
                 <div class="dashboard-card">
                     <div class="card-header">
-                        <h2>🧠 Quiz</h2>
+                        <h2>📚 Guides & Quiz</h2>
                         <a href="quizzes.html" class="card-link">Gérer →</a>
                     </div>
                     <div id="quiz-list">
@@ -554,21 +559,22 @@
                     .limit(4);
                 
                 if (!quizzes?.length) {
-                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">🧠</span><p>Aucun quiz créé</p><a href="quizzes.html" class="btn btn-sm btn-primary">Créer un quiz</a></div>';
+                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">📚</span><p>Aucun guide créé</p><a href="quizzes.html" class="btn btn-sm btn-primary">Créer un guide</a></div>';
                     return;
                 }
                 
-                container.innerHTML = quizzes.map(q => 
-                    '<div class="quiz-item">' +
+                container.innerHTML = quizzes.map(q => {
+                    const icon = q.icon || '📝';
+                    return '<div class="quiz-item">' +
                         '<div class="quiz-info">' +
-                            '<h4>' + q.titre + '</h4>' +
-                            '<span class="quiz-meta">' + (q.duree || '5 min') + '</span>' +
+                            '<h4>' + icon + ' ' + q.titre + '</h4>' +
+                            '<span class="quiz-meta">' + (q.duree || '10 min') + '</span>' +
                         '</div>' +
                         '<span class="quiz-status ' + (q.published ? 'published' : 'draft') + '">' +
                             (q.published ? '✅ Publié' : '📝 Brouillon') +
                         '</span>' +
-                    '</div>'
-                ).join('');
+                    '</div>';
+                }).join('');
             } catch (err) {
                 console.error('Erreur:', err);
                 container.innerHTML = '<p class="error">Erreur de chargement</p>';

@@ -1,6 +1,7 @@
 // ============================================
 // ADMIN QUIZ - ÉDITEUR DE BLOCS
 // OP! Parents
+// VERSION: 2.0 - avec auto-save et collecte des données
 // ============================================
 
 let currentQuizId = null;
@@ -108,12 +109,19 @@ function initEventListeners() {
             slugField.value = generateSlug(e.target.value);
         }
         markDirty();
+        autoSave();
     });
     
-    // Tous les champs de paramètres
+    // Tous les champs de paramètres - avec auto-save
     document.querySelectorAll('.settings-sidebar input, .settings-sidebar select, .settings-sidebar textarea').forEach(el => {
-        el.addEventListener('change', markDirty);
-        el.addEventListener('input', markDirty);
+        el.addEventListener('change', () => {
+            markDirty();
+            autoSave();
+        });
+        el.addEventListener('input', () => {
+            markDirty();
+            autoSave();
+        });
     });
     
     // Modal suppression
@@ -286,6 +294,13 @@ async function loadQuizData(quizId) {
 }
 
 function closeEditor() {
+    // Annuler l'auto-save en cours
+    if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = null;
+    }
+    lastSavedData = null;
+    
     document.getElementById('quiz-editor-modal').classList.remove('active');
     currentQuizId = null;
     blocks = [];
@@ -298,6 +313,11 @@ function closeEditor() {
 // ============================================
 
 function addBlock(type, index = -1) {
+    console.log('➕ addBlock appelé, type:', type);
+    
+    // IMPORTANT: Collecter les données actuelles AVANT de re-render
+    collectAllBlocksData();
+    
     const blockData = {
         id: generateBlockId(),
         type: type,
@@ -310,8 +330,11 @@ function addBlock(type, index = -1) {
         blocks.splice(index, 0, blockData);
     }
     
+    console.log('📦 Blocs après ajout:', blocks.length);
+    
     renderAllBlocks();
     markDirty();
+    autoSave();
     
     // Scroll vers le nouveau bloc
     setTimeout(() => {
@@ -449,6 +472,7 @@ function attachBlockEvents() {
             const blockId = blockEl.dataset.blockId;
             const fieldName = e.target.dataset.field;
             updateBlockData(blockId, fieldName, e.target.value);
+            autoSave(); // Déclencher l'auto-save
         });
     });
     
@@ -458,6 +482,7 @@ function attachBlockEvents() {
             const blockEl = e.target.closest('.block-item');
             const blockId = blockEl.dataset.blockId;
             updateBlockOptions(blockId);
+            autoSave(); // Déclencher l'auto-save
         });
     });
     
@@ -482,6 +507,7 @@ function attachBlockEvents() {
             }
             
             updateBlockOptions(blockId);
+            autoSave(); // Déclencher l'auto-save
         });
     });
     
@@ -497,6 +523,7 @@ function attachBlockEvents() {
             
             // Mettre à jour les markers
             updateOptionMarkers(blockEl);
+            autoSave(); // Déclencher l'auto-save
         });
     });
     
@@ -523,7 +550,10 @@ function attachBlockEvents() {
             optionsList.appendChild(newOption);
             
             // Attacher les événements au nouvel élément
-            newOption.querySelector('input').addEventListener('input', () => updateBlockOptions(blockId));
+            newOption.querySelector('input').addEventListener('input', () => {
+                updateBlockOptions(blockId);
+                autoSave();
+            });
             
             if (blockType === 'quiz') {
                 newOption.querySelector('.option-correct-toggle').addEventListener('click', (e) => {
@@ -531,6 +561,7 @@ function attachBlockEvents() {
                     blockEl.querySelectorAll('.option-item').forEach(item => item.classList.remove('correct'));
                     if (!wasCorrect) newOption.classList.add('correct');
                     updateBlockOptions(blockId);
+                    autoSave();
                 });
             }
             
@@ -538,10 +569,12 @@ function attachBlockEvents() {
                 newOption.remove();
                 updateBlockOptions(blockId);
                 updateOptionMarkers(blockEl);
+                autoSave();
             });
             
             updateBlockOptions(blockId);
             markDirty();
+            autoSave();
         });
     });
     
@@ -587,13 +620,19 @@ function updateBlockOptions(blockId) {
 
 function deleteBlock(blockId) {
     if (confirm('Supprimer ce bloc ?')) {
+        // Collecter les données avant de supprimer
+        collectAllBlocksData();
         blocks = blocks.filter(b => b.id !== blockId);
         renderAllBlocks();
         markDirty();
+        autoSave();
     }
 }
 
 function duplicateBlock(blockId) {
+    // Collecter les données avant de dupliquer
+    collectAllBlocksData();
+    
     const block = blocks.find(b => b.id === blockId);
     if (!block) return;
     
@@ -607,6 +646,7 @@ function duplicateBlock(blockId) {
     blocks.splice(index + 1, 0, newBlock);
     renderAllBlocks();
     markDirty();
+    autoSave();
 }
 
 // ============================================
@@ -620,6 +660,8 @@ function makeSortable(container) {
         item.setAttribute('draggable', true);
         
         item.addEventListener('dragstart', (e) => {
+            // Collecter les données avant de commencer le drag
+            collectAllBlocksData();
             draggedItem = item;
             item.classList.add('dragging');
             e.dataTransfer.effectAllowed = 'move';
@@ -638,6 +680,7 @@ function makeSortable(container) {
             });
             blocks = newOrder;
             markDirty();
+            autoSave();
         });
         
         item.addEventListener('dragover', (e) => {
@@ -734,6 +777,7 @@ async function saveQuiz() {
 
 function collectAllBlocksData() {
     const container = document.getElementById('blocks-container');
+    console.log('🔄 collectAllBlocksData - Nombre de blocs:', blocks.length);
     
     container.querySelectorAll('.block-item').forEach(blockEl => {
         const blockId = blockEl.dataset.blockId;
@@ -745,14 +789,108 @@ function collectAllBlocksData() {
                 const fieldName = field.dataset.field;
                 if (!block.data) block.data = {};
                 block.data[fieldName] = field.value;
+                console.log(`  📝 Block ${blockId}: ${fieldName} = "${field.value.substring(0, 30)}..."`);
             });
             
             // Collecter les options si quiz/poll
             if (block.type === 'quiz' || block.type === 'poll') {
-                updateBlockOptions(blockId);
+                const optionItems = blockEl.querySelectorAll('.option-item');
+                block.data.options = Array.from(optionItems).map(item => ({
+                    text: item.querySelector('input[type="text"]').value,
+                    correct: item.classList.contains('correct')
+                }));
             }
         }
     });
+    
+    console.log('✅ Données collectées:', JSON.stringify(blocks.map(b => ({id: b.id, type: b.type, data: b.data})), null, 2));
+}
+
+// ============================================
+// AUTO-SAVE (sauvegarde en temps réel)
+// ============================================
+
+let autoSaveTimeout = null;
+let lastSavedData = null;
+
+function autoSave() {
+    // Annuler le timeout précédent
+    if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+    }
+    
+    // Sauvegarder après 2 secondes d'inactivité
+    autoSaveTimeout = setTimeout(async () => {
+        // Vérifier qu'on a un quiz en cours d'édition avec un titre et slug
+        const title = document.getElementById('quiz-title').value.trim();
+        const slug = document.getElementById('quiz-slug').value.trim();
+        
+        if (!title || !slug) {
+            // Pas assez d'infos pour sauvegarder
+            return;
+        }
+        
+        // Collecter les données actuelles
+        collectAllBlocksData();
+        
+        // Vérifier si les données ont changé
+        const currentData = JSON.stringify({ blocks, title, slug });
+        if (currentData === lastSavedData) {
+            return; // Rien n'a changé
+        }
+        
+        // Sauvegarder
+        try {
+            updateSaveStatus('saving');
+            
+            const quizData = {
+                titre: title,
+                sous_titre: document.getElementById('quiz-subtitle').value.trim(),
+                slug: slug,
+                duree: document.getElementById('quiz-duration').value.trim(),
+                icon: document.getElementById('quiz-icon').value.trim() || '💰',
+                published: document.getElementById('quiz-published').checked,
+                collect_email: document.getElementById('quiz-collect-email').checked,
+                show_progress: document.getElementById('quiz-show-progress').checked,
+                category: document.getElementById('quiz-category').value,
+                image_url: document.getElementById('quiz-image').value.trim(),
+                blocks: blocks,
+                updated_at: new Date().toISOString()
+            };
+            
+            let result;
+            if (currentQuizId) {
+                result = await supabaseClient
+                    .from('quizzes')
+                    .update(quizData)
+                    .eq('id', currentQuizId)
+                    .select()
+                    .single();
+            } else {
+                quizData.created_at = new Date().toISOString();
+                quizData.view_count = 0;
+                result = await supabaseClient
+                    .from('quizzes')
+                    .insert(quizData)
+                    .select()
+                    .single();
+                
+                if (result.data) {
+                    currentQuizId = result.data.id;
+                }
+            }
+            
+            if (result.error) throw result.error;
+            
+            lastSavedData = currentData;
+            isDirty = false;
+            updateSaveStatus('saved');
+            
+        } catch (error) {
+            console.error('Erreur auto-save:', error);
+            updateSaveStatus('error');
+        }
+    }, 2000);
 }
 
 // ============================================

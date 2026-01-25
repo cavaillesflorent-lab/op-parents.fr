@@ -9,103 +9,80 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="assets/images/favicon.png" type="image/png">
     
     <style>
         .legal-hero {
             background: linear-gradient(135deg, var(--vert-fonce) 0%, #1F2E29 100%);
-            padding: 4rem 1.5rem;
+            padding: var(--space-3xl) var(--space-lg);
             text-align: center;
-            color: var(--blanc);
+            color: var(--white);
         }
-        .legal-hero-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .legal-hero-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 0.75rem; }
-        .legal-hero-update { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
-        .legal-hero-intro { font-size: 1rem; color: rgba(255,255,255,0.85); max-width: 600px; margin: 0 auto; }
+        .legal-hero-icon { font-size: 3rem; margin-bottom: var(--space-md); }
+        .legal-hero-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: var(--space-sm); }
+        .legal-hero-update { font-size: 0.9rem; opacity: 0.7; margin-bottom: var(--space-lg); }
+        .legal-hero-intro { font-size: 1rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
         
-        .legal-content { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+        .legal-content { max-width: 800px; margin: 0 auto; padding: var(--space-3xl) var(--space-lg); }
         
         .legal-article {
-            background: var(--blanc);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid var(--gris-200);
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
         }
-        .legal-article-title { font-size: 1.1rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
-        .legal-article-number { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--vert-fonce); color: var(--blanc); border-radius: 50%; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
-        .legal-article-content { font-size: 0.95rem; color: var(--gris-700); line-height: 1.8; }
-        .legal-article-content p { margin-bottom: 0.75rem; }
+        .legal-article-title { font-size: 1.1rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-sm); }
+        .legal-article-number { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--vert-fonce); color: var(--white); border-radius: 50%; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
+        .legal-article-content { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8; }
+        .legal-article-content p { margin-bottom: var(--space-sm); }
         .legal-article-content p:last-child { margin-bottom: 0; }
-        .legal-article-content ul { list-style: none; margin: 0.75rem 0; padding: 0; }
-        .legal-article-content ul li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+        .legal-article-content ul { list-style: none; margin: var(--space-sm) 0; padding: 0; }
+        .legal-article-content ul li { position: relative; padding-left: 1.5rem; margin-bottom: var(--space-xs); }
         .legal-article-content ul li::before { content: '•'; position: absolute; left: 0.5rem; color: var(--vert-fonce); font-weight: 700; }
-        .legal-article-content strong { color: var(--gris-800); }
+        .legal-article-content strong { color: var(--text-primary); }
         .legal-article-content a { color: var(--vert-fonce); text-decoration: none; font-weight: 500; }
         .legal-article-content a:hover { text-decoration: underline; }
         
-        .legal-sub-section { background: var(--gris-50); border-radius: 12px; padding: 1rem 1.25rem; margin: 1rem 0; }
-        .legal-sub-section-title { font-size: 0.85rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .legal-sub-section { background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-md) var(--space-lg); margin: var(--space-md) 0; }
+        .legal-sub-section-title { font-size: 0.85rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: var(--space-sm); text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .legal-highlight { background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%); border-left: 4px solid var(--vert-fonce); padding: 1rem 1.25rem; border-radius: 12px; margin: 1rem 0; font-size: 0.9rem; }
+        .legal-highlight { background: linear-gradient(135deg, var(--vert-clair) 0%, rgba(223, 242, 182, 0.5) 100%); border-left: 4px solid var(--vert-fonce); padding: var(--space-md) var(--space-lg); border-radius: var(--radius-lg); margin: var(--space-md) 0; font-size: 0.9rem; }
         .legal-highlight.privacy { background: linear-gradient(135deg, #DBEAFE 0%, rgba(219, 234, 254, 0.5) 100%); border-left-color: #3B82F6; }
         
-        .legal-rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
-        .legal-right-item { background: var(--gris-50); border-radius: 12px; padding: 0.875rem 1rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+        .legal-rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); margin: var(--space-md) 0; }
+        .legal-right-item { background: var(--gray-50); border-radius: var(--radius-lg); padding: var(--space-md); display: flex; align-items: flex-start; gap: var(--space-sm); }
         .legal-right-icon { font-size: 1.25rem; flex-shrink: 0; }
         .legal-right-content { font-size: 0.85rem; }
-        .legal-right-name { font-weight: 600; color: var(--gris-800); margin-bottom: 0.25rem; }
-        .legal-right-desc { color: var(--gris-600); }
+        .legal-right-name { font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-xs); }
+        .legal-right-desc { color: var(--text-secondary); }
         
-        .legal-contact-box { background: var(--vert-fonce); border-radius: 12px; padding: 1rem 1.25rem; margin-top: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .legal-contact-box { background: var(--vert-fonce); border-radius: var(--radius-lg); padding: var(--space-md) var(--space-lg); margin-top: var(--space-md); display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; }
         .legal-contact-box-text { color: rgba(255,255,255,0.9); font-size: 0.9rem; flex: 1; }
-        .legal-contact-box-link { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--dore); color: var(--vert-fonce); padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+        .legal-contact-box-link { display: inline-flex; align-items: center; gap: var(--space-sm); background: var(--dore); color: var(--vert-fonce); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-lg); font-size: 0.85rem; font-weight: 600; text-decoration: none; }
         .legal-contact-box-link:hover { opacity: 0.9; }
         
-        .legal-contact-card { background: var(--vert-fonce); border-radius: 16px; padding: 2rem; margin-top: 2rem; text-align: center; color: var(--blanc); }
-        .legal-contact-card h3 { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .legal-contact-card p { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.8; margin-bottom: 0.25rem; }
+        .legal-contact-card { background: var(--vert-fonce); border-radius: var(--radius-xl); padding: var(--space-xl); margin-top: var(--space-xl); text-align: center; color: var(--white); }
+        .legal-contact-card h3 { font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; margin-bottom: var(--space-lg); }
+        .legal-contact-card p { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.8; margin-bottom: var(--space-xs); }
         .legal-contact-card strong { color: var(--dore); }
         .legal-contact-card a { color: var(--dore); text-decoration: none; }
         .legal-contact-card a:hover { text-decoration: underline; }
         
         @media (max-width: 768px) {
-            .legal-hero { padding: 3rem 1rem; }
-            .legal-content { padding: 2rem 1rem; }
-            .legal-article { padding: 1.25rem; }
+            .legal-hero { padding: var(--space-xl) var(--space-md); }
+            .legal-content { padding: var(--space-xl) var(--space-md); }
+            .legal-article { padding: var(--space-lg); }
             .legal-rights-grid { grid-template-columns: 1fr; }
             .legal-contact-box { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER COMPONENT -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="assets/images/logo.png" alt="OP!" class="logo-img">
-                    </a>
-                    <span class="logo-text">booste tes finances !</span>
-                </div>
-                <nav class="nav">
-                    <a href="quizzes.html" data-page="quizzes"><span class="nav-icon">🧠</span> Quiz</a>
-                    <a href="webinaires.html" data-page="webinaires"><span class="nav-icon">🎥</span> Webinaires</a>
-                    <a href="investir.html" data-page="investir"><span class="nav-icon">💰</span> Investir</a>
-                    <a href="mission.html" data-page="mission"><span class="nav-icon">🚀</span> Le Concept!</a>
-                    <a href="contact.html" data-page="contact"><span class="nav-icon">✉️</span> Contact</a>
-                </nav>
-                <button class="mobile-toggle" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- HEADER -->
+    <div id="header-placeholder"></div>
 
     <!-- Hero -->
     <section class="legal-hero">
@@ -269,7 +246,7 @@
                     <a href="mailto:donnees@occitea-ip.fr" class="legal-contact-box-link">📧 donnees@occitea-ip.fr</a>
                 </div>
                 
-                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--gris-500);">
+                <p style="margin-top: var(--space-md); font-size: 0.85rem; color: var(--text-muted);">
                     En cas de réclamation : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>
                 </p>
             </div>
@@ -304,49 +281,11 @@
         </div>
     </main>
 
-    <!-- FOOTER COMPONENT -->
-    <footer id="contact" class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <div class="footer-logo">
-                        <img src="assets/images/logo.png" alt="OP!" class="footer-logo-img">
-                        <span class="footer-tagline">booste tes finances !</span>
-                    </div>
-                    <p>L'application d'éducation financière dédiée aux parents.</p>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Navigation</h4>
-                    <ul>
-                        <li><a href="quizzes.html">Quiz</a></li>
-                        <li><a href="webinaires.html">Webinaires</a></li>
-                        <li><a href="investir.html">Investir</a></li>
-                        <li><a href="mission.html">Le Concept!</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-col">
-                    <h4>Suivez-nous</h4>
-                    <div class="social-links">
-                        <a href="https://instagram.com/op.parents" target="_blank">Instagram</a>
-                        <a href="https://linkedin.com/company/op-parents" target="_blank">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 <a href="admin/login.html" class="admin-link">OP!</a> - Tous droits réservés</p>
-                <div class="footer-legal">
-                    <a href="cgu.html">CGU</a>
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <a href="politique-confidentialite.html">Confidentialité</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
 
-    <script src="assets/js/main.js"></script>
+    <!-- Scripts -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/components.js"></script>
 </body>
 </html>

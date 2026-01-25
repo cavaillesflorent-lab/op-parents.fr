@@ -330,6 +330,17 @@
             transform: translateX(-100%);
         }
         
+        /* Container pour plusieurs blocs dans une slide */
+        .slide-blocks {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .slide-blocks > * {
+            flex-shrink: 0;
+        }
+        
         /* ============================================
            NAVIGATION BOTTOM
            ============================================ */
@@ -1060,6 +1071,7 @@
         // ============================================
         let guideData = null;
         let blocks = [];
+        let slides = []; // Groupes de blocs par slide
         let currentSlide = 0;
         let quizCorrectCount = 0;
         let quizTotalCount = 0;
@@ -1109,6 +1121,9 @@
                 blocks = guide.blocks || [];
                 quizTotalCount = blocks.filter(b => b.type === 'quiz').length;
                 
+                // Grouper les blocs en slides basé sur les page-break
+                slides = groupBlocksIntoSlides(blocks);
+                
                 if (!isPreviewMode) {
                     supabaseClient.from('quizzes').update({ view_count: (guide.view_count || 0) + 1 }).eq('id', guide.id);
                 }
@@ -1129,6 +1144,41 @@
             }
         }
         
+        // Grouper les blocs en slides (séparés par page-break)
+        function groupBlocksIntoSlides(allBlocks) {
+            // Vérifier s'il y a au moins un page-break
+            const hasPageBreaks = allBlocks.some(b => b.type === 'page-break');
+            
+            // Si pas de page-break, chaque bloc = 1 slide (comportement par défaut)
+            if (!hasPageBreaks) {
+                return allBlocks.map(b => [b]);
+            }
+            
+            // Sinon, grouper par page-break
+            const result = [];
+            let currentGroup = [];
+            
+            for (const block of allBlocks) {
+                if (block.type === 'page-break') {
+                    // Si on a des blocs dans le groupe courant, on les ajoute comme slide
+                    if (currentGroup.length > 0) {
+                        result.push(currentGroup);
+                        currentGroup = [];
+                    }
+                    // On ignore le page-break lui-même, il ne s'affiche pas
+                } else {
+                    currentGroup.push(block);
+                }
+            }
+            
+            // Ajouter le dernier groupe s'il reste des blocs
+            if (currentGroup.length > 0) {
+                result.push(currentGroup);
+            }
+            
+            return result;
+        }
+        
         // ============================================
         // RENDER HERO
         // ============================================
@@ -1138,7 +1188,7 @@
             document.getElementById('hero-title').textContent = guide.titre;
             document.getElementById('hero-subtitle').textContent = guide.sous_titre || '';
             document.getElementById('hero-duration').textContent = guide.duree || '10 min';
-            document.getElementById('hero-blocks').textContent = blocks.length;
+            document.getElementById('hero-blocks').textContent = slides.length;
             
             const categories = { 'budget': '💰 Budget', 'epargne': '🛡️ Épargne', 'investissement': '📈 Investissement', 'mindset': '🧠 Mindset', 'famille': '👨‍👩‍👧 Famille' };
             document.getElementById('hero-category').textContent = categories[guide.category] || '📖 Guide';
@@ -1154,7 +1204,7 @@
         // ============================================
         function renderProgressSegments() {
             const container = document.getElementById('progress-segments');
-            container.innerHTML = blocks.map((_, i) => `
+            container.innerHTML = slides.map((_, i) => `
                 <div class="progress-segment" data-index="${i}">
                     <div class="progress-segment-fill"></div>
                 </div>
@@ -1167,7 +1217,7 @@
                 if (i < currentSlide) seg.classList.add('completed');
                 else if (i === currentSlide) seg.classList.add('current');
             });
-            document.getElementById('header-counter').textContent = `${currentSlide + 1}/${blocks.length}`;
+            document.getElementById('header-counter').textContent = `${currentSlide + 1}/${slides.length}`;
         }
         
         // ============================================
@@ -1175,8 +1225,12 @@
         // ============================================
         function renderSlides() {
             const container = document.getElementById('slides-container');
-            container.innerHTML = blocks.map((block, i) => `
-                <div class="slide" data-index="${i}">${renderBlock(block, i)}</div>
+            container.innerHTML = slides.map((slideBlocks, slideIndex) => `
+                <div class="slide" data-index="${slideIndex}">
+                    <div class="slide-blocks">
+                        ${slideBlocks.map((block, blockIndex) => renderBlock(block, blockIndex)).join('')}
+                    </div>
+                </div>
             `).join('');
         }
         
@@ -1271,7 +1325,7 @@
         }
         
         function nextSlide() {
-            if (currentSlide < blocks.length - 1) {
+            if (currentSlide < slides.length - 1) {
                 showSlide(currentSlide + 1);
             } else {
                 showCompletion();
@@ -1284,7 +1338,7 @@
             
             prevBtn.disabled = currentSlide === 0;
             
-            if (currentSlide === blocks.length - 1) {
+            if (currentSlide === slides.length - 1) {
                 nextBtn.innerHTML = `Terminer <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
                 nextBtn.classList.add('golden');
             } else {
@@ -1364,7 +1418,7 @@
         // COMPLETION
         // ============================================
         function showCompletion() {
-            document.getElementById('stat-blocks').textContent = blocks.length;
+            document.getElementById('stat-blocks').textContent = slides.length;
             document.getElementById('stat-quiz').textContent = `${quizCorrectCount}/${quizTotalCount}`;
             document.getElementById('completion-screen').classList.add('visible');
         }

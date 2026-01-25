@@ -1033,6 +1033,14 @@
                             <span class="block-icon">🖼️</span>
                             <span class="block-name">Image</span>
                         </button>
+                        <button class="block-type-btn" data-type="personal-field" style="background: linear-gradient(135deg, #DFF2B6, #C5E89E); border-color: #A8D970;">
+                            <span class="block-icon">👤</span>
+                            <span class="block-name">Champ perso</span>
+                        </button>
+                        <button class="block-type-btn" data-type="page-break" style="background: linear-gradient(135deg, #F0D075, #E5C35A); border-color: #E5C35A;">
+                            <span class="block-icon">➡️</span>
+                            <span class="block-name">Slide suivante</span>
+                        </button>
                     </div>
                 </aside>
 
@@ -1516,6 +1524,67 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
                     <label>Légende (optionnel)</label>
                     <input type="text" class="block-field" data-field="caption" placeholder="Description de l'image">
                 </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-personal-field">
+        <div class="block-item" data-type="personal-field">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge" style="background: linear-gradient(135deg, #DFF2B6, #C5E89E); color: #2D403B;">👤 Champ personnel</span>
+                <div class="block-actions">
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Question / Label</label>
+                    <input type="text" class="block-field" data-field="label" placeholder="Ex: Quel est votre revenu mensuel net ?">
+                </div>
+                <div class="block-form-row">
+                    <div class="block-form-group">
+                        <label>Clé de stockage</label>
+                        <input type="text" class="block-field" data-field="key" placeholder="Ex: revenu_mensuel">
+                        <small style="color: #6B7280; font-size: 0.75rem;">Identifiant unique (sans espaces ni accents)</small>
+                    </div>
+                    <div class="block-form-group">
+                        <label>Type de champ</label>
+                        <select class="block-field" data-field="fieldType">
+                            <option value="text">Texte libre</option>
+                            <option value="number">Nombre</option>
+                            <option value="money">Montant (€)</option>
+                            <option value="percent">Pourcentage (%)</option>
+                            <option value="date">Date</option>
+                            <option value="textarea">Texte long</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="block-form-group">
+                    <label>Placeholder (texte d'aide)</label>
+                    <input type="text" class="block-field" data-field="placeholder" placeholder="Ex: 2500">
+                </div>
+                <div class="block-form-group">
+                    <label>Aide contextuelle (optionnel)</label>
+                    <input type="text" class="block-field" data-field="help" placeholder="Ex: Indiquez votre salaire après impôts">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-page-break">
+        <div class="block-item block-page-break" data-type="page-break">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge" style="background: linear-gradient(135deg, #F0D075, #E5C35A); color: #2D403B;">➡️ Slide suivante</span>
+                <div class="block-actions">
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content" style="text-align: center; padding: 1rem; color: #6B7280; font-style: italic;">
+                <div style="border-top: 2px dashed #F0D075; margin: 0.5rem 0;"></div>
+                ↓ Les blocs suivants seront sur une nouvelle slide ↓
             </div>
         </div>
     </template>

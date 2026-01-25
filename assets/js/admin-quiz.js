@@ -22,7 +22,9 @@ const BLOCK_TYPES = {
     'exercise': { icon: '✍️', name: 'Exercice' },
     'summary': { icon: '📝', name: 'Résumé' },
     'cta': { icon: '🎯', name: 'CTA' },
-    'image': { icon: '🖼️', name: 'Image' }
+    'image': { icon: '🖼️', name: 'Image' },
+    'personal-field': { icon: '👤', name: 'Champ perso' },
+    'page-break': { icon: '➡️', name: 'Slide suivante' }
 };
 
 // ============================================

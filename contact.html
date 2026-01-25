@@ -6,6 +6,532 @@
     <title>Contact - OP! Éducation financière des parents</title>
     <meta name="description" content="Une question ? Besoin d'aide ? Contactez l'équipe OP! pour toute demande d'information sur nos formations et webinaires.">
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* ============================================
+           PAGE CONTACT - DESIGN MODERNE
+           ============================================ */
+        
+        /* Hero simplifié */
+        .contact-hero {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #3D5550 100%);
+            padding: calc(80px + var(--space-xl)) var(--space-md) var(--space-xl);
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--vert-clair) 0%, transparent 70%);
+            opacity: 0.1;
+        }
+        
+        .contact-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--white);
+        }
+        
+        .contact-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            color: var(--white);
+        }
+        
+        /* Section principale */
+        .contact-main {
+            padding: var(--space-3xl) 0;
+            background: var(--gray-50);
+        }
+        
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        /* Colonne gauche - Infos de contact */
+        .contact-info-column {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+        
+        /* Cartes de contact */
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .contact-method-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .contact-method-card:hover {
+            border-color: var(--vert-clair);
+            transform: translateX(5px);
+        }
+        
+        .contact-method-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-method-info h3 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-method-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-method-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--vert-fonce);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .contact-method-link:hover {
+            color: var(--terracotta);
+        }
+        
+        /* Encart Florent avec agréments */
+        .advisor-card {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            border-top: 4px solid var(--vert-fonce);
+        }
+        
+        .advisor-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .advisor-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 4px solid var(--vert-clair);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .advisor-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+        }
+        
+        .advisor-info h3 {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .advisor-info .advisor-title {
+            font-size: 1rem;
+            color: var(--vert-fonce);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .advisor-info .advisor-tagline {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .advisor-credentials {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .advisor-credentials h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .credential-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: var(--space-sm);
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .credential-icon {
+            color: var(--vert-fonce);
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .credential-item strong {
+            color: var(--vert-fonce);
+        }
+        
+        /* Colonne droite - Formulaire */
+        .contact-form-column {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-lg);
+            height: fit-content;
+        }
+        
+        .contact-form-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .contact-form-header h2 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-xs);
+            color: var(--text-primary);
+        }
+        
+        .contact-form-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: var(--space-sm) var(--space-md);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--vert-fonce);
+            box-shadow: 0 0 0 3px rgba(45, 64, 59, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-consent {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            margin-top: 3px;
+            accent-color: var(--vert-fonce);
+        }
+        
+        .checkbox-label a {
+            color: var(--vert-fonce);
+        }
+        
+        .form-submit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--vert-fonce);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-sans);
+            margin-top: var(--space-sm);
+        }
+        
+        .form-submit-btn:hover {
+            background: var(--vert-fonce-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .form-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .form-message {
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .form-message.success {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+        
+        .form-message.error {
+            background: #fdeaea;
+            color: var(--terracotta);
+        }
+        
+        /* Section FAQ */
+        .contact-faq-section {
+            padding: var(--space-3xl) 0;
+            background: var(--white);
+        }
+        
+        .contact-faq-section h2 {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            color: var(--text-primary);
+        }
+        
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--gray-50);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            border-left: 4px solid var(--vert-clair);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-left-color: var(--vert-fonce);
+            transform: translateX(5px);
+        }
+        
+        .faq-item h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+        
+        .faq-item p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* CTA Section */
+        .contact-cta-section {
+            padding: var(--space-3xl) 0;
+            background: var(--vert-clair);
+        }
+        
+        .contact-cta-card {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-cta-card h2 {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--vert-fonce);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .contact-cta-card p {
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+            opacity: 0.9;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .contact-cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        
+        .contact-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .contact-cta-btn.primary {
+            background: var(--vert-fonce);
+            color: var(--white);
+        }
+        
+        .contact-cta-btn.primary:hover {
+            background: var(--vert-fonce-light);
+            transform: translateY(-2px);
+        }
+        
+        .contact-cta-btn.secondary {
+            background: var(--white);
+            color: var(--vert-fonce);
+        }
+        
+        .contact-cta-btn.secondary:hover {
+            background: var(--peche);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 968px) {
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+            
+            .contact-info-column {
+                order: 2;
+            }
+            
+            .contact-form-column {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .contact-hero {
+                padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .advisor-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -13,115 +539,146 @@
 
     <main>
         <!-- HERO -->
-        <section class="page-hero">
-            <div class="page-hero-content">
-                <span class="page-hero-badge">💬 Contact</span>
+        <section class="contact-hero">
+            <div class="contact-hero-content">
                 <h1>Une question ?<br>On est là pour toi</h1>
-                <p>N'hésite pas à nous écrire, on répond à toutes les questions avec plaisir.</p>
+                <p>N'hésite pas à nous contacter, on répond à toutes les questions avec plaisir.</p>
             </div>
         </section>
 
-        <!-- CONTACT OPTIONS -->
-        <section class="contact-options-section">
+        <!-- SECTION PRINCIPALE -->
+        <section class="contact-main">
             <div class="container">
-                <div class="contact-grid">
-                    <!-- Email -->
-                    <div class="contact-card">
-                        <div class="contact-card-icon">📧</div>
-                        <h3>Par email</h3>
-                        <p>Pour toute question générale ou demande d'information</p>
-                        <a href="mailto:contact@op-parents.fr" class="contact-link">
-                            contact@op-parents.fr
-                        </a>
+                <div class="contact-layout">
+                    <!-- Colonne gauche - Infos -->
+                    <div class="contact-info-column">
+                        <!-- Méthodes de contact -->
+                        <div class="contact-methods">
+                            <!-- Email -->
+                            <div class="contact-method-card">
+                                <div class="contact-method-icon">📧</div>
+                                <div class="contact-method-info">
+                                    <h3>Par email</h3>
+                                    <p>Pour toute question générale</p>
+                                    <a href="mailto:contact@op-parents.fr" class="contact-method-link">
+                                        contact@op-parents.fr
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Téléphone -->
+                            <div class="contact-method-card">
+                                <div class="contact-method-icon">📱</div>
+                                <div class="contact-method-info">
+                                    <h3>Par téléphone</h3>
+                                    <p>Du lundi au vendredi, 9h-18h</p>
+                                    <a href="tel:0686629434" class="contact-method-link">
+                                        06 86 62 94 34
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Encart Florent + Agréments -->
+                        <div class="advisor-card">
+                            <div class="advisor-header">
+                                <div class="advisor-photo">
+                                    <img src="assets/images/florent.png" alt="Florent Cavaillès">
+                                </div>
+                                <div class="advisor-info">
+                                    <h3>Florent Cavaillès</h3>
+                                    <p class="advisor-title">Ingénieur Patrimonial</p>
+                                    <p class="advisor-tagline">+12 ans d'expérience, +150 familles accompagnées</p>
+                                </div>
+                            </div>
+                            
+                            <div class="advisor-credentials">
+                                <h4>Agréments & certifications</h4>
+                                
+                                <div class="credential-item">
+                                    <span class="credential-icon">✓</span>
+                                    <span><strong>N° ORIAS :</strong> 21008193</span>
+                                </div>
+                                
+                                <div class="credential-item">
+                                    <span class="credential-icon">✓</span>
+                                    <span>Conseiller en Investissement Financier membre de l'<strong>ANACOFI-CIF</strong></span>
+                                </div>
+                                
+                                <div class="credential-item">
+                                    <span class="credential-icon">✓</span>
+                                    <span>Courtier en opérations d'assurance</span>
+                                </div>
+                                
+                                <div class="credential-item">
+                                    <span class="credential-icon">✓</span>
+                                    <span>Compétence juridique appropriée</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Instagram -->
-                    <div class="contact-card">
-                        <div class="contact-card-icon">📱</div>
-                        <h3>Sur Instagram</h3>
-                        <p>Rejoins notre communauté et échange avec nous au quotidien</p>
-                        <a href="https://instagram.com/op.parents" target="_blank" class="contact-link">
-                            @op.parents
-                        </a>
-                    </div>
+                    <!-- Colonne droite - Formulaire -->
+                    <div class="contact-form-column">
+                        <div class="contact-form-header">
+                            <h2>Envoie-nous un message</h2>
+                            <p>On te répond sous 48h maximum.</p>
+                        </div>
 
-                    <!-- RDV -->
-                    <div class="contact-card highlight">
-                        <div class="contact-card-icon">📅</div>
-                        <h3>Prendre rendez-vous</h3>
-                        <p>Besoin d'un accompagnement personnalisé avec Florent ?</p>
-                        <a href="investir.html" class="contact-btn">
-                            Découvrir l'accompagnement
-                            <span class="arrow">→</span>
-                        </a>
+                        <form class="contact-form" id="contact-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="prenom">Prénom *</label>
+                                    <input type="text" id="prenom" name="prenom" required placeholder="Ton prénom">
+                                </div>
+                                <div class="form-group">
+                                    <label for="nom">Nom *</label>
+                                    <input type="text" id="nom" name="nom" required placeholder="Ton nom">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required placeholder="ton@email.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sujet">Sujet *</label>
+                                <select id="sujet" name="sujet" required>
+                                    <option value="">Choisis un sujet</option>
+                                    <option value="formations">Question sur les formations</option>
+                                    <option value="webinaires">Question sur les webinaires</option>
+                                    <option value="accompagnement">Demande d'accompagnement</option>
+                                    <option value="partenariat">Proposition de partenariat</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="Écris ton message ici..."></textarea>
+                            </div>
+
+                            <div class="form-consent">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="consent" required>
+                                    <span>J'accepte que mes données soient utilisées pour répondre à ma demande. <a href="mentions-legales.html">Politique de confidentialité</a></span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="form-submit-btn">
+                                Envoyer le message
+                                <span class="arrow">→</span>
+                            </button>
+
+                            <div class="form-message" id="form-message"></div>
+                        </form>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- FORMULAIRE -->
-        <section class="contact-form-section">
-            <div class="container">
-                <div class="contact-form-wrapper">
-                    <div class="contact-form-header">
-                        <h2>Envoie-nous un message</h2>
-                        <p>Remplis le formulaire ci-dessous et on te répond sous 48h.</p>
-                    </div>
-
-                    <form class="contact-form" id="contact-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="prenom">Prénom *</label>
-                                <input type="text" id="prenom" name="prenom" required placeholder="Ton prénom">
-                            </div>
-                            <div class="form-group">
-                                <label for="nom">Nom *</label>
-                                <input type="text" id="nom" name="nom" required placeholder="Ton nom">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required placeholder="ton@email.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sujet">Sujet *</label>
-                            <select id="sujet" name="sujet" required>
-                                <option value="">Choisis un sujet</option>
-                                <option value="formations">Question sur les formations</option>
-                                <option value="webinaires">Question sur les webinaires</option>
-                                <option value="accompagnement">Demande d'accompagnement</option>
-                                <option value="partenariat">Proposition de partenariat</option>
-                                <option value="autre">Autre</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">Message *</label>
-                            <textarea id="message" name="message" rows="5" required placeholder="Écris ton message ici..."></textarea>
-                        </div>
-
-                        <div class="form-consent">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="consent" required>
-                                <span class="checkmark"></span>
-                                <span>J'accepte que mes données soient utilisées pour répondre à ma demande. <a href="#">Politique de confidentialité</a></span>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="form-submit-btn">
-                            Envoyer le message
-                            <span class="arrow">→</span>
-                        </button>
-
-                        <div class="form-message" id="form-message"></div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ RAPIDE -->
+        <!-- FAQ -->
         <section class="contact-faq-section">
             <div class="container">
                 <h2>Questions fréquentes</h2>
@@ -131,8 +688,8 @@
                         <p>Oui, toutes nos formations et webinaires sont 100% gratuits. Notre mission est de rendre l'éducation financière accessible à tous les parents.</p>
                     </div>
                     <div class="faq-item">
-                        <h3>Comment fonctionne l'accompagnement personnalisé ?</h3>
-                        <p>Florent, ingénieur patrimonial, propose des consultations pour t'aider dans tes décisions financières. C'est un service séparé et payant.</p>
+                        <h3>Comment fonctionne l'accompagnement ?</h3>
+                        <p>Florent, ingénieur patrimonial, propose des consultations pour t'aider dans tes décisions financières. Un premier échange permet de faire connaissance.</p>
                     </div>
                     <div class="faq-item">
                         <h3>Je suis débutant, c'est fait pour moi ?</h3>
@@ -140,24 +697,28 @@
                     </div>
                     <div class="faq-item">
                         <h3>Comment rester informé des nouveautés ?</h3>
-                        <p>Suis-nous sur Instagram @op.parents ou inscris-toi à notre newsletter pour ne rien manquer.</p>
+                        <p>Inscris-toi à notre newsletter ou consulte régulièrement notre page webinaires pour ne rien manquer.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- CTA -->
-        <section class="page-cta-section">
+        <section class="contact-cta-section">
             <div class="container">
-                <div class="page-cta-card">
-                    <div class="page-cta-content">
-                        <h2>Pas encore inscrit ?</h2>
-                        <p>Découvre nos formations gratuites et commence ta transformation financière dès aujourd'hui.</p>
+                <div class="contact-cta-card">
+                    <h2>Prêt à passer à l'action ?</h2>
+                    <p>Découvre nos formations gratuites ou réserve un échange avec Florent pour parler de ta situation.</p>
+                    <div class="contact-cta-buttons">
+                        <a href="formations.html" class="contact-cta-btn primary">
+                            Voir les formations
+                            <span>→</span>
+                        </a>
+                        <a href="investir.html" class="contact-cta-btn secondary">
+                            Parler à Florent
+                            <span>→</span>
+                        </a>
                     </div>
-                    <a href="formations.html" class="page-cta-btn">
-                        Voir les formations
-                        <span class="arrow">→</span>
-                    </a>
                 </div>
             </div>
         </section>

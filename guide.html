@@ -220,10 +220,15 @@
         .block-exercise { background: linear-gradient(135deg, var(--dore) 0%, #E5C35A 100%); border-radius: var(--radius-xl); padding: 1.5rem; }
         .exercise-title { font-size: 1.1rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 0.5rem; }
         .exercise-instructions { font-size: 0.9rem; color: var(--gris-700); margin-bottom: 1rem; font-style: italic; }
+        .exercise-fields { margin-bottom: 1rem; }
+        .exercise-help-text { padding: 0.4rem 0.75rem; font-size: 0.8rem; color: var(--gris-500); font-style: italic; background: none; margin-top: -0.25rem; }
         .exercise-field { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.75rem; background: var(--blanc); border-radius: var(--radius-md); margin-bottom: 0.5rem; font-size: 0.9rem; }
-        .exercise-field-label { color: var(--gris-700); flex: 1; }
-        .exercise-field-input { border: none; border-bottom: 2px dashed var(--gris-300); background: transparent; width: 80px; padding: 0.25rem; font-size: 0.95rem; font-weight: 600; color: var(--vert-fonce); text-align: center; }
+        .exercise-field-label { color: var(--gris-700); flex: 1; font-weight: 500; }
+        .exercise-field-input { border: none; border-bottom: 2px dashed var(--gris-300); background: transparent; width: 80px; padding: 0.25rem; font-size: 0.95rem; font-weight: 600; color: var(--vert-fonce); text-align: right; }
         .exercise-field-input:focus { outline: none; border-bottom-color: var(--vert-fonce); }
+        .exercise-field-unit { font-size: 0.85rem; color: var(--gris-500); width: 20px; }
+        .exercise-calc-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.75rem; background: var(--blanc); border: 2px solid var(--vert-fonce); border-radius: var(--radius-md); color: var(--vert-fonce); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .exercise-calc-btn:hover { background: var(--vert-fonce); color: var(--blanc); }
         
         .block-summary { background: var(--blanc); border-radius: var(--radius-xl); padding: 1.5rem; border: 2px solid var(--vert-fonce); }
         .summary-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
@@ -279,23 +284,27 @@
         .calc-fab {
             position: fixed;
             bottom: calc(var(--nav-height) + 16px);
-            right: 16px;
-            width: 56px;
-            height: 56px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 44px;
+            padding: 0 1.25rem;
             background: var(--dore);
             border: none;
-            border-radius: 50%;
+            border-radius: var(--radius-full);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            font-size: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
             cursor: pointer;
             z-index: 80;
             display: none;
             align-items: center;
             justify-content: center;
+            gap: 0.5rem;
             transition: all 0.2s ease;
         }
         .calc-fab.visible { display: flex; }
-        .calc-fab:active { transform: scale(0.95); }
+        .calc-fab:active { transform: translateX(-50%) scale(0.95); }
         .calc-fab:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
         
         /* Calculator Modal */
@@ -619,9 +628,9 @@
     </div>
 
     <!-- Completion -->
-    <!-- Floating Calculator Button -->
-    <button class="calc-fab" id="calc-fab" onclick="openCalculator()">🧮</button>
-    
+    <!-- Floating Calculator Button (shown only on exercise slides) -->
+    <button class="calc-fab" id="calc-fab" onclick="openCalculator()">🧮 Calculette</button>
+
     <!-- Calculator Modal -->
     <div class="calc-modal-overlay" id="calc-modal" onclick="if(event.target===this)closeCalculator()">
         <div class="calc-modal">
@@ -632,7 +641,7 @@
             <div class="calc-modal-body">
                 <button class="calc-add-btn" onclick="addCalcLine()">+ Ajouter une ligne</button>
                 <div class="calc-lines" id="calc-lines">
-                    <div class="calc-empty" id="calc-empty">
+                    <div class="calc-empty">
                         <div class="calc-empty-icon">📝</div>
                         <div class="calc-empty-text">Ajoutez des lignes pour calculer</div>
                     </div>
@@ -961,8 +970,32 @@
         }
         
         function renderExercise(data) {
-            const fields = (data.fields || '').split('\n').filter(f => f.trim());
-            return `<div class="block-exercise"><div class="exercise-title">${esc(data.title || '✍️ Exercice')}</div>${data.instructions ? `<div class="exercise-instructions">${esc(data.instructions)}</div>` : ''}<div class="exercise-fields">${fields.map(f => `<div class="exercise-field"><span class="exercise-field-label">${esc(f.split(':')[0].trim())}</span><input type="text" class="exercise-field-input" placeholder="..."></div>`).join('')}</div></div>`;
+            const lines = (data.fields || '').split('\n').filter(f => f.trim());
+            let html = `<div class="block-exercise" data-has-calc="true">
+                <div class="exercise-title">${esc(data.title || '✍️ Exercice')}</div>
+                ${data.instructions ? `<div class="exercise-instructions">${esc(data.instructions)}</div>` : ''}
+                <div class="exercise-fields">`;
+            
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                // Lignes commençant par ( sont des aides non éditables
+                if (trimmed.startsWith('(') && trimmed.endsWith(')')) {
+                    html += `<div class="exercise-help-text">${esc(trimmed)}</div>`;
+                } else {
+                    // Champ à remplir
+                    const label = trimmed.replace(/[:：].*$/, '').trim();
+                    html += `<div class="exercise-field">
+                        <span class="exercise-field-label">${esc(label)}</span>
+                        <input type="text" class="exercise-field-input" placeholder="...">
+                        <span class="exercise-field-unit">€</span>
+                    </div>`;
+                }
+            });
+            
+            html += `</div>
+                <button class="exercise-calc-btn" onclick="openCalculator()">🧮 Ouvrir la calculette</button>
+            </div>`;
+            return html;
         }
         
         function renderPersonalField(data) {
@@ -1160,6 +1193,22 @@
             currentSlide = index;
             updateProgressSegments();
             updateNavButtons();
+            updateCalcButton(index);
+        }
+        
+        function updateCalcButton(slideIndex) {
+            const calcFab = document.getElementById('calc-fab');
+            if (!calcFab) return;
+            
+            // Check if current slide has an exercise block
+            const slideBlocks = slides[slideIndex] || [];
+            const hasExercise = slideBlocks.some(b => b.type === 'exercise');
+            
+            if (hasExercise) {
+                calcFab.classList.add('visible');
+            } else {
+                calcFab.classList.remove('visible');
+            }
         }
         
         function prevSlide() { if (currentSlide > 0) showSlide(currentSlide - 1); }
@@ -1385,14 +1434,6 @@
         let calcLines = [];
         let calcLineId = 0;
         
-        function showCalcButton() {
-            document.getElementById('calc-fab').classList.add('visible');
-        }
-        
-        function hideCalcButton() {
-            document.getElementById('calc-fab').classList.remove('visible');
-        }
-        
         function openCalculator() {
             // Load saved data if exists
             loadCalcFromResponses();
@@ -1428,7 +1469,6 @@
                 }));
                 calcLineId = calcLines.length;
             } else if (calcLines.length === 0) {
-                // Start with empty if nothing saved
                 calcLines = [];
                 calcLineId = 0;
             }
@@ -1457,6 +1497,7 @@
             const id = calcLineId;
             calcLines.push({ id, label, value: parseFloat(value) || 0 });
             renderCalcLines();
+            updateCalcTotal();
             
             // Focus on the new label input
             setTimeout(() => {
@@ -1487,16 +1528,17 @@
         
         function renderCalcLines() {
             const container = document.getElementById('calc-lines');
-            const empty = document.getElementById('calc-empty');
             
             if (calcLines.length === 0) {
-                empty.style.display = 'block';
-                container.innerHTML = '';
-                container.appendChild(empty);
+                container.innerHTML = `
+                    <div class="calc-empty">
+                        <div class="calc-empty-icon">📝</div>
+                        <div class="calc-empty-text">Ajoutez des lignes pour calculer</div>
+                    </div>
+                `;
                 return;
             }
             
-            empty.style.display = 'none';
             container.innerHTML = calcLines.map(line => `
                 <div class="calc-line" data-calc-id="${line.id}">
                     <input type="text" 
@@ -1534,7 +1576,7 @@
                 
                 setTimeout(() => {
                     btn.classList.remove('copied');
-                    text.textContent = '📋 Copier le total';
+                    text.textContent = '📋 Copier';
                 }, 2000);
             });
         }
@@ -1548,13 +1590,6 @@
                 saveCalcToResponses();
             }
         }
-        
-        // Show calculator button when guide starts
-        const originalStartGuide = startGuide;
-        startGuide = function() {
-            originalStartGuide();
-            showCalcButton();
-        };
     </script>
 </body>
 </html>

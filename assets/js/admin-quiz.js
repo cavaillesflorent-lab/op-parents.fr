@@ -3,7 +3,6 @@
 // OP! Parents
 // ============================================
 
-let supabaseClient;
 let currentQuizId = null;
 let blocks = [];
 let isDirty = false;
@@ -28,22 +27,21 @@ const BLOCK_TYPES = {
 // INITIALISATION
 // ============================================
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Init Supabase
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+document.addEventListener('DOMContentLoaded', () => {
+    // Init Supabase (utilise la fonction de config.js)
+    const client = initSupabase();
     
-    // Vérifier l'auth
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) {
-        window.location.href = 'login.html';
-        return;
-    }
-    
-    // Charger la liste des quiz
-    loadQuizzesList();
-    
-    // Event listeners
+    // Event listeners (attachés immédiatement)
     initEventListeners();
+    
+    // Vérifier l'auth et charger les données
+    client.auth.onAuthStateChange((event, session) => {
+        if (!session) {
+            window.location.href = 'login.html';
+        } else {
+            loadQuizzesList();
+        }
+    });
 });
 
 // ============================================

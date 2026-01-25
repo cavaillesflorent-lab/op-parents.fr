@@ -362,6 +362,11 @@
             border-radius: var(--radius-md);
             text-align: center;
             font-weight: 500;
+            display: none;
+        }
+        
+        .form-message.show {
+            display: block;
         }
         
         .form-message.success {
@@ -625,7 +630,7 @@
                             <p>On te répond sous 48h maximum.</p>
                         </div>
 
-                        <form class="contact-form" id="contact-form">
+                        <form class="contact-form" id="contact-form" action="https://formspree.io/f/mdaeqazl" method="POST">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="prenom">Prénom *</label>
@@ -731,7 +736,7 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
-        // Gestion du formulaire
+        // Gestion du formulaire avec Formspree
         document.getElementById('contact-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -740,17 +745,25 @@
             
             btn.disabled = true;
             btn.innerHTML = 'Envoi en cours...';
+            msgDiv.className = 'form-message';
             
-            // Simuler l'envoi (à remplacer par une vraie API)
             try {
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: { 'Accept': 'application/json' }
+                });
                 
-                msgDiv.className = 'form-message success';
-                msgDiv.innerHTML = '✅ Message envoyé avec succès ! On te répond très vite.';
-                this.reset();
+                if (response.ok) {
+                    msgDiv.className = 'form-message success show';
+                    msgDiv.innerHTML = '✅ Message envoyé avec succès ! On te répond très vite.';
+                    this.reset();
+                } else {
+                    throw new Error('Erreur serveur');
+                }
             } catch (error) {
-                msgDiv.className = 'form-message error';
-                msgDiv.innerHTML = '❌ Une erreur est survenue. Réessaie ou contacte-nous par email.';
+                msgDiv.className = 'form-message error show';
+                msgDiv.innerHTML = '❌ Une erreur est survenue. Réessaie ou contacte-nous directement par email.';
             }
             
             btn.disabled = false;

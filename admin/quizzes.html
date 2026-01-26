@@ -81,6 +81,136 @@
             color: var(--text-secondary);
         }
         
+        /* ============================================
+           ONGLETS DE SÉQUENCES/NIVEAUX (NOUVEAU)
+           ============================================ */
+        
+        .sequences-tabs-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 1.5rem;
+            background: var(--gray-100);
+            border-bottom: 2px solid var(--gray-200);
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+        
+        .sequence-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        
+        .sequence-tab:hover {
+            color: var(--vert-fonce);
+            background: rgba(45, 90, 61, 0.05);
+        }
+        
+        .sequence-tab.active {
+            color: var(--vert-fonce);
+            border-bottom-color: var(--vert-fonce);
+            background: var(--white);
+        }
+        
+        .sequence-tab .tab-emoji {
+            font-size: 1.1rem;
+        }
+        
+        .sequence-tab .tab-delete {
+            display: none;
+            margin-left: 0.25rem;
+            padding: 2px 6px;
+            background: rgba(191, 96, 75, 0.1);
+            border-radius: 50%;
+            color: var(--terracotta);
+            font-size: 0.8rem;
+            line-height: 1;
+        }
+        
+        .sequence-tab:hover .tab-delete {
+            display: inline-flex;
+        }
+        
+        .sequence-tab .tab-delete:hover {
+            background: rgba(191, 96, 75, 0.2);
+        }
+        
+        #btn-add-sequence {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 2px dashed var(--gray-400);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        #btn-add-sequence:hover {
+            border-color: var(--vert-fonce);
+            color: var(--vert-fonce);
+            background: rgba(45, 90, 61, 0.05);
+        }
+        
+        /* En-tête de séquence (titre, emoji, description) */
+        .sequence-header-bar {
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            flex-shrink: 0;
+        }
+        
+        .sequence-header-fields {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr;
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .sequence-field label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+        }
+        
+        .sequence-field input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+        }
+        
+        .sequence-field input:focus {
+            outline: none;
+            border-color: var(--vert-fonce);
+        }
+        
+        .sequence-emoji-field input {
+            text-align: center;
+            font-size: 1.5rem;
+            padding: 0.35rem;
+        }
+        
         /* Layout principal */
         .editor-layout {
             display: grid;
@@ -764,6 +894,14 @@
             .settings-sidebar {
                 display: none;
             }
+            
+            .sequence-header-fields {
+                grid-template-columns: 1fr;
+            }
+            
+            .sequence-emoji-field {
+                max-width: 100px;
+            }
         }
         
         /* ============================================
@@ -973,6 +1111,23 @@
                     <button class="btn btn-primary" id="btn-save">💾 Enregistrer</button>
                 </div>
             </header>
+
+            <!-- ============================================
+                 ONGLETS DE SÉQUENCES/NIVEAUX (NOUVEAU)
+                 ============================================ -->
+            <div class="sequences-tabs-bar">
+                <div id="sequences-tabs-container">
+                    <!-- Les onglets seront générés par JS -->
+                </div>
+                <button type="button" id="btn-add-sequence" title="Ajouter un niveau">+</button>
+            </div>
+
+            <!-- En-tête de la séquence active -->
+            <div class="sequence-header-bar">
+                <div id="sequence-header-container">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
 
             <!-- Layout 3 colonnes -->
             <div class="editor-layout">

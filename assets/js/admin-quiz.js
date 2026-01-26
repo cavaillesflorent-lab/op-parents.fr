@@ -1,11 +1,13 @@
 // ============================================
 // ADMIN QUIZ - ÉDITEUR DE BLOCS
 // OP! Parents
-// VERSION: 3.0 - Corrections: perte de données, boucle infinie, erreur 409
+// VERSION: 4.0 - Ajout des séquences/niveaux
 // ============================================
 
 let currentQuizId = null;
 let blocks = [];
+let sequences = []; // NOUVEAU: Liste des séquences/niveaux
+let activeSequenceIndex = 0; // NOUVEAU: Index de la séquence active
 let isDirty = false;
 let eventsInitialized = false;
 
@@ -183,6 +185,160 @@ function initEventListeners() {
         e.stopPropagation();
         removeImage();
     });
+    
+    // ============================================
+    // BOUTON AJOUTER SÉQUENCE (NOUVEAU)
+    // ============================================
+    const btnAddSeq = document.getElementById('btn-add-sequence');
+    if (btnAddSeq) {
+        btnAddSeq.addEventListener('click', addSequence);
+    }
+}
+
+// ============================================
+// GESTION DES SÉQUENCES/NIVEAUX (NOUVEAU)
+// ============================================
+
+function initDefaultSequence() {
+    sequences = [{
+        id: generateSequenceId(),
+        titre: 'Niveau 1',
+        description: '',
+        emoji: '📚'
+    }];
+    activeSequenceIndex = 0;
+}
+
+function generateSequenceId() {
+    return 'seq_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+}
+
+function addSequence() {
+    // Collecter les données avant d'ajouter
+    collectAllBlocksData();
+    
+    const newSeq = {
+        id: generateSequenceId(),
+        titre: `Niveau ${sequences.length + 1}`,
+        description: '',
+        emoji: '📚'
+    };
+    
+    sequences.push(newSeq);
+    activeSequenceIndex = sequences.length - 1;
+    
+    renderSequenceTabs();
+    renderSequenceHeader();
+    renderAllBlocks();
+    markDirty();
+    autoSave();
+}
+
+function deleteSequence(index, e) {
+    if (e) e.stopPropagation();
+    
+    if (sequences.length <= 1) {
+        alert('Vous devez garder au moins un niveau');
+        return;
+    }
+    
+    if (!confirm(`Supprimer "${sequences[index].titre}" et tous ses blocs ?`)) {
+        return;
+    }
+    
+    // Collecter les données avant de supprimer
+    collectAllBlocksData();
+    
+    // Supprimer les blocs de cette séquence
+    const seqId = sequences[index].id;
+    blocks = blocks.filter(b => b.sequenceId !== seqId);
+    
+    // Supprimer la séquence
+    sequences.splice(index, 1);
+    
+    // Ajuster l'index actif
+    if (activeSequenceIndex >= sequences.length) {
+        activeSequenceIndex = sequences.length - 1;
+    }
+    
+    renderSequenceTabs();
+    renderSequenceHeader();
+    renderAllBlocks();
+    markDirty();
+    autoSave();
+}
+
+function selectSequence(index) {
+    // Collecter les données avant de changer
+    collectAllBlocksData();
+    
+    activeSequenceIndex = index;
+    renderSequenceTabs();
+    renderSequenceHeader();
+    renderAllBlocks();
+}
+
+function renderSequenceTabs() {
+    const container = document.getElementById('sequences-tabs-container');
+    if (!container) return;
+    
+    container.innerHTML = sequences.map((seq, index) => `
+        <button type="button" class="sequence-tab ${index === activeSequenceIndex ? 'active' : ''}" 
+                onclick="selectSequence(${index})">
+            <span class="tab-emoji">${seq.emoji || '📚'}</span>
+            <span class="tab-title">${seq.titre}</span>
+            ${sequences.length > 1 ? `<span class="tab-delete" onclick="deleteSequence(${index}, event)" title="Supprimer">×</span>` : ''}
+        </button>
+    `).join('');
+}
+
+function renderSequenceHeader() {
+    const container = document.getElementById('sequence-header-container');
+    if (!container) return;
+    
+    const seq = sequences[activeSequenceIndex];
+    if (!seq) return;
+    
+    container.innerHTML = `
+        <div class="sequence-header-fields">
+            <div class="sequence-field sequence-emoji-field">
+                <label>Emoji</label>
+                <input type="text" value="${seq.emoji || '📚'}" 
+                       onchange="updateSequenceField(${activeSequenceIndex}, 'emoji', this.value)"
+                       maxlength="4">
+            </div>
+            <div class="sequence-field sequence-title-field">
+                <label>Titre du niveau</label>
+                <input type="text" value="${seq.titre || ''}" 
+                       onchange="updateSequenceField(${activeSequenceIndex}, 'titre', this.value)"
+                       placeholder="Ex: Quel duo financier formez-vous ?">
+            </div>
+            <div class="sequence-field sequence-desc-field">
+                <label>Description (optionnelle)</label>
+                <input type="text" value="${seq.description || ''}" 
+                       onchange="updateSequenceField(${activeSequenceIndex}, 'description', this.value)"
+                       placeholder="Courte description du niveau">
+            </div>
+        </div>
+    `;
+}
+
+function updateSequenceField(index, field, value) {
+    if (sequences[index]) {
+        sequences[index][field] = value;
+        renderSequenceTabs();
+        markDirty();
+        autoSave();
+    }
+}
+
+function getActiveSequenceId() {
+    return sequences[activeSequenceIndex]?.id || null;
+}
+
+function getBlocksForActiveSequence() {
+    const seqId = getActiveSequenceId();
+    return blocks.filter(b => b.sequenceId === seqId);
 }
 
 // ============================================
@@ -226,7 +382,17 @@ async function loadQuizzesList() {
         }
         
         tbody.innerHTML = quizzes.map(quiz => {
-            const blocksCount = quiz.blocks ? quiz.blocks.length : 0;
+            // Compter les blocs et séquences
+            let blocksCount = 0;
+            let sequencesCount = 1;
+            
+            if (quiz.sequences && Array.isArray(quiz.sequences)) {
+                sequencesCount = quiz.sequences.length;
+            }
+            if (quiz.blocks && Array.isArray(quiz.blocks)) {
+                blocksCount = quiz.blocks.length;
+            }
+            
             const icon = quiz.icon || '📝';
             const isPublished = quiz.published || quiz.is_published;
             const title = quiz.titre || quiz.title || 'Sans titre';
@@ -238,7 +404,7 @@ async function loadQuizzesList() {
                             <div class="quiz-icon">${icon}</div>
                             <div class="quiz-info">
                                 <h4>${title}</h4>
-                                <small>${quiz.slug || 'pas-de-slug'}</small>
+                                <small>${quiz.slug || 'pas-de-slug'} • ${sequencesCount} niveau(x)</small>
                             </div>
                         </div>
                     </td>
@@ -276,6 +442,8 @@ async function openEditor(quizId) {
     
     currentQuizId = quizId;
     blocks = [];
+    sequences = [];
+    activeSequenceIndex = 0;
     isDirty = false;
     
     // Reset le formulaire
@@ -306,7 +474,15 @@ async function openEditor(quizId) {
     // Charger les données si édition
     if (quizId) {
         await loadQuizData(quizId);
+    } else {
+        // Nouveau quiz : créer une séquence par défaut
+        initDefaultSequence();
     }
+    
+    // Rendre les onglets de séquences
+    renderSequenceTabs();
+    renderSequenceHeader();
+    renderAllBlocks();
     
     // Afficher l'éditeur
     document.getElementById('quiz-editor-modal').classList.add('active');
@@ -342,11 +518,28 @@ async function loadQuizData(quizId) {
             removeImage(true); // silent = true pour ne pas déclencher l'auto-save
         }
         
+        // Charger les séquences
+        if (quiz.sequences && Array.isArray(quiz.sequences) && quiz.sequences.length > 0) {
+            sequences = quiz.sequences;
+        } else {
+            // Pas de séquences, créer une par défaut
+            initDefaultSequence();
+        }
+        
         // Charger les blocs
         if (quiz.blocks && Array.isArray(quiz.blocks)) {
             blocks = quiz.blocks;
-            renderAllBlocks();
+            
+            // Migration: ajouter sequenceId aux blocs qui n'en ont pas
+            const defaultSeqId = sequences[0]?.id;
+            blocks.forEach(block => {
+                if (!block.sequenceId && defaultSeqId) {
+                    block.sequenceId = defaultSeqId;
+                }
+            });
         }
+        
+        activeSequenceIndex = 0;
         
     } catch (error) {
         console.error('Erreur chargement quiz:', error);
@@ -361,6 +554,7 @@ function closeEditor() {
     document.getElementById('quiz-editor-modal').classList.remove('active');
     currentQuizId = null;
     blocks = [];
+    sequences = [];
     isDirty = false;
     loadQuizzesList();
 }
@@ -378,13 +572,22 @@ function addBlock(type, index = -1) {
     const blockData = {
         id: generateBlockId(),
         type: type,
+        sequenceId: getActiveSequenceId(), // NOUVEAU: Associer à la séquence active
         data: getDefaultBlockData(type)
     };
     
     if (index === -1) {
         blocks.push(blockData);
     } else {
-        blocks.splice(index, 0, blockData);
+        // Trouver l'index réel dans le tableau global
+        const seqBlocks = getBlocksForActiveSequence();
+        if (index < seqBlocks.length) {
+            const targetBlock = seqBlocks[index];
+            const globalIndex = blocks.indexOf(targetBlock);
+            blocks.splice(globalIndex, 0, blockData);
+        } else {
+            blocks.push(blockData);
+        }
     }
     
     console.log('📦 Blocs après ajout:', blocks.length);
@@ -438,7 +641,10 @@ function renderAllBlocks() {
     const container = document.getElementById('blocks-container');
     const emptyState = document.getElementById('canvas-empty');
     
-    if (blocks.length === 0) {
+    // Filtrer les blocs pour la séquence active
+    const seqBlocks = getBlocksForActiveSequence();
+    
+    if (seqBlocks.length === 0) {
         container.innerHTML = '';
         emptyState.style.display = 'flex';
         return;
@@ -446,7 +652,7 @@ function renderAllBlocks() {
     
     emptyState.style.display = 'none';
     
-    container.innerHTML = blocks.map((block, index) => {
+    container.innerHTML = seqBlocks.map((block, index) => {
         return renderBlock(block, index);
     }).join('');
     
@@ -710,6 +916,7 @@ function duplicateBlock(blockId) {
     const newBlock = {
         id: generateBlockId(),
         type: block.type,
+        sequenceId: block.sequenceId, // Garder la même séquence
         data: JSON.parse(JSON.stringify(block.data))
     };
     
@@ -741,14 +948,18 @@ function makeSortable(container) {
             item.classList.remove('dragging');
             draggedItem = null;
             
-            // Mettre à jour l'ordre des blocs
-            const newOrder = [];
+            // Mettre à jour l'ordre des blocs pour cette séquence
+            const seqId = getActiveSequenceId();
+            const otherBlocks = blocks.filter(b => b.sequenceId !== seqId);
+            const reorderedBlocks = [];
+            
             container.querySelectorAll('.block-item').forEach(el => {
                 const blockId = el.dataset.blockId;
                 const block = blocks.find(b => b.id === blockId);
-                if (block) newOrder.push(block);
+                if (block) reorderedBlocks.push(block);
             });
-            blocks = newOrder;
+            
+            blocks = [...otherBlocks, ...reorderedBlocks];
             markDirty();
             autoSave();
         });
@@ -802,6 +1013,7 @@ async function saveQuiz() {
         show_progress: document.getElementById('quiz-show-progress').checked,
         category: document.getElementById('quiz-category').value,
         image_url: document.getElementById('quiz-image').value.trim(),
+        sequences: sequences, // NOUVEAU: Sauvegarder les séquences
         blocks: blocks,
         updated_at: new Date().toISOString()
     };
@@ -855,7 +1067,7 @@ async function saveQuiz() {
         
         isDirty = false;
         autoSaveErrorCount = 0; // Reset le compteur d'erreurs
-        lastSavedData = JSON.stringify({ blocks, title, slug });
+        lastSavedData = JSON.stringify({ blocks, sequences, title, slug });
         updateSaveStatus('saved');
         
     } catch (error) {
@@ -1064,7 +1276,7 @@ function autoSave() {
         collectAllBlocksData();
         
         // Vérifier si les données ont changé
-        const currentData = JSON.stringify({ blocks, title, slug });
+        const currentData = JSON.stringify({ blocks, sequences, title, slug });
         if (currentData === lastSavedData) {
             console.log('⏸️ Auto-save: aucun changement');
             return; // Rien n'a changé
@@ -1088,6 +1300,7 @@ function autoSave() {
                 show_progress: document.getElementById('quiz-show-progress').checked,
                 category: document.getElementById('quiz-category').value,
                 image_url: document.getElementById('quiz-image').value.trim(),
+                sequences: sequences, // NOUVEAU
                 blocks: blocks,
                 updated_at: new Date().toISOString()
             };

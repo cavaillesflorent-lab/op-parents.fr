@@ -98,6 +98,20 @@
         .header-title { flex: 1; font-size: 0.95rem; font-weight: 600; color: var(--gris-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .header-counter { font-size: 0.8rem; font-weight: 600; color: var(--gris-500); white-space: nowrap; }
         
+        /* === AJOUT: Indicateur séquence dans header === */
+        .header-sequence {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--vert-clair);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        .header-sequence.visible { display: flex; }
+        
         /* Hero */
         .guide-hero {
             position: fixed;
@@ -114,13 +128,162 @@
         .hero-category { display: inline-block; padding: 0.375rem 1rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: var(--radius-full); font-size: 0.75rem; font-weight: 600; color: var(--dore); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
         .hero-title { font-family: var(--font-serif); font-size: clamp(1.75rem, 6vw, 2.25rem); font-weight: 700; color: var(--blanc); line-height: 1.2; margin-bottom: 0.75rem; }
         .hero-subtitle { font-size: 1rem; color: rgba(255,255,255,0.75); margin-bottom: 1.5rem; max-width: 400px; }
-        .hero-meta { display: flex; justify-content: center; gap: 1.5rem; font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 2rem; }
+        .hero-meta { display: flex; justify-content: center; gap: 1.5rem; font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 2rem; flex-wrap: wrap; }
         .hero-meta span { color: var(--blanc); font-weight: 600; }
         .hero-image-container { width: 100%; max-width: 400px; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); margin-bottom: 2rem; }
         .hero-image-container img { width: 100%; height: 180px; object-fit: cover; }
         .hero-start-btn { display: flex; align-items: center; justify-content: center; gap: 0.75rem; width: 100%; max-width: 280px; padding: 1rem 2rem; background: var(--dore); color: var(--vert-fonce); border: none; border-radius: var(--radius-lg); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
         .hero-start-btn:active { transform: scale(0.98); }
         .hero-start-btn svg { width: 20px; height: 20px; }
+        
+        /* === AJOUT: Sommaire des séquences === */
+        .sequence-sommaire {
+            position: fixed;
+            inset: 0;
+            background: var(--gris-50);
+            z-index: 45;
+            display: none;
+            flex-direction: column;
+            overflow: auto;
+        }
+        .sequence-sommaire.visible { display: flex; }
+        
+        .sommaire-header {
+            padding: 1rem 1.5rem;
+            background: var(--blanc);
+            border-bottom: 1px solid var(--gris-200);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .sommaire-back {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--gris-100);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--gris-600);
+        }
+        .sommaire-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gris-800);
+        }
+        
+        .sommaire-content {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .sommaire-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .sommaire-intro-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .sommaire-intro-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 0.5rem; }
+        .sommaire-intro-text { color: var(--gris-600); font-size: 0.95rem; }
+        
+        .sequence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .sequence-card {
+            background: var(--blanc);
+            border-radius: var(--radius-xl);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .sequence-card:hover { border-color: var(--vert-clair); transform: translateY(-2px); }
+        .sequence-card.locked { opacity: 0.6; cursor: not-allowed; }
+        .sequence-card.locked:hover { border-color: transparent; transform: none; }
+        .sequence-card.completed { border-color: var(--vert-clair); background: linear-gradient(135deg, var(--blanc), rgba(223, 242, 182, 0.3)); }
+        .sequence-card.current { border-color: var(--dore); }
+        
+        .sequence-card-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gris-100);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+        .sequence-card.completed .sequence-card-icon { background: var(--vert-clair); }
+        .sequence-card.current .sequence-card-icon { background: var(--dore); }
+        
+        .sequence-card-content { flex: 1; min-width: 0; }
+        .sequence-card-number { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gris-500); margin-bottom: 0.25rem; }
+        .sequence-card.current .sequence-card-number { color: var(--dore); }
+        .sequence-card-title { font-size: 1rem; font-weight: 700; color: var(--gris-800); margin-bottom: 0.25rem; }
+        .sequence-card-desc { font-size: 0.85rem; color: var(--gris-500); }
+        
+        .sequence-card-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .sequence-card.completed .sequence-card-status { background: var(--vert-fonce); color: var(--blanc); }
+        .sequence-card.current .sequence-card-status { background: var(--dore); color: var(--vert-fonce); }
+        .sequence-card.locked .sequence-card-status { background: var(--gris-200); color: var(--gris-400); }
+        
+        /* === AJOUT: Overlay fin de séquence === */
+        .sequence-complete-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 180;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .sequence-complete-overlay.visible { opacity: 1; visibility: visible; }
+        
+        .sequence-complete-card {
+            background: var(--blanc);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+            max-width: 360px;
+            width: 100%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .sequence-complete-overlay.visible .sequence-complete-card { transform: scale(1); }
+        
+        .sequence-complete-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .sequence-complete-title { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 0.5rem; }
+        .sequence-complete-text { color: var(--gris-600); margin-bottom: 1.5rem; }
+        .sequence-complete-actions { display: flex; flex-direction: column; gap: 0.75rem; }
+        .sequence-complete-btn { padding: 0.875rem 1.5rem; border-radius: var(--radius-lg); font-size: 1rem; font-weight: 600; cursor: pointer; border: none; }
+        .sequence-complete-btn.primary { background: var(--vert-fonce); color: var(--blanc); }
+        .sequence-complete-btn.secondary { background: var(--gris-100); color: var(--gris-700); }
         
         /* Main Content */
         .guide-content { position: fixed; top: var(--header-height); left: 0; right: 0; bottom: var(--nav-height); display: none; overflow: hidden; }
@@ -573,10 +736,15 @@
     <header class="guide-header" id="guide-header" style="display: none;">
         <div class="progress-segments" id="progress-segments"></div>
         <div class="header-row">
-            <button class="header-back" onclick="exitGuide()">
+            <button class="header-back" onclick="handleBackButton()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             <div class="header-title" id="header-title">Guide</div>
+            <!-- AJOUT: Indicateur de séquence -->
+            <div class="header-sequence" id="header-sequence">
+                <span id="header-sequence-emoji">📚</span>
+                <span id="header-sequence-name">Niveau 1</span>
+            </div>
             <div class="header-counter" id="header-counter">1/1</div>
         </div>
         <link rel="stylesheet" href="assets/css/style-responsive.css">
@@ -592,6 +760,8 @@
             <div class="hero-meta">
                 <span>⏱️ <span id="hero-duration">10 min</span></span>
                 <span>📖 <span id="hero-blocks">0</span> slides</span>
+                <!-- AJOUT: Nombre de niveaux -->
+                <span id="hero-levels-container" style="display: none;">📚 <span id="hero-levels">1</span> niveaux</span>
             </div>
             <div class="hero-image-container" id="hero-card" style="display: none;">
                 <img id="hero-image" src="" alt="">
@@ -600,6 +770,26 @@
                 C'est parti
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
+        </div>
+    </section>
+
+    <!-- AJOUT: Sommaire des séquences -->
+    <section class="sequence-sommaire" id="sequence-sommaire">
+        <header class="sommaire-header">
+            <button class="sommaire-back" onclick="backToHero()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <h2 class="sommaire-title" id="sommaire-title">Sommaire</h2>
+        </header>
+        <div class="sommaire-content">
+            <div class="sommaire-intro">
+                <div class="sommaire-intro-icon" id="sommaire-icon">📚</div>
+                <h3 class="sommaire-intro-title" id="sommaire-intro-title">Choisis ton niveau</h3>
+                <p class="sommaire-intro-text">Progresse à ton rythme, niveau par niveau</p>
+            </div>
+            <div class="sequence-list" id="sequence-list">
+                <!-- Généré par JS -->
+            </div>
         </div>
     </section>
 
@@ -664,6 +854,23 @@
                 </div>
                 <button onclick="clearCalculator()" style="width: 100%; background: none; border: none; color: var(--gris-500); font-size: 0.8rem; cursor: pointer; padding: 0.5rem;">
                     🗑️ Tout effacer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AJOUT: Overlay fin de séquence -->
+    <div class="sequence-complete-overlay" id="sequence-complete-overlay">
+        <div class="sequence-complete-card">
+            <div class="sequence-complete-icon">🎉</div>
+            <h3 class="sequence-complete-title" id="sequence-complete-title">Niveau terminé !</h3>
+            <p class="sequence-complete-text" id="sequence-complete-text">Bravo, tu as terminé ce niveau.</p>
+            <div class="sequence-complete-actions">
+                <button class="sequence-complete-btn primary" id="sequence-next-btn" onclick="goToNextSequence()">
+                    Niveau suivant →
+                </button>
+                <button class="sequence-complete-btn secondary" onclick="backToSommaire()">
+                    Retour au sommaire
                 </button>
             </div>
         </div>
@@ -764,6 +971,12 @@
         let userResponses = {};
         let saveTimeout = null;
         
+        // AJOUT: Variables pour les séquences
+        let sequences = [];
+        let currentSequenceIndex = 0;
+        let allBlocks = [];
+        let sequenceProgress = {};
+        
         // ============================================
         // INIT
         // ============================================
@@ -786,6 +999,8 @@
         // Keyboard & Swipe
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('auth-overlay').classList.contains('visible')) return;
+            if (document.getElementById('sequence-sommaire').classList.contains('visible')) return;
+            if (document.getElementById('calc-modal').classList.contains('visible')) return;
             if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
             if (e.key === 'ArrowLeft') prevSlide();
         });
@@ -794,6 +1009,7 @@
         document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
         document.addEventListener('touchend', (e) => {
             if (document.getElementById('auth-overlay').classList.contains('visible')) return;
+            if (document.getElementById('sequence-sommaire').classList.contains('visible')) return;
             const diff = touchStartX - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 50) {
                 if (diff > 0) nextSlide();
@@ -813,7 +1029,23 @@
                 if (error || !guide) { showError(); return; }
                 
                 guideData = guide;
-                blocks = guide.blocks || [];
+                
+                // MODIFIÉ: Charger blocks et sequences depuis le guide
+                allBlocks = guide.blocks || [];
+                sequences = guide.sequences || [];
+                
+                // Si pas de séquences, créer une séquence par défaut
+                if (sequences.length === 0) {
+                    sequences = [{ id: 'default', titre: guideData.titre || 'Guide', emoji: guideData.icon || '📖', description: '' }];
+                }
+                
+                // Assigner les blocs sans sequenceId à la première séquence
+                allBlocks = allBlocks.map(b => ({
+                    ...b,
+                    sequenceId: b.sequenceId || sequences[0]?.id || 'default'
+                }));
+                
+                blocks = allBlocks;
                 quizTotalCount = blocks.filter(b => b.type === 'quiz').length;
                 slides = groupBlocksIntoSlides(blocks);
                 
@@ -853,10 +1085,27 @@
                 
                 if (data && data.responses) {
                     userResponses = data.responses;
+                    sequenceProgress = userResponses._sequenceProgress || {};
                 }
             } catch (e) {
                 // No existing responses
             }
+        }
+        
+        // AJOUT: Récupérer les blocs d'une séquence
+        function getBlocksForSequence(sequenceId) {
+            return allBlocks.filter(b => b.sequenceId === sequenceId);
+        }
+        
+        // AJOUT: Compter le total de slides
+        function getTotalSlideCount() {
+            let total = 0;
+            sequences.forEach(seq => {
+                const seqBlocks = getBlocksForSequence(seq.id);
+                const seqSlides = groupBlocksIntoSlides(seqBlocks);
+                total += seqSlides.length;
+            });
+            return total || slides.length;
         }
         
         function groupBlocksIntoSlides(allBlocks) {
@@ -885,13 +1134,54 @@
             document.getElementById('hero-title').textContent = guide.titre;
             document.getElementById('hero-subtitle').textContent = guide.sous_titre || '';
             document.getElementById('hero-duration').textContent = guide.duree || '10 min';
-            document.getElementById('hero-blocks').textContent = slides.length;
+            document.getElementById('hero-blocks').textContent = getTotalSlideCount();
+            
+            // AJOUT: Afficher nombre de niveaux si > 1
+            if (sequences.length > 1) {
+                document.getElementById('hero-levels-container').style.display = '';
+                document.getElementById('hero-levels').textContent = sequences.length;
+            }
+            
             const categories = { 'budget': '💰 Budget', 'epargne': '🛡️ Épargne', 'investissement': '📈 Investissement', 'mindset': '🧠 Mindset', 'famille': '👨‍👩‍👧 Famille' };
             document.getElementById('hero-category').textContent = categories[guide.category] || '📖 Guide';
             if (guide.image_url) {
                 document.getElementById('hero-image').src = guide.image_url;
                 document.getElementById('hero-card').style.display = 'block';
             }
+        }
+        
+        // AJOUT: Render du sommaire des séquences
+        function renderSommaire() {
+            document.getElementById('sommaire-icon').textContent = guideData.icon || '📚';
+            document.getElementById('sommaire-intro-title').textContent = guideData.titre;
+            
+            const container = document.getElementById('sequence-list');
+            container.innerHTML = sequences.map((seq, index) => {
+                const seqBlocks = getBlocksForSequence(seq.id);
+                const slideCount = groupBlocksIntoSlides(seqBlocks).length;
+                const progress = sequenceProgress[seq.id] || {};
+                const isCompleted = progress.completed;
+                const isPreviousCompleted = index === 0 || sequenceProgress[sequences[index - 1]?.id]?.completed;
+                const isLocked = index > 0 && !isPreviousCompleted;
+                const isCurrent = isPreviousCompleted && !isCompleted;
+                
+                let statusClass = isCompleted ? 'completed' : isCurrent ? 'current' : 'locked';
+                let statusIcon = isCompleted ? '✓' : isCurrent ? '→' : '🔒';
+                
+                const onclick = isLocked ? '' : `startSequence(${index})`;
+                
+                return `
+                    <div class="sequence-card ${statusClass}" onclick="${onclick}" data-index="${index}">
+                        <div class="sequence-card-icon">${seq.emoji || '📚'}</div>
+                        <div class="sequence-card-content">
+                            <div class="sequence-card-number">Niveau ${index + 1}</div>
+                            <div class="sequence-card-title">${esc(seq.titre)}</div>
+                            <div class="sequence-card-desc">${slideCount} slides${seq.description ? ' • ' + esc(seq.description) : ''}</div>
+                        </div>
+                        <div class="sequence-card-status">${statusIcon}</div>
+                    </div>
+                `;
+            }).join('');
         }
         
         function renderProgressSegments() {
@@ -939,9 +1229,9 @@
                 case 'exercise':
                     return renderExercise(data);
                 case 'summary':
-                    return `<div class="block-summary"><div class="summary-header"><div class="summary-icon">📝</div><div class="summary-title">${esc(data.title || 'À retenir')}</div></div><ul class="summary-list">${(data.content || '').split('\n').filter(l => l.trim()).map(l => `<li>${esc(l.replace(/^[•\-\*]\s*/, ''))}</li>`).join('')}</ul></div>`;
+                    return `<div class="block-summary"><div class="summary-header"><div class="summary-icon">📝</div><div class="summary-title">${esc(data.title || 'À retenir')}</div></div><ul class="summary-list">${(data.points || data.content || '').split('\n').filter(l => l.trim()).map(l => `<li>${esc(l.replace(/^[•\-\*]\s*/, ''))}</li>`).join('')}</ul></div>`;
                 case 'cta':
-                    return `<div class="block-cta"><h3 class="cta-title">${esc(data.title || 'Passez à l\'action')}</h3><p class="cta-text">${esc(data.content || '')}</p><a href="${data.link || 'contact.html'}" class="cta-button">${esc(data.buttonText || 'Je me lance')} →</a></div>`;
+                    return `<div class="block-cta"><h3 class="cta-title">${esc(data.title || 'Passez à l\'action')}</h3><p class="cta-text">${esc(data.content || '')}</p><a href="${data.button_url || data.link || 'contact.html'}" class="cta-button">${esc(data.button_text || data.buttonText || 'Je me lance')} →</a></div>`;
                 case 'image':
                     return `<figure class="block-image"><img src="${esc(data.url || '')}" alt="${esc(data.alt || '')}">${data.caption ? `<figcaption>${esc(data.caption)}</figcaption>` : ''}</figure>`;
                 case 'personal-field':
@@ -955,12 +1245,19 @@
         
         function renderPoll(data, index) {
             const options = data.options || [];
-            return `<div class="block-poll" data-answered="false"><div class="poll-header"><span class="poll-badge">🗳️ Sondage</span></div><div class="poll-question">${esc(data.question || '')}</div><div class="poll-options">${options.map((o, i) => `<div class="poll-option" onclick="selectPoll(this)"><div class="poll-option-checkbox"></div><span class="poll-option-text">${esc(o.text || '')}</span></div>`).join('')}</div></div>`;
+            return `<div class="block-poll" data-answered="false"><div class="poll-header"><span class="poll-badge">🗳️ Sondage</span></div><div class="poll-question">${esc(data.question || '')}</div><div class="poll-options">${options.map((o, i) => {
+                const text = typeof o === 'string' ? o : o.text;
+                return `<div class="poll-option" onclick="selectPoll(this)"><div class="poll-option-checkbox"></div><span class="poll-option-text">${esc(text || '')}</span></div>`;
+            }).join('')}</div></div>`;
         }
         
         function renderQuiz(data, index) {
             const options = data.options || [];
-            return `<div class="block-quiz" data-answered="false"><div class="quiz-header"><span class="quiz-badge">❓ Quiz</span></div><div class="quiz-question">${esc(data.question || '')}</div><div class="quiz-options">${options.map((o, i) => `<div class="quiz-option" data-correct="${o.correct ? 'true' : 'false'}" onclick="selectQuiz(this)"><span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span><span class="quiz-option-text">${esc(o.text || '')}</span></div>`).join('')}</div>${data.explanation ? `<div class="quiz-explanation"><div class="quiz-explanation-title">💡 Explication</div><div class="quiz-explanation-text">${fmt(data.explanation)}</div></div>` : ''}</div>`;
+            return `<div class="block-quiz" data-answered="false"><div class="quiz-header"><span class="quiz-badge">❓ Quiz</span></div><div class="quiz-question">${esc(data.question || '')}</div><div class="quiz-options">${options.map((o, i) => {
+                const text = typeof o === 'string' ? o : o.text;
+                const correct = typeof o === 'object' ? o.correct : false;
+                return `<div class="quiz-option" data-correct="${correct ? 'true' : 'false'}" onclick="selectQuiz(this)"><span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span><span class="quiz-option-text">${esc(text || '')}</span></div>`;
+            }).join('')}</div>${data.explanation ? `<div class="quiz-explanation"><div class="quiz-explanation-title">💡 Explication</div><div class="quiz-explanation-text">${fmt(data.explanation)}</div></div>` : ''}</div>`;
         }
         
         function renderTable(data) {
@@ -1125,6 +1422,9 @@
             if (!currentUser || isPreviewMode) return;
             
             try {
+                // AJOUT: Sauvegarder aussi la progression des séquences
+                userResponses._sequenceProgress = sequenceProgress;
+                
                 const { error } = await supabaseClient
                     .from('user_responses')
                     .upsert({
@@ -1153,7 +1453,12 @@
         // ============================================
         function handleStartGuide() {
             if (isPreviewMode) {
-                startGuide();
+                // MODIFIÉ: Gérer les séquences multiples
+                if (sequences.length > 1) {
+                    showSommaire();
+                } else {
+                    startSequence(0);
+                }
                 return;
             }
             
@@ -1162,10 +1467,56 @@
                 return;
             }
             
-            startGuide();
+            // MODIFIÉ: Gérer les séquences multiples
+            if (sequences.length > 1) {
+                showSommaire();
+            } else {
+                startSequence(0);
+            }
         }
         
-        function startGuide() {
+        // AJOUT: Afficher le sommaire
+        function showSommaire() {
+            renderSommaire();
+            document.getElementById('guide-hero').classList.add('hidden');
+            document.getElementById('sequence-sommaire').classList.add('visible');
+        }
+        
+        // AJOUT: Retour au hero
+        function backToHero() {
+            document.getElementById('sequence-sommaire').classList.remove('visible');
+            document.getElementById('guide-hero').classList.remove('hidden');
+        }
+        
+        // AJOUT: Retour au sommaire
+        function backToSommaire() {
+            document.getElementById('sequence-complete-overlay').classList.remove('visible');
+            document.getElementById('guide-header').style.display = 'none';
+            document.getElementById('guide-content').classList.remove('active');
+            document.getElementById('nav-bottom').classList.remove('active');
+            renderSommaire();
+            document.getElementById('sequence-sommaire').classList.add('visible');
+        }
+        
+        // AJOUT: Démarrer une séquence
+        function startSequence(index) {
+            currentSequenceIndex = index;
+            const seq = sequences[index];
+            
+            // Filtrer les blocs pour cette séquence
+            blocks = getBlocksForSequence(seq.id);
+            slides = groupBlocksIntoSlides(blocks);
+            quizTotalCount = blocks.filter(b => b.type === 'quiz').length;
+            
+            // Mettre à jour le header avec info séquence
+            if (sequences.length > 1) {
+                document.getElementById('header-sequence').classList.add('visible');
+                document.getElementById('header-sequence-emoji').textContent = seq.emoji || '📚';
+                document.getElementById('header-sequence-name').textContent = seq.titre;
+            }
+            
+            // Masquer sommaire, afficher guide
+            document.getElementById('sequence-sommaire').classList.remove('visible');
             document.getElementById('guide-hero').classList.add('hidden');
             document.getElementById('guide-header').style.display = 'flex';
             document.getElementById('guide-content').classList.add('active');
@@ -1175,8 +1526,26 @@
                 showUserBadge();
             }
             
-            currentSlide = 0;
-            showSlide(0);
+            renderSlides();
+            renderProgressSegments();
+            
+            // Reprendre là où on en était
+            const savedProgress = sequenceProgress[seq.id];
+            currentSlide = savedProgress?.currentSlide || 0;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            
+            showSlide(currentSlide);
+        }
+        
+        // MODIFIÉ: Gestion du bouton retour
+        function handleBackButton() {
+            if (sequences.length > 1) {
+                if (confirm('Retourner au sommaire ?')) {
+                    backToSommaire();
+                }
+            } else {
+                exitGuide();
+            }
         }
         
         function exitGuide() {
@@ -1196,6 +1565,16 @@
             updateProgressSegments();
             updateNavButtons();
             updateCalcButton(index);
+            
+            // AJOUT: Sauvegarder la progression de la séquence
+            if (sequences.length > 0 && currentUser) {
+                const seq = sequences[currentSequenceIndex];
+                if (seq) {
+                    sequenceProgress[seq.id] = sequenceProgress[seq.id] || {};
+                    sequenceProgress[seq.id].currentSlide = index;
+                    saveUserResponses();
+                }
+            }
         }
         
         function updateCalcButton(slideIndex) {
@@ -1219,16 +1598,57 @@
             if (currentSlide < slides.length - 1) {
                 showSlide(currentSlide + 1);
             } else {
-                showCompletion();
+                // MODIFIÉ: Gérer la fin de séquence
+                completeCurrentSequence();
             }
+        }
+        
+        // AJOUT: Compléter la séquence courante
+        function completeCurrentSequence() {
+            const seq = sequences[currentSequenceIndex];
+            sequenceProgress[seq.id] = { completed: true, currentSlide: slides.length };
+            saveUserResponses();
+            
+            // Vérifier si c'est le dernier niveau
+            if (currentSequenceIndex >= sequences.length - 1) {
+                showCompletion();
+            } else {
+                showSequenceComplete();
+            }
+        }
+        
+        // AJOUT: Afficher l'écran de fin de séquence
+        function showSequenceComplete() {
+            const seq = sequences[currentSequenceIndex];
+            const nextSeq = sequences[currentSequenceIndex + 1];
+            
+            document.getElementById('sequence-complete-title').textContent = `${seq.emoji || '🎉'} ${seq.titre} terminé !`;
+            document.getElementById('sequence-complete-text').textContent = `Bravo ! Tu peux maintenant passer au niveau suivant.`;
+            document.getElementById('sequence-next-btn').textContent = `${nextSeq.emoji || '📚'} ${nextSeq.titre} →`;
+            
+            document.getElementById('sequence-complete-overlay').classList.add('visible');
+        }
+        
+        // AJOUT: Passer à la séquence suivante
+        function goToNextSequence() {
+            document.getElementById('sequence-complete-overlay').classList.remove('visible');
+            startSequence(currentSequenceIndex + 1);
         }
         
         function updateNavButtons() {
             const prevBtn = document.getElementById('btn-prev');
             const nextBtn = document.getElementById('btn-next');
             prevBtn.disabled = currentSlide === 0;
-            if (currentSlide === slides.length - 1) {
-                nextBtn.innerHTML = `Terminer <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+            
+            const isLastSlide = currentSlide === slides.length - 1;
+            const isLastSequence = currentSequenceIndex >= sequences.length - 1;
+            
+            if (isLastSlide) {
+                if (isLastSequence || sequences.length <= 1) {
+                    nextBtn.innerHTML = `Terminer <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+                } else {
+                    nextBtn.innerHTML = `Niveau suivant <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>`;
+                }
                 nextBtn.classList.add('golden');
             } else {
                 nextBtn.innerHTML = `Suivant <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>`;
@@ -1290,7 +1710,7 @@
         // COMPLETION
         // ============================================
         async function showCompletion() {
-            document.getElementById('stat-blocks').textContent = slides.length;
+            document.getElementById('stat-blocks').textContent = getTotalSlideCount();
             document.getElementById('stat-quiz').textContent = `${quizCorrectCount}/${quizTotalCount}`;
             
             // Mark as completed
@@ -1351,7 +1771,7 @@
                 if (data.session) {
                     currentUser = data.user;
                     closeAuthModal();
-                    startGuide();
+                    handleStartGuide();
                 } else {
                     showAuthError('Vérifiez votre email pour confirmer votre inscription.');
                 }
@@ -1379,7 +1799,7 @@
                 currentUser = data.user;
                 await loadUserResponses(guideData.slug);
                 closeAuthModal();
-                startGuide();
+                handleStartGuide();
             } catch (error) {
                 showAuthError(getAuthErrorMessage(error));
             } finally {
@@ -1423,6 +1843,7 @@
         }
         
         function showUserBadge() {
+            if (document.querySelector('.user-badge')) return;
             const name = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
             const b = document.createElement('div');
             b.className = 'user-badge';

@@ -3,226 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Mindset Financier - OP!</title>
-    <meta name="description" content="Découvre ton profil financier grâce à notre quiz basé sur la psychologie financière.">
+    <title>Quiz - OP! Parents</title>
+    <meta name="description" content="Découvre ton profil financier grâce à nos quiz interactifs. Teste ton mindset et progresse à ton rythme.">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/quiz.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
 </head>
-<body class="quiz-body">
-    <!-- HEADER (chargé dynamiquement) -->
+<body>
+    <!-- HEADER -->
     <div id="header-placeholder"></div>
 
-    <!-- QUIZ CONTAINER -->
-    <main class="quiz-main">
-        <!-- Écran de chargement -->
-        <div class="quiz-loading" id="quiz-loading">
-            <div class="loader-spinner"></div>
-            <p>Chargement du quiz...</p>
-        </div>
-
-        <!-- Écran d'accueil -->
-        <div class="quiz-screen quiz-intro" id="quiz-intro" style="display: none;">
-            <div class="quiz-intro-card">
-                <!-- Image de couverture -->
-                <div class="quiz-cover-wrapper">
-                    <img src="" alt="Quiz" id="quiz-cover-image" class="quiz-cover-image" style="display: none;">
-                    <div class="quiz-cover-placeholder" id="quiz-cover-placeholder">🧠</div>
-                </div>
-
-                <div class="quiz-intro-header">
-                    <span class="quiz-badge">🧠 Quiz Gratuit</span>
-                    <h1 id="quiz-title">Quel est ton mindset par rapport à l'argent ?</h1>
-                    <p class="quiz-subtitle" id="quiz-description"></p>
-                </div>
-
-                <!-- Bloc de reprise (affiché si progression en cours) -->
-                <div class="quiz-resume-block" id="quiz-resume-block" style="display: none;">
-                    <div class="resume-info">
-                        <span class="resume-icon">⏸️</span>
-                        <div class="resume-text">
-                            <strong>Tu as un quiz en cours !</strong>
-                            <span id="resume-progress-text">Question 3 sur 10</span>
-                        </div>
-                    </div>
-                    <div class="resume-progress-bar">
-                        <div class="resume-progress-fill" id="resume-progress-fill"></div>
-                    </div>
-                </div>
-
-                <div class="quiz-intro-stat" id="quiz-stat">
-                    <div class="stat-number" id="stat-number"></div>
-                    <div class="stat-source" id="stat-source"></div>
-                </div>
-
-                <div class="quiz-intro-benefits" id="quiz-benefits">
-                    <h3>🎯 À la fin de ce quiz, tu sauras :</h3>
-                    <ul id="benefits-list">
-                        <!-- Chargé dynamiquement -->
-                    </ul>
-                </div>
-
-                <div class="quiz-intro-meta">
-                    <span class="meta-item">⏱️ <span id="quiz-duration">3 min</span></span>
-                    <span class="meta-item">📝 <span id="quiz-questions-count">6</span> questions</span>
-                    <span class="meta-item">🔬 Basé sur la science</span>
-                </div>
-
-                <!-- Boutons -->
-                <div class="quiz-intro-actions">
-                    <!-- Bouton normal (nouveau quiz) -->
-                    <button class="btn-quiz-start" id="btn-start" onclick="startQuiz()">
-                        <span>Commencer le quiz</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-
-                    <!-- Boutons de reprise (affichés si progression) -->
-                    <button class="btn-quiz-start btn-resume" id="btn-resume" style="display: none;" onclick="resumeQuiz()">
-                        <span>Reprendre où j'en étais</span>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                    </button>
-                    <button class="btn-quiz-secondary" id="btn-restart-fresh" style="display: none;" onclick="startQuiz()">
-                        <span>Recommencer depuis le début</span>
-                    </button>
-                </div>
-
-                <p class="quiz-disclaimer">100% gratuit • Aucune inscription requise • Résultats immédiats</p>
-            </div>
-        </div>
-
-        <!-- Écran de question -->
-        <div class="quiz-screen quiz-question-screen" id="quiz-question-screen" style="display: none;">
-            <!-- Progress bar -->
-            <div class="quiz-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
-                </div>
-                <span class="progress-text" id="progress-text">Question 1/6</span>
-            </div>
-
-            <!-- Contexte de la séquence (optionnel) -->
-            <div class="quiz-context" id="quiz-context" style="display: none;">
-                <div class="context-badge" id="context-badge"></div>
-                <p class="context-text" id="context-text"></p>
-            </div>
-
-            <!-- Stat highlight (optionnel) -->
-            <div class="quiz-stat-highlight" id="quiz-stat-highlight" style="display: none;">
-                <div class="stat-icon">🔬</div>
-                <div class="stat-content">
-                    <p class="stat-text" id="highlight-stat-text"></p>
-                    <span class="stat-source" id="highlight-stat-source"></span>
-                </div>
-            </div>
-
-            <!-- Question -->
-            <div class="quiz-question-container">
-                <h2 class="quiz-question" id="quiz-question"></h2>
+    <main>
+        <!-- HERO -->
+        <section class="page-hero">
+            <div class="page-hero-content">
                 
-                <div class="quiz-answers" id="quiz-answers">
-                    <!-- Answers will be inserted here -->
-                </div>
+                <h1>Quel parent êtes-vous face à l'argent ?</h1>
+                <p>Des quiz rapides pour comprendre vos réflexes financiers et savoir par où commencer.</p>
             </div>
+        </section>
 
-            <!-- Insight après réponse -->
-            <div class="quiz-insight" id="quiz-insight" style="display: none;">
-                <div class="insight-icon">💡</div>
-                <p class="insight-text" id="insight-text"></p>
-                <button class="btn-next" id="btn-next">
-                    <span>Question suivante</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Écran de résultat -->
-        <div class="quiz-screen quiz-result-screen" id="quiz-result-screen" style="display: none;">
-            <div class="result-card">
-                <div class="result-header">
-                    <span class="result-badge">🎉 Ton résultat</span>
-                    <div class="result-profile-icon" id="result-icon"></div>
-                    <h2 class="result-profile-name" id="result-profile-name"></h2>
-                    <p class="result-profile-subtitle" id="result-profile-subtitle"></p>
-                </div>
-
-                <!-- Graphique radar des scores -->
-                <div class="result-chart">
-                    <canvas id="result-radar-chart"></canvas>
-                </div>
-
-                <!-- Description du profil -->
-                <div class="result-description">
-                    <p id="result-description-text"></p>
-                </div>
-
-                <!-- Forces et vigilances -->
-                <div class="result-details">
-                    <div class="result-section result-forces">
-                        <h3>✅ Tes forces</h3>
-                        <ul id="result-forces-list"></ul>
-                    </div>
-                    <div class="result-section result-vigilances">
-                        <h3>⚠️ Points de vigilance</h3>
-                        <ul id="result-vigilances-list"></ul>
+        <!-- STATS -->
+        <section class="page-stats-section">
+            <div class="page-stats">
+                <div class="page-stat">
+                    <div class="page-stat-icon">✅</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-completed">0</span>
+                        <span class="page-stat-label">Terminés</span>
                     </div>
                 </div>
-
-                <!-- Message clé -->
-                <div class="result-key-message">
-                    <p>🔑 <strong>Clé de lecture :</strong> Aucun profil n'est « meilleur ». L'enjeu n'est pas de changer, mais de rendre conscient.</p>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">⏳</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-in-progress">0</span>
+                        <span class="page-stat-label">En cours</span>
+                    </div>
                 </div>
+                <div class="page-stat-divider"></div>
+                <div class="page-stat">
+                    <div class="page-stat-icon">📚</div>
+                    <div class="page-stat-info">
+                        <span class="page-stat-value" id="stat-total">0</span>
+                        <span class="page-stat-label">Disponibles</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                <!-- Actions -->
-                <div class="result-actions">
-                    <button class="btn-share" id="btn-share">
-                        <span>📤</span> Partager mon résultat
-                    </button>
-                    <a href="formations.html" class="btn-cta-primary">
-                        <span>📚</span> Découvrir les formations
+        <!-- FILTRES -->
+        <section class="page-filters-section">
+            <div class="container">
+                <div class="page-filters">
+                    <button class="page-filter-btn active" data-filter="all">Tous les quiz</button>
+                    <button class="page-filter-btn" data-filter="in-progress">En cours</button>
+                    <button class="page-filter-btn" data-filter="completed">Terminés</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTE -->
+        <section class="page-list-section">
+            <div class="container">
+                <div class="quiz-grid" id="quiz-list">
+                    <div class="loading-state">
+                        <div class="quiz-loading-spinner"></div>
+                        <p>Chargement des quiz...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="page-cta-section">
+            <div class="container">
+                <div class="page-cta-card">
+                    <div class="page-cta-content">
+                        <h2>Tu veux aller plus loin ?</h2>
+                        <p>Découvre nos webinaires pour approfondir ta transformation financière avec des experts.</p>
+                    </div>
+                    <a href="webinaires.html" class="page-cta-btn">
+                        Voir les webinaires
+                        <span class="arrow">→</span>
                     </a>
-                    <button class="btn-restart" id="btn-restart">
-                        Refaire le quiz
-                    </button>
-                </div>
-
-                <!-- Capture email (optionnel) -->
-                <div class="result-email-capture">
-                    <p>Reçois ton profil complet par email + des conseils personnalisés</p>
-                    <form class="email-form" id="email-form">
-                        <input type="email" placeholder="ton@email.com" id="result-email">
-                        <button type="submit">Recevoir</button>
-                    </form>
                 </div>
             </div>
-
-            <!-- CTA Final -->
-            <div class="result-cta-section">
-                <h3>🚀 Prêt à transformer ta relation à l'argent ?</h3>
-                <p>Rejoins OP! et accède à des formations concrètes pour les parents.</p>
-                <div class="cta-buttons">
-                    <a href="formations.html" class="btn btn-primary">Voir les formations</a>
-                    <a href="webinaires.html" class="btn btn-secondary">Webinaires gratuits</a>
-                </div>
-            </div>
-        </div>
+        </section>
     </main>
 
-    <!-- FOOTER (chargé dynamiquement) -->
+    <!-- FOOTER -->
     <div id="footer-placeholder"></div>
 
-    <!-- Chart.js pour le graphique -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
-    <script src="assets/js/quiz.js"></script>
+    <script>
+        const STORAGE_KEY = 'op_quiz_progress';
+
+        function getProgress() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            } catch {
+                return {};
+            }
+        }
+
+        /**
+         * Calcule la progression d'un quiz
+         * Compatible avec la structure sequenceProgress du quiz-engine
+         */
+        function getQuizProgress(quizSlug, totalQuestions) {
+            const progress = getProgress()[quizSlug];
+            
+            // Pas de progression sauvegardée
+            if (!progress) {
+                return { percent: 0, status: 'not-started', currentQuestion: 0 };
+            }
+            
+            // Quiz terminé
+            if (progress.completed) {
+                return { percent: 100, status: 'completed', currentQuestion: totalQuestions };
+            }
+            
+            // Calculer le nombre de réponses depuis sequenceProgress
+            let answered = 0;
+            
+            // Méthode 1: Utiliser answeredQuestions si disponible (nouveau format)
+            if (typeof progress.answeredQuestions === 'number') {
+                answered = progress.answeredQuestions;
+            }
+            // Méthode 2: Compter depuis sequenceProgress (ancien format)
+            else if (progress.sequenceProgress) {
+                Object.values(progress.sequenceProgress).forEach(seqProgress => {
+                    if (seqProgress && seqProgress.answers) {
+                        answered += Object.keys(seqProgress.answers).length;
+                    }
+                });
+            }
+            
+            const percent = totalQuestions > 0 ? Math.round((answered / totalQuestions) * 100) : 0;
+            
+            return {
+                percent,
+                status: answered > 0 ? 'in-progress' : 'not-started',
+                currentQuestion: answered
+            };
+        }
+
+        function createProgressCircle(percent) {
+            const radius = 20;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percent / 100) * circumference;
+            const color = percent === 100 ? '#2D403B' : percent > 0 ? '#F2B47E' : '#dee2e0';
+            
+            return `
+                <div class="quiz-card-progress">
+                    <svg class="progress-ring" width="52" height="52" viewBox="0 0 52 52">
+                        <circle cx="26" cy="26" r="${radius}" fill="none" stroke="#e8e8e8" stroke-width="4"/>
+                        <circle cx="26" cy="26" r="${radius}" fill="none" stroke="${color}" stroke-width="4"
+                            stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+                            transform="rotate(-90 26 26)"/>
+                    </svg>
+                    <span class="progress-percent">${percent}%</span>
+                </div>
+            `;
+        }
+
+        /**
+         * Compte le nombre de questions/slides dans un quiz
+         * Supporte l'ancien format (quiz_questions) et le nouveau (blocks JSONB)
+         */
+        function countQuestionsFromBlocks(blocks) {
+            if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+                return 0;
+            }
+            
+            // Compter les blocs de type quiz
+            return blocks.filter(b => b.type === 'quiz').length;
+        }
+
+        function createQuizCard(quiz, questionCount) {
+            const progress = getQuizProgress(quiz.slug, questionCount);
+            
+            const statusLabels = {
+                'not-started': { text: 'Nouveau', class: 'new', btn: 'Commencer' },
+                'in-progress': { text: 'En cours', class: 'progress', btn: 'Continuer' },
+                'completed': { text: 'Terminé', class: 'done', btn: 'Refaire' }
+            };
+            const status = statusLabels[progress.status];
+
+            const imageHtml = quiz.image_url 
+                ? `<img src="${quiz.image_url}" alt="${quiz.titre}" loading="lazy">`
+                : `<div class="quiz-card-placeholder"><span>🧠</span></div>`;
+
+            // Afficher le nombre de niveaux si plusieurs séquences
+            const sequences = quiz.sequences || [];
+            const levelsBadge = sequences.length > 1 
+                ? `<span style="margin-left: 0.5rem; padding: 0.15rem 0.5rem; background: var(--vert-clair, #DFF2B6); border-radius: 12px; font-size: 0.75rem; color: var(--vert-fonce, #2D403B);">📚 ${sequences.length} niveaux</span>` 
+                : '';
+
+            return `
+                <article class="quiz-card" data-slug="${quiz.slug}" data-status="${progress.status}">
+                    <div class="quiz-card-image">
+                        ${imageHtml}
+                        <span class="quiz-card-badge ${status.class}">${status.text}</span>
+                    </div>
+                    <div class="quiz-card-body">
+                        <h3 class="quiz-card-title">${quiz.titre}${levelsBadge}</h3>
+                        ${quiz.sous_titre ? `<p class="quiz-card-subtitle">${quiz.sous_titre}</p>` : ''}
+                        <div class="quiz-card-meta">
+                            <span>❓ ${questionCount} questions</span>
+                            <span>⏱️ ${quiz.duree || '5 min'}</span>
+                        </div>
+                        <div class="quiz-card-footer">
+                            ${createProgressCircle(progress.percent)}
+                            <a href="guide.html?slug=${quiz.slug}" class="quiz-card-btn ${status.class}">
+                                ${status.btn}
+                                <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        async function loadQuizzes() {
+            try {
+                initSupabase();
+                
+                // Charger les quiz publiés avec blocks et sequences
+                const { data: quizzes, error } = await supabaseClient
+                    .from('quizzes')
+                    .select('*, blocks, sequences')
+                    .eq('published', true)
+                    .order('ordre', { ascending: true });
+
+                if (error) throw error;
+
+                // Charger aussi le nombre de questions depuis quiz_questions (fallback ancien système)
+                const { data: questions } = await supabaseClient
+                    .from('quiz_questions')
+                    .select('quiz_id');
+
+                const questionCountsOld = {};
+                questions?.forEach(q => {
+                    questionCountsOld[q.quiz_id] = (questionCountsOld[q.quiz_id] || 0) + 1;
+                });
+
+                const container = document.getElementById('quiz-list');
+                
+                if (!quizzes || quizzes.length === 0) {
+                    container.innerHTML = `
+                        <div class="page-empty">
+                            <div class="page-empty-icon">🧠</div>
+                            <h3>Aucun quiz disponible</h3>
+                            <p>Les quiz arrivent très bientôt, reste connecté !</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = quizzes.map(quiz => {
+                    // Priorité: compter depuis blocks JSONB, sinon fallback sur quiz_questions
+                    let questionCount = countQuestionsFromBlocks(quiz.blocks);
+                    if (questionCount === 0) {
+                        questionCount = questionCountsOld[quiz.id] || 0;
+                    }
+                    return createQuizCard(quiz, questionCount);
+                }).join('');
+
+                updateStats(quizzes, questionCountsOld);
+                setupFilters();
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('quiz-list').innerHTML = `
+                    <div class="page-empty">
+                        <div class="page-empty-icon">😕</div>
+                        <h3>Oups, une erreur</h3>
+                        <p>Impossible de charger les quiz. Réessaie plus tard.</p>
+                        <button onclick="loadQuizzes()" class="retry-btn">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats(quizzes, questionCountsOld) {
+            let completed = 0;
+            let inProgress = 0;
+
+            quizzes.forEach(quiz => {
+                let questionCount = countQuestionsFromBlocks(quiz.blocks);
+                if (questionCount === 0) {
+                    questionCount = questionCountsOld[quiz.id] || 0;
+                }
+                const p = getQuizProgress(quiz.slug, questionCount);
+                if (p.status === 'completed') completed++;
+                else if (p.status === 'in-progress') inProgress++;
+            });
+
+            document.getElementById('stat-completed').textContent = completed;
+            document.getElementById('stat-in-progress').textContent = inProgress;
+            document.getElementById('stat-total').textContent = quizzes.length;
+        }
+
+        function setupFilters() {
+            document.querySelectorAll('.page-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.page-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.dataset.filter;
+                    let hasVisible = false;
+                    
+                    document.querySelectorAll('.quiz-card').forEach(card => {
+                        const status = card.dataset.status;
+                        const show = filter === 'all' || 
+                            (filter === 'in-progress' && status === 'in-progress') ||
+                            (filter === 'completed' && status === 'completed');
+                        
+                        card.style.display = show ? '' : 'none';
+                        if (show) hasVisible = true;
+                    });
+
+                    const container = document.getElementById('quiz-list');
+                    const existingEmpty = container.querySelector('.filter-empty');
+                    if (existingEmpty) existingEmpty.remove();
+
+                    if (!hasVisible && filter !== 'all') {
+                        const msg = filter === 'in-progress' 
+                            ? "Tu n'as aucun quiz en cours. Commence-en un !" 
+                            : "Tu n'as pas encore terminé de quiz. Lance-toi !";
+                        container.insertAdjacentHTML('beforeend', `
+                            <div class="filter-empty">
+                                <p>${msg}</p>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('componentsLoaded', loadQuizzes);
+        setTimeout(() => {
+            if (document.getElementById('quiz-list').innerHTML.includes('Chargement')) {
+                loadQuizzes();
+            }
+        }, 1500);
+    </script>
 </body>
 </html>

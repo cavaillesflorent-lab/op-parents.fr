@@ -20,6 +20,21 @@
             height: 100%;
             background: #DFF2B6;
         }
+        
+        /* === BOUTONS RÉDUITS === */
+        .webinaire-btn {
+            padding: 0.6rem 1rem !important;
+            font-size: 0.85rem !important;
+            margin-top: auto;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .webinaire-btn {
+                padding: 0.5rem 0.875rem !important;
+                font-size: 0.8rem !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -224,6 +239,45 @@
             `;
         }
 
+        /**
+         * Trier les webinaires intelligemment :
+         * 1. D'abord les "à venir" triés par date croissante (le plus proche en premier)
+         * 2. Ensuite les "replay" triés par date décroissante (le plus récent en premier)
+         * 3. Enfin les "terminé" triés par date décroissante
+         */
+        function sortWebinaires(webinaires) {
+            const now = new Date();
+            
+            // Séparer par statut
+            const aVenir = webinaires.filter(w => w.statut === 'a_venir');
+            const replays = webinaires.filter(w => w.statut === 'replay');
+            const termines = webinaires.filter(w => w.statut === 'termine' || (!w.statut && w.statut !== 'a_venir' && w.statut !== 'replay'));
+            
+            // Trier "à venir" par date croissante (le plus proche en premier)
+            aVenir.sort((a, b) => {
+                const dateA = a.date_heure ? new Date(a.date_heure) : new Date(9999, 11, 31);
+                const dateB = b.date_heure ? new Date(b.date_heure) : new Date(9999, 11, 31);
+                return dateA - dateB;
+            });
+            
+            // Trier "replay" par date décroissante (le plus récent en premier)
+            replays.sort((a, b) => {
+                const dateA = a.date_heure ? new Date(a.date_heure) : new Date(0);
+                const dateB = b.date_heure ? new Date(b.date_heure) : new Date(0);
+                return dateB - dateA;
+            });
+            
+            // Trier "terminé" par date décroissante
+            termines.sort((a, b) => {
+                const dateA = a.date_heure ? new Date(a.date_heure) : new Date(0);
+                const dateB = b.date_heure ? new Date(b.date_heure) : new Date(0);
+                return dateB - dateA;
+            });
+            
+            // Combiner : à venir en premier, puis replays, puis terminés
+            return [...aVenir, ...replays, ...termines];
+        }
+
         // Charger les webinaires
         async function loadWebinaires() {
             const grid = document.getElementById('webinaires-grid');
@@ -231,12 +285,12 @@
             try {
                 const { data, error } = await supabaseClient
                     .from('webinaires')
-                    .select('*')
-                    .order('date_heure', { ascending: false });
+                    .select('*');
 
                 if (error) throw error;
 
-                allWebinaires = data || [];
+                // Trier intelligemment
+                allWebinaires = sortWebinaires(data || []);
                 
                 // Mettre à jour les stats
                 document.getElementById('stat-total').textContent = allWebinaires.length;

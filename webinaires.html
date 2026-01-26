@@ -21,6 +21,26 @@
             background: #DFF2B6;
         }
         
+        /* === GRILLE ALIGNÉE COMME LES QUIZ === */
+        .webinaires-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 992px) {
+            .webinaires-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .webinaires-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
         /* === BOUTONS RÉDUITS === */
         .webinaire-btn {
             padding: 0.6rem 1rem !important;

@@ -356,6 +356,19 @@
             color: var(--terracotta);
         }
         
+        /* Boutons de déplacement haut/bas */
+        .block-action-btn.move-up,
+        .block-action-btn.move-down {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .block-action-btn.move-up:hover,
+        .block-action-btn.move-down:hover {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+        
         .block-content {
             padding: 1rem;
         }
@@ -1011,6 +1024,23 @@
             color: var(--text-secondary);
             margin-top: 0.25rem;
         }
+        
+        /* URL manuelle pour image */
+        .image-url-manual {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .image-url-manual label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .image-url-manual input {
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body class="admin-body">
@@ -1174,7 +1204,11 @@
                         </button>
                         <button class="block-type-btn" data-type="exercise">
                             <span class="block-icon">✍️</span>
-                            <span class="block-name">Exercice</span>
+                            <span class="block-name">Exercice calcul</span>
+                        </button>
+                        <button class="block-type-btn" data-type="exercise-text" style="background: linear-gradient(135deg, #E0E7FF, #C7D2FE); border-color: #818CF8;">
+                            <span class="block-icon">💬</span>
+                            <span class="block-name">Exercice texte</span>
                         </button>
                         <button class="block-type-btn" data-type="summary">
                             <span class="block-icon">📝</span>
@@ -1299,11 +1333,15 @@
                                     <span class="upload-hint">JPG, PNG, WebP (max 2 Mo)</span>
                                 </div>
                                 <input type="file" id="quiz-image-file" accept="image/*" style="display: none;">
-                                <input type="hidden" id="quiz-image" value="">
                             </div>
                             <div class="upload-progress" id="image-upload-progress" style="display: none;">
                                 <div class="progress-bar"><div class="progress-fill" id="image-progress-fill"></div></div>
                                 <span class="progress-text" id="image-progress-text">Upload en cours...</span>
+                            </div>
+                            <!-- Champ URL manuel -->
+                            <div class="image-url-manual">
+                                <label for="quiz-image">Ou coller une URL :</label>
+                                <input type="url" id="quiz-image" placeholder="https://images.unsplash.com/..." value="">
                             </div>
                         </div>
                     </div>
@@ -1332,6 +1370,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📑 Titre de section</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1351,6 +1391,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📖 Narratif</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1374,6 +1416,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📋 Encadré info</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1406,6 +1450,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📊 Statistique</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1429,6 +1475,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">🗳️ Sondage</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1473,6 +1521,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">❓ Quiz</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1524,6 +1574,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">🔍 Focus</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1547,6 +1599,8 @@
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📈 Tableau</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1571,8 +1625,10 @@ Réparation voiture | 300 à 1 500 € | Tous les 1-2 ans
         <div class="block-item" data-type="exercise">
             <div class="block-header">
                 <span class="block-drag-handle">⋮⋮</span>
-                <span class="block-type-badge">✍️ Exercice</span>
+                <span class="block-type-badge">✍️ Exercice calcul</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1597,12 +1653,48 @@ MON RESTE À VIVRE : ___ €"></textarea>
         </div>
     </template>
 
+    <!-- NOUVEAU: Template exercice texte libre -->
+    <template id="template-exercise-text">
+        <div class="block-item" data-type="exercise-text">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge" style="background: linear-gradient(135deg, #E0E7FF, #C7D2FE); color: #4338CA;">💬 Exercice texte</span>
+                <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre de l'exercice</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: ✍️ À toi de jouer !">
+                </div>
+                <div class="block-form-group">
+                    <label>Question / Consigne</label>
+                    <textarea class="block-field" data-field="question" rows="3" placeholder="Ex: Quels sont les 3 postes de dépense que tu pourrais réduire ce mois-ci ?"></textarea>
+                </div>
+                <div class="block-form-group">
+                    <label>Texte d'aide dans le champ (placeholder)</label>
+                    <input type="text" class="block-field" data-field="placeholder" placeholder="Ex: Écris ici tes idées...">
+                </div>
+                <div class="block-form-group">
+                    <label>Aide contextuelle (optionnel)</label>
+                    <input type="text" class="block-field" data-field="help" placeholder="Ex: Pense aux abonnements, sorties, achats impulsifs...">
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="template-summary">
         <div class="block-item" data-type="summary">
             <div class="block-header">
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">📝 Résumé</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1633,6 +1725,8 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">🎯 Call-to-Action</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1666,6 +1760,8 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge">🖼️ Image</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1689,6 +1785,8 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge" style="background: linear-gradient(135deg, #DFF2B6, #C5E89E); color: #2D403B;">👤 Champ personnel</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
@@ -1734,6 +1832,8 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
                 <span class="block-drag-handle">⋮⋮</span>
                 <span class="block-type-badge" style="background: linear-gradient(135deg, #F0D075, #E5C35A); color: #2D403B;">➡️ Slide suivante</span>
                 <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
                     <button class="block-action-btn delete" title="Supprimer">🗑️</button>
                 </div>
             </div>

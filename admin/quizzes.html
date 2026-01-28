@@ -519,6 +519,119 @@
             background: var(--vert-clair);
         }
         
+        /* Exercise Text Fields */
+        .exercise-text-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .exercise-text-field-item {
+            background: #F5F3FF;
+            border: 1px solid #C7D2FE;
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+        }
+        
+        .exercise-text-field-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .exercise-text-field-number {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #818CF8;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        
+        .exercise-text-field-delete {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(191, 96, 75, 0.1);
+            color: var(--terracotta);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+        
+        .exercise-text-field-delete:hover {
+            background: rgba(191, 96, 75, 0.2);
+        }
+        
+        .exercise-text-field-row {
+            margin-bottom: 0.75rem;
+        }
+        
+        .exercise-text-field-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .exercise-text-field-row label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #6366F1;
+            margin-bottom: 0.35rem;
+        }
+        
+        .exercise-text-field-row input,
+        .exercise-text-field-row textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #C7D2FE;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+        
+        .exercise-text-field-row input:focus,
+        .exercise-text-field-row textarea:focus {
+            outline: none;
+            border-color: #818CF8;
+        }
+        
+        .exercise-text-field-row textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .add-exercise-text-field-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem;
+            background: none;
+            border: 2px dashed #A5B4FC;
+            border-radius: var(--radius-md);
+            color: #6366F1;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .add-exercise-text-field-btn:hover {
+            border-color: #6366F1;
+            background: #EEF2FF;
+        }
+        
         /* Champs d'exercice */
         .exercise-fields {
             display: flex;
@@ -1653,7 +1766,7 @@ MON RESTE À VIVRE : ___ €"></textarea>
         </div>
     </template>
 
-    <!-- NOUVEAU: Template exercice texte libre -->
+    <!-- NOUVEAU: Template exercice texte libre avec plusieurs champs -->
     <template id="template-exercise-text">
         <div class="block-item" data-type="exercise-text">
             <div class="block-header">
@@ -1671,17 +1784,32 @@ MON RESTE À VIVRE : ___ €"></textarea>
                     <label>Titre de l'exercice</label>
                     <input type="text" class="block-field" data-field="title" placeholder="Ex: ✍️ À toi de jouer !">
                 </div>
+                
                 <div class="block-form-group">
-                    <label>Question / Consigne</label>
-                    <textarea class="block-field" data-field="question" rows="3" placeholder="Ex: Quels sont les 3 postes de dépense que tu pourrais réduire ce mois-ci ?"></textarea>
+                    <label>📝 Champs de réponse</label>
+                    <div class="exercise-text-fields">
+                        <!-- Les champs seront générés par JS -->
+                        <div class="exercise-text-field-item">
+                            <div class="exercise-text-field-header">
+                                <span class="exercise-text-field-number">1</span>
+                                <button type="button" class="exercise-text-field-delete" title="Supprimer">×</button>
+                            </div>
+                            <div class="exercise-text-field-row">
+                                <label>Question / Consigne</label>
+                                <textarea class="exercise-text-field-question" rows="2" placeholder="Ex: Quels abonnements pourrais-tu supprimer ?"></textarea>
+                            </div>
+                            <div class="exercise-text-field-row">
+                                <label>Placeholder</label>
+                                <input type="text" class="exercise-text-field-placeholder" placeholder="Ex: Netflix, Spotify...">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="add-exercise-text-field-btn">+ Ajouter un champ</button>
                 </div>
+                
                 <div class="block-form-group">
-                    <label>Texte d'aide dans le champ (placeholder)</label>
-                    <input type="text" class="block-field" data-field="placeholder" placeholder="Ex: Écris ici tes idées...">
-                </div>
-                <div class="block-form-group">
-                    <label>Aide contextuelle (optionnel)</label>
-                    <input type="text" class="block-field" data-field="help" placeholder="Ex: Pense aux abonnements, sorties, achats impulsifs...">
+                    <label>Aide générale (optionnel)</label>
+                    <input type="text" class="block-field" data-field="help" placeholder="Ex: Sois honnête avec toi-même !">
                 </div>
             </div>
         </div>

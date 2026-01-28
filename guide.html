@@ -398,12 +398,14 @@
         .block-exercise-text { background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%); border-radius: var(--radius-xl); padding: 1.5rem; }
         .exercise-text-header { margin-bottom: 0.75rem; }
         .exercise-text-badge { display: inline-block; background: var(--blanc); color: #4338CA; font-size: 0.75rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: var(--radius-full); }
-        .exercise-text-title { font-size: 1.1rem; font-weight: 700; color: #312E81; margin-bottom: 0.5rem; }
-        .exercise-text-question { font-size: 0.95rem; color: #4338CA; margin-bottom: 1rem; line-height: 1.5; }
-        .exercise-text-input { width: 100%; padding: 1rem; border: 2px solid #A5B4FC; border-radius: var(--radius-md); font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 100px; background: var(--blanc); transition: all 0.2s ease; }
+        .exercise-text-title { font-size: 1.1rem; font-weight: 700; color: #312E81; margin-bottom: 1rem; }
+        .exercise-text-fields-container { display: flex; flex-direction: column; gap: 1rem; }
+        .exercise-text-field { background: rgba(255,255,255,0.5); border-radius: var(--radius-md); padding: 1rem; }
+        .exercise-text-question { font-size: 0.95rem; color: #4338CA; margin-bottom: 0.75rem; line-height: 1.5; font-weight: 500; }
+        .exercise-text-input { width: 100%; padding: 0.875rem 1rem; border: 2px solid #A5B4FC; border-radius: var(--radius-md); font-size: 0.95rem; font-family: inherit; resize: vertical; min-height: 80px; background: var(--blanc); transition: all 0.2s ease; }
         .exercise-text-input:focus { outline: none; border-color: #4338CA; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
         .exercise-text-input::placeholder { color: #A5B4FC; }
-        .exercise-text-help { margin-top: 0.75rem; font-size: 0.85rem; color: #6366F1; font-style: italic; }
+        .exercise-text-help { margin-top: 1rem; font-size: 0.85rem; color: #6366F1; font-style: italic; background: rgba(255,255,255,0.5); padding: 0.75rem 1rem; border-radius: var(--radius-md); }
         
         .block-summary { background: var(--blanc); border-radius: var(--radius-xl); padding: 1.5rem; border: 2px solid var(--vert-fonce); }
         .summary-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
@@ -1311,21 +1313,34 @@
         }
         
         function renderExerciseText(data) {
-            const key = 'exercise_text_' + Math.random().toString(36).substr(2, 9);
+            const blockKey = 'exercise_text_' + Math.random().toString(36).substr(2, 9);
+            const fields = data.fields || [{ question: data.question || '', placeholder: data.placeholder || '' }];
+            
+            let fieldsHtml = fields.map((field, i) => {
+                const fieldKey = `${blockKey}_${i}`;
+                return `
+                    <div class="exercise-text-field">
+                        <div class="exercise-text-question">${esc(field.question || '')}</div>
+                        <textarea 
+                            class="exercise-text-input" 
+                            data-key="${esc(fieldKey)}"
+                            placeholder="${esc(field.placeholder || 'Écris ta réponse ici...')}"
+                            rows="3"
+                            oninput="handleExerciseTextChange(this)"
+                        ></textarea>
+                    </div>
+                `;
+            }).join('');
+            
             return `
                 <div class="block-exercise-text">
                     <div class="exercise-text-header">
                         <span class="exercise-text-badge">💬 À toi de répondre</span>
                     </div>
-                    <div class="exercise-text-title">${esc(data.title || 'Exercice')}</div>
-                    <div class="exercise-text-question">${esc(data.question || '')}</div>
-                    <textarea 
-                        class="exercise-text-input" 
-                        data-key="${esc(key)}"
-                        placeholder="${esc(data.placeholder || 'Écris ta réponse ici...')}"
-                        rows="4"
-                        oninput="handleExerciseTextChange(this)"
-                    ></textarea>
+                    ${data.title ? `<div class="exercise-text-title">${esc(data.title)}</div>` : ''}
+                    <div class="exercise-text-fields-container">
+                        ${fieldsHtml}
+                    </div>
                     ${data.help ? `<div class="exercise-text-help">💡 ${esc(data.help)}</div>` : ''}
                 </div>
             `;

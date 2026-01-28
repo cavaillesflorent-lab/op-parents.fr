@@ -636,8 +636,9 @@ function getDefaultBlockData(type) {
         case 'exercise-text':
             return {
                 title: '',
-                question: '',
-                placeholder: '',
+                fields: [
+                    { question: '', placeholder: '' }
+                ],
                 help: ''
             };
         default:
@@ -716,6 +717,34 @@ function renderBlock(block, index) {
                         <input type="text" value="${escapedText}" placeholder="Option ${i + 1}">
                         ${block.type === 'quiz' ? `<button class="option-correct-toggle" title="Bonne réponse">✓</button>` : ''}
                         <button class="option-delete" title="Supprimer">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+    
+    // Gérer les champs pour exercise-text
+    if (block.type === 'exercise-text') {
+        const fieldsList = blockEl.querySelector('.exercise-text-fields');
+        if (fieldsList && block.data && block.data.fields && Array.isArray(block.data.fields)) {
+            fieldsList.innerHTML = block.data.fields.map((field, i) => {
+                const escapedQuestion = (field.question || '').replace(/"/g, '&quot;');
+                const escapedPlaceholder = (field.placeholder || '').replace(/"/g, '&quot;');
+                
+                return `
+                    <div class="exercise-text-field-item">
+                        <div class="exercise-text-field-header">
+                            <span class="exercise-text-field-number">${i + 1}</span>
+                            <button type="button" class="exercise-text-field-delete" title="Supprimer">×</button>
+                        </div>
+                        <div class="exercise-text-field-row">
+                            <label>Question / Consigne</label>
+                            <textarea class="exercise-text-field-question" rows="2" placeholder="Ex: Quels abonnements pourrais-tu supprimer ?">${escapedQuestion}</textarea>
+                        </div>
+                        <div class="exercise-text-field-row">
+                            <label>Placeholder</label>
+                            <input type="text" class="exercise-text-field-placeholder" value="${escapedPlaceholder}" placeholder="Ex: Netflix, Spotify...">
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -880,6 +909,87 @@ function attachBlockEvents() {
         });
     });
     
+    // Exercise-text : modification des champs
+    container.querySelectorAll('.exercise-text-fields input, .exercise-text-fields textarea').forEach(input => {
+        input.addEventListener('input', (e) => {
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            updateExerciseTextFields(blockId);
+            autoSave();
+        });
+    });
+    
+    // Exercise-text : suppression d'un champ
+    container.querySelectorAll('.exercise-text-field-delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const fieldItem = e.target.closest('.exercise-text-field-item');
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            
+            // Ne pas supprimer si c'est le dernier champ
+            if (blockEl.querySelectorAll('.exercise-text-field-item').length <= 1) {
+                alert('Vous devez garder au moins un champ');
+                return;
+            }
+            
+            fieldItem.remove();
+            updateExerciseTextFields(blockId);
+            autoSave();
+        });
+    });
+    
+    // Exercise-text : ajout d'un champ
+    container.querySelectorAll('.add-exercise-text-field-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            const fieldsList = blockEl.querySelector('.exercise-text-fields');
+            const count = fieldsList.querySelectorAll('.exercise-text-field-item').length;
+            
+            const newField = document.createElement('div');
+            newField.className = 'exercise-text-field-item';
+            newField.innerHTML = `
+                <div class="exercise-text-field-header">
+                    <span class="exercise-text-field-number">${count + 1}</span>
+                    <button type="button" class="exercise-text-field-delete" title="Supprimer">×</button>
+                </div>
+                <div class="exercise-text-field-row">
+                    <label>Question / Consigne</label>
+                    <textarea class="exercise-text-field-question" rows="2" placeholder="Ex: Quels abonnements pourrais-tu supprimer ?"></textarea>
+                </div>
+                <div class="exercise-text-field-row">
+                    <label>Placeholder</label>
+                    <input type="text" class="exercise-text-field-placeholder" placeholder="Ex: Netflix, Spotify...">
+                </div>
+            `;
+            
+            fieldsList.appendChild(newField);
+            
+            // Attacher les événements
+            newField.querySelectorAll('input, textarea').forEach(input => {
+                input.addEventListener('input', () => {
+                    updateExerciseTextFields(blockId);
+                    autoSave();
+                });
+            });
+            
+            newField.querySelector('.exercise-text-field-delete').addEventListener('click', () => {
+                if (blockEl.querySelectorAll('.exercise-text-field-item').length <= 1) {
+                    alert('Vous devez garder au moins un champ');
+                    return;
+                }
+                newField.remove();
+                updateExerciseTextFieldNumbers(blockEl);
+                updateExerciseTextFields(blockId);
+                autoSave();
+            });
+            
+            updateExerciseTextFields(blockId);
+            markDirty();
+            autoSave();
+        });
+    });
+    
     // Drag & drop des blocs
     makeSortable(container);
 }
@@ -918,6 +1028,28 @@ function updateBlockOptions(blockId) {
     }));
     
     markDirty();
+}
+
+function updateExerciseTextFields(blockId) {
+    const block = blocks.find(b => b.id === blockId);
+    if (!block) return;
+    
+    const blockEl = document.querySelector(`[data-block-id="${blockId}"]`);
+    const fieldItems = blockEl.querySelectorAll('.exercise-text-field-item');
+    
+    block.data.fields = Array.from(fieldItems).map(item => ({
+        question: item.querySelector('.exercise-text-field-question').value,
+        placeholder: item.querySelector('.exercise-text-field-placeholder').value
+    }));
+    
+    markDirty();
+}
+
+function updateExerciseTextFieldNumbers(blockEl) {
+    blockEl.querySelectorAll('.exercise-text-field-item').forEach((item, i) => {
+        const numberEl = item.querySelector('.exercise-text-field-number');
+        if (numberEl) numberEl.textContent = i + 1;
+    });
 }
 
 function deleteBlock(blockId) {
@@ -1196,6 +1328,15 @@ function collectAllBlocksData() {
                 block.data.options = Array.from(optionItems).map(item => ({
                     text: item.querySelector('input[type="text"]').value,
                     correct: item.classList.contains('correct')
+                }));
+            }
+            
+            // Collecter les champs si exercise-text
+            if (block.type === 'exercise-text') {
+                const fieldItems = blockEl.querySelectorAll('.exercise-text-field-item');
+                block.data.fields = Array.from(fieldItems).map(item => ({
+                    question: item.querySelector('.exercise-text-field-question').value,
+                    placeholder: item.querySelector('.exercise-text-field-placeholder').value
                 }));
             }
         }

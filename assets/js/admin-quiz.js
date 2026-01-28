@@ -21,7 +21,8 @@ const BLOCK_TYPES = {
     'quiz': { icon: '❓', name: 'Quiz' },
     'focus': { icon: '🔍', name: 'Focus' },
     'table': { icon: '📈', name: 'Tableau' },
-    'exercise': { icon: '✍️', name: 'Exercice' },
+    'exercise': { icon: '✍️', name: 'Exercice calcul' },
+    'exercise-text': { icon: '💬', name: 'Exercice texte' },
     'summary': { icon: '📝', name: 'Résumé' },
     'cta': { icon: '🎯', name: 'CTA' },
     'image': { icon: '🖼️', name: 'Image' },
@@ -632,6 +633,13 @@ function getDefaultBlockData(type) {
                 fields: '',
                 instructions: ''
             };
+        case 'exercise-text':
+            return {
+                title: '',
+                question: '',
+                placeholder: '',
+                help: ''
+            };
         default:
             return {};
     }
@@ -738,6 +746,24 @@ function attachBlockEvents() {
             const blockEl = e.target.closest('.block-item');
             const blockId = blockEl.dataset.blockId;
             duplicateBlock(blockId);
+        });
+    });
+    
+    // Déplacement vers le haut
+    container.querySelectorAll('.block-action-btn.move-up').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            moveBlockUp(blockId);
+        });
+    });
+    
+    // Déplacement vers le bas
+    container.querySelectorAll('.block-action-btn.move-down').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            moveBlockDown(blockId);
         });
     });
     
@@ -924,6 +950,76 @@ function duplicateBlock(blockId) {
     renderAllBlocks();
     markDirty();
     autoSave();
+}
+
+// ============================================
+// DÉPLACEMENT HAUT/BAS DES BLOCS
+// ============================================
+
+function moveBlockUp(blockId) {
+    collectAllBlocksData();
+    
+    const seqBlocks = getBlocksForActiveSequence();
+    const blockIndex = seqBlocks.findIndex(b => b.id === blockId);
+    
+    if (blockIndex <= 0) return; // Déjà en haut
+    
+    // Trouver les index dans le tableau global
+    const currentBlock = seqBlocks[blockIndex];
+    const prevBlock = seqBlocks[blockIndex - 1];
+    
+    const globalCurrentIndex = blocks.indexOf(currentBlock);
+    const globalPrevIndex = blocks.indexOf(prevBlock);
+    
+    // Échanger les positions
+    blocks[globalCurrentIndex] = prevBlock;
+    blocks[globalPrevIndex] = currentBlock;
+    
+    renderAllBlocks();
+    markDirty();
+    autoSave();
+    
+    // Highlight le bloc déplacé
+    setTimeout(() => {
+        const movedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
+        if (movedBlock) {
+            movedBlock.classList.add('selected');
+            setTimeout(() => movedBlock.classList.remove('selected'), 800);
+        }
+    }, 50);
+}
+
+function moveBlockDown(blockId) {
+    collectAllBlocksData();
+    
+    const seqBlocks = getBlocksForActiveSequence();
+    const blockIndex = seqBlocks.findIndex(b => b.id === blockId);
+    
+    if (blockIndex >= seqBlocks.length - 1) return; // Déjà en bas
+    
+    // Trouver les index dans le tableau global
+    const currentBlock = seqBlocks[blockIndex];
+    const nextBlock = seqBlocks[blockIndex + 1];
+    
+    const globalCurrentIndex = blocks.indexOf(currentBlock);
+    const globalNextIndex = blocks.indexOf(nextBlock);
+    
+    // Échanger les positions
+    blocks[globalCurrentIndex] = nextBlock;
+    blocks[globalNextIndex] = currentBlock;
+    
+    renderAllBlocks();
+    markDirty();
+    autoSave();
+    
+    // Highlight le bloc déplacé
+    setTimeout(() => {
+        const movedBlock = document.querySelector(`[data-block-id="${blockId}"]`);
+        if (movedBlock) {
+            movedBlock.classList.add('selected');
+            setTimeout(() => movedBlock.classList.remove('selected'), 800);
+        }
+    }, 50);
 }
 
 // ============================================
@@ -1161,7 +1257,18 @@ async function handleImageUpload(file) {
                 upsert: false
             });
         
-        if (error) throw error;
+        if (error) {
+            // Si le bucket n'existe pas, afficher un message utile
+            if (error.message.includes('bucket') || error.message.includes('not found') || error.statusCode === '404') {
+                progressText.textContent = '⚠️ Bucket non configuré';
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    alert('L\'upload d\'images n\'est pas configuré.\n\nUtilisez plutôt une URL externe (Unsplash, Imgur, etc.) dans le champ "URL de l\'image".');
+                }, 500);
+                return;
+            }
+            throw error;
+        }
         
         progressFill.style.width = '80%';
         progressText.textContent = 'Finalisation...';

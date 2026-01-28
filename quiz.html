@@ -98,50 +98,45 @@
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
-        const STORAGE_KEY = 'op_quiz_progress';
-
-        function getProgress() {
-            try {
-                return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-            } catch {
-                return {};
-            }
-        }
+        let currentUser = null;
+        let userProgressMap = {}; // Stocke la progression par quiz_slug
 
         /**
-         * Calcule la progression d'un quiz
-         * Compatible avec la structure sequenceProgress du quiz-engine
+         * Récupère la progression d'un quiz depuis les données chargées
          */
         function getQuizProgress(quizSlug, totalQuestions) {
-            const progress = getProgress()[quizSlug];
+            const progress = userProgressMap[quizSlug];
             
             // Pas de progression sauvegardée
             if (!progress) {
                 return { percent: 0, status: 'not-started', currentQuestion: 0 };
             }
             
-            // Quiz terminé
+            // Quiz terminé (depuis Supabase)
             if (progress.completed) {
                 return { percent: 100, status: 'completed', currentQuestion: totalQuestions };
             }
             
-            // Calculer le nombre de réponses depuis sequenceProgress
+            // Calculer le pourcentage depuis les réponses
             let answered = 0;
+            const responses = progress.responses || {};
             
-            // Méthode 1: Utiliser answeredQuestions si disponible (nouveau format)
-            if (typeof progress.answeredQuestions === 'number') {
-                answered = progress.answeredQuestions;
-            }
-            // Méthode 2: Compter depuis sequenceProgress (ancien format)
-            else if (progress.sequenceProgress) {
-                Object.values(progress.sequenceProgress).forEach(seqProgress => {
-                    if (seqProgress && seqProgress.answers) {
-                        answered += Object.keys(seqProgress.answers).length;
-                    }
-                });
-            }
+            // Compter les réponses de type quiz
+            Object.keys(responses).forEach(key => {
+                if (key.startsWith('quiz_') || key.startsWith('poll_')) {
+                    answered++;
+                }
+            });
             
-            const percent = totalQuestions > 0 ? Math.round((answered / totalQuestions) * 100) : 0;
+            // Aussi vérifier sequenceProgress
+            const seqProgress = responses._sequenceProgress || {};
+            Object.values(seqProgress).forEach(seq => {
+                if (seq && seq.currentSlide) {
+                    answered = Math.max(answered, seq.currentSlide);
+                }
+            });
+            
+            const percent = totalQuestions > 0 ? Math.min(Math.round((answered / totalQuestions) * 100), 99) : 0;
             
             return {
                 percent,
@@ -171,7 +166,6 @@
 
         /**
          * Compte le nombre de questions/slides dans un quiz
-         * Supporte l'ancien format (quiz_questions) et le nouveau (blocks JSONB)
          */
         function countQuestionsFromBlocks(blocks) {
             if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
@@ -227,9 +221,44 @@
             `;
         }
 
+        /**
+         * Charge la progression de l'utilisateur depuis Supabase
+         */
+        async function loadUserProgress() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_responses')
+                    .select('quiz_slug, responses, completed')
+                    .eq('user_id', currentUser.id);
+                
+                if (error) throw error;
+                
+                // Créer un map slug -> progression
+                data?.forEach(row => {
+                    userProgressMap[row.quiz_slug] = {
+                        responses: row.responses || {},
+                        completed: row.completed || false
+                    };
+                });
+                
+                console.log('✅ Progression chargée:', Object.keys(userProgressMap).length, 'quiz');
+            } catch (e) {
+                console.error('Erreur chargement progression:', e);
+            }
+        }
+
         async function loadQuizzes() {
             try {
                 initSupabase();
+                
+                // Vérifier l'authentification
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session) {
+                    currentUser = session.user;
+                    await loadUserProgress();
+                }
                 
                 // Charger les quiz publiés avec blocks et sequences
                 const { data: quizzes, error } = await supabaseClient

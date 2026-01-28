@@ -852,7 +852,7 @@
         <div class="error-icon">😕</div>
         <h1 class="error-title">Guide introuvable</h1>
         <p class="error-text">Ce guide n'existe pas ou n'est pas publié.</p>
-        <a href="formations.html" class="error-btn">← Retour aux guides</a>
+        <a href="quiz.html" class="error-btn">← Retour aux guides</a>
     </div>
 
     <!-- Completion -->
@@ -929,13 +929,13 @@
             </div>
             <div class="completion-actions">
                 <a href="mon-espace.html" class="completion-btn primary">Mon espace →</a>
-                <a href="formations.html" class="completion-btn secondary">Autres guides</a>
+                <a href="quiz.html" class="completion-btn secondary">Autres guides</a>
             </div>
         </div>
     </div>
 
     <!-- Auth Modal -->
-    <div class="auth-overlay" id="auth-overlay" onclick="if(event.target===this)closeAuthModal()">
+    <div class="auth-overlay" id="auth-overlay" onclick="if(event.target===this && !authRequired)closeAuthModal()">
         <div class="auth-modal">
             <div class="auth-header">
                 <div class="auth-logo">OP!</div>
@@ -1006,6 +1006,7 @@
         let currentUser = null;
         let userResponses = {};
         let saveTimeout = null;
+        let authRequired = false;
         
         // AJOUT: Variables pour les séquences
         let sequences = [];
@@ -1025,12 +1026,60 @@
             
             if (!slug) { showError(); return; }
             
-            // Check auth silently
+            // Check auth
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) currentUser = session.user;
             
+            // Auth obligatoire sauf en mode aperçu
+            if (!isPreviewMode && !currentUser) {
+                authRequired = true;
+                // Charger le guide pour afficher le hero, mais bloquer l'accès
+                await loadGuidePreview(slug);
+                showAuthModal();
+                return;
+            }
+            
             await loadGuide(slug);
         });
+        
+        // Charger uniquement le hero sans démarrer le guide
+        async function loadGuidePreview(slug) {
+            try {
+                const { data: guide, error } = await supabaseClient
+                    .from('quizzes')
+                    .select('*')
+                    .eq('slug', slug)
+                    .eq('published', true)
+                    .single();
+                
+                if (error || !guide) { showError(); return; }
+                
+                guideData = guide;
+                document.title = `${guide.titre} - OP! Parents`;
+                renderHero(guide);
+                
+                setTimeout(() => {
+                    document.getElementById('loading-screen').classList.add('hidden');
+                }, 400);
+            } catch (e) {
+                showError();
+            }
+        }
+        
+        // Callback après connexion réussie
+        async function onAuthSuccess() {
+            authRequired = false;
+            closeAuthModal();
+            
+            // Charger le guide complet si pas encore fait
+            if (!blocks || blocks.length === 0) {
+                await loadGuide(guideData.slug);
+            } else {
+                // Guide déjà chargé, juste charger les réponses et démarrer
+                await loadUserResponses(guideData.slug);
+                handleStartGuide();
+            }
+        }
         
         // Keyboard & Swipe
         document.addEventListener('keydown', (e) => {
@@ -1605,7 +1654,7 @@
         async function sendNewsletterAlert(email, guideName) {
             // Envoyer l'alerte via webhook Make
             try {
-                await fetch('https://hook.eu2.make.com/q1hp4jeos5gmaba5iy27eb9suy8yf7pe', {
+                await fetch('https://hook.eu2.make.com/xpabkvk01i54lmnc5mitb0gtw74eoxqi', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1768,7 +1817,7 @@
         
         function exitGuide() {
             if (confirm('Quitter ce guide ?')) {
-                window.location.href = 'formations.html';
+                window.location.href = 'quiz.html';
             }
         }
         
@@ -1988,8 +2037,7 @@
                 
                 if (data.session) {
                     currentUser = data.user;
-                    closeAuthModal();
-                    handleStartGuide();
+                    await onAuthSuccess();
                 } else {
                     showAuthError('Vérifiez votre email pour confirmer votre inscription.');
                 }
@@ -2015,9 +2063,7 @@
                 if (error) throw error;
                 
                 currentUser = data.user;
-                await loadUserResponses(guideData.slug);
-                closeAuthModal();
-                handleStartGuide();
+                await onAuthSuccess();
             } catch (error) {
                 showAuthError(getAuthErrorMessage(error));
             } finally {

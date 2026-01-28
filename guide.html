@@ -69,7 +69,7 @@
             z-index: 9999;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .loading-screen.hidden { opacity: 0; visibility: hidden; }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .loading-logo { font-family: var(--font-serif); font-size: 3rem; font-weight: 700; color: var(--dore); margin-bottom: 1.5rem; }
         .loading-spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.2); border-top-color: var(--dore); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -261,9 +261,10 @@
             padding: 1.5rem;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        .sequence-complete-overlay.visible { opacity: 1; visibility: visible; }
+        .sequence-complete-overlay.visible { opacity: 1; visibility: visible; pointer-events: auto; }
         
         .sequence-complete-card {
             background: var(--blanc);
@@ -520,9 +521,10 @@
             padding: 0;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        .calc-modal-overlay.visible { opacity: 1; visibility: visible; }
+        .calc-modal-overlay.visible { opacity: 1; visibility: visible; pointer-events: auto; }
         
         .calc-modal {
             background: var(--blanc);
@@ -702,8 +704,8 @@
         .calc-copy-btn.copied { background: #10B981; }
         
         /* Completion */
-        .completion-screen { position: fixed; inset: 0; background: var(--vert-fonce); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; transition: all 0.4s ease; }
-        .completion-screen.visible { opacity: 1; visibility: visible; }
+        .completion-screen { position: fixed; inset: 0; background: var(--vert-fonce); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.4s ease; }
+        .completion-screen.visible { opacity: 1; visibility: visible; pointer-events: auto; }
         .completion-content { text-align: center; max-width: 360px; }
         .completion-confetti { font-size: 3.5rem; margin-bottom: 1rem; }
         .completion-title { font-family: var(--font-serif); font-size: 1.75rem; font-weight: 700; color: var(--blanc); margin-bottom: 0.75rem; }
@@ -726,8 +728,8 @@
         .error-btn { padding: 0.875rem 1.5rem; background: var(--vert-fonce); color: var(--blanc); border-radius: var(--radius-lg); text-decoration: none; font-weight: 600; }
         
         /* Auth Modal */
-        .auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-        .auth-overlay.visible { opacity: 1; visibility: visible; }
+        .auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.3s ease; }
+        .auth-overlay.visible { opacity: 1; visibility: visible; pointer-events: auto; }
         .auth-modal { background: var(--blanc); border-radius: var(--radius-xl); width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform 0.3s ease; }
         .auth-overlay.visible .auth-modal { transform: translateY(0); }
         .auth-header { padding: 1.5rem 1.5rem 1rem; text-align: center; background: linear-gradient(135deg, var(--vert-clair) 0%, #c5e89e 100%); }
@@ -1074,6 +1076,8 @@
             // Charger le guide complet si pas encore fait
             if (!blocks || blocks.length === 0) {
                 await loadGuide(guideData.slug);
+                // Démarrer automatiquement après chargement
+                handleStartGuide();
             } else {
                 // Guide déjà chargé, juste charger les réponses et démarrer
                 await loadUserResponses(guideData.slug);

@@ -1603,30 +1603,20 @@
         }
         
         async function sendNewsletterAlert(email, guideName) {
-            // Cette fonction envoie une alerte à l'admin
-            // Option 1: Utiliser Supabase Edge Function
-            // Option 2: Utiliser un webhook externe (Make, Zapier, etc.)
-            
+            // Envoyer l'alerte via webhook Make
             try {
-                // Appel à une Edge Function Supabase (à créer)
-                const response = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-alert`, {
+                await fetch('https://hook.eu2.make.com/q1hp4jeos5gmaba5iy27eb9suy8yf7pe', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         email: email,
                         guide: guideName,
                         timestamp: new Date().toISOString()
                     })
                 });
-                
-                if (!response.ok) {
-                    console.log('Alert webhook non configuré ou erreur');
-                }
+                console.log('✅ Alerte newsletter envoyée');
             } catch (e) {
-                // Silencieux si le webhook n'existe pas
+                // Silencieux si erreur
                 console.log('Newsletter alert skipped:', e.message);
             }
         }

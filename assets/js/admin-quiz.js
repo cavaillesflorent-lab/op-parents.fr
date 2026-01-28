@@ -1392,7 +1392,7 @@ async function handleImageUpload(file) {
         
         // Upload vers Supabase Storage
         const { data, error } = await supabaseClient.storage
-            .from('guides')
+            .from('guides-images')
             .upload(fileName, file, {
                 cacheControl: '3600',
                 upsert: false
@@ -1416,7 +1416,7 @@ async function handleImageUpload(file) {
         
         // Récupérer l'URL publique
         const { data: urlData } = supabaseClient.storage
-            .from('guides')
+            .from('guides-images')
             .getPublicUrl(fileName);
         
         const imageUrl = urlData.publicUrl;

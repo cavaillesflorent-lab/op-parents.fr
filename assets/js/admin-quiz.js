@@ -751,6 +751,18 @@ function renderBlock(block, index) {
         }
     }
     
+    // Gérer la prévisualisation pour les blocs image
+    if (block.type === 'image' && block.data && block.data.url) {
+        const zone = blockEl.querySelector('.block-image-upload-zone');
+        const placeholder = zone.querySelector('.block-image-placeholder');
+        const preview = zone.querySelector('.block-image-preview');
+        const previewImg = preview.querySelector('img');
+        
+        previewImg.src = block.data.url;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+    }
+    
     // Convertir en string HTML
     const wrapper = document.createElement('div');
     wrapper.appendChild(clone);
@@ -987,6 +999,90 @@ function attachBlockEvents() {
             updateExerciseTextFields(blockId);
             markDirty();
             autoSave();
+        });
+    });
+    
+    // Block Image : upload zone click
+    container.querySelectorAll('.block-image-upload-zone').forEach(zone => {
+        const fileInput = zone.querySelector('.block-image-file-input');
+        const placeholder = zone.querySelector('.block-image-placeholder');
+        const preview = zone.querySelector('.block-image-preview');
+        
+        // Click to upload
+        zone.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-remove-block-image')) return;
+            fileInput.click();
+        });
+        
+        // File selected
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const blockEl = zone.closest('.block-item');
+                const blockId = blockEl.dataset.blockId;
+                handleBlockImageUpload(e.target.files[0], blockEl, blockId);
+            }
+        });
+        
+        // Drag & drop
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.classList.add('dragover');
+        });
+        
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('dragover');
+        });
+        
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                const blockEl = zone.closest('.block-item');
+                const blockId = blockEl.dataset.blockId;
+                handleBlockImageUpload(e.dataTransfer.files[0], blockEl, blockId);
+            }
+        });
+    });
+    
+    // Block Image : remove button
+    container.querySelectorAll('.btn-remove-block-image').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const blockEl = e.target.closest('.block-item');
+            const blockId = blockEl.dataset.blockId;
+            const zone = blockEl.querySelector('.block-image-upload-zone');
+            const placeholder = zone.querySelector('.block-image-placeholder');
+            const preview = zone.querySelector('.block-image-preview');
+            const urlInput = blockEl.querySelector('.block-field[data-field="url"]');
+            
+            preview.style.display = 'none';
+            placeholder.style.display = 'flex';
+            urlInput.value = '';
+            
+            updateBlockData(blockId, 'url', '');
+            markDirty();
+            autoSave();
+        });
+    });
+    
+    // Block Image : URL input change (sync preview)
+    container.querySelectorAll('.block-item[data-type="image"] .block-field[data-field="url"]').forEach(input => {
+        input.addEventListener('change', (e) => {
+            const blockEl = e.target.closest('.block-item');
+            const url = e.target.value.trim();
+            const zone = blockEl.querySelector('.block-image-upload-zone');
+            const placeholder = zone.querySelector('.block-image-placeholder');
+            const preview = zone.querySelector('.block-image-preview');
+            const previewImg = preview.querySelector('img');
+            
+            if (url) {
+                previewImg.src = url;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                preview.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
         });
     });
     
@@ -1478,6 +1574,122 @@ function removeImage(silent = false) {
     if (!silent) {
         markDirty();
         autoSave();
+    }
+}
+
+// Upload d'image pour les blocs Image
+async function handleBlockImageUpload(file, blockEl, blockId) {
+    // Vérifier le type
+    if (!file.type.startsWith('image/')) {
+        alert('Veuillez sélectionner une image (JPG, PNG, WebP)');
+        return;
+    }
+    
+    // Vérifier la taille (2 Mo max)
+    if (file.size > 2 * 1024 * 1024) {
+        alert('L\'image est trop lourde. Maximum 2 Mo.');
+        return;
+    }
+    
+    const zone = blockEl.querySelector('.block-image-upload-zone');
+    const placeholder = zone.querySelector('.block-image-placeholder');
+    const preview = zone.querySelector('.block-image-preview');
+    const previewImg = preview.querySelector('img');
+    const progressContainer = blockEl.querySelector('.block-image-progress');
+    const progressFill = progressContainer.querySelector('.progress-fill');
+    const progressText = progressContainer.querySelector('.progress-text');
+    const urlInput = blockEl.querySelector('.block-field[data-field="url"]');
+    
+    try {
+        // Afficher la progression
+        progressContainer.style.display = 'block';
+        progressFill.style.width = '20%';
+        progressText.textContent = 'Préparation...';
+        
+        // Prévisualisation locale immédiate
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+        
+        progressFill.style.width = '40%';
+        progressText.textContent = 'Upload en cours...';
+        
+        // Générer un nom unique
+        const timestamp = Date.now();
+        const randomStr = Math.random().toString(36).substring(2, 8);
+        const ext = file.name.split('.').pop().toLowerCase();
+        const fileName = `block-${timestamp}-${randomStr}.${ext}`;
+        
+        progressFill.style.width = '60%';
+        
+        // Upload vers Supabase Storage
+        const { data, error } = await supabaseClient.storage
+            .from('guides-images')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        
+        if (error) {
+            // Si le bucket n'existe pas, afficher un message utile
+            if (error.message.includes('bucket') || error.message.includes('not found') || error.statusCode === '404') {
+                progressText.textContent = '⚠️ Bucket non configuré';
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    alert('L\'upload d\'images n\'est pas configuré.\n\nCréez le bucket "guides-images" dans Supabase Storage ou utilisez une URL externe.');
+                }, 500);
+                return;
+            }
+            throw error;
+        }
+        
+        progressFill.style.width = '80%';
+        progressText.textContent = 'Finalisation...';
+        
+        // Récupérer l'URL publique
+        const { data: urlData } = supabaseClient.storage
+            .from('guides-images')
+            .getPublicUrl(fileName);
+        
+        const imageUrl = urlData.publicUrl;
+        
+        // Mettre à jour l'input URL
+        urlInput.value = imageUrl;
+        
+        // Mettre à jour les données du bloc
+        updateBlockData(blockId, 'url', imageUrl);
+        
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Upload terminé !';
+        
+        console.log('✅ Image bloc uploadée:', imageUrl);
+        
+        // Déclencher l'auto-save
+        markDirty();
+        autoSave();
+        
+        // Cacher la progression après un délai
+        setTimeout(() => {
+            progressContainer.style.display = 'none';
+            progressFill.style.width = '0%';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Erreur upload bloc image:', error);
+        progressText.textContent = 'Erreur: ' + error.message;
+        progressFill.style.width = '0%';
+        progressFill.style.background = '#BF604B';
+        
+        setTimeout(() => {
+            progressContainer.style.display = 'none';
+            progressFill.style.background = 'var(--vert-fonce)';
+        }, 3000);
+        
+        alert('Erreur lors de l\'upload: ' + error.message);
     }
 }
 

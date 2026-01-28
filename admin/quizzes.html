@@ -632,6 +632,89 @@
             background: #EEF2FF;
         }
         
+        /* Block Image Upload */
+        .block-image-upload-zone {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .block-image-upload-zone:hover {
+            border-color: var(--vert-fonce);
+            background: rgba(45, 90, 61, 0.05);
+        }
+        
+        .block-image-upload-zone.dragover {
+            border-color: var(--vert-fonce);
+            background: rgba(45, 90, 61, 0.1);
+        }
+        
+        .block-image-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .block-image-preview {
+            position: relative;
+            width: 100%;
+        }
+        
+        .block-image-preview img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+        }
+        
+        .btn-remove-block-image {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+        
+        .btn-remove-block-image:hover {
+            background: #BF604B;
+        }
+        
+        .block-image-progress {
+            margin-bottom: 0.75rem;
+        }
+        
+        .block-image-url-manual {
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .block-image-url-manual label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+        
         /* Champs d'exercice */
         .exercise-fields {
             display: flex;
@@ -1896,8 +1979,27 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
             </div>
             <div class="block-content">
                 <div class="block-form-group">
-                    <label>URL de l'image</label>
-                    <input type="url" class="block-field" data-field="url" placeholder="https://...">
+                    <label>Image</label>
+                    <div class="block-image-upload-zone">
+                        <div class="block-image-preview" style="display: none;">
+                            <img src="" alt="Prévisualisation">
+                            <button type="button" class="btn-remove-block-image" title="Supprimer">×</button>
+                        </div>
+                        <div class="block-image-placeholder">
+                            <span class="upload-icon">🖼️</span>
+                            <span class="upload-text">Cliquer ou glisser une image</span>
+                            <span class="upload-hint">JPG, PNG, WebP (max 2 Mo)</span>
+                        </div>
+                        <input type="file" class="block-image-file-input" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="block-image-progress" style="display: none;">
+                        <div class="progress-bar"><div class="progress-fill"></div></div>
+                        <span class="progress-text">Upload en cours...</span>
+                    </div>
+                    <div class="block-image-url-manual">
+                        <label>Ou coller une URL :</label>
+                        <input type="url" class="block-field" data-field="url" placeholder="https://...">
+                    </div>
                 </div>
                 <div class="block-form-group">
                     <label>Légende (optionnel)</label>

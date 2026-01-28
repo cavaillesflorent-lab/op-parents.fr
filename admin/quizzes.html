@@ -1426,6 +1426,10 @@
                             <span class="block-icon">➡️</span>
                             <span class="block-name">Slide suivante</span>
                         </button>
+                        <button class="block-type-btn" data-type="newsletter" style="background: linear-gradient(135deg, #FECACA, #FCA5A5); border-color: #F87171;">
+                            <span class="block-icon">📬</span>
+                            <span class="block-name">Newsletter</span>
+                        </button>
                     </div>
                 </aside>
 
@@ -2070,6 +2074,45 @@ Les gros mois (rentrée, Noël, vacances)."></textarea>
             <div class="block-content" style="text-align: center; padding: 1rem; color: #6B7280; font-style: italic;">
                 <div style="border-top: 2px dashed #F0D075; margin: 0.5rem 0;"></div>
                 ↓ Les blocs suivants seront sur une nouvelle slide ↓
+            </div>
+        </div>
+    </template>
+
+    <template id="template-newsletter">
+        <div class="block-item" data-type="newsletter">
+            <div class="block-header">
+                <span class="block-drag-handle">⋮⋮</span>
+                <span class="block-type-badge" style="background: linear-gradient(135deg, #FECACA, #FCA5A5); color: #991B1B;">📬 Newsletter</span>
+                <div class="block-actions">
+                    <button class="block-action-btn move-up" title="Monter">▲</button>
+                    <button class="block-action-btn move-down" title="Descendre">▼</button>
+                    <button class="block-action-btn duplicate" title="Dupliquer">📋</button>
+                    <button class="block-action-btn delete" title="Supprimer">🗑️</button>
+                </div>
+            </div>
+            <div class="block-content">
+                <div class="block-form-group">
+                    <label>Titre</label>
+                    <input type="text" class="block-field" data-field="title" placeholder="Ex: Reste informé ! 📬">
+                </div>
+                <div class="block-form-group">
+                    <label>Texte explicatif</label>
+                    <textarea class="block-field" data-field="description" rows="3" placeholder="Ex: Inscris-toi à notre newsletter pour recevoir nos meilleurs conseils..."></textarea>
+                </div>
+                <div class="block-form-row">
+                    <div class="block-form-group">
+                        <label>Placeholder email</label>
+                        <input type="text" class="block-field" data-field="placeholder" placeholder="Ex: ton@email.com">
+                    </div>
+                    <div class="block-form-group">
+                        <label>Texte bouton</label>
+                        <input type="text" class="block-field" data-field="buttonText" placeholder="Ex: Je m'inscris">
+                    </div>
+                </div>
+                <div class="block-form-group">
+                    <label>Texte du lien "Passer"</label>
+                    <input type="text" class="block-field" data-field="skipText" placeholder="Ex: Passer cette étape">
+                </div>
             </div>
         </div>
     </template>

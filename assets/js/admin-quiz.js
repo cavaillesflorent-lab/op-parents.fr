@@ -27,7 +27,8 @@ const BLOCK_TYPES = {
     'cta': { icon: '🎯', name: 'CTA' },
     'image': { icon: '🖼️', name: 'Image' },
     'personal-field': { icon: '👤', name: 'Champ perso' },
-    'page-break': { icon: '➡️', name: 'Slide suivante' }
+    'page-break': { icon: '➡️', name: 'Slide suivante' },
+    'newsletter': { icon: '📬', name: 'Newsletter' }
 };
 
 // ============================================
@@ -640,6 +641,14 @@ function getDefaultBlockData(type) {
                     { question: '', placeholder: '' }
                 ],
                 help: ''
+            };
+        case 'newsletter':
+            return {
+                title: 'Reste informé ! 📬',
+                description: 'Inscris-toi à notre newsletter pour recevoir nos meilleurs conseils financiers directement dans ta boîte mail.',
+                placeholder: 'ton@email.com',
+                buttonText: 'Je m\'inscris',
+                skipText: 'Passer cette étape'
             };
         default:
             return {};

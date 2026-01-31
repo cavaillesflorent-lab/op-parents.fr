@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz - OP! Parents</title>
-    <meta name="description" content="Découvre ton profil financier grâce à nos quiz interactifs. Teste ton mindset et progresse à ton rythme.">
+    <title>Guides - OP! Parents</title>
+    <meta name="description" content="Découvre ton profil financier grâce à nos guides interactifs. Teste ton mindset et progresse à ton rythme.">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
@@ -15,25 +15,211 @@
         }
         .quiz-card:hover {
             transform: none !important;
+            box-shadow: var(--shadow-xl);
         }
-        /* S'assurer que le bouton est toujours cliquable */
         .quiz-card-btn {
             position: relative;
             z-index: 10;
+        }
+        
+        /* Modal d'authentification */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .auth-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .auth-modal {
+            background: var(--white, #fff);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .auth-overlay.visible .auth-modal {
+            transform: translateY(0);
+        }
+        .auth-header {
+            background: linear-gradient(135deg, #2D403B 0%, #3D5550 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 24px 24px 0 0;
+        }
+        .auth-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #F2D680;
+            margin-bottom: 0.5rem;
+        }
+        .auth-title {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .auth-benefits {
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9eceb;
+        }
+        .auth-benefit {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            color: #2D403B;
+        }
+        .auth-benefit-icon {
+            font-size: 1.2rem;
+        }
+        .auth-form {
+            padding: 1.5rem 2rem 2rem;
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: #f1f3f2;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .auth-tab.active {
+            background: #2D403B;
+            color: white;
+        }
+        .auth-input-group {
+            margin-bottom: 1rem;
+        }
+        .auth-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #2D403B;
+            margin-bottom: 0.4rem;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e9eceb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            font-family: inherit;
+        }
+        .auth-input:focus {
+            outline: none;
+            border-color: #2D403B;
+        }
+        .auth-submit {
+            width: 100%;
+            padding: 1rem;
+            background: #2D403B;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-top: 0.5rem;
+        }
+        .auth-submit:hover {
+            background: #3D5550;
+        }
+        .auth-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .auth-error {
+            background: #fef2f2;
+            color: #BF604B;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .auth-error.visible {
+            display: block;
+        }
+        
+        /* User bar quand connecté */
+        .user-bar {
+            background: linear-gradient(135deg, #DFF2B6 0%, #c5e090 100%);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #2D403B;
+            font-weight: 500;
+        }
+        .user-logout {
+            background: none;
+            border: none;
+            color: #2D403B;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            font-family: inherit;
+        }
+        .user-logout:hover {
+            color: #BF604B;
         }
     </style>
 </head>
 <body>
     <!-- HEADER -->
     <div id="header-placeholder"></div>
+    
+    <!-- USER BAR (affiché quand connecté) -->
+    <div class="user-bar" id="user-bar" style="display: none;">
+        <div class="user-info">
+            <span>👋</span>
+            <span>Bonjour <strong id="user-name">!</strong></span>
+        </div>
+        <button class="user-logout" onclick="handleLogout()">Déconnexion</button>
+    </div>
 
     <main>
         <!-- HERO -->
         <section class="page-hero">
             <div class="page-hero-content">
-                
                 <h1>Quel parent êtes-vous face à l'argent ?</h1>
-                <p>Des quiz rapides pour comprendre vos réflexes financiers et savoir par où commencer.</p>
+                <p>Des guides interactifs pour comprendre vos réflexes financiers et savoir par où commencer.</p>
             </div>
         </section>
 
@@ -70,7 +256,7 @@
         <section class="page-filters-section">
             <div class="container">
                 <div class="page-filters">
-                    <button class="page-filter-btn active" data-filter="all">Tous les quiz</button>
+                    <button class="page-filter-btn active" data-filter="all">Tous les guides</button>
                     <button class="page-filter-btn" data-filter="in-progress">En cours</button>
                     <button class="page-filter-btn" data-filter="completed">Terminés</button>
                 </div>
@@ -83,7 +269,7 @@
                 <div class="quiz-grid" id="quiz-list">
                     <div class="loading-state">
                         <div class="quiz-loading-spinner"></div>
-                        <p>Chargement des quiz...</p>
+                        <p>Chargement des guides...</p>
                     </div>
                 </div>
             </div>
@@ -108,6 +294,58 @@
 
     <!-- FOOTER -->
     <div id="footer-placeholder"></div>
+    
+    <!-- MODAL AUTH -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-modal">
+            <div class="auth-header">
+                <div class="auth-logo">OP!</div>
+                <div class="auth-title">Créez votre compte gratuit</div>
+            </div>
+            <div class="auth-benefits">
+                <div class="auth-benefit"><span class="auth-benefit-icon">📚</span> Accès à tous les guides interactifs</div>
+                <div class="auth-benefit"><span class="auth-benefit-icon">💾</span> Sauvegarde automatique de ta progression</div>
+                <div class="auth-benefit"><span class="auth-benefit-icon">📊</span> Suivi personnalisé de tes résultats</div>
+            </div>
+            <div class="auth-form">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchAuthTab('signup')">Inscription</button>
+                    <button class="auth-tab" onclick="switchAuthTab('login')">Connexion</button>
+                </div>
+                <div class="auth-error" id="auth-error"></div>
+                
+                <!-- Signup Form -->
+                <form id="signup-form" onsubmit="handleSignup(event)">
+                    <div class="auth-input-group">
+                        <label class="auth-label">Prénom</label>
+                        <input type="text" class="auth-input" id="signup-name" required placeholder="Ton prénom">
+                    </div>
+                    <div class="auth-input-group">
+                        <label class="auth-label">Email</label>
+                        <input type="email" class="auth-input" id="signup-email" required placeholder="ton@email.com">
+                    </div>
+                    <div class="auth-input-group">
+                        <label class="auth-label">Mot de passe</label>
+                        <input type="password" class="auth-input" id="signup-password" required minlength="6" placeholder="Minimum 6 caractères">
+                    </div>
+                    <button type="submit" class="auth-submit" id="signup-btn">Créer mon compte</button>
+                </form>
+                
+                <!-- Login Form -->
+                <form id="login-form" style="display:none" onsubmit="handleLogin(event)">
+                    <div class="auth-input-group">
+                        <label class="auth-label">Email</label>
+                        <input type="email" class="auth-input" id="login-email" required placeholder="ton@email.com">
+                    </div>
+                    <div class="auth-input-group">
+                        <label class="auth-label">Mot de passe</label>
+                        <input type="password" class="auth-input" id="login-password" required placeholder="Ton mot de passe">
+                    </div>
+                    <button type="submit" class="auth-submit" id="login-btn">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/config.js"></script>
@@ -115,10 +353,149 @@
     <script>
         let currentUser = null;
         let userProgressMap = {}; // Stocke la progression par quiz_slug
+        
+        // ============================================
+        // AUTH FUNCTIONS
+        // ============================================
+        
+        function showAuthModal() {
+            document.getElementById('auth-overlay').classList.add('visible');
+        }
+        
+        function hideAuthModal() {
+            document.getElementById('auth-overlay').classList.remove('visible');
+        }
+        
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.auth-tab:${tab === 'signup' ? 'first-child' : 'last-child'}`).classList.add('active');
+            document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+            document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+            document.getElementById('auth-error').classList.remove('visible');
+        }
+        
+        function showAuthError(message) {
+            const el = document.getElementById('auth-error');
+            el.textContent = message;
+            el.classList.add('visible');
+        }
+        
+        function getAuthErrorMessage(error) {
+            const messages = {
+                'Invalid login credentials': 'Email ou mot de passe incorrect',
+                'Email not confirmed': 'Vérifie ton email pour confirmer ton compte',
+                'User already registered': 'Un compte existe déjà avec cet email',
+                'Password should be at least 6 characters': 'Le mot de passe doit faire au moins 6 caractères'
+            };
+            return messages[error.message] || error.message || 'Une erreur est survenue';
+        }
+        
+        async function handleSignup(e) {
+            e.preventDefault();
+            const btn = document.getElementById('signup-btn');
+            btn.disabled = true;
+            btn.textContent = 'Création...';
+            
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email, password,
+                    options: { data: { name } }
+                });
+                
+                if (error) throw error;
+                
+                if (data.session) {
+                    currentUser = data.user;
+                    onAuthSuccess();
+                } else {
+                    showAuthError('Vérifie ton email pour confirmer ton inscription.');
+                }
+            } catch (error) {
+                showAuthError(getAuthErrorMessage(error));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Créer mon compte';
+            }
+        }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            btn.textContent = 'Connexion...';
+            
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                
+                currentUser = data.user;
+                onAuthSuccess();
+            } catch (error) {
+                showAuthError(getAuthErrorMessage(error));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            }
+        }
+        
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            currentUser = null;
+            userProgressMap = {};
+            document.getElementById('user-bar').style.display = 'none';
+            showAuthModal();
+        }
+        
+        async function onAuthSuccess() {
+            hideAuthModal();
+            showUserBar();
+            await loadUserProgress();
+            await loadQuizzes();
+        }
+        
+        function showUserBar() {
+            const userName = currentUser?.user_metadata?.name || currentUser?.email?.split('@')[0] || 'Visiteur';
+            document.getElementById('user-name').textContent = userName;
+            document.getElementById('user-bar').style.display = 'flex';
+        }
 
-        /**
-         * Récupère la progression d'un quiz depuis les données chargées
-         */
+        // ============================================
+        // PROGRESS FUNCTIONS
+        // ============================================
+        
+        async function loadUserProgress() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_responses')
+                    .select('quiz_slug, responses, completed')
+                    .eq('user_id', currentUser.id);
+                
+                if (error) throw error;
+                
+                // Créer un map slug -> progression
+                userProgressMap = {};
+                data?.forEach(row => {
+                    userProgressMap[row.quiz_slug] = {
+                        responses: row.responses || {},
+                        completed: row.completed || false
+                    };
+                });
+                
+                console.log('✅ Progression chargée:', Object.keys(userProgressMap).length, 'guides');
+            } catch (e) {
+                console.error('Erreur chargement progression:', e);
+            }
+        }
+
         function getQuizProgress(quizSlug, totalQuestions) {
             const progress = userProgressMap[quizSlug];
             
@@ -127,7 +504,7 @@
                 return { percent: 0, status: 'not-started', currentQuestion: 0 };
             }
             
-            // Quiz terminé (depuis Supabase)
+            // Guide terminé (depuis Supabase)
             if (progress.completed) {
                 return { percent: 100, status: 'completed', currentQuestion: totalQuestions };
             }
@@ -160,6 +537,10 @@
             };
         }
 
+        // ============================================
+        // UI FUNCTIONS
+        // ============================================
+        
         function createProgressCircle(percent) {
             const radius = 20;
             const circumference = 2 * Math.PI * radius;
@@ -179,15 +560,10 @@
             `;
         }
 
-        /**
-         * Compte le nombre de questions/slides dans un quiz
-         */
         function countQuestionsFromBlocks(blocks) {
             if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
                 return 0;
             }
-            
-            // Compter les blocs de type quiz
             return blocks.filter(b => b.type === 'quiz').length;
         }
 
@@ -203,9 +579,8 @@
 
             const imageHtml = quiz.image_url 
                 ? `<img src="${quiz.image_url}" alt="${quiz.titre}" loading="lazy">`
-                : `<div class="quiz-card-placeholder"><span>🧠</span></div>`;
+                : `<div class="quiz-card-placeholder"><span>📚</span></div>`;
 
-            // Afficher le nombre de niveaux si plusieurs séquences
             const sequences = quiz.sequences || [];
             const levelsBadge = sequences.length > 1 
                 ? `<span style="margin-left: 0.5rem; padding: 0.15rem 0.5rem; background: var(--vert-clair, #DFF2B6); border-radius: 12px; font-size: 0.75rem; color: var(--vert-fonce, #2D403B);">📚 ${sequences.length} niveaux</span>` 
@@ -226,7 +601,7 @@
                         </div>
                         <div class="quiz-card-footer">
                             ${createProgressCircle(progress.percent)}
-                            <a href="guide.html?slug=${quiz.slug}" class="quiz-card-btn ${status.class}" onclick="console.log('Clic sur:', '${quiz.slug}')">
+                            <a href="guide.html?slug=${quiz.slug}" class="quiz-card-btn ${status.class}">
                                 ${status.btn}
                                 <span class="arrow">→</span>
                             </a>
@@ -236,46 +611,8 @@
             `;
         }
 
-        /**
-         * Charge la progression de l'utilisateur depuis Supabase
-         */
-        async function loadUserProgress() {
-            if (!currentUser) return;
-            
-            try {
-                const { data, error } = await supabaseClient
-                    .from('user_responses')
-                    .select('quiz_slug, responses, completed')
-                    .eq('user_id', currentUser.id);
-                
-                if (error) throw error;
-                
-                // Créer un map slug -> progression
-                data?.forEach(row => {
-                    userProgressMap[row.quiz_slug] = {
-                        responses: row.responses || {},
-                        completed: row.completed || false
-                    };
-                });
-                
-                console.log('✅ Progression chargée:', Object.keys(userProgressMap).length, 'quiz');
-            } catch (e) {
-                console.error('Erreur chargement progression:', e);
-            }
-        }
-
         async function loadQuizzes() {
             try {
-                initSupabase();
-                
-                // Vérifier l'authentification
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (session) {
-                    currentUser = session.user;
-                    await loadUserProgress();
-                }
-                
-                // Charger les quiz publiés avec blocks et sequences
                 const { data: quizzes, error } = await supabaseClient
                     .from('quizzes')
                     .select('*, blocks, sequences')
@@ -284,7 +621,6 @@
 
                 if (error) throw error;
 
-                // Charger aussi le nombre de questions depuis quiz_questions (fallback ancien système)
                 const { data: questions } = await supabaseClient
                     .from('quiz_questions')
                     .select('quiz_id');
@@ -299,16 +635,15 @@
                 if (!quizzes || quizzes.length === 0) {
                     container.innerHTML = `
                         <div class="page-empty">
-                            <div class="page-empty-icon">🧠</div>
-                            <h3>Aucun quiz disponible</h3>
-                            <p>Les quiz arrivent très bientôt, reste connecté !</p>
+                            <div class="page-empty-icon">📚</div>
+                            <h3>Aucun guide disponible</h3>
+                            <p>Les guides arrivent très bientôt, reste connecté !</p>
                         </div>
                     `;
                     return;
                 }
 
                 container.innerHTML = quizzes.map(quiz => {
-                    // Priorité: compter depuis blocks JSONB, sinon fallback sur quiz_questions
                     let questionCount = countQuestionsFromBlocks(quiz.blocks);
                     if (questionCount === 0) {
                         questionCount = questionCountsOld[quiz.id] || 0;
@@ -325,7 +660,7 @@
                     <div class="page-empty">
                         <div class="page-empty-icon">😕</div>
                         <h3>Oups, une erreur</h3>
-                        <p>Impossible de charger les quiz. Réessaie plus tard.</p>
+                        <p>Impossible de charger les guides. Réessaie plus tard.</p>
                         <button onclick="loadQuizzes()" class="retry-btn">Réessayer</button>
                     </div>
                 `;
@@ -376,8 +711,8 @@
 
                     if (!hasVisible && filter !== 'all') {
                         const msg = filter === 'in-progress' 
-                            ? "Tu n'as aucun quiz en cours. Commence-en un !" 
-                            : "Tu n'as pas encore terminé de quiz. Lance-toi !";
+                            ? "Tu n'as aucun guide en cours. Commence-en un !" 
+                            : "Tu n'as pas encore terminé de guide. Lance-toi !";
                         container.insertAdjacentHTML('beforeend', `
                             <div class="filter-empty">
                                 <p>${msg}</p>
@@ -388,24 +723,35 @@
             });
         }
 
-        document.addEventListener('componentsLoaded', loadQuizzes);
+        // ============================================
+        // INIT
+        // ============================================
+        
+        async function init() {
+            initSupabase();
+            
+            // Vérifier si déjà connecté
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            if (session) {
+                currentUser = session.user;
+                showUserBar();
+                await loadUserProgress();
+                await loadQuizzes();
+            } else {
+                // Pas connecté → afficher le modal d'auth
+                showAuthModal();
+                // Charger les quiz quand même (sans progression)
+                await loadQuizzes();
+            }
+        }
+
+        document.addEventListener('componentsLoaded', init);
         setTimeout(() => {
             if (document.getElementById('quiz-list').innerHTML.includes('Chargement')) {
-                loadQuizzes();
+                init();
             }
         }, 1500);
-        
-        // Fix: S'assurer que les clics sur les boutons fonctionnent
-        document.addEventListener('click', (e) => {
-            const btn = e.target.closest('.quiz-card-btn');
-            if (btn && btn.href) {
-                console.log('Clic sur bouton quiz:', btn.href);
-                // Force la navigation si le lien ne fonctionne pas naturellement
-                if (!e.defaultPrevented) {
-                    window.location.href = btn.href;
-                }
-            }
-        });
     </script>
 </body>
 </html>

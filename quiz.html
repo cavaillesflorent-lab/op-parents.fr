@@ -7,6 +7,21 @@
     <meta name="description" content="Découvre ton profil financier grâce à nos quiz interactifs. Teste ton mindset et progresse à ton rythme.">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
+    <style>
+        /* Fix: Éviter que la transition ne fasse rater les clics */
+        .quiz-card {
+            transition: box-shadow 0.3s ease !important;
+            transform: none !important;
+        }
+        .quiz-card:hover {
+            transform: none !important;
+        }
+        /* S'assurer que le bouton est toujours cliquable */
+        .quiz-card-btn {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -211,7 +226,7 @@
                         </div>
                         <div class="quiz-card-footer">
                             ${createProgressCircle(progress.percent)}
-                            <a href="guide.html?slug=${quiz.slug}" class="quiz-card-btn ${status.class}">
+                            <a href="guide.html?slug=${quiz.slug}" class="quiz-card-btn ${status.class}" onclick="console.log('Clic sur:', '${quiz.slug}')">
                                 ${status.btn}
                                 <span class="arrow">→</span>
                             </a>
@@ -379,6 +394,18 @@
                 loadQuizzes();
             }
         }, 1500);
+        
+        // Fix: S'assurer que les clics sur les boutons fonctionnent
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.quiz-card-btn');
+            if (btn && btn.href) {
+                console.log('Clic sur bouton quiz:', btn.href);
+                // Force la navigation si le lien ne fonctionne pas naturellement
+                if (!e.defaultPrevented) {
+                    window.location.href = btn.href;
+                }
+            }
+        });
     </script>
 </body>
 </html>

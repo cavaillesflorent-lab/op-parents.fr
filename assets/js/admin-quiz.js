@@ -716,15 +716,14 @@ function renderBlock(block, index) {
             optionsList.innerHTML = block.data.options.map((opt, i) => {
                 const letter = String.fromCharCode(65 + i); // A, B, C...
                 const isCorrect = opt.correct ? 'correct' : '';
-                const marker = block.type === 'poll' ? '□' : letter;
                 // Échapper les guillemets dans le texte
                 const escapedText = (opt.text || '').replace(/"/g, '&quot;');
                 
                 return `
                     <div class="option-item ${isCorrect}">
-                        <span class="option-marker">${marker}</span>
+                        <span class="option-marker">${letter}</span>
                         <input type="text" value="${escapedText}" placeholder="Option ${i + 1}">
-                        ${block.type === 'quiz' ? `<button class="option-correct-toggle" title="Bonne réponse">✓</button>` : ''}
+                        <button class="option-correct-toggle" title="Bonne réponse">✓</button>
                         <button class="option-delete" title="Supprimer">×</button>
                     </div>
                 `;
@@ -888,14 +887,13 @@ function attachBlockEvents() {
             const blockType = blockEl.dataset.type;
             const count = optionsList.querySelectorAll('.option-item').length;
             const letter = String.fromCharCode(65 + count);
-            const marker = blockType === 'poll' ? '□' : letter;
             
             const newOption = document.createElement('div');
             newOption.className = 'option-item';
             newOption.innerHTML = `
-                <span class="option-marker">${marker}</span>
+                <span class="option-marker">${letter}</span>
                 <input type="text" placeholder="Option ${count + 1}">
-                ${blockType === 'quiz' ? `<button class="option-correct-toggle" title="Bonne réponse">✓</button>` : ''}
+                <button class="option-correct-toggle" title="Bonne réponse">✓</button>
                 <button class="option-delete" title="Supprimer">×</button>
             `;
             
@@ -907,7 +905,7 @@ function attachBlockEvents() {
                 autoSave();
             });
             
-            if (blockType === 'quiz') {
+            if (blockType === 'quiz' || blockType === 'poll') {
                 newOption.querySelector('.option-correct-toggle').addEventListener('click', (e) => {
                     const wasCorrect = newOption.classList.contains('correct');
                     blockEl.querySelectorAll('.option-item').forEach(item => item.classList.remove('correct'));
@@ -1100,14 +1098,9 @@ function attachBlockEvents() {
 }
 
 function updateOptionMarkers(blockEl) {
-    const blockType = blockEl.dataset.type;
     blockEl.querySelectorAll('.option-item').forEach((item, i) => {
         const marker = item.querySelector('.option-marker');
-        if (blockType === 'poll') {
-            marker.textContent = '□';
-        } else {
-            marker.textContent = String.fromCharCode(65 + i);
-        }
+        marker.textContent = String.fromCharCode(65 + i); // A, B, C...
     });
 }
 

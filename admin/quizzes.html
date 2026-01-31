@@ -1691,25 +1691,32 @@
                     <textarea class="block-field" data-field="question" rows="2" placeholder="Ex: Honnêtement, tu sais combien tu dépenses en courses chaque mois ?"></textarea>
                 </div>
                 <div class="block-form-group">
-                    <label>Options (pas de bonne réponse)</label>
+                    <label>Options (cliquez sur ✓ pour marquer la bonne réponse)</label>
                     <div class="options-list" data-field="options">
                         <div class="option-item">
-                            <span class="option-marker">□</span>
-                            <input type="text" placeholder="Option 1">
+                            <span class="option-marker">A</span>
+                            <input type="text" placeholder="Réponse A">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
                             <button class="option-delete" title="Supprimer">×</button>
                         </div>
                         <div class="option-item">
-                            <span class="option-marker">□</span>
-                            <input type="text" placeholder="Option 2">
+                            <span class="option-marker">B</span>
+                            <input type="text" placeholder="Réponse B">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
                             <button class="option-delete" title="Supprimer">×</button>
                         </div>
                         <div class="option-item">
-                            <span class="option-marker">□</span>
-                            <input type="text" placeholder="Option 3">
+                            <span class="option-marker">C</span>
+                            <input type="text" placeholder="Réponse C">
+                            <button class="option-correct-toggle" title="Bonne réponse">✓</button>
                             <button class="option-delete" title="Supprimer">×</button>
                         </div>
                     </div>
                     <button class="add-option-btn">+ Ajouter une option</button>
+                </div>
+                <div class="block-form-group">
+                    <label>Explication (affichée après la réponse)</label>
+                    <textarea class="block-field" data-field="explanation" rows="3" placeholder="Explique pourquoi cette réponse est la bonne..."></textarea>
                 </div>
             </div>
         </div>

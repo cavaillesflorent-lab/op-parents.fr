@@ -350,6 +350,10 @@
         .quiz-option.incorrect { border-color: #EF4444; background: rgba(239, 68, 68, 0.1); }
         .quiz-option.disabled, .poll-option.disabled { cursor: default; opacity: 0.7; }
         .poll-option.selected { border-color: var(--vert-fonce); background: var(--vert-clair); }
+        .poll-option.correct { border-color: #10B981; background: rgba(16, 185, 129, 0.1); opacity: 1; }
+        .poll-option.wrong { border-color: #EF4444; background: rgba(239, 68, 68, 0.1); }
+        .poll-option.correct .quiz-option-letter { background: #10B981; color: var(--blanc); }
+        .poll-option.wrong .quiz-option-letter { background: #EF4444; color: var(--blanc); }
         .quiz-option-letter { width: 28px; height: 28px; background: var(--gris-200); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; color: var(--gris-600); flex-shrink: 0; }
         .quiz-option.correct .quiz-option-letter { background: #10B981; color: var(--blanc); }
         .quiz-option.incorrect .quiz-option-letter { background: #EF4444; color: var(--blanc); }
@@ -1340,8 +1344,9 @@
             const options = data.options || [];
             return `<div class="block-poll" data-answered="false"><div class="poll-header"><span class="poll-badge">🗳️ Sondage</span></div><div class="poll-question">${esc(data.question || '')}</div><div class="poll-options">${options.map((o, i) => {
                 const text = typeof o === 'string' ? o : o.text;
-                return `<div class="poll-option" onclick="selectPoll(this)"><div class="poll-option-checkbox"></div><span class="poll-option-text">${esc(text || '')}</span></div>`;
-            }).join('')}</div></div>`;
+                const correct = typeof o === 'object' ? o.correct : false;
+                return `<div class="poll-option" data-correct="${correct ? 'true' : 'false'}" onclick="selectPoll(this)"><span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span><span class="poll-option-text">${esc(text || '')}</span></div>`;
+            }).join('')}</div>${data.explanation ? `<div class="quiz-explanation" style="display:none;"><div class="quiz-explanation-title">💡 Explication</div><div class="quiz-explanation-text">${fmt(data.explanation)}</div></div>` : ''}</div>`;
         }
         
         function renderQuiz(data, index) {
@@ -1954,27 +1959,31 @@
             const poll = el.closest('.block-poll');
             if (poll.dataset.answered === 'true') return;
             poll.dataset.answered = 'true';
-            poll.querySelectorAll('.poll-option').forEach(o => o.classList.add('disabled'));
+            
+            const isCorrect = el.dataset.correct === 'true';
+            
+            // Désactiver toutes les options
+            poll.querySelectorAll('.poll-option').forEach(o => {
+                o.classList.add('disabled');
+                // Marquer la bonne réponse
+                if (o.dataset.correct === 'true') {
+                    o.classList.add('correct');
+                }
+            });
+            
+            // Marquer la réponse sélectionnée
             el.classList.add('selected');
-            setTimeout(() => {
-                const options = poll.querySelectorAll('.poll-option');
-                const results = fakePollResults(options.length);
-                let html = '<div class="poll-results">';
-                options.forEach((o, i) => {
-                    const text = o.querySelector('.poll-option-text').textContent;
-                    html += `<div class="poll-result-item"><div class="poll-result-header"><span class="poll-result-text">${esc(text)}</span><span class="poll-result-percent">${results[i]}%</span></div><div class="poll-result-bar"><div class="poll-result-fill" style="width:0%"></div></div></div>`;
-                });
-                html += '</div>';
-                poll.insertAdjacentHTML('beforeend', html);
-                setTimeout(() => { poll.querySelectorAll('.poll-result-fill').forEach((f, i) => f.style.width = results[i] + '%'); }, 50);
-            }, 300);
-        }
-        
-        function fakePollResults(n) {
-            const r = []; let rem = 100;
-            for (let i = 0; i < n - 1; i++) { const v = Math.floor(Math.random() * (rem - (n - i) * 5)) + 5; r.push(v); rem -= v; }
-            r.push(rem);
-            return r;
+            if (!isCorrect) {
+                el.classList.add('wrong');
+            }
+            
+            // Afficher l'explication si elle existe
+            const explanation = poll.querySelector('.quiz-explanation');
+            if (explanation) {
+                setTimeout(() => {
+                    explanation.style.display = 'block';
+                }, 300);
+            }
         }
         
         // ============================================

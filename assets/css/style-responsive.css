@@ -92,6 +92,12 @@ body {
     padding-top: 90px;
 }
 
+/* User bar - styles de base */
+.user-bar {
+    position: relative;
+    z-index: 90;
+}
+
 /* ========================================
    HEADER & MENU HAMBURGER (MOBILE)
    ======================================== */
@@ -241,7 +247,7 @@ body {
     
     /* ===== HEADER & NAVIGATION ===== */
     body {
-        padding-top: 55px;
+        padding-top: 70px;
     }
     
     .header {
@@ -603,6 +609,7 @@ body {
         padding: 0.5rem 1rem;
         flex-wrap: wrap;
         gap: 0.5rem;
+        margin-top: 5px;
     }
     
     .user-info {

@@ -1,16 +1,138 @@
 /* ========================================
    OP! - STYLES RESPONSIVE
-   Fichier séparé pour toutes les media queries
-   À importer à la fin de style.css :
-   @import url('style-responsive.css');
+   Version corrigée avec menu hamburger fonctionnel
    ======================================== */
+
+/* ========================================
+   HEADER - STYLES DE BASE
+   ======================================== */
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--vert-fonce, #2D403B);
+    padding: 0.75rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header .container {
+    max-width: var(--container-max, 1200px);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+.logo-text {
+    font-size: 0.9rem;
+    color: var(--jaune-dore, #F2D680);
+    font-weight: 500;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    color: var(--blanc, #fff);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: var(--radius-md, 12px);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav a.active {
+    background: var(--jaune-dore, #F2D680);
+    color: var(--vert-fonce, #2D403B);
+}
+
+.nav-icon {
+    font-size: 1rem;
+}
+
+/* ========================================
+   HEADER & MENU HAMBURGER (MOBILE)
+   ======================================== */
+
+/* Bouton hamburger - caché par défaut sur desktop */
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+    position: relative;
+}
+
+.mobile-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--blanc, #fff);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Animation hamburger -> X */
+.mobile-toggle.is-active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-toggle.is-active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle.is-active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
 
 /* ========================================
    TABLETTE - max 1024px
    ======================================== */
 
 @media (max-width: 1024px) {
-    /* Réduction des espacements */
     :root {
         --space-3xl: 4rem;
         --space-4xl: 5rem;
@@ -20,7 +142,6 @@
         padding: var(--space-3xl) 0;
     }
     
-    /* Grilles en 1 colonne centrée */
     .benefits-grid,
     .offerings-grid,
     .testimonials-grid,
@@ -31,21 +152,22 @@
         max-width: 500px;
         margin-left: auto;
         margin-right: auto;
+        gap: 1.5rem;
     }
     
-    /* Grille moments en 2 colonnes */
     .moments-cards {
         grid-template-columns: repeat(2, 1fr);
         max-width: 700px;
         margin-left: auto;
         margin-right: auto;
+        gap: 1.5rem;
     }
     
     .moments-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
     }
     
-    /* Footer en colonne */
     .footer-content {
         grid-template-columns: 1fr;
         gap: var(--space-xl);
@@ -60,11 +182,19 @@
         align-items: center;
     }
     
-    /* Grilles de cartes - réduction minmax */
     .webinaires-grid,
     .quiz-grid,
     .formations-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .raisons-grid {
+        gap: 1.5rem;
+    }
+    
+    .raison {
+        padding: 1.25rem;
     }
 }
 
@@ -73,58 +203,73 @@
    ======================================== */
 
 @media (max-width: 768px) {
-    /* Réduction des espacements mobile */
     :root {
-        --space-2xl: 2.5rem;
-        --space-3xl: 3rem;
-        --space-4xl: 3.5rem;
+        --space-2xl: 3rem;
+        --space-3xl: 3.5rem;
+        --space-4xl: 4rem;
     }
     
     section {
         padding: var(--space-2xl) 0;
+        margin-bottom: 1rem;
     }
     
     .container {
-        padding: 0 var(--space-sm);
+        padding: 0 1rem;
     }
     
     /* ===== HEADER & NAVIGATION ===== */
-    .header .nav {
-        display: none !important;
+    .mobile-toggle {
+        display: flex;
+    }
+    
+    .nav {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: #F0D075;
+        background: linear-gradient(135deg, #F0D075 0%, #e8c45a 100%);
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: var(--space-xl);
-        gap: var(--space-lg);
-        z-index: 999;
+        padding: 2rem;
+        gap: 1.5rem;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
     }
     
-    /* Fix : Support des deux classes pour le menu */
-    .header .nav.active,
-    .header .nav.nav-open {
-        display: flex !important;
+    .nav.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
     
     .nav a {
-        font-size: 1.2rem;
-        padding: var(--space-sm);
+        font-size: 1.25rem;
+        padding: 0.75rem 1rem;
+        color: var(--vert-fonce, #2D403B);
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background 0.2s ease;
     }
     
-    /* Bouton hamburger - toujours visible sur mobile */
-    .header .mobile-toggle {
-        display: flex !important;
+    .nav a:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .nav a .nav-icon {
+        margin-right: 0.5rem;
     }
     
     .logo {
         flex-direction: column;
         align-items: flex-start;
-        gap: var(--space-xs);
+        gap: 0.25rem;
     }
     
     .logo-img {
@@ -142,8 +287,7 @@
     
     .hero .container {
         text-align: center;
-        padding: var(--space-md);
-        padding-left: var(--space-md);
+        padding: 1.5rem;
         justify-content: center;
     }
     
@@ -158,16 +302,19 @@
     
     .hero-content h1 {
         font-size: 1.8rem;
+        margin-bottom: 1rem;
     }
     
     .hero-subtitle {
         font-size: 1rem;
+        margin-bottom: 1.5rem;
     }
     
     .hero-cta {
         justify-content: center;
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
     
     .hero-cta .btn {
@@ -177,17 +324,27 @@
     
     /* ===== PAGE HERO ===== */
     .page-hero {
-        padding: calc(70px + var(--space-md)) var(--space-sm) var(--space-lg);
+        padding: calc(70px + 1.5rem) 1rem 2rem;
     }
     
     .page-hero h1 {
         font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .page-hero p {
+        margin-bottom: 1rem;
     }
     
     .page-stats {
         flex-direction: column;
-        gap: var(--space-sm);
-        padding: var(--space-md);
+        gap: 1rem;
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+    }
+    
+    .page-stat {
+        padding: 0.5rem 0;
     }
     
     .page-stat-divider {
@@ -205,35 +362,134 @@
     .offerings-grid,
     .testimonials-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
     .webinaires-grid,
     .quiz-grid,
     .formations-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* ===== CARTES ===== */
+    .triptych-card,
+    .benefit-card,
+    .offering-card,
+    .testimonial-card,
+    .quiz-card,
+    .webinaire-card,
+    .formation-card {
+        margin-bottom: 0.5rem;
+    }
+    
+    .triptych-content {
+        padding: 1.5rem;
+    }
+    
+    .benefit-card {
+        padding: 1.5rem;
+    }
+    
+    .offering-card {
+        padding: 1.5rem;
+    }
+    
+    /* ===== SECTION POURQUOI OP ===== */
+    .pourquoi-section {
+        margin: 2rem 0;
+    }
+    
+    .pourquoi-header {
+        padding: 2rem 1.25rem;
+    }
+    
+    .pourquoi-header h2 {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .pourquoi-content {
+        padding: 1.5rem 1.25rem 2rem;
+    }
+    
+    .raisons-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .raison {
+        padding: 1.25rem;
+        margin-bottom: 0;
+    }
+    
+    .raison-icon {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .raison-text h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .raison-text p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .trust-bar {
+        flex-direction: column;
+        gap: 1.25rem;
+        align-items: center;
+        padding: 1.5rem 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .trust-item {
+        padding: 0.5rem 0;
+    }
+    
+    .pourquoi-cta {
+        padding: 2rem 1.25rem;
+    }
+    
+    .pourquoi-cta .tagline {
+        font-size: 1.15rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .pourquoi-cta .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
     
     /* ===== LISTES & ITEMS ===== */
     .audience-list {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
     
     .audience-item {
         width: 100%;
         max-width: 300px;
         justify-content: center;
+        padding: 1rem;
     }
     
     .summary-grid {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
     
     .summary-item {
         width: 100%;
         max-width: 300px;
         justify-content: center;
+        padding: 1rem;
     }
     
     /* ===== BOUTONS CTA ===== */
@@ -241,6 +497,7 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
+        gap: 1rem;
     }
     
     .cta-buttons .btn {
@@ -248,239 +505,187 @@
         max-width: 300px;
     }
     
+    .page-cta-section {
+        padding: 2rem 0;
+    }
+    
     .page-cta-card {
-        padding: var(--space-lg);
+        padding: 1.75rem 1.5rem;
         flex-direction: column;
         text-align: center;
+        gap: 1.25rem;
+    }
+    
+    .page-cta-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .page-cta-content p {
+        font-size: 0.95rem;
     }
     
     .page-cta-btn {
         width: 100%;
+        padding: 1rem 1.5rem;
     }
     
     .page-cta-buttons {
         flex-direction: column;
         width: 100%;
+        gap: 0.75rem;
+    }
+    
+    /* ===== FILTRES ===== */
+    .page-filters-section {
+        padding: 1.5rem 0;
+    }
+    
+    .page-filters {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .page-filter-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    /* ===== USER BAR ===== */
+    .user-bar {
+        padding: 0.6rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .user-info {
+        font-size: 0.85rem;
+    }
+    
+    /* ===== AUTH MODAL ===== */
+    .auth-modal {
+        max-width: 95%;
+        margin: 1rem;
+    }
+    
+    .auth-header {
+        padding: 1.5rem;
+    }
+    
+    .auth-logo {
+        font-size: 2rem;
+    }
+    
+    .auth-benefits {
+        padding: 1rem 1.25rem;
+    }
+    
+    .auth-benefit {
+        font-size: 0.9rem;
+    }
+    
+    .auth-form {
+        padding: 1.25rem;
     }
     
     /* ===== FOOTER ===== */
     .footer {
-        padding: var(--space-2xl) 0 var(--space-md);
+        padding: 3rem 0 1.5rem;
+        margin-top: 2rem;
     }
     
     .footer-content {
         text-align: center;
+        gap: 2rem;
+    }
+    
+    .footer-col {
+        margin-bottom: 1rem;
+    }
+    
+    .footer-col h4 {
+        margin-bottom: 1rem;
+    }
+    
+    .footer-links {
+        gap: 0.75rem;
     }
     
     .footer-bottom {
         flex-direction: column;
-        gap: var(--space-md);
+        gap: 1rem;
         text-align: center;
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
     }
     
     .footer-legal {
         flex-wrap: wrap;
         justify-content: center;
-        gap: var(--space-sm);
+        gap: 1rem;
     }
     
-    /* ===== FORMULAIRES ===== */
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* ===== CARTES ===== */
+    /* ===== QUIZ CARDS ===== */
     .quiz-card-footer {
         flex-direction: column;
-        gap: var(--space-sm);
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .quiz-card-progress {
+        align-self: center;
     }
     
     .quiz-card-btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .webinaire-card {
-        padding: var(--space-md);
-    }
-    
-    .webinaire-title {
-        font-size: 1.25rem;
-    }
-    
-    .webinaire-speaker-avatar {
-        width: 48px;
-        height: 48px;
-    }
-    
-    /* ===== PAGE INVESTIR ===== */
-    .investir-intro {
-        grid-template-columns: 1fr;
-    }
-    
-    .investir-intro-image {
-        order: -1;
-    }
-    
-    .intro-image-placeholder {
-        max-width: 250px;
-        margin: 0 auto;
-        font-size: 5rem;
-    }
-    
-    .expert-card {
-        flex-direction: column;
         text-align: center;
-    }
-    
-    .expert-avatar {
-        width: 120px;
-        height: 120px;
-        font-size: 3rem;
-    }
-    
-    .expert-badges {
         justify-content: center;
     }
     
-    .pricing-card.featured {
-        transform: none;
+    /* ===== GUIDES ===== */
+    .slide-blocks {
+        gap: 1.25rem;
     }
     
-    .investir-cta-card .cta-buttons {
-        flex-direction: column;
-        align-items: center;
+    .block-narrative,
+    .block-info-box,
+    .block-quiz,
+    .block-poll,
+    .block-stat,
+    .block-focus {
+        padding: 1rem;
     }
     
-    /* ===== PAGE MISSION ===== */
-    .mission-hero {
-        padding: 2.5rem 0;
-    }
-    
-    .mission-hero h1 {
-        font-size: 1.6rem;
-    }
-    
-    .problem-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .solution-pillars {
-        grid-template-columns: 1fr;
-    }
-    
-    .concrete-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .founders-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .for-who-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .mission-cta .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    /* ===== PAGE FORMATION DETAIL ===== */
-    .formation-info-card {
-        flex-direction: column;
-        gap: var(--space-md);
-        text-align: center;
-    }
-    
-    .formation-meta-hero {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-sm);
-    }
-    
-    /* ===== SECTION POURQUOI OP ===== */
-    .pourquoi-header {
-        padding: 2rem 1.5rem;
-    }
-    
-    .pourquoi-header h2 {
-        font-size: 1.5rem;
-    }
-    
-    .pourquoi-content {
-        padding: 2rem 1.5rem;
-    }
-    
-    .raisons-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .trust-bar {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: center;
-    }
-    
-    .pourquoi-cta .tagline {
-        font-size: 1.2rem;
-    }
-    
-    .pourquoi-cta .cta-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    /* ===== QUIZ - BILANS & RÉSULTATS ===== */
-    .result-traits {
-        grid-template-columns: 1fr;
-    }
-    
-    .result-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-result-primary,
-    .btn-result-secondary {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .sequence-recap-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-sm);
-    }
-    
-    .recap-seq-result {
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .conclusion-screen-columns {
-        grid-template-columns: 1fr;
-    }
-    
-    .conclusion-main-title {
-        font-size: 1.4rem;
-    }
-    
-    .btn-see-final-result {
-        width: 100%;
-    }
-    
-    /* ===== CREDIBILITY BOX ===== */
-    .credibility-box {
-        padding: var(--space-xl);
-    }
-    
-    .credibility-box p {
+    .narrative-title,
+    .info-box-title {
         font-size: 1rem;
+    }
+    
+    .narrative-content,
+    .info-box-content {
+        font-size: 0.9rem;
+    }
+    
+    .quiz-question,
+    .poll-question {
+        font-size: 1rem;
+    }
+    
+    .quiz-option,
+    .poll-option {
+        padding: 0.875rem;
+    }
+    
+    .hero-title {
+        font-size: 1.35rem;
+    }
+    
+    .sommaire-content {
+        padding: 1rem;
+    }
+    
+    .sequence-card {
+        padding: 0.875rem;
     }
 }
 
@@ -489,70 +694,77 @@
    ======================================== */
 
 @media (max-width: 480px) {
-    /* Espacements encore réduits */
-    :root {
-        --space-xl: 2rem;
-        --space-2xl: 2rem;
-        --space-3xl: 2.5rem;
-        --space-4xl: 3rem;
+    .container {
+        padding: 0 0.875rem;
     }
     
-    /* Typographie */
-    h1 {
-        font-size: 1.75rem;
+    section {
+        padding: 2rem 0;
+    }
+    
+    h1, .hero-content h1 {
+        font-size: 1.5rem;
     }
     
     h2 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
     
     h3 {
         font-size: 1.1rem;
     }
     
-    /* Hero encore plus compact */
-    .hero {
-        min-height: 50vh;
+    .nav a {
+        font-size: 1.15rem;
     }
     
-    .hero-content h1 {
-        font-size: 1.5rem;
-    }
-    
-    .hero-tagline {
-        font-size: 0.8rem;
-        padding: var(--space-xs) var(--space-sm);
-    }
-    
-    .hero-subtitle {
-        font-size: 0.95rem;
-    }
-    
-    /* Boutons pleine largeur */
     .btn {
-        width: 100%;
-        padding: 0.875rem 1.5rem;
+        padding: 0.875rem 1.25rem;
         font-size: 0.95rem;
     }
     
-    .hero-cta .btn,
-    .cta-buttons .btn {
-        max-width: 100%;
+    .pourquoi-header h2 {
+        font-size: 1.25rem;
     }
     
-    /* Cartes */
-    .triptych-content,
-    .benefit-card,
-    .offering-card,
-    .testimonial-card {
-        padding: var(--space-md);
+    .pourquoi-content {
+        padding: 1.25rem 1rem 1.75rem;
     }
     
-    .triptych-image {
-        height: 180px;
+    .raison {
+        padding: 1rem;
     }
     
-    /* Stats */
+    .raison-icon {
+        font-size: 1.75rem;
+    }
+    
+    .raison-text h3 {
+        font-size: 1rem;
+    }
+    
+    .raison-text p {
+        font-size: 0.9rem;
+    }
+    
+    .trust-bar {
+        padding: 1.25rem 1rem;
+        gap: 1rem;
+    }
+    
+    .pourquoi-cta {
+        padding: 1.5rem 1rem;
+    }
+    
+    .pourquoi-cta .tagline {
+        font-size: 1.1rem;
+    }
+    
+    .page-stats {
+        padding: 1rem;
+        gap: 0.875rem;
+    }
+    
     .stat-number {
         font-size: 1.5rem;
     }
@@ -561,10 +773,13 @@
         font-size: 1.2rem;
     }
     
-    /* Quiz cards */
     .quiz-card-image,
     .webinaire-image-container {
-        height: 150px;
+        height: 160px;
+    }
+    
+    .quiz-card-body {
+        padding: 1rem;
     }
     
     .quiz-card-title,
@@ -572,7 +787,15 @@
         font-size: 1.1rem;
     }
     
-    /* Expert card */
+    .quiz-card-meta {
+        font-size: 0.85rem;
+    }
+    
+    .expert-card {
+        padding: 1.25rem;
+        gap: 1.25rem;
+    }
+    
     .expert-avatar {
         width: 100px;
         height: 100px;
@@ -580,72 +803,97 @@
     }
     
     .expert-info h2 {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
     }
     
-    /* Process steps */
     .process-step {
         flex-direction: column;
         text-align: center;
+        padding: 1rem;
     }
     
     .step-number {
-        margin: 0 auto var(--space-sm);
+        margin: 0 auto 0.75rem;
     }
     
     .process-connector {
         margin: 0 auto;
     }
     
-    /* Footer */
+    .page-cta-card {
+        padding: 1.5rem 1.25rem;
+    }
+    
+    .page-cta-content h2 {
+        font-size: 1.2rem;
+    }
+    
+    .footer {
+        padding: 2.5rem 0 1.25rem;
+    }
+    
+    .footer-content {
+        gap: 1.75rem;
+    }
+    
     .footer-logo-img {
         height: 40px;
-        margin: 0 auto var(--space-sm);
+        margin: 0 auto 0.75rem;
     }
     
     .footer-tagline {
         font-size: 1rem;
     }
     
-    .footer-col h4 {
-        font-size: 0.9rem;
-        margin-bottom: var(--space-md);
+    .footer-col {
+        margin-bottom: 0.5rem;
     }
     
-    /* Formulaires */
+    .footer-col h4 {
+        font-size: 0.9rem;
+        margin-bottom: 0.875rem;
+    }
+    
+    .footer-links a {
+        font-size: 0.9rem;
+    }
+    
     .form-group input,
     .form-group select,
     .form-group textarea {
         padding: 0.875rem;
-        font-size: 16px; /* Évite le zoom iOS */
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
     }
     
     .form-submit-btn {
-        padding: 0.875rem var(--space-lg);
+        padding: 0.875rem 1.5rem;
     }
     
-    /* Contact */
     .contact-card {
-        padding: var(--space-md);
+        padding: 1.25rem;
     }
     
     .contact-card-icon {
         font-size: 2rem;
     }
     
-    /* Pricing */
     .pricing-card {
-        padding: var(--space-md);
+        padding: 1.25rem;
     }
     
     .pricing-price .price {
         font-size: 1.75rem;
     }
     
-    /* Quiz bilans */
+    /* Guides - résultats */
     .sequence-bilan-dominant {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
     }
     
     .sequence-bilan-dominant .dominant-info {
@@ -654,12 +902,13 @@
     
     .bilan-dominant-name,
     .result-profile-name {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     
     .tendency-content {
         flex-direction: column;
         text-align: center;
+        gap: 0.75rem;
     }
     
     .tendency-text {
@@ -667,7 +916,7 @@
     }
     
     .result-profile-icons {
-        gap: var(--space-xs);
+        gap: 0.5rem;
     }
     
     .hybrid-icon {
@@ -676,21 +925,21 @@
     
     .hybrid-breakdown {
         flex-direction: column;
-        gap: var(--space-xs);
+        gap: 0.5rem;
     }
     
     .hybrid-name {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
     
-    /* Conclusion */
     .conclusion-columns {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
     
-    /* Legal pages */
+    /* Pages légales */
     .legal-hero {
-        padding: var(--space-xl) var(--space-sm);
+        padding: 1.75rem 1rem;
     }
     
     .legal-hero-icon {
@@ -698,33 +947,39 @@
     }
     
     .legal-hero-title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     
     .legal-content {
-        padding: var(--space-lg) var(--space-sm);
+        padding: 1.5rem 1rem;
     }
     
     .legal-article {
-        padding: var(--space-md);
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
     }
     
     .legal-rights-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .legal-contact-box {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
+        padding: 1.25rem;
     }
     
     .legal-hosting-box {
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
     }
     
     .legal-activity-cards {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
 }
 
@@ -737,12 +992,24 @@
         padding: 0 0.75rem;
     }
     
-    .hero-content h1 {
+    section {
+        padding: 1.75rem 0;
+    }
+    
+    h1 {
         font-size: 1.35rem;
     }
     
+    .hero-content h1 {
+        font-size: 1.3rem;
+    }
+    
     h2 {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
+    }
+    
+    h3 {
+        font-size: 0.95rem;
     }
     
     .btn {
@@ -757,6 +1024,24 @@
     .logo-text {
         font-size: 0.75rem;
     }
+    
+    .triptych-content,
+    .benefit-card,
+    .offering-card,
+    .quiz-card-body {
+        padding: 1rem;
+    }
+    
+    .raison {
+        padding: 0.875rem;
+    }
+    
+    .pourquoi-header,
+    .pourquoi-content,
+    .pourquoi-cta {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
 }
 
 /* ========================================
@@ -766,17 +1051,21 @@
 @media (max-height: 600px) and (orientation: landscape) {
     .hero {
         min-height: auto;
-        padding: var(--space-xl) 0;
+        padding: 2rem 0;
+    }
+    
+    section {
+        padding: 1.5rem 0;
     }
     
     .nav {
-        padding: var(--space-md);
-        gap: var(--space-sm);
+        padding: 1rem;
+        gap: 0.5rem;
     }
     
     .nav a {
-        font-size: 1rem;
-        padding: var(--space-xs);
+        font-size: 0.95rem;
+        padding: 0.4rem 0.75rem;
     }
 }
 
@@ -784,7 +1073,6 @@
    PRÉFÉRENCES UTILISATEUR
    ======================================== */
 
-/* Réduction des animations si demandé */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -799,47 +1087,39 @@
     }
 }
 
-/* Mode sombre (préparation future) */
-@media (prefers-color-scheme: dark) {
-    /* À implémenter si besoin */
-}
-
 /* ========================================
    UTILITAIRES RESPONSIVE
    ======================================== */
 
-/* Masquer sur mobile */
 @media (max-width: 768px) {
     .hide-mobile {
         display: none !important;
     }
 }
 
-/* Masquer sur desktop */
 @media (min-width: 769px) {
     .hide-desktop {
         display: none !important;
     }
 }
 
-/* Masquer sur tablette uniquement */
 @media (min-width: 481px) and (max-width: 1024px) {
     .hide-tablet {
         display: none !important;
     }
 }
 
-/* Texte centré sur mobile uniquement */
 @media (max-width: 768px) {
     .text-center-mobile {
         text-align: center !important;
     }
-}
-
-/* Pleine largeur sur mobile */
-@media (max-width: 768px) {
+    
     .full-width-mobile {
         width: 100% !important;
         max-width: 100% !important;
+    }
+    
+    .section-spaced {
+        margin-bottom: 2rem !important;
     }
 }

@@ -8,50 +8,263 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
-        /* Cartes webinaires - héritent du comportement quiz-card */
-        .webinaire-card-link {
-            text-decoration: none;
-            display: block;
+        /* ===== GRILLE WEBINAIRES - 3 colonnes forcées ===== */
+        .webinaires-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: stretch;
         }
         
-        /* Override pour garder le style vert des webinaires */
-        .webinaire-card-link.quiz-card {
-            background: #DFF2B6;
-            border-radius: 16px;
-            overflow: hidden;
+        @media (max-width: 1024px) {
+            .webinaires-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
+        @media (max-width: 640px) {
+            .webinaires-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
+        /* ===== CARTE WEBINAIRE MODERNE ===== */
         .webinaire-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.08);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
         }
         
-        /* Boutons */
-        .webinaire-btn {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.9rem;
-            margin-top: auto;
-            background: var(--vert-fonce, #2D403B);
-            color: white;
+        .webinaire-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(45, 64, 59, 0.15);
+        }
+        
+        /* Header de la carte avec gradient */
+        .webinaire-card-header {
+            background: linear-gradient(135deg, #DFF2B6 0%, #c5e090 100%);
+            padding: 1.25rem;
+            position: relative;
+        }
+        
+        .webinaire-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
             border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        
+        .webinaire-badge.status-a_venir {
+            background: #F2D680;
+            color: #2D403B;
+        }
+        
+        .webinaire-badge.status-replay {
+            background: #2D403B;
+            color: #fff;
+        }
+        
+        .webinaire-badge.status-termine {
+            background: #ADB5B2;
+            color: #fff;
+        }
+        
+        .webinaire-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #2D403B;
+            margin: 0.75rem 0 0;
+            line-height: 1.3;
+        }
+        
+        /* Body de la carte */
+        .webinaire-card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        
+        /* Date */
+        .webinaire-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.85rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #2D403B;
+            margin-bottom: 1rem;
+        }
+        
+        .webinaire-date-icon {
+            font-size: 1rem;
+        }
+        
+        /* Intervenant */
+        .webinaire-speaker {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .webinaire-speaker-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #DFF2B6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .webinaire-speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .webinaire-speaker-avatar-placeholder {
+            font-size: 1.25rem;
+        }
+        
+        .webinaire-speaker-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        
+        .webinaire-speaker-prefix {
+            font-size: 0.7rem;
+            color: #6C7A75;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .webinaire-speaker-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2D403B;
+        }
+        
+        .webinaire-speaker-title {
+            font-size: 0.8rem;
+            color: #6C7A75;
+        }
+        
+        /* Description */
+        .webinaire-description {
+            font-size: 0.9rem;
+            color: #4A5854;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Footer avec bouton */
+        .webinaire-card-footer {
+            margin-top: auto;
+            padding-top: 0.5rem;
+        }
+        
+        .webinaire-btn {
+            display: block;
+            width: 100%;
+            padding: 0.85rem 1.25rem;
             text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 12px;
             text-decoration: none;
-            font-weight: 500;
             transition: all 0.2s ease;
         }
         
-        .webinaire-btn:hover {
-            background: var(--vert-fonce-light, #3D5550);
-            transform: translateY(-2px);
+        .webinaire-btn.upcoming {
+            background: #2D403B;
+            color: #fff;
         }
         
-        @media (max-width: 768px) {
-            .webinaire-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.85rem;
-            }
+        .webinaire-btn.upcoming:hover {
+            background: #3D5550;
+        }
+        
+        .webinaire-btn.replay {
+            background: #F2D680;
+            color: #2D403B;
+        }
+        
+        .webinaire-btn.replay:hover {
+            background: #e8c45a;
+        }
+        
+        .webinaire-btn.disabled {
+            background: #e9eceb;
+            color: #6C7A75;
+        }
+        
+        /* État vide */
+        .page-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .page-empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .page-empty h3 {
+            font-size: 1.25rem;
+            color: #2D403B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-empty p {
+            color: #6C7A75;
+        }
+        
+        /* Loading */
+        .loading-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e9eceb;
+            border-top-color: #2D403B;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -63,7 +276,6 @@
     <section class="page-hero">
         <div class="container">
             <div class="page-hero-content">
-                
                 <h1>Les sujets qu'on repousse, expliqués simplement</h1>
                 <p>Un webinaire par mois sur les vraies questions des parents : impôts, épargne, couple, transmission... 45 min pour comprendre, sans jargon.</p>
             </div>
@@ -115,9 +327,9 @@
     <!-- LISTE -->
     <section class="page-list-section">
         <div class="container">
-            <div class="quiz-grid" id="webinaires-grid">
+            <div class="webinaires-grid" id="webinaires-grid">
                 <div class="loading-state">
-                    <div class="quiz-loading-spinner"></div>
+                    <div class="loading-spinner"></div>
                     <p>Chargement des webinaires...</p>
                 </div>
             </div>
@@ -157,19 +369,19 @@
             initFilters();
         });
 
-        // Générer une carte webinaire
+        // Générer une carte webinaire MODERNE
         function generateWebinaireCard(webinaire) {
             const status = webinaire.statut || 'replay';
-            const statusLabels = {
-                'a_venir': 'À venir',
-                'replay': 'Replay',
-                'termine': 'Terminé'
+            const statusConfig = {
+                'a_venir': { label: '📅 À venir', class: 'status-a_venir', btnText: 'S\'inscrire', btnClass: 'upcoming' },
+                'replay': { label: '▶️ Replay', class: 'status-replay', btnText: 'Voir le replay', btnClass: 'replay' },
+                'termine': { label: '✓ Terminé', class: 'status-termine', btnText: 'Voir les détails', btnClass: 'disabled' }
             };
-            const statusLabel = statusLabels[status] || 'Replay';
+            const config = statusConfig[status] || statusConfig['replay'];
 
-            // Date pour les webinaires à venir
+            // Date formatée
             let dateBlock = '';
-            if (status === 'a_venir' && webinaire.date_heure) {
+            if (webinaire.date_heure) {
                 const date = new Date(webinaire.date_heure);
                 const options = { 
                     weekday: 'long', 
@@ -181,14 +393,14 @@
                 };
                 const formattedDate = date.toLocaleDateString('fr-FR', options);
                 dateBlock = `
-                    <div class="webinaire-date-block">
-                        <span class="webinaire-date-icon">📅</span>
-                        <span class="webinaire-date-text">${formattedDate}</span>
+                    <div class="webinaire-date">
+                        <span class="webinaire-date-icon">🗓️</span>
+                        <span>${formattedDate}</span>
                     </div>
                 `;
             }
 
-            // Bloc intervenant
+            // Intervenant
             let speakerBlock = '';
             const speakerName = webinaire.speaker_name || webinaire.intervenant || '';
             const speakerTitle = webinaire.speaker_title || webinaire.intervenant_titre || '';
@@ -201,9 +413,7 @@
                 
                 speakerBlock = `
                     <div class="webinaire-speaker">
-                        <div class="webinaire-speaker-avatar">
-                            ${avatarContent}
-                        </div>
+                        <div class="webinaire-speaker-avatar">${avatarContent}</div>
                         <div class="webinaire-speaker-info">
                             <span class="webinaire-speaker-prefix">Avec</span>
                             <span class="webinaire-speaker-name">${speakerName}</span>
@@ -213,86 +423,59 @@
                 `;
             }
 
-            // Bouton → TOUJOURS vers la page détail
-            let buttonHTML = '';
-            const detailUrl = `webinaire-detail.html?id=${webinaire.id}`;
-            
-            switch(status) {
-                case 'a_venir':
-                    buttonHTML = `
-                        <a href="${detailUrl}" class="webinaire-btn upcoming">
-                            Voir les détails & s'inscrire
-                        </a>
-                    `;
-                    break;
-                case 'replay':
-                    buttonHTML = `
-                        <a href="${detailUrl}" class="webinaire-btn replay">
-                            Voir le webinaire
-                        </a>
-                    `;
-                    break;
-                case 'termine':
-                default:
-                    buttonHTML = `
-                        <a href="${detailUrl}" class="webinaire-btn disabled">
-                            Voir les détails
-                        </a>
-                    `;
-                    break;
-            }
+            // Description tronquée
+            const description = webinaire.description 
+                ? `<p class="webinaire-description">${webinaire.description}</p>` 
+                : '';
 
-            // Assembler la carte (cliquable entièrement) - utilise quiz-card pour le style de grille
+            const detailUrl = `webinaire-detail.html?id=${webinaire.id}`;
+
+            // Carte moderne
             return `
-                <a href="${detailUrl}" class="webinaire-card-link quiz-card">
-                    <div class="webinaire-card" data-status="${status}">
-                        <span class="webinaire-badge status-${status}">${statusLabel}</span>
+                <a href="${detailUrl}" class="webinaire-card" data-status="${status}">
+                    <div class="webinaire-card-header">
+                        <span class="webinaire-badge ${config.class}">${config.label}</span>
                         <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>
+                    </div>
+                    <div class="webinaire-card-body">
                         ${dateBlock}
                         ${speakerBlock}
-                        ${webinaire.description ? `<p class="webinaire-description">${webinaire.description}</p>` : ''}
-                        ${buttonHTML}
+                        ${description}
+                        <div class="webinaire-card-footer">
+                            <span class="webinaire-btn ${config.btnClass}">${config.btnText}</span>
+                        </div>
                     </div>
                 </a>
             `;
         }
 
-        /**
-         * Trier les webinaires intelligemment :
-         * 1. D'abord les "à venir" triés par date croissante (le plus proche en premier)
-         * 2. Ensuite les "replay" triés par date décroissante (le plus récent en premier)
-         * 3. Enfin les "terminé" triés par date décroissante
-         */
+        // Trier les webinaires intelligemment
         function sortWebinaires(webinaires) {
-            const now = new Date();
-            
-            // Séparer par statut
             const aVenir = webinaires.filter(w => w.statut === 'a_venir');
             const replays = webinaires.filter(w => w.statut === 'replay');
             const termines = webinaires.filter(w => w.statut === 'termine' || (!w.statut && w.statut !== 'a_venir' && w.statut !== 'replay'));
             
-            // Trier "à venir" par date croissante (le plus proche en premier)
+            // À venir : date croissante
             aVenir.sort((a, b) => {
                 const dateA = a.date_heure ? new Date(a.date_heure) : new Date(9999, 11, 31);
                 const dateB = b.date_heure ? new Date(b.date_heure) : new Date(9999, 11, 31);
                 return dateA - dateB;
             });
             
-            // Trier "replay" par date décroissante (le plus récent en premier)
+            // Replay : date décroissante
             replays.sort((a, b) => {
                 const dateA = a.date_heure ? new Date(a.date_heure) : new Date(0);
                 const dateB = b.date_heure ? new Date(b.date_heure) : new Date(0);
                 return dateB - dateA;
             });
             
-            // Trier "terminé" par date décroissante
+            // Terminé : date décroissante
             termines.sort((a, b) => {
                 const dateA = a.date_heure ? new Date(a.date_heure) : new Date(0);
                 const dateB = b.date_heure ? new Date(b.date_heure) : new Date(0);
                 return dateB - dateA;
             });
             
-            // Combiner : à venir en premier, puis replays, puis terminés
             return [...aVenir, ...replays, ...termines];
         }
 
@@ -307,10 +490,9 @@
 
                 if (error) throw error;
 
-                // Trier intelligemment
                 allWebinaires = sortWebinaires(data || []);
                 
-                // Mettre à jour les stats
+                // Stats
                 document.getElementById('stat-total').textContent = allWebinaires.length;
                 document.getElementById('stat-replays').textContent = allWebinaires.filter(w => w.statut === 'replay').length;
                 document.getElementById('stat-avenir').textContent = allWebinaires.filter(w => w.statut === 'a_venir').length;

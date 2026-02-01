@@ -219,8 +219,23 @@
     }
     
     /* ===== HEADER & NAVIGATION ===== */
+    .header {
+        padding: 0.35rem 0;
+    }
+    
+    .header .container {
+        padding: 0 0.75rem;
+    }
+    
     .mobile-toggle {
         display: flex;
+        width: 36px;
+        height: 36px;
+        padding: 8px;
+    }
+    
+    .mobile-toggle span {
+        width: 20px;
     }
     
     .nav {
@@ -269,15 +284,15 @@
     .logo {
         flex-direction: row;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
     
     .logo-img {
-        height: 32px;
+        height: 26px;
     }
     
     .logo-text {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.02em;
@@ -327,7 +342,7 @@
     
     /* ===== PAGE HERO ===== */
     .page-hero {
-        padding: calc(70px + 1.5rem) 1rem 2rem;
+        padding: calc(50px + 1rem) 1rem 1.5rem;
     }
     
     .page-hero h1 {

@@ -21,23 +21,46 @@
             background: #DFF2B6;
         }
         
-        /* === GRILLE ALIGNÉE COMME LES QUIZ === */
+        /* === GRILLE FORCÉE 3 COLONNES === */
         .webinaires-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 1.5rem !important;
+            align-items: stretch !important;
+        }
+        
+        /* TOUTES les cartes = même taille, pas de featured */
+        .webinaires-grid > *,
+        .webinaires-grid > *:first-child,
+        .webinaires-grid > *:nth-child(1),
+        .webinaires-grid > a,
+        .webinaires-grid > a:first-child,
+        .webinaires-grid .webinaire-card-link,
+        .webinaires-grid .webinaire-card-link:first-child {
+            grid-column: span 1 !important;
+            grid-row: span 1 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        /* Désactiver tout style featured potentiel */
+        .webinaire-card.featured,
+        .webinaire-card-link.featured,
+        .webinaires-grid > .featured {
+            grid-column: span 1 !important;
+            grid-row: span 1 !important;
         }
         
         @media (max-width: 992px) {
             .webinaires-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr) !important;
             }
         }
         
         @media (max-width: 640px) {
             .webinaires-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
             }
         }
         

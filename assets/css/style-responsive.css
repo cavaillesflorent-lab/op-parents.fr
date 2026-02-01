@@ -99,6 +99,31 @@ body {
 }
 
 /* ========================================
+   GRILLES DE CONTENU (Desktop)
+   ======================================== */
+
+/* Webinaires - grille 3 colonnes desktop */
+.webinaires-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+/* Désactiver le featured sur webinaires */
+.webinaires-grid > *,
+.webinaires-grid > *:first-child {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+/* Quiz - grille similaire */
+.quiz-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+/* ========================================
    HEADER & MENU HAMBURGER (MOBILE)
    ======================================== */
 
@@ -212,8 +237,16 @@ body {
     .webinaires-grid,
     .quiz-grid,
     .formations-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
+    }
+    
+    /* Pas de featured sur tablette non plus */
+    .webinaires-grid > *,
+    .webinaires-grid > *:first-child,
+    .quiz-grid > *,
+    .quiz-grid > *:first-child {
+        grid-column: span 1;
     }
     
     .raisons-grid {

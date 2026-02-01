@@ -57,20 +57,21 @@
 .nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .nav a {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1rem;
+    gap: 0.3rem;
+    padding: 0.5rem 0.75rem;
     color: var(--vert-fonce, #2D403B);
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 500;
     border-radius: var(--radius-md, 12px);
     transition: background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
 }
 
 .nav a:hover {
@@ -83,7 +84,7 @@
 }
 
 .nav-icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 /* Espace pour le contenu sous le header fixe */
@@ -142,6 +143,20 @@ body {
     :root {
         --space-3xl: 4rem;
         --space-4xl: 5rem;
+    }
+    
+    /* Navigation tablette */
+    .nav {
+        gap: 0.15rem;
+    }
+    
+    .nav a {
+        padding: 0.4rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .nav-icon {
+        font-size: 0.85rem;
     }
     
     section {

@@ -13,7 +13,7 @@
     left: 0;
     right: 0;
     z-index: 100;
-    background: var(--vert-fonce, #2D403B);
+    background: var(--jaune-dore, #F2D680);
     padding: 0.75rem 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -49,8 +49,9 @@
 
 .logo-text {
     font-size: 0.9rem;
-    color: var(--jaune-dore, #F2D680);
-    font-weight: 500;
+    color: var(--blanc, #fff);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .nav {
@@ -64,7 +65,7 @@
     align-items: center;
     gap: 0.4rem;
     padding: 0.6rem 1rem;
-    color: var(--blanc, #fff);
+    color: var(--vert-fonce, #2D403B);
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
@@ -73,16 +74,21 @@
 }
 
 .nav a:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .nav a.active {
-    background: var(--jaune-dore, #F2D680);
-    color: var(--vert-fonce, #2D403B);
+    background: var(--vert-fonce, #2D403B);
+    color: var(--blanc, #fff);
 }
 
 .nav-icon {
     font-size: 1rem;
+}
+
+/* Espace pour le contenu sous le header fixe */
+body {
+    padding-top: 70px;
 }
 
 /* ========================================
@@ -110,7 +116,7 @@
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--blanc, #fff);
+    background: var(--vert-fonce, #2D403B);
     border-radius: 2px;
     transition: all 0.3s ease;
 }
@@ -219,6 +225,10 @@
     }
     
     /* ===== HEADER & NAVIGATION ===== */
+    body {
+        padding-top: 50px;
+    }
+    
     .header {
         padding: 0.35rem 0;
     }
@@ -296,6 +306,8 @@
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.02em;
+        color: var(--blanc, #fff);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
     
     /* ===== HERO ===== */
@@ -342,7 +354,7 @@
     
     /* ===== PAGE HERO ===== */
     .page-hero {
-        padding: calc(50px + 1rem) 1rem 1.5rem;
+        padding: 1.5rem 1rem;
     }
     
     .page-hero h1 {

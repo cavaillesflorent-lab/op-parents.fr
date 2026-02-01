@@ -88,7 +88,7 @@
 
 /* Espace pour le contenu sous le header fixe */
 body {
-    padding-top: 70px;
+    padding-top: 90px;
 }
 
 /* ========================================
@@ -226,7 +226,7 @@ body {
     
     /* ===== HEADER & NAVIGATION ===== */
     body {
-        padding-top: 50px;
+        padding-top: 55px;
     }
     
     .header {
@@ -354,7 +354,8 @@ body {
     
     /* ===== PAGE HERO ===== */
     .page-hero {
-        padding: 1.5rem 1rem;
+        padding: 1rem 1rem 1.5rem;
+        margin-top: 0.5rem;
     }
     
     .page-hero h1 {
@@ -584,13 +585,13 @@ body {
     
     /* ===== USER BAR ===== */
     .user-bar {
-        padding: 0.6rem 1rem;
+        padding: 0.5rem 1rem;
         flex-wrap: wrap;
         gap: 0.5rem;
     }
     
     .user-info {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     
     /* ===== AUTH MODAL ===== */

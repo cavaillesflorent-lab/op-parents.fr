@@ -8,74 +8,49 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
-        /* Style pour les cartes webinaires */
+        /* Cartes webinaires - héritent du comportement quiz-card */
         .webinaire-card-link {
             text-decoration: none;
             display: block;
+        }
+        
+        /* Override pour garder le style vert des webinaires */
+        .webinaire-card-link.quiz-card {
+            background: #DFF2B6;
+            border-radius: 16px;
+            overflow: hidden;
         }
         
         .webinaire-card {
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: #DFF2B6;
+            padding: 1.5rem;
         }
         
-        /* === GRILLE FORCÉE 3 COLONNES === */
-        .webinaires-grid {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 1.5rem !important;
-            align-items: stretch !important;
-        }
-        
-        /* TOUTES les cartes = même taille, pas de featured */
-        .webinaires-grid > *,
-        .webinaires-grid > *:first-child,
-        .webinaires-grid > *:nth-child(1),
-        .webinaires-grid > a,
-        .webinaires-grid > a:first-child,
-        .webinaires-grid .webinaire-card-link,
-        .webinaires-grid .webinaire-card-link:first-child {
-            grid-column: span 1 !important;
-            grid-row: span 1 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-        
-        /* Désactiver tout style featured potentiel */
-        .webinaire-card.featured,
-        .webinaire-card-link.featured,
-        .webinaires-grid > .featured {
-            grid-column: span 1 !important;
-            grid-row: span 1 !important;
-        }
-        
-        @media (max-width: 992px) {
-            .webinaires-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-        
-        @media (max-width: 640px) {
-            .webinaires-grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-        }
-        
-        /* === BOUTONS RÉDUITS === */
+        /* Boutons */
         .webinaire-btn {
-            padding: 0.6rem 1rem !important;
-            font-size: 0.85rem !important;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
             margin-top: auto;
+            background: var(--vert-fonce, #2D403B);
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
         
-        /* Mobile */
+        .webinaire-btn:hover {
+            background: var(--vert-fonce-light, #3D5550);
+            transform: translateY(-2px);
+        }
+        
         @media (max-width: 768px) {
             .webinaire-btn {
-                padding: 0.5rem 0.875rem !important;
-                font-size: 0.8rem !important;
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -140,7 +115,7 @@
     <!-- LISTE -->
     <section class="page-list-section">
         <div class="container">
-            <div class="webinaires-grid" id="webinaires-grid">
+            <div class="quiz-grid" id="webinaires-grid">
                 <div class="loading-state">
                     <div class="quiz-loading-spinner"></div>
                     <p>Chargement des webinaires...</p>
@@ -267,9 +242,9 @@
                     break;
             }
 
-            // Assembler la carte (cliquable entièrement)
+            // Assembler la carte (cliquable entièrement) - utilise quiz-card pour le style de grille
             return `
-                <a href="${detailUrl}" class="webinaire-card-link">
+                <a href="${detailUrl}" class="webinaire-card-link quiz-card">
                     <div class="webinaire-card" data-status="${status}">
                         <span class="webinaire-badge status-${status}">${statusLabel}</span>
                         <h3 class="webinaire-title">${webinaire.titre || 'Webinaire sans titre'}</h3>

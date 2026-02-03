@@ -8,29 +8,18 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
-        /* ===== OVERRIDE NUCLÉAIRE - écrase TOUT padding/margin des sections ===== */
-        body > section.page-hero,
-        section.page-hero {
-            padding: 2rem 0 1rem 0 !important;
-            margin: 0 !important;
+        /* ===== LAYOUT WEBINAIRES (div, pas section → échappe aux règles globales) ===== */
+        .wb-hero {
+            padding: 2rem 0 1rem;
         }
-        
-        body > section.page-stats-section,
-        section.page-stats-section {
-            padding: 0 0 0.5rem 0 !important;
-            margin: 0 !important;
+        .wb-stats {
+            padding: 0 0 0.5rem;
         }
-        
-        body > section.page-list-section,
-        section.page-list-section {
-            padding: 1rem 0 2rem 0 !important;
-            margin: 0 !important;
+        .wb-content {
+            padding: 1rem 0 2rem;
         }
-        
-        body > section.page-cta-section,
-        section.page-cta-section {
-            padding: 2rem 0 !important;
-            margin: 0 !important;
+        .wb-cta {
+            padding: 2rem 0;
         }
         
         /* ===== FILTRES ===== */
@@ -327,17 +316,17 @@
     <div id="header-placeholder"></div>
 
     <!-- HERO -->
-    <section class="page-hero" style="padding: 2rem 0 1rem 0 !important; margin: 0 !important;">
+    <div class="wb-hero">
         <div class="container">
             <div class="page-hero-content">
                 <h1>Les sujets qu'on repousse, expliqués simplement</h1>
                 <p>Un webinaire par mois sur les vraies questions des parents : impôts, épargne, couple, transmission... 45 min pour comprendre, sans jargon.</p>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- STATS -->
-    <section class="page-stats-section" style="padding: 0 0 0.5rem 0 !important; margin: 0 !important;">
+    <div class="wb-stats">
         <div class="container">
             <div class="page-stats">
                 <div class="page-stat">
@@ -365,10 +354,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- LISTE (filtres intégrés) -->
-    <section class="page-list-section" style="padding: 1rem 0 2rem 0 !important; margin: 0 !important;">
+    <!-- CONTENU (filtres + grille) -->
+    <div class="wb-content">
         <div class="container">
             <div class="page-filters">
                 <button class="page-filter-btn active" data-filter="all">Tous</button>
@@ -382,10 +371,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- CTA -->
-    <section class="page-cta-section" style="padding: 2rem 0 !important; margin: 0 !important;">
+    <div class="wb-cta">
         <div class="container">
             <div class="page-cta-card">
                 <div class="page-cta-content">
@@ -397,7 +386,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- FOOTER (chargé dynamiquement) -->
     <div id="footer-placeholder"></div>

@@ -8,29 +8,37 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
-        /* ===== SPACING COMPACT POUR CETTE PAGE ===== */
-        .page-hero {
-            padding-bottom: 1rem !important;
-            margin-bottom: 0 !important;
+        /* ===== OVERRIDE NUCLÉAIRE - écrase TOUT padding/margin des sections ===== */
+        body > section.page-hero,
+        section.page-hero {
+            padding: 2rem 0 1rem 0 !important;
+            margin: 0 !important;
         }
         
-        .page-stats-section {
-            padding-top: 0 !important;
-            padding-bottom: 0.5rem !important;
-            margin-bottom: 0 !important;
+        body > section.page-stats-section,
+        section.page-stats-section {
+            padding: 0 0 0.5rem 0 !important;
+            margin: 0 !important;
         }
         
-        .page-list-section {
-            padding-top: 1rem !important;
-            margin-bottom: 0 !important;
+        body > section.page-list-section,
+        section.page-list-section {
+            padding: 1rem 0 2rem 0 !important;
+            margin: 0 !important;
+        }
+        
+        body > section.page-cta-section,
+        section.page-cta-section {
+            padding: 2rem 0 !important;
+            margin: 0 !important;
         }
         
         /* ===== FILTRES ===== */
         .page-filters {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            display: flex !important;
+            gap: 0.5rem !important;
+            margin-bottom: 1.5rem !important;
+            flex-wrap: wrap !important;
         }
         
         .page-filter-btn {
@@ -319,7 +327,7 @@
     <div id="header-placeholder"></div>
 
     <!-- HERO -->
-    <section class="page-hero">
+    <section class="page-hero" style="padding: 2rem 0 1rem 0 !important; margin: 0 !important;">
         <div class="container">
             <div class="page-hero-content">
                 <h1>Les sujets qu'on repousse, expliqués simplement</h1>
@@ -329,7 +337,7 @@
     </section>
 
     <!-- STATS -->
-    <section class="page-stats-section">
+    <section class="page-stats-section" style="padding: 0 0 0.5rem 0 !important; margin: 0 !important;">
         <div class="container">
             <div class="page-stats">
                 <div class="page-stat">
@@ -360,7 +368,7 @@
     </section>
 
     <!-- LISTE (filtres intégrés) -->
-    <section class="page-list-section">
+    <section class="page-list-section" style="padding: 1rem 0 2rem 0 !important; margin: 0 !important;">
         <div class="container">
             <div class="page-filters">
                 <button class="page-filter-btn active" data-filter="all">Tous</button>
@@ -377,7 +385,7 @@
     </section>
 
     <!-- CTA -->
-    <section class="page-cta-section">
+    <section class="page-cta-section" style="padding: 2rem 0 !important; margin: 0 !important;">
         <div class="container">
             <div class="page-cta-card">
                 <div class="page-cta-content">

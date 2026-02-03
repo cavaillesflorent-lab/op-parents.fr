@@ -1619,7 +1619,8 @@ section {
 
 /* CTA en bas de page */
 .page-cta-section {
-    padding: 0;
+    padding: var(--space-lg) 0 var(--space-3xl);
+    background: var(--gray-50);
 }
 
 .page-cta-card {

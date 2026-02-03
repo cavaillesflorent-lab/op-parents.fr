@@ -8,6 +8,52 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
+        /* ===== SPACING COMPACT POUR CETTE PAGE ===== */
+        .page-hero {
+            padding-bottom: 1rem !important;
+            margin-bottom: 0 !important;
+        }
+        
+        .page-stats-section {
+            padding-top: 0 !important;
+            padding-bottom: 0.5rem !important;
+            margin-bottom: 0 !important;
+        }
+        
+        .page-list-section {
+            padding-top: 1rem !important;
+            margin-bottom: 0 !important;
+        }
+        
+        /* ===== FILTRES ===== */
+        .page-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .page-filter-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            border: 2px solid #2D403B;
+            background: transparent;
+            color: #2D403B;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .page-filter-btn:hover {
+            background: rgba(45, 64, 59, 0.08);
+        }
+        
+        .page-filter-btn.active {
+            background: #2D403B;
+            color: #fff;
+        }
+
         /* ===== GRILLE WEBINAIRES - 3 colonnes forcées ===== */
         .webinaires-grid {
             display: grid;
@@ -316,7 +362,7 @@
     <!-- LISTE (filtres intégrés) -->
     <section class="page-list-section">
         <div class="container">
-            <div class="page-filters" style="display:flex; gap:0.5rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+            <div class="page-filters">
                 <button class="page-filter-btn active" data-filter="all">Tous</button>
                 <button class="page-filter-btn" data-filter="a_venir">À venir</button>
                 <button class="page-filter-btn" data-filter="replay">Replays</button>

@@ -52,9 +52,66 @@
             overflow-y: auto;
             transform: translateY(20px);
             transition: transform 0.3s ease;
+            position: relative;
         }
         .auth-overlay.visible .auth-modal {
             transform: translateY(0);
+        }
+        /* Bouton fermeture → retour accueil */
+        .auth-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+        .auth-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+        .auth-close svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            stroke-width: 2.5;
+        }
+        /* Responsive */
+        @media (max-width: 480px) {
+            .auth-close {
+                width: 32px;
+                height: 32px;
+                top: 0.75rem;
+                right: 0.75rem;
+            }
+            .auth-close svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        @media (max-width: 360px) {
+            .auth-close {
+                width: 30px;
+                height: 30px;
+                top: 0.6rem;
+                right: 0.6rem;
+            }
+            .auth-close svg {
+                width: 14px;
+                height: 14px;
+            }
         }
         .auth-header {
             background: linear-gradient(135deg, #2D403B 0%, #3D5550 100%);
@@ -299,6 +356,13 @@
     <!-- MODAL AUTH -->
     <div class="auth-overlay" id="auth-overlay">
         <div class="auth-modal">
+            <!-- Bouton fermeture → retour accueil -->
+            <a href="index.html" class="auth-close" title="Retour à l'accueil">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </a>
             <div class="auth-header">
                 <div class="auth-logo">OP!</div>
                 <div class="auth-title">Créez votre compte gratuit</div>

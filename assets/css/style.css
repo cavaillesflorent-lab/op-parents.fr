@@ -6406,3 +6406,61 @@ section {
    IMPORT RESPONSIVE
    ======================================== */
 @import url('style-responsive.css');
+
+/* ============================================
+   PATCH WEBINAIRES - À COLLER À LA FIN DE style.css
+   ============================================ */
+
+/* Supprime le padding énorme des sections sur les pages webinaires/quiz */
+.wb-hero,
+.wb-stats,
+.wb-content,
+.wb-cta {
+    padding: 0;
+    margin: 0;
+}
+
+.wb-hero {
+    padding: 2rem 0 1rem;
+}
+
+.wb-stats {
+    padding: 0 0 0.5rem;
+}
+
+.wb-content {
+    padding: 1rem 0 2rem;
+}
+
+.wb-cta {
+    padding: 2rem 0;
+}
+
+/* Filtres stylisés */
+.page-filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.page-filter-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    border: 2px solid #2D403B;
+    background: transparent;
+    color: #2D403B;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-filter-btn:hover {
+    background: rgba(45, 64, 59, 0.08);
+}
+
+.page-filter-btn.active {
+    background: #2D403B;
+    color: #fff;
+}

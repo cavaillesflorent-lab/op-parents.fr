@@ -43,12 +43,12 @@
 }
 
 .logo-img {
-    height: 50px;
+    height: 60px;
     width: auto;
 }
 
 .logo-text {
-    font-size: 0.9rem;
+    font-size: 1.3rem;
     color: var(--blanc, #fff);
     font-weight: 600;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -352,11 +352,11 @@ body {
     }
     
     .logo-img {
-        height: 40px;
+        height: 46px;
     }
     
     .logo-text {
-        font-size: 0.85rem;
+        font-size: 1rem;
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.02em;
@@ -787,11 +787,11 @@ body {
     
     /* Logo adaptatif */
     .logo-img {
-        height: 38px;
+        height: 42px;
     }
     
     .logo-text {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
     
     section {
@@ -1118,11 +1118,11 @@ body {
     }
     
     .logo-img {
-        height: 34px;
+        height: 36px;
     }
     
     .logo-text {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
     
     .triptych-content,

@@ -64,11 +64,11 @@
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.5rem 0.75rem;
+    padding: 0.55rem 0.85rem;
     color: var(--vert-fonce, #2D403B);
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     border-radius: var(--radius-md, 12px);
     transition: background 0.2s ease, color 0.2s ease;
     white-space: nowrap;
@@ -84,7 +84,7 @@
 }
 
 .nav-icon {
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 /* Espace pour le contenu sous le header fixe */
@@ -182,12 +182,12 @@ body {
     }
     
     .nav a {
-        padding: 0.4rem 0.5rem;
-        font-size: 0.8rem;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.9rem;
     }
     
     .nav-icon {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
     }
     
     section {
@@ -328,8 +328,8 @@ body {
     }
     
     .nav a {
-        font-size: 1.25rem;
-        padding: 0.75rem 1rem;
+        font-size: 1.4rem;
+        padding: 0.85rem 1.25rem;
         color: var(--vert-fonce, #2D403B);
         text-decoration: none;
         font-weight: 600;

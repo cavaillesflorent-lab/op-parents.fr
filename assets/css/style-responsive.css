@@ -369,7 +369,7 @@ body {
     .hero {
         min-height: 85vh;
         background-size: cover;
-        background-position: center center;
+        background-position: 35% center;
         background-repeat: no-repeat;
         padding: 2rem 0;
     }

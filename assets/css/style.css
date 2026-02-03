@@ -6174,6 +6174,7 @@ section {
     border-radius: var(--radius-full);
     font-size: 0.85rem;
     font-weight: 600;
+    position: static;
 }
 
 .webinaire-badge.status-a_venir {

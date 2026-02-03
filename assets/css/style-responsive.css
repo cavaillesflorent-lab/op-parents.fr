@@ -367,12 +367,17 @@ body {
     
     /* ===== HERO ===== */
     .hero {
-        min-height: 60vh;
+        min-height: auto;
+        height: auto;
+        padding: 3rem 0;
+        background-size: cover;
+        background-position: center top;
     }
     
     .hero .container {
         text-align: center;
         padding: 1.5rem;
+        padding-left: 1.5rem;
         justify-content: center;
     }
     
@@ -783,6 +788,21 @@ body {
 @media (max-width: 480px) {
     .container {
         padding: 0 0.875rem;
+    }
+    
+    /* Hero adaptatif petit écran */
+    .hero {
+        min-height: auto;
+        padding: 2.5rem 0;
+        background-position: center top;
+    }
+    
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
     }
     
     /* Logo adaptatif */

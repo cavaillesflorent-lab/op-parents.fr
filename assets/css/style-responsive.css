@@ -369,9 +369,15 @@ body {
     .hero {
         min-height: auto;
         height: auto;
-        padding: 3rem 0;
-        background-size: cover;
-        background-position: center top;
+        padding: 0;
+        background-size: 100% auto;
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-color: #e8d8c8;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        aspect-ratio: 3 / 4;
     }
     
     .hero .container {
@@ -792,9 +798,7 @@ body {
     
     /* Hero adaptatif petit écran */
     .hero {
-        min-height: auto;
-        padding: 2.5rem 0;
-        background-position: center top;
+        aspect-ratio: 2 / 3;
     }
     
     .hero-content h1 {

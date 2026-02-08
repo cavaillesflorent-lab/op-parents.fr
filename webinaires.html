@@ -11,7 +11,40 @@
         /* ===== LAYOUT WEBINAIRES (div, pas section → échappe aux règles globales) ===== */
         .wb-hero {
             padding: 2rem 0 1rem;
+            background: linear-gradient(135deg, #f8faf5 0%, #f5f7f2 100%);
+            text-align: center;
         }
+        
+        .wb-hero .page-hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .wb-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            color: #2D403B;
+            margin-bottom: 1rem;
+            line-height: 1.25;
+        }
+        
+        .wb-hero p {
+            font-size: 1.1rem;
+            color: #4A5854;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .wb-hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .wb-hero p {
+                font-size: 1rem;
+            }
+        }
+        
         .wb-stats {
             padding: 0 0 0.5rem;
         }

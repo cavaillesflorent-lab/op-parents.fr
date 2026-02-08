@@ -96,6 +96,7 @@ body {
 .user-bar {
     position: relative;
     z-index: 90;
+    margin-top: 1.5rem;
 }
 
 /* ========================================

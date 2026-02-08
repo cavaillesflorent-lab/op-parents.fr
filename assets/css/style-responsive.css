@@ -99,6 +99,14 @@ body {
     margin-top: 1.5rem;
 }
 
+/* User bar - espacement desktop */
+@media (min-width: 769px) {
+    .user-bar {
+        margin-top: 2rem !important;
+        padding-top: 1rem;
+    }
+}
+
 /* ========================================
    GRILLES DE CONTENU (Desktop)
    ======================================== */

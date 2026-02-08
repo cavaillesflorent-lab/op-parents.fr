@@ -211,6 +211,49 @@
         .auth-submit:hover {
             background: #3D5550;
         }
+        .auth-forgot {
+            text-align: right;
+            margin-bottom: 1rem;
+            margin-top: -0.5rem;
+        }
+        .auth-forgot a {
+            font-size: 0.85rem;
+            color: #6C7A75;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .auth-forgot a:hover {
+            color: #2D403B;
+            text-decoration: underline;
+        }
+        .auth-forgot-text {
+            font-size: 0.9rem;
+            color: #6C7A75;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+        .auth-back {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .auth-back a {
+            font-size: 0.9rem;
+            color: #6C7A75;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .auth-back a:hover {
+            color: #2D403B;
+        }
+        .auth-success {
+            background: #DFF2B6;
+            color: #2D403B;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
         .auth-submit:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -406,7 +449,23 @@
                         <label class="auth-label">Mot de passe</label>
                         <input type="password" class="auth-input" id="login-password" required placeholder="Ton mot de passe">
                     </div>
+                    <div class="auth-forgot">
+                        <a href="#" onclick="showForgotPassword(event)">Mot de passe oublié ?</a>
+                    </div>
                     <button type="submit" class="auth-submit" id="login-btn">Se connecter</button>
+                </form>
+                
+                <!-- Forgot Password Form -->
+                <form id="forgot-form" style="display:none" onsubmit="handleForgotPassword(event)">
+                    <p class="auth-forgot-text">Entre ton email et nous t'enverrons un lien pour réinitialiser ton mot de passe.</p>
+                    <div class="auth-input-group">
+                        <label class="auth-label">Email</label>
+                        <input type="email" class="auth-input" id="forgot-email" required placeholder="ton@email.com">
+                    </div>
+                    <button type="submit" class="auth-submit" id="forgot-btn">Envoyer le lien</button>
+                    <div class="auth-back">
+                        <a href="#" onclick="backToLogin(event)">← Retour à la connexion</a>
+                    </div>
                 </form>
             </div>
         </div>
@@ -507,6 +566,55 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Se connecter';
+            }
+        }
+        
+        function showForgotPassword(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('forgot-form').style.display = 'block';
+            document.querySelector('.auth-tabs').style.display = 'none';
+            document.getElementById('auth-error').innerHTML = '';
+        }
+        
+        function backToLogin(e) {
+            e.preventDefault();
+            document.getElementById('forgot-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            document.querySelector('.auth-tabs').style.display = 'flex';
+            document.querySelectorAll('.auth-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === 1);
+            });
+            document.getElementById('auth-error').innerHTML = '';
+        }
+        
+        async function handleForgotPassword(e) {
+            e.preventDefault();
+            const btn = document.getElementById('forgot-btn');
+            btn.disabled = true;
+            btn.textContent = 'Envoi en cours...';
+            
+            const email = document.getElementById('forgot-email').value.trim();
+            
+            try {
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/reset-password.html'
+                });
+                if (error) throw error;
+                
+                // Afficher message de succès
+                document.getElementById('auth-error').innerHTML = '';
+                const successDiv = document.createElement('div');
+                successDiv.className = 'auth-success';
+                successDiv.textContent = '📧 Email envoyé ! Vérifie ta boîte mail (et les spams) pour réinitialiser ton mot de passe.';
+                document.getElementById('forgot-form').insertBefore(successDiv, document.getElementById('forgot-form').firstChild);
+                
+            } catch (error) {
+                showAuthError(getAuthErrorMessage(error));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Envoyer le lien';
             }
         }
         

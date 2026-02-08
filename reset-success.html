@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mot de passe mis à jour ! - OP!</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .success-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #DFF2B6 0%, #F2D680 100%);
+        }
+        .success-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(45, 64, 59, 0.15);
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 0.6s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            color: #2D403B;
+            margin-bottom: 0.75rem;
+        }
+        .success-message {
+            color: #6C7A75;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .success-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #2D403B;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .success-btn:hover {
+            background: #3D5550;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(45, 64, 59, 0.3);
+        }
+        .success-footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9eceb;
+            color: #9CA8A3;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-card">
+            <div class="success-icon">🎉</div>
+            <h1 class="success-title">Mot de passe mis à jour !</h1>
+            <p class="success-message">
+                Super, ton nouveau mot de passe est maintenant actif.<br>
+                Tu peux te connecter et continuer ton parcours financier !
+            </p>
+            <a href="quiz.html" class="success-btn">Accéder aux quiz →</a>
+            <div class="success-footer">
+                Tu as une question ? <a href="contact.html" style="color: #2D403B;">Contacte-nous</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OP! - L'app gratuite pour gérer les finances de ta famille</title>
+    <meta name="description" content="Télécharge gratuitement l'app OP! Quiz financiers, webinaires, accompagnement. Le repère des parents qui veulent y voir clair.">
+    
+    <!-- Open Graph pour Instagram/Facebook -->
+    <meta property="og:title" content="OP! - Reprends le contrôle de tes finances familiales">
+    <meta property="og:description" content="L'app 100% gratuite pour les parents. Quiz, webinaires, zéro jargon.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://op-parents.fr/app">
+    <meta property="og:image" content="https://op-parents.fr/assets/images/og-app.jpg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --vert-fonce: #2D403B;
+            --vert-clair: #DFF2B6;
+            --jaune-dore: #F2D680;
+            --peche: #F2B47E;
+            --blanc: #FFFFFF;
+            --gris-50: #F8FAF5;
+            --gris-100: #E9ECEB;
+            --gris-600: #6C7A75;
+            --gris-800: #2D403B;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gris-50);
+            color: var(--gris-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #3D5550 100%);
+            padding: 3rem 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--vert-clair) 0%, var(--jaune-dore) 50%, var(--peche) 100%);
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: var(--jaune-dore);
+            color: var(--vert-fonce);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blanc);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero h1 span {
+            color: var(--jaune-dore);
+        }
+        
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* App Store Buttons */
+        .store-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--blanc);
+            color: var(--vert-fonce);
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            min-width: 200px;
+            justify-content: center;
+        }
+        
+        .store-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .store-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .store-btn-text {
+            text-align: left;
+            line-height: 1.2;
+        }
+        
+        .store-btn-small {
+            font-size: 0.7rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        
+        .store-btn-big {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        
+        /* ===== STATS ===== */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem 1.5rem;
+            background: var(--blanc);
+            border-bottom: 1px solid var(--gris-100);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gris-600);
+            margin-top: 0.25rem;
+        }
+        
+        /* ===== FEATURES ===== */
+        .features {
+            padding: 3rem 1.5rem;
+            background: var(--blanc);
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background: var(--gris-50);
+            border-radius: 16px;
+            border: 1px solid var(--gris-100);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--vert-clair);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.25rem;
+        }
+        
+        .feature-content p {
+            font-size: 0.9rem;
+            color: var(--gris-600);
+            line-height: 1.5;
+        }
+        
+        /* ===== SCREENSHOTS ===== */
+        .screenshots {
+            padding: 3rem 0;
+            background: linear-gradient(180deg, var(--blanc) 0%, var(--gris-50) 100%);
+            overflow: hidden;
+        }
+        
+        .screenshots .section-title {
+            padding: 0 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .screenshots-carousel {
+            display: flex;
+            gap: 1rem;
+            padding: 0 1.5rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .screenshots-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .screenshot-item {
+            flex: 0 0 auto;
+            width: 260px;
+            scroll-snap-align: center;
+        }
+        
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(45, 64, 59, 0.15);
+        }
+        
+        /* ===== TESTIMONIALS ===== */
+        .testimonials {
+            padding: 3rem 1.5rem;
+            background: var(--vert-clair);
+        }
+        
+        .testimonials .section-title {
+            margin-bottom: 1.5rem;
+        }
+        
+        .testimonials-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: var(--blanc);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 15px rgba(45, 64, 59, 0.08);
+        }
+        
+        .testimonial-stars {
+            color: #F59E0B;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .testimonial-text {
+            font-size: 0.95rem;
+            color: var(--gris-800);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+        
+        .testimonial-source {
+            font-size: 0.75rem;
+            color: var(--gris-600);
+        }
+        
+        /* ===== FAQ ===== */
+        .faq {
+            padding: 3rem 1.5rem;
+            background: var(--blanc);
+        }
+        
+        .faq .section-title {
+            margin-bottom: 1.5rem;
+        }
+        
+        .faq-list {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--gris-100);
+        }
+        
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.25rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+        }
+        
+        .faq-question h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+            padding-right: 1rem;
+        }
+        
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--gris-50);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--vert-fonce);
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+        }
+        
+        .faq-answer p {
+            padding-bottom: 1.25rem;
+            font-size: 0.95rem;
+            color: var(--gris-600);
+            line-height: 1.6;
+        }
+        
+        /* ===== CTA FINAL ===== */
+        .cta-final {
+            padding: 3rem 1.5rem;
+            background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
+            text-align: center;
+        }
+        
+        .cta-final h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.5rem;
+        }
+        
+        .cta-final p {
+            color: var(--vert-fonce);
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-final .store-buttons {
+            margin-bottom: 0;
+        }
+        
+        .cta-final .store-btn {
+            background: var(--vert-fonce);
+            color: var(--blanc);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 2rem 1.5rem;
+            background: var(--vert-fonce);
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--jaune-dore);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--blanc);
+        }
+        
+        .footer-copy {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* ===== DESKTOP ===== */
+        @media (min-width: 768px) {
+            .hero {
+                padding: 4rem 2rem 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+                max-width: 500px;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                max-width: 450px;
+            }
+            
+            .store-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .stats {
+                gap: 4rem;
+                padding: 2.5rem 2rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .features {
+                padding: 4rem 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .features-grid {
+                flex-direction: row;
+                max-width: 900px;
+                gap: 1.5rem;
+            }
+            
+            .feature-card {
+                flex: 1;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .feature-icon {
+                margin: 0 auto 1rem;
+            }
+            
+            .screenshots {
+                padding: 4rem 0;
+            }
+            
+            .screenshots-carousel {
+                justify-content: center;
+                padding: 0 2rem;
+            }
+            
+            .screenshot-item {
+                width: 280px;
+            }
+            
+            .testimonials {
+                padding: 4rem 2rem;
+            }
+            
+            .testimonials-grid {
+                flex-direction: row;
+                max-width: 900px;
+            }
+            
+            .testimonial-card {
+                flex: 1;
+            }
+            
+            .faq {
+                padding: 4rem 2rem;
+            }
+            
+            .cta-final {
+                padding: 4rem 2rem;
+            }
+            
+            .cta-final h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO -->
+    <section class="hero">
+        <span class="hero-badge">100% Gratuit</span>
+        <h1>Reprends le contrôle de tes <span>finances familiales</span></h1>
+        <p class="hero-subtitle">Quiz, webinaires, accompagnement. Le repère des parents qui veulent y voir clair.</p>
+        
+        <div class="store-buttons">
+            <a href="#" class="store-btn" id="btn-appstore">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <div class="store-btn-text">
+                    <span class="store-btn-small">Télécharger sur</span>
+                    <span class="store-btn-big">App Store</span>
+                </div>
+            </a>
+            <a href="#" class="store-btn" id="btn-playstore">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                </svg>
+                <div class="store-btn-text">
+                    <span class="store-btn-small">Disponible sur</span>
+                    <span class="store-btn-big">Google Play</span>
+                </div>
+            </a>
+        </div>
+    </section>
+    
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-number">12+</div>
+            <div class="stat-label">Quiz interactifs</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Webinaires/mois</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">0€</div>
+            <div class="stat-label">100% gratuit</div>
+        </div>
+    </section>
+    
+    <!-- FEATURES -->
+    <section class="features">
+        <h2 class="section-title">Ce que tu vas découvrir</h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-content">
+                    <h3>Quiz personnalisés</h3>
+                    <p>Évalue ta situation financière et identifie tes priorités en quelques minutes.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🎥</div>
+                <div class="feature-content">
+                    <h3>Webinaires sans jargon</h3>
+                    <p>Impôts, épargne, transmission... 45 min pour comprendre ce qu'on n'apprend jamais.</p>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <div class="feature-content">
+                    <h3>Accompagnement expert</h3>
+                    <p>Besoin d'aller plus loin ? Un conseiller en gestion de patrimoine à ton écoute.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SCREENSHOTS -->
+    <section class="screenshots">
+        <h2 class="section-title">Découvre l'application</h2>
+        
+        <div class="screenshots-carousel">
+            <div class="screenshot-item">
+                <img src="assets/images/app-screen-1.png" alt="Écran d'accueil OP!">
+            </div>
+            <div class="screenshot-item">
+                <img src="assets/images/app-screen-2.png" alt="Inscription gratuite OP!">
+            </div>
+            <div class="screenshot-item">
+                <img src="assets/images/app-screen-3.png" alt="Webinaires OP!">
+            </div>
+        </div>
+    </section>
+    
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <h2 class="section-title">Ce que les parents en pensent</h2>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Enfin une app qui explique les finances sans nous prendre de haut. Les quiz m'ont ouvert les yeux sur mes priorités."</p>
+                <p class="testimonial-author">Sophie, maman de 2 enfants</p>
+                <p class="testimonial-source">App Store</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                <p class="testimonial-text">"Je repoussais le sujet depuis des années. Grâce au webinaire, j'ai enfin compris comment épargner pour mes enfants."</p>
+                <p class="testimonial-author">Marc, papa de 3 enfants</p>
+                <p class="testimonial-source">Google Play</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ -->
+    <section class="faq">
+        <h2 class="section-title">Questions fréquentes</h2>
+        
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <h3>C'est vraiment 100% gratuit ?</h3>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Oui ! L'application, les quiz et les webinaires sont entièrement gratuits. Si tu veux un accompagnement personnalisé avec un expert, c'est en option.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <h3>C'est quoi OP! exactement ?</h3>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>OP! est le repère financier des parents. On t'aide à comprendre, décider et agir sur tes finances familiales. Sans jargon, sans pression.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Qui est derrière OP! ?</h3>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Florent et Charlène, parents de 2 enfants. Florent est conseiller en gestion de patrimoine depuis 6 ans. On a créé OP! parce qu'on cherchait ce repère pour nous-mêmes.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <h3>Mes données sont-elles protégées ?</h3>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolument. Tes données restent confidentielles et ne sont jamais vendues. On respecte le RGPD et ta vie privée.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+        <h2>Prêt(e) à y voir clair ?</h2>
+        <p>Télécharge l'app gratuitement et fais ton premier quiz.</p>
+        
+        <div class="store-buttons">
+            <a href="#" class="store-btn" id="btn-appstore-2">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <div class="store-btn-text">
+                    <span class="store-btn-small">Télécharger sur</span>
+                    <span class="store-btn-big">App Store</span>
+                </div>
+            </a>
+            <a href="#" class="store-btn" id="btn-playstore-2">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                </svg>
+                <div class="store-btn-text">
+                    <span class="store-btn-small">Disponible sur</span>
+                    <span class="store-btn-big">Google Play</span>
+                </div>
+            </a>
+        </div>
+    </section>
+    
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-logo">OP!</div>
+        <div class="footer-links">
+            <a href="https://op-parents.fr">Site web</a>
+            <a href="https://op-parents.fr/mentions-legales.html">Mentions légales</a>
+            <a href="https://op-parents.fr/politique-confidentialite.html">Confidentialité</a>
+        </div>
+        <p class="footer-copy">© 2026 OP! - Tous droits réservés</p>
+    </footer>
+    
+    <script>
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            const wasOpen = item.classList.contains('open');
+            
+            // Fermer tous les autres
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            
+            // Ouvrir celui-ci si il était fermé
+            if (!wasOpen) {
+                item.classList.add('open');
+            }
+        }
+        
+        // Tracking des clics (à personnaliser avec ton analytics)
+        document.querySelectorAll('.store-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const isAppStore = this.id.includes('appstore');
+                console.log('Click:', isAppStore ? 'App Store' : 'Google Play');
+                // Ici tu peux ajouter ton tracking (Google Analytics, Meta Pixel, etc.)
+            });
+        });
+    </script>
+</body>
+</html>

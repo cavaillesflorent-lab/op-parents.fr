@@ -6,17 +6,16 @@
     <title>OP! - L'app gratuite pour gérer les finances de ta famille</title>
     <meta name="description" content="Télécharge gratuitement l'app OP! Quiz financiers, webinaires, accompagnement. Le repère des parents qui veulent y voir clair.">
     
-    <!-- Open Graph pour Instagram/Facebook -->
+    <!-- Open Graph -->
     <meta property="og:title" content="OP! - Reprends le contrôle de tes finances familiales">
     <meta property="og:description" content="L'app 100% gratuite pour les parents. Quiz, webinaires, zéro jargon.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://op-parents.fr/app">
-    <meta property="og:image" content="https://op-parents.fr/assets/images/og-app.jpg">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -25,8 +24,9 @@
             --jaune-dore: #F2D680;
             --peche: #F2B47E;
             --blanc: #FFFFFF;
-            --gris-50: #F8FAF5;
-            --gris-100: #E9ECEB;
+            --gris-50: #FAFBF9;
+            --gris-100: #F0F2EE;
+            --gris-200: #E4E7E1;
             --gris-600: #6C7A75;
             --gris-800: #2D403B;
         }
@@ -39,186 +39,218 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gris-50);
+            background: var(--blanc);
             color: var(--gris-800);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
         
         /* ===== HERO ===== */
         .hero {
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, #3D5550 100%);
-            padding: 3rem 1.5rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(180deg, var(--vert-clair) 0%, #E8F5D0 100%);
+            padding: 2rem 0 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--vert-clair) 0%, var(--jaune-dore) 50%, var(--peche) 100%);
+        .hero-header {
+            text-align: center;
+            padding: 1rem 1.5rem;
+        }
+        
+        .hero-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+        }
+        
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
         }
         
         .hero-badge {
             display: inline-block;
             background: var(--jaune-dore);
             color: var(--vert-fonce);
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1.25rem;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.25rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.5rem;
         }
         
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--blanc);
+            font-size: 2.25rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
             line-height: 1.2;
             margin-bottom: 1rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero h1 span {
-            color: var(--jaune-dore);
+            max-width: 500px;
         }
         
         .hero-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            max-width: 350px;
-            margin-left: auto;
-            margin-right: auto;
+            color: var(--gris-600);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 400px;
         }
         
-        /* App Store Buttons */
+        /* Store Buttons */
         .store-buttons {
             display: flex;
             flex-direction: column;
             gap: 0.75rem;
-            align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
         
         .store-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            background: var(--blanc);
-            color: var(--vert-fonce);
-            padding: 0.875rem 1.5rem;
+            gap: 0.6rem;
+            background: var(--vert-fonce);
+            color: var(--blanc);
+            padding: 0.75rem 1.5rem;
             border-radius: 12px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            min-width: 200px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            min-width: 180px;
             justify-content: center;
         }
         
         .store-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(45, 64, 59, 0.25);
         }
         
         .store-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
         }
         
-        .store-btn-text {
-            text-align: left;
-            line-height: 1.2;
+        .store-btn span {
+            font-weight: 600;
         }
         
-        .store-btn-small {
-            font-size: 0.7rem;
-            font-weight: 400;
-            opacity: 0.7;
+        /* Hero Mockup */
+        .hero-mockup {
+            max-width: 280px;
+            margin: 0 auto;
         }
         
-        .store-btn-big {
-            font-size: 1rem;
-            font-weight: 700;
+        .hero-mockup img {
+            width: 100%;
+            height: auto;
+            border-radius: 32px;
+            box-shadow: 0 25px 80px rgba(45, 64, 59, 0.2);
         }
         
         /* ===== STATS ===== */
         .stats {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 2rem 1.5rem;
             background: var(--blanc);
+            padding: 3rem 1.5rem;
             border-bottom: 1px solid var(--gris-100);
         }
         
-        .stat {
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
             text-align: center;
+            padding: 1rem;
         }
         
         .stat-number {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--vert-fonce);
             line-height: 1;
+            margin-bottom: 0.25rem;
         }
         
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--gris-600);
-            margin-top: 0.25rem;
         }
         
-        /* ===== FEATURES ===== */
-        .features {
-            padding: 3rem 1.5rem;
-            background: var(--blanc);
+        /* ===== SECTION TITLE ===== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
         }
         
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.75rem;
+            font-weight: 600;
             color: var(--vert-fonce);
-            text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-subtitle {
+            color: var(--gris-600);
+            font-size: 1rem;
+        }
+        
+        /* ===== FEATURES ===== */
+        .features {
+            padding: 4rem 1.5rem;
+            background: var(--gris-50);
         }
         
         .features-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 400px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            max-width: 500px;
             margin: 0 auto;
         }
         
         .feature-card {
+            background: var(--blanc);
+            border-radius: 20px;
+            padding: 1.5rem;
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            padding: 1.25rem;
-            background: var(--gris-50);
-            border-radius: 16px;
-            border: 1px solid var(--gris-100);
+            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(45, 64, 59, 0.12);
         }
         
         .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--vert-clair);
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, #C8E59B 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -227,10 +259,10 @@
         }
         
         .feature-content h3 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             color: var(--vert-fonce);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.35rem;
         }
         
         .feature-content p {
@@ -241,24 +273,23 @@
         
         /* ===== SCREENSHOTS ===== */
         .screenshots {
-            padding: 3rem 0;
-            background: linear-gradient(180deg, var(--blanc) 0%, var(--gris-50) 100%);
-            overflow: hidden;
+            padding: 4rem 0;
+            background: var(--blanc);
         }
         
-        .screenshots .section-title {
+        .screenshots .section-header {
             padding: 0 1.5rem;
-            margin-bottom: 1.5rem;
         }
         
         .screenshots-carousel {
             display: flex;
-            gap: 1rem;
+            gap: 1.25rem;
             padding: 0 1.5rem;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            padding-bottom: 1rem;
         }
         
         .screenshots-carousel::-webkit-scrollbar {
@@ -267,58 +298,97 @@
         
         .screenshot-item {
             flex: 0 0 auto;
-            width: 260px;
+            width: 240px;
             scroll-snap-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .screenshot-item:hover {
+            transform: scale(1.02);
         }
         
         .screenshot-item img {
             width: 100%;
             height: auto;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(45, 64, 59, 0.15);
+            border-radius: 28px;
+            box-shadow: 0 15px 50px rgba(45, 64, 59, 0.15);
         }
         
         /* ===== TESTIMONIALS ===== */
         .testimonials {
-            padding: 3rem 1.5rem;
-            background: var(--vert-clair);
-        }
-        
-        .testimonials .section-title {
-            margin-bottom: 1.5rem;
+            padding: 4rem 1.5rem;
+            background: linear-gradient(180deg, var(--gris-50) 0%, var(--vert-clair) 100%);
         }
         
         .testimonials-grid {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            max-width: 400px;
+            gap: 1.25rem;
+            max-width: 500px;
             margin: 0 auto;
         }
         
         .testimonial-card {
             background: var(--blanc);
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 15px rgba(45, 64, 59, 0.08);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.08);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 0.75rem;
+            left: 1.25rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--vert-clair);
+            line-height: 1;
         }
         
         .testimonial-stars {
-            color: #F59E0B;
-            font-size: 1rem;
+            color: #FBBF24;
+            font-size: 0.9rem;
             margin-bottom: 0.75rem;
+            letter-spacing: 2px;
         }
         
         .testimonial-text {
             font-size: 0.95rem;
             color: var(--gris-800);
-            line-height: 1.6;
+            line-height: 1.65;
             margin-bottom: 1rem;
-            font-style: italic;
+            position: relative;
+            z-index: 1;
         }
         
         .testimonial-author {
-            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--jaune-dore), var(--peche));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--vert-fonce);
+            font-size: 0.9rem;
+        }
+        
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .testimonial-name {
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--vert-fonce);
         }
@@ -330,21 +400,17 @@
         
         /* ===== FAQ ===== */
         .faq {
-            padding: 3rem 1.5rem;
+            padding: 4rem 1.5rem;
             background: var(--blanc);
         }
         
-        .faq .section-title {
-            margin-bottom: 1.5rem;
-        }
-        
         .faq-list {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
         }
         
         .faq-item {
-            border-bottom: 1px solid var(--gris-100);
+            border-bottom: 1px solid var(--gris-200);
         }
         
         .faq-question {
@@ -368,9 +434,9 @@
         }
         
         .faq-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--gris-50);
+            width: 28px;
+            height: 28px;
+            background: var(--vert-clair);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -378,11 +444,13 @@
             font-size: 1.25rem;
             color: var(--vert-fonce);
             flex-shrink: 0;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .faq-item.open .faq-icon {
             transform: rotate(45deg);
+            background: var(--vert-fonce);
+            color: var(--blanc);
         }
         
         .faq-answer {
@@ -399,65 +467,241 @@
             padding-bottom: 1.25rem;
             font-size: 0.95rem;
             color: var(--gris-600);
-            line-height: 1.6;
+            line-height: 1.65;
+        }
+        
+        /* ===== CTA INLINE ===== */
+        .cta-inline {
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+        
+        .cta-inline .store-buttons {
+            justify-content: center;
+            margin-bottom: 0;
+        }
+        
+        /* ===== FOUNDERS ===== */
+        .founders {
+            padding: 4rem 1.5rem;
+            background: var(--blanc);
+        }
+        
+        .founders-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            background: linear-gradient(135deg, #FDF8F3 0%, #FFF9F0 100%);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 8px 30px rgba(45, 64, 59, 0.08);
+            text-align: center;
+        }
+        
+        .founders-avatars {
+            display: flex;
+            gap: -0.5rem;
+        }
+        
+        .founder-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--blanc);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .founder-avatar:last-child {
+            margin-left: -1rem;
+        }
+        
+        .founder-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+        }
+        
+        .founders-content p {
+            font-size: 1.05rem;
+            color: var(--gris-600);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        
+        .founders-content p strong {
+            color: var(--vert-fonce);
+        }
+        
+        .founders-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .founders-badges .badge {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+            padding: 0.4rem 0.85rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* ===== WHY OP ===== */
+        .why-op {
+            padding: 4rem 1.5rem;
+            background: linear-gradient(180deg, var(--gris-50) 0%, var(--vert-clair) 100%);
+        }
+        
+        .why-badge {
+            display: inline-block;
+            background: var(--jaune-dore);
+            color: var(--vert-fonce);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .why-op .section-title {
+            font-size: 1.5rem;
+            line-height: 1.3;
+        }
+        
+        .why-op .section-title span {
+            color: var(--peche);
+        }
+        
+        .why-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .why-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--blanc);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 15px rgba(45, 64, 59, 0.06);
+        }
+        
+        .why-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--vert-clair);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .why-content h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin-bottom: 0.25rem;
+        }
+        
+        .why-content p {
+            font-size: 0.9rem;
+            color: var(--gris-600);
+            line-height: 1.5;
+        }
+        
+        .trust-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .trust-item {
+            background: var(--blanc);
+            color: var(--vert-fonce);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(45, 64, 59, 0.08);
+        }
+        
+        .why-tagline {
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
         }
         
         /* ===== CTA FINAL ===== */
         .cta-final {
-            padding: 3rem 1.5rem;
+            padding: 4rem 1.5rem;
             background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
             text-align: center;
         }
         
         .cta-final h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 600;
             color: var(--vert-fonce);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
         
         .cta-final p {
             color: var(--vert-fonce);
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
+            opacity: 0.85;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
         }
         
         .cta-final .store-buttons {
             margin-bottom: 0;
         }
         
-        .cta-final .store-btn {
-            background: var(--vert-fonce);
-            color: var(--blanc);
-        }
-        
         /* ===== FOOTER ===== */
         .footer {
-            padding: 2rem 1.5rem;
+            padding: 2.5rem 1.5rem;
             background: var(--vert-fonce);
             text-align: center;
         }
         
         .footer-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--jaune-dore);
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
         
         .footer-links {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
         }
         
         .footer-links a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             font-size: 0.85rem;
+            transition: color 0.2s ease;
         }
         
         .footer-links a:hover {
@@ -466,69 +710,95 @@
         
         .footer-copy {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
         }
         
         /* ===== DESKTOP ===== */
         @media (min-width: 768px) {
             .hero {
-                padding: 4rem 2rem 3rem;
+                min-height: auto;
+                padding: 2rem 0 4rem;
             }
             
-            .hero h1 {
-                font-size: 2.5rem;
+            .hero-content {
+                flex-direction: row;
+                text-align: left;
+                justify-content: space-between;
+                align-items: center;
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 3rem 2rem;
+                gap: 3rem;
+            }
+            
+            .hero-text {
+                flex: 1;
                 max-width: 500px;
             }
             
+            .hero h1 {
+                font-size: 2.75rem;
+            }
+            
             .hero-subtitle {
-                font-size: 1.1rem;
-                max-width: 450px;
+                font-size: 1.15rem;
+                max-width: 100%;
             }
             
             .store-buttons {
                 flex-direction: row;
-                justify-content: center;
+            }
+            
+            .hero-mockup {
+                flex: 0 0 300px;
+                max-width: 300px;
             }
             
             .stats {
+                padding: 3.5rem 2rem;
+            }
+            
+            .stats-grid {
                 gap: 4rem;
-                padding: 2.5rem 2rem;
             }
             
             .stat-number {
-                font-size: 2.5rem;
+                font-size: 3.5rem;
             }
             
             .features {
-                padding: 4rem 2rem;
+                padding: 5rem 2rem;
             }
             
             .section-title {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
             
             .features-grid {
-                flex-direction: row;
-                max-width: 900px;
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
                 gap: 1.5rem;
             }
             
             .feature-card {
-                flex: 1;
                 flex-direction: column;
                 text-align: center;
+                padding: 2rem 1.5rem;
             }
             
             .feature-icon {
                 margin: 0 auto 1rem;
+                width: 64px;
+                height: 64px;
             }
             
             .screenshots {
-                padding: 4rem 0;
+                padding: 5rem 0;
             }
             
             .screenshots-carousel {
                 justify-content: center;
+                gap: 2rem;
                 padding: 0 2rem;
             }
             
@@ -537,12 +807,13 @@
             }
             
             .testimonials {
-                padding: 4rem 2rem;
+                padding: 5rem 2rem;
             }
             
             .testimonials-grid {
                 flex-direction: row;
-                max-width: 900px;
+                max-width: 1000px;
+                gap: 1.5rem;
             }
             
             .testimonial-card {
@@ -550,14 +821,67 @@
             }
             
             .faq {
-                padding: 4rem 2rem;
+                padding: 5rem 2rem;
             }
             
             .cta-final {
-                padding: 4rem 2rem;
+                padding: 5rem 2rem;
             }
             
             .cta-final h2 {
+                font-size: 2.5rem;
+            }
+            
+            .founders {
+                padding: 5rem 2rem;
+            }
+            
+            .founders-card {
+                flex-direction: row;
+                text-align: left;
+                padding: 2.5rem;
+                gap: 2rem;
+            }
+            
+            .founders-avatars {
+                flex-shrink: 0;
+            }
+            
+            .founder-avatar {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .founders-badges {
+                justify-content: flex-start;
+            }
+            
+            .why-op {
+                padding: 5rem 2rem;
+            }
+            
+            .why-op .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .why-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 800px;
+                gap: 1.25rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-mockup {
+                flex: 0 0 340px;
+                max-width: 340px;
+            }
+            
+            .why-op .section-title {
                 font-size: 2rem;
             }
         }
@@ -566,89 +890,120 @@
 <body>
     <!-- HERO -->
     <section class="hero">
-        <span class="hero-badge">100% Gratuit</span>
-        <h1>Reprends le contrôle de tes <span>finances familiales</span></h1>
-        <p class="hero-subtitle">Quiz, webinaires, accompagnement. Le repère des parents qui veulent y voir clair.</p>
+        <div class="hero-header">
+            <div class="hero-logo">OP!</div>
+        </div>
         
-        <div class="store-buttons">
-            <a href="#" class="store-btn" id="btn-appstore">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <div class="store-btn-text">
-                    <span class="store-btn-small">Télécharger sur</span>
-                    <span class="store-btn-big">App Store</span>
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="hero-badge">✨ 100% Gratuit</span>
+                <h1>Reprends le contrôle de tes finances familiales</h1>
+                <p class="hero-subtitle">Quiz, webinaires, accompagnement. Le repère des parents qui veulent y voir clair, sans jargon.</p>
+                
+                <div class="store-buttons">
+                    <a href="#" class="store-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span>App Store</span>
+                    </a>
+                    <a href="#" class="store-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                        </svg>
+                        <span>Google Play</span>
+                    </a>
                 </div>
-            </a>
-            <a href="#" class="store-btn" id="btn-playstore">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                </svg>
-                <div class="store-btn-text">
-                    <span class="store-btn-small">Disponible sur</span>
-                    <span class="store-btn-big">Google Play</span>
-                </div>
-            </a>
+            </div>
+            
+            <div class="hero-mockup">
+                <img src="assets/images/app-screen-1.png" alt="Application OP!">
+            </div>
         </div>
     </section>
     
     <!-- STATS -->
     <section class="stats">
-        <div class="stat">
-            <div class="stat-number">12+</div>
-            <div class="stat-label">Quiz interactifs</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">3</div>
-            <div class="stat-label">Webinaires/mois</div>
-        </div>
-        <div class="stat">
-            <div class="stat-number">0€</div>
-            <div class="stat-label">100% gratuit</div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">12+</div>
+                <div class="stat-label">quiz interactifs</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">webinaires/mois</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0€</div>
+                <div class="stat-label">100% gratuit</div>
+            </div>
         </div>
     </section>
     
     <!-- FEATURES -->
     <section class="features">
-        <h2 class="section-title">Ce que tu vas découvrir</h2>
+        <div class="section-header">
+            <h2 class="section-title">Ce que nous proposons</h2>
+            <p class="section-subtitle">Tout ce dont tu as besoin pour y voir clair</p>
+        </div>
         
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <div class="feature-content">
                     <h3>Quiz personnalisés</h3>
-                    <p>Évalue ta situation financière et identifie tes priorités en quelques minutes.</p>
+                    <p>Évalue ta situation et identifie tes priorités en quelques minutes.</p>
                 </div>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">🎥</div>
                 <div class="feature-content">
-                    <h3>Webinaires sans jargon</h3>
-                    <p>Impôts, épargne, transmission... 45 min pour comprendre ce qu'on n'apprend jamais.</p>
+                    <h3>Webinaires</h3>
+                    <p>Impôts, épargne, transmission... 45 min pour tout comprendre.</p>
                 </div>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">💬</div>
                 <div class="feature-content">
-                    <h3>Accompagnement expert</h3>
-                    <p>Besoin d'aller plus loin ? Un conseiller en gestion de patrimoine à ton écoute.</p>
+                    <h3>Accompagnement</h3>
+                    <p>Un expert patrimoine disponible si tu veux aller plus loin.</p>
                 </div>
+            </div>
+        </div>
+        
+        <!-- CTA intermédiaire -->
+        <div class="cta-inline">
+            <div class="store-buttons">
+                <a href="#" class="store-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <span>App Store</span>
+                </a>
+                <a href="#" class="store-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                    </svg>
+                    <span>Google Play</span>
+                </a>
             </div>
         </div>
     </section>
     
     <!-- SCREENSHOTS -->
     <section class="screenshots">
-        <h2 class="section-title">Découvre l'application</h2>
+        <div class="section-header">
+            <h2 class="section-title">Découvrez l'expérience</h2>
+        </div>
         
         <div class="screenshots-carousel">
             <div class="screenshot-item">
-                <img src="assets/images/app-screen-1.png" alt="Écran d'accueil OP!">
+                <img src="assets/images/app-screen-1.png" alt="Écran accueil OP!">
             </div>
             <div class="screenshot-item">
-                <img src="assets/images/app-screen-2.png" alt="Inscription gratuite OP!">
+                <img src="assets/images/app-screen-2.png" alt="Inscription OP!">
             </div>
             <div class="screenshot-item">
                 <img src="assets/images/app-screen-3.png" alt="Webinaires OP!">
@@ -656,30 +1011,102 @@
         </div>
     </section>
     
+    <!-- QUI SOMMES-NOUS -->
+    <section class="founders">
+        <div class="section-header">
+            <h2 class="section-title">Qui sommes-nous ?</h2>
+            <p class="section-subtitle">Florent & Charlène — parents de deux enfants</p>
+        </div>
+        
+        <div class="founders-card">
+            <div class="founders-avatars">
+                <div class="founder-avatar">
+                    <img src="assets/images/florent.png" alt="Florent">
+                </div>
+                <div class="founder-avatar">
+                    <img src="assets/images/charlene.jpg" alt="Charlène">
+                </div>
+            </div>
+            <div class="founders-content">
+                <p>On a créé OP! parce qu'on sait à quel point c'est difficile de trouver des réponses fiables sur l'argent quand on est parent.</p>
+                <p><strong>On voulait un repère de confiance. Il n'existait pas, alors on l'a construit.</strong></p>
+                <div class="founders-badges">
+                    <span class="badge">👨‍👩‍👧‍👦 Parents de 2 enfants</span>
+                    <span class="badge">📊 6 ans d'expertise patrimoine</span>
+                    <span class="badge">✅ 100% indépendant</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA intermédiaire -->
+        <div class="cta-inline">
+            <div class="store-buttons">
+                <a href="#" class="store-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <span>App Store</span>
+                </a>
+                <a href="#" class="store-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                    </svg>
+                    <span>Google Play</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
     <!-- TESTIMONIALS -->
     <section class="testimonials">
-        <h2 class="section-title">Ce que les parents en pensent</h2>
+        <div class="section-header">
+            <h2 class="section-title">Vos avis</h2>
+        </div>
         
         <div class="testimonials-grid">
             <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"Enfin une app qui explique les finances sans nous prendre de haut. Les quiz m'ont ouvert les yeux sur mes priorités."</p>
-                <p class="testimonial-author">Sophie, maman de 2 enfants</p>
-                <p class="testimonial-source">App Store</p>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">Enfin une app qui explique les finances sans nous prendre de haut. Les quiz m'ont ouvert les yeux sur mes priorités.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">S</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Sophie</span>
+                        <span class="testimonial-source">App Store</span>
+                    </div>
+                </div>
             </div>
             
             <div class="testimonial-card">
-                <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                <p class="testimonial-text">"Je repoussais le sujet depuis des années. Grâce au webinaire, j'ai enfin compris comment épargner pour mes enfants."</p>
-                <p class="testimonial-author">Marc, papa de 3 enfants</p>
-                <p class="testimonial-source">Google Play</p>
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">Je repoussais le sujet depuis des années. Grâce au webinaire, j'ai enfin compris comment épargner pour mes enfants.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">M</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Marc</span>
+                        <span class="testimonial-source">Google Play</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">Super application, très facile à utiliser. Les contenus sont clairs et vraiment utiles au quotidien.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">L</div>
+                    <div class="testimonial-info">
+                        <span class="testimonial-name">Lucie</span>
+                        <span class="testimonial-source">App Store</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
     
     <!-- FAQ -->
     <section class="faq">
-        <h2 class="section-title">Questions fréquentes</h2>
+        <div class="section-header">
+            <h2 class="section-title">Questions fréquentes</h2>
+        </div>
         
         <div class="faq-list">
             <div class="faq-item">
@@ -724,29 +1151,74 @@
         </div>
     </section>
     
+    <!-- POURQUOI OP! -->
+    <section class="why-op">
+        <div class="section-header">
+            <span class="why-badge">🧭 Pourquoi OP! ?</span>
+            <h2 class="section-title">Parce que gérer l'argent de sa famille,<br><span>ça ne s'improvise pas.</span></h2>
+            <p class="section-subtitle">Et pourtant, personne ne nous apprend. OP! change ça.</p>
+        </div>
+        
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">🎯</div>
+                <div class="why-content">
+                    <h3>Des repères clairs</h3>
+                    <p>Découvre où tu en es vraiment — finances, mindset, objectifs.</p>
+                </div>
+            </div>
+            
+            <div class="why-card">
+                <div class="why-icon">🛡️</div>
+                <div class="why-content">
+                    <h3>L'expertise sans les travers</h3>
+                    <p>Pros de la finance, on te transmet ce qui marche vraiment. Sans jargon.</p>
+                </div>
+            </div>
+            
+            <div class="why-card">
+                <div class="why-icon">💡</div>
+                <div class="why-content">
+                    <h3>Enfin compréhensible</h3>
+                    <p>Exit le jargon. Ici, on t'explique comme on expliquerait à un ami.</p>
+                </div>
+            </div>
+            
+            <div class="why-card">
+                <div class="why-icon">🤝</div>
+                <div class="why-content">
+                    <h3>Un vrai accompagnement</h3>
+                    <p>Quiz, webinaires, et un expert dispo si tu veux aller plus loin.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="trust-bar">
+            <span class="trust-item">✓ 100% indépendant</span>
+            <span class="trust-item">✓ Créé par des parents</span>
+            <span class="trust-item">✓ Expert certifié</span>
+        </div>
+        
+        <p class="why-tagline">Le repère financier que tout parent devrait avoir. 💛</p>
+    </section>
+    
     <!-- CTA FINAL -->
     <section class="cta-final">
         <h2>Prêt(e) à y voir clair ?</h2>
         <p>Télécharge l'app gratuitement et fais ton premier quiz.</p>
         
         <div class="store-buttons">
-            <a href="#" class="store-btn" id="btn-appstore-2">
+            <a href="#" class="store-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                 </svg>
-                <div class="store-btn-text">
-                    <span class="store-btn-small">Télécharger sur</span>
-                    <span class="store-btn-big">App Store</span>
-                </div>
+                <span>App Store</span>
             </a>
-            <a href="#" class="store-btn" id="btn-playstore-2">
+            <a href="#" class="store-btn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                 </svg>
-                <div class="store-btn-text">
-                    <span class="store-btn-small">Disponible sur</span>
-                    <span class="store-btn-big">Google Play</span>
-                </div>
+                <span>Google Play</span>
             </a>
         </div>
     </section>
@@ -767,23 +1239,12 @@
             const item = button.parentElement;
             const wasOpen = item.classList.contains('open');
             
-            // Fermer tous les autres
             document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
             
-            // Ouvrir celui-ci si il était fermé
             if (!wasOpen) {
                 item.classList.add('open');
             }
         }
-        
-        // Tracking des clics (à personnaliser avec ton analytics)
-        document.querySelectorAll('.store-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const isAppStore = this.id.includes('appstore');
-                console.log('Click:', isAppStore ? 'App Store' : 'Google Play');
-                // Ici tu peux ajouter ton tracking (Google Analytics, Meta Pixel, etc.)
-            });
-        });
     </script>
 </body>
 </html>

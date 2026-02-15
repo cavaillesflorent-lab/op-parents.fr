@@ -6,7 +6,6 @@
     <title>Investir - OP! Accompagnement patrimonial personnalisé</title>
     <meta name="description" content="Bénéficiez d'un accompagnement personnalisé avec Florent, ingénieur patrimonial. Structurez vos finances et investissez en toute confiance.">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
         /* Styles spécifiques page Investir */
         
@@ -17,7 +16,7 @@
         }
         
         .why-card {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
         
@@ -285,13 +284,13 @@
             background:  #DFF2B6;
             border-radius: var(--radius-2xl);
             padding: var(--space-xl);
-            color: var(--vert-fonce);
+            color: var(--white);
         }
         
         .pricing-card-simple h2 {
             font-family: var(--font-serif);
             font-size: 1.5rem;
-            color: var(--vert-fonce);
+            color: var(--white);
             margin-bottom: var(--space-md);
             text-align: center;
         }
@@ -300,15 +299,14 @@
             text-align: center;
             font-size: 1.1rem;
             margin-bottom: var(--space-lg);
-            color: var(--vert-fonce);
-            
+            opacity: 0.95;
         }
         
         .pricing-description {
             text-align: center;
-            margin-bottom: var(--space-lg);         
+            margin-bottom: var(--space-lg);
+            opacity: 0.9;
             line-height: 1.6;
-            color: var(--vert-fonce);
         }
         
         .pricing-highlight {
@@ -332,7 +330,6 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            
         }
         
         .pricing-points li {
@@ -342,7 +339,7 @@
             font-size: 1rem;
             line-height: 1.6;
             margin-bottom: var(--space-sm);
-            
+            opacity: 0.95;
         }
         
         .pricing-points li:last-child {
@@ -354,7 +351,6 @@
             color: var(--vert-fonce);
             font-weight: bold;
             flex-shrink: 0;
-            opacity: 0.95;
         }
         
         /* Témoignages */
@@ -471,6 +467,47 @@
             opacity: 0.8;
         }
         
+        /* Boutons RDV dans les sections */
+        .expert-cta-btn,
+        .process-cta-btn,
+        .pricing-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--vert-fonce);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: var(--space-lg);
+        }
+        
+        .expert-cta-btn:hover,
+        .process-cta-btn:hover,
+        .pricing-cta-btn:hover {
+            background: var(--vert-fonce-light);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .process-cta {
+            text-align: center;
+            margin-top: var(--space-xl);
+        }
+        
+        .pricing-cta {
+            text-align: center;
+            margin-top: var(--space-lg);
+        }
+        
+        .pricing-cta-btn {
+            background: var(--vert-fonce);
+            color: var(--white);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .expert-card {
@@ -504,6 +541,14 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .expert-cta-btn,
+            .process-cta-btn,
+            .pricing-cta-btn {
+                width: 100%;
+                justify-content: center;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -516,12 +561,14 @@
         <section class="page-hero">
             <div class="container">
                 <div class="page-hero-content">
-                    
+                    <span class="page-hero-badge">💼 Accompagnement</span>
                     <h1>Quand les quiz et webinaires ne suffisent plus</h1>
                     <p>Tu as compris les bases. Maintenant tu as besoin d'un regard expert sur ta situation — quelqu'un qui prend le temps d'expliquer avant de proposer.</p>
                 </div>
             </div>
         </section>
+
+       
 
         <!-- QUI EST FLORENT -->
         <section class="investir-expert-section">
@@ -533,12 +580,15 @@
                     <div class="expert-info">
                         <h2>Florent</h2>
                         <p class="expert-subtitle">Ingénieur patrimonial · Fondateur d'OP!</p>
-                        <p class="expert-bio"><strong>Ton copilote financier.</strong> Florent accompagne des familles et constate le même problème depuis plusieurs années : personne ne prend le temps d'expliquer. Son approche est simple — comprendre ta situation, répondre à tes questions, t'aider à y voir clair. Il te dira clairement quelle est la meilleure option pour <strong>TOI</strong>, pas pour lui !</p>
+                        <p class="expert-bio"><strong>Ton copilote financier.</strong> Florent a créé OP! après des années à conseiller des familles et à constater le même problème : personne ne prend le temps d'expliquer. Son approche est simple — comprendre ta situation, répondre à tes questions, t'aider à y voir clair. Il te dira clairement quelle est la meilleure option pour <strong>TOI</strong>, pas pour lui !</p>
                         <div class="expert-badges">
-                            <span class="badge">🏅 Inscrit à l'ORIAS</span>
+                            <span class="badge">🏅 Certifié ORIAS</span>
                             <span class="badge">📚 +150 familles accompagnées</span>
                             <span class="badge">🎯 Conseil personnalisé</span>
                         </div>
+                        <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="expert-cta-btn">
+                            📅 Prendre rendez-vous <span>→</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -573,6 +623,12 @@
                         <h3>Protection de la famille</h3>
                         <p>Le sujet qu'on repousse toujours. Succession, donation, prévoyance : on en parle simplement pour que tes proches soient protégés quoi qu'il arrive.</p>
                     </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: var(--space-xl);">
+                    <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="btn btn-primary">
+                        Prendre rendez-vous <span>→</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -621,6 +677,12 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="process-cta">
+                    <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="process-cta-btn">
+                        📅 Réserver mon appel gratuit <span>→</span>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -633,7 +695,7 @@
                     <p class="pricing-intro">Le premier échange est <strong>gratuit</strong>, sans engagement.</p>
                     
                     <p class="pricing-description">
-                        Si tu choisis de passer à l'action (assurance-vie, PER, SCPI...), Florent est rémunéré par les partenaires financiers. Transparence totale : chaque euro est détaillé dans les documents de conformité que tu reçois en amont.
+                        Si tu décides de mettre en place des solutions (assurance-vie, PER, SCPI...), Florent est rémunéré par les partenaires financiers — comme tout conseiller en gestion de patrimoine.
                     </p>
                     
                     <div class="pricing-highlight">
@@ -646,6 +708,12 @@
                             <li>Jamais de pression, jamais de produit "miracle"</li>
                             <li>Si après analyse ta meilleure option c'est de ne rien faire, on te le dit</li>
                         </ul>
+                    </div>
+                    
+                    <div class="pricing-cta">
+                        <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="pricing-cta-btn">
+                            📅 Prendre rendez-vous <span>→</span>
+                        </a>
                     </div>
                 </div>
             </div>

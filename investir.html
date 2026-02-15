@@ -284,13 +284,12 @@
             background:  #DFF2B6;
             border-radius: var(--radius-2xl);
             padding: var(--space-xl);
-            color: var(--white);
         }
         
         .pricing-card-simple h2 {
             font-family: var(--font-serif);
             font-size: 1.5rem;
-            color: var(--white);
+            color: var(--vert-fonce);
             margin-bottom: var(--space-md);
             text-align: center;
         }
@@ -299,18 +298,18 @@
             text-align: center;
             font-size: 1.1rem;
             margin-bottom: var(--space-lg);
-            opacity: 0.95;
+            color: var(--vert-fonce);
         }
         
         .pricing-description {
             text-align: center;
             margin-bottom: var(--space-lg);
-            opacity: 0.9;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
         
         .pricing-highlight {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: var(--radius-lg);
             padding: var(--space-lg);
             margin-bottom: var(--space-lg);
@@ -339,7 +338,7 @@
             font-size: 1rem;
             line-height: 1.6;
             margin-bottom: var(--space-sm);
-            opacity: 0.95;
+            color: var(--vert-fonce);
         }
         
         .pricing-points li:last-child {
@@ -510,6 +509,8 @@
         .pricing-cta-btn {
             background: var(--vert-fonce);
             color: var(--white);
+            padding: var(--space-md) var(--space-xl);
+            font-size: 1rem;
         }
         
         /* Responsive */
@@ -557,9 +558,15 @@
                 padding: var(--space-lg);
             }
             
+            .pricing-cta {
+                padding: 0 1rem;
+            }
+            
             .pricing-cta-btn {
-                width: 100%;
-                max-width: 300px;
+                width: auto;
+                max-width: 280px;
+                padding: var(--space-md) var(--space-lg);
+                font-size: 0.95rem;
             }
             
             .testimonials-grid {
@@ -585,11 +592,17 @@
         @media (max-width: 480px) {
             .expert-cta-btn,
             .process-cta-btn,
-            .pricing-cta-btn,
             .investir-cta-btn {
                 max-width: 100%;
                 padding: var(--space-md) var(--space-lg);
                 font-size: 0.95rem;
+            }
+            
+            .pricing-cta-btn {
+                width: auto;
+                max-width: 100%;
+                padding: var(--space-sm) var(--space-lg);
+                font-size: 0.9rem;
             }
             
             .step-tag {

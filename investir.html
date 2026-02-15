@@ -433,6 +433,7 @@
         .investir-cta-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-sm);
             padding: var(--space-md) var(--space-xl);
             border-radius: var(--radius-lg);
@@ -440,6 +441,7 @@
             font-size: 1rem;
             text-decoration: none;
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
         
         .investir-cta-btn.primary {
@@ -473,6 +475,7 @@
         .pricing-cta-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: var(--space-sm);
             padding: var(--space-md) var(--space-xl);
             background: var(--vert-fonce);
@@ -483,6 +486,7 @@
             text-decoration: none;
             transition: all 0.2s ease;
             margin-top: var(--space-lg);
+            box-sizing: border-box;
         }
         
         .expert-cta-btn:hover,
@@ -513,6 +517,7 @@
             .expert-card {
                 flex-direction: column;
                 text-align: center;
+                padding: var(--space-lg);
             }
             
             .expert-avatar {
@@ -520,12 +525,41 @@
                 height: 120px;
             }
             
+            .expert-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
             .expert-badges {
                 justify-content: center;
             }
             
+            .expert-cta-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
             .services-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .process-cta {
+                padding: 0 1rem;
+            }
+            
+            .process-cta-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .pricing-card-simple {
+                padding: var(--space-lg);
+            }
+            
+            .pricing-cta-btn {
+                width: 100%;
+                max-width: 300px;
             }
             
             .testimonials-grid {
@@ -535,19 +569,33 @@
             .cta-buttons {
                 flex-direction: column;
                 align-items: center;
+                padding: 0 1rem;
             }
             
             .investir-cta-btn {
                 width: 100%;
-                justify-content: center;
+                max-width: 300px;
             }
             
+            .investir-cta-card h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .expert-cta-btn,
             .process-cta-btn,
-            .pricing-cta-btn {
-                width: 100%;
-                justify-content: center;
-                text-align: center;
+            .pricing-cta-btn,
+            .investir-cta-btn {
+                max-width: 100%;
+                padding: var(--space-md) var(--space-lg);
+                font-size: 0.95rem;
+            }
+            
+            .step-tag {
+                display: block;
+                margin-left: 0;
+                margin-top: 0.25rem;
             }
         }
     </style>
@@ -561,7 +609,7 @@
         <section class="page-hero">
             <div class="container">
                 <div class="page-hero-content">
-                    <span class="page-hero-badge">💼 Accompagnement</span>
+                    
                     <h1>Quand les quiz et webinaires ne suffisent plus</h1>
                     <p>Tu as compris les bases. Maintenant tu as besoin d'un regard expert sur ta situation — quelqu'un qui prend le temps d'expliquer avant de proposer.</p>
                 </div>
@@ -582,7 +630,7 @@
                         <p class="expert-subtitle">Ingénieur patrimonial · Fondateur d'OP!</p>
                         <p class="expert-bio"><strong>Ton copilote financier.</strong> Florent a créé OP! après des années à conseiller des familles et à constater le même problème : personne ne prend le temps d'expliquer. Son approche est simple — comprendre ta situation, répondre à tes questions, t'aider à y voir clair. Il te dira clairement quelle est la meilleure option pour <strong>TOI</strong>, pas pour lui !</p>
                         <div class="expert-badges">
-                            <span class="badge">🏅 Certifié ORIAS</span>
+                            <span class="badge">🏅 Inscrit à l'ORIAS</span>
                             <span class="badge">📚 +150 familles accompagnées</span>
                             <span class="badge">🎯 Conseil personnalisé</span>
                         </div>

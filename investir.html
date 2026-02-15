@@ -444,23 +444,24 @@
         }
         
         .investir-cta-btn.primary {
-            background: var(--white);
+            background: #F2B47E;
             color: var(--vert-fonce);
         }
         
         .investir-cta-btn.primary:hover {
             transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 8px 20px rgba(242, 180, 126, 0.4);
+            background: #E8A56E;
         }
         
         .investir-cta-btn.secondary {
-             background: var(--white);
+            background: var(--white);
             color: var(--vert-fonce);
+            border: 2px solid #F2B47E;
         }
         
         .investir-cta-btn.secondary:hover {
-            border-color: var(--white);
-            background: rgba(255, 255, 255, 0.1);
+            background: #FDF8F3;
         }
         
         .cta-note {
@@ -468,7 +469,7 @@
             opacity: 0.8;
         }
         
-        /* Boutons RDV dans les sections */
+        /* Boutons RDV dans les sections - TOUS EN ORANGE */
         .expert-cta-btn,
         .process-cta-btn,
         .pricing-cta-btn {
@@ -477,8 +478,8 @@
             justify-content: center;
             gap: var(--space-sm);
             padding: var(--space-md) var(--space-xl);
-            background: var(--vert-fonce);
-            color: var(--white);
+            background: #F2B47E;
+            color: var(--vert-fonce);
             border-radius: var(--radius-lg);
             font-weight: 700;
             font-size: 1rem;
@@ -491,9 +492,9 @@
         .expert-cta-btn:hover,
         .process-cta-btn:hover,
         .pricing-cta-btn:hover {
-            background: var(--vert-fonce-light);
+            background: #E8A56E;
             transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 8px 20px rgba(242, 180, 126, 0.4);
         }
         
         .process-cta {
@@ -507,8 +508,8 @@
         }
         
         .pricing-cta-btn {
-            background: var(--vert-fonce);
-            color: var(--white);
+            background: #F2B47E;
+            color: var(--vert-fonce);
             padding: var(--space-md) var(--space-xl);
             font-size: 1rem;
         }
@@ -536,9 +537,14 @@
                 justify-content: center;
             }
             
-            .expert-cta-btn {
-                width: 100%;
-                max-width: 300px;
+            .expert-cta-btn,
+            .process-cta-btn,
+            .pricing-cta-btn,
+            .investir-cta-btn {
+                width: auto;
+                max-width: 280px;
+                padding: var(--space-md) var(--space-lg);
+                font-size: 0.95rem;
             }
             
             .services-grid {
@@ -549,24 +555,12 @@
                 padding: 0 1rem;
             }
             
-            .process-cta-btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            
             .pricing-card-simple {
                 padding: var(--space-lg);
             }
             
             .pricing-cta {
                 padding: 0 1rem;
-            }
-            
-            .pricing-cta-btn {
-                width: auto;
-                max-width: 280px;
-                padding: var(--space-md) var(--space-lg);
-                font-size: 0.95rem;
             }
             
             .testimonials-grid {
@@ -579,11 +573,6 @@
                 padding: 0 1rem;
             }
             
-            .investir-cta-btn {
-                width: 100%;
-                max-width: 300px;
-            }
-            
             .investir-cta-card h2 {
                 font-size: 1.5rem;
             }
@@ -592,14 +581,8 @@
         @media (max-width: 480px) {
             .expert-cta-btn,
             .process-cta-btn,
+            .pricing-cta-btn,
             .investir-cta-btn {
-                max-width: 100%;
-                padding: var(--space-md) var(--space-lg);
-                font-size: 0.95rem;
-            }
-            
-            .pricing-cta-btn {
-                width: auto;
                 max-width: 100%;
                 padding: var(--space-sm) var(--space-lg);
                 font-size: 0.9rem;

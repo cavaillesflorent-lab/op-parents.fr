@@ -1414,7 +1414,7 @@ section {
     position: relative;
     background: #f8f9fa;
     color: var(--vert-fonce);
-    padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-xl);
+    padding: var(--space-3xl) 0;
     text-align: center;
     overflow: hidden;
 }

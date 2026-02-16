@@ -2,1269 +2,407 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>OP! - L'app gratuite pour gérer les finances de ta famille</title>
-    <meta name="description" content="Télécharge gratuitement l'app OP! Quiz financiers, webinaires, accompagnement. Le repère des parents qui veulent y voir clair.">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="OP! - Reprends le contrôle de tes finances familiales">
-    <meta property="og:description" content="L'app 100% gratuite pour les parents. Quiz, webinaires, zéro jargon.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://op-parents.fr/app">
-    
-    <!-- Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OP! - Reprends le contrôle de tes finances familiales</title>
+    <meta name="description" content="L'app gratuite qui aide les parents à comprendre, décider et agir sur leurs finances. Quiz, webinaires et accompagnement par un expert patrimoine.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --vert-fonce: #2D403B;
+            --vert-fonce-light: #3D524B;
             --vert-clair: #DFF2B6;
+            --vert-clair-light: #EBF7D1;
             --jaune-dore: #F2D680;
+            --jaune-dore-light: #F7E5A8;
             --peche: #F2B47E;
-            --blanc: #FFFFFF;
-            --gris-50: #FAFBF9;
-            --gris-100: #F0F2EE;
-            --gris-200: #E4E7E1;
-            --gris-600: #6C7A75;
-            --gris-800: #2D403B;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--blanc);
-            color: var(--gris-800);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        
-        /* ===== HERO ===== */
-        .hero {
-            background: linear-gradient(180deg, var(--vert-clair) 0%, #E8F5D0 100%);
-            padding: 2rem 0 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .hero-header {
-            text-align: center;
-            padding: 1rem 1.5rem;
-        }
-        
-        .hero-logo-img {
-            height: 60px;
-            width: auto;
-        }
-        
-        .hero-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem 1.5rem;
-        }
-        
-        .hero-badge {
-            display: inline-block;
-            background: var(--jaune-dore);
-            color: var(--vert-fonce);
-            padding: 0.5rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 1.5rem;
-        }
-        
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.25rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            line-height: 1.2;
-            margin-bottom: 1rem;
-            max-width: 500px;
-        }
-        
-        .hero-subtitle {
-            color: var(--gris-600);
-            font-size: 1.05rem;
-            margin-bottom: 2rem;
-            max-width: 400px;
-        }
-        
-        /* Store Buttons */
-        .store-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-bottom: 2.5rem;
-        }
-        
-        .store-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: #F2B47E;
-            color: var(--vert-fonce);
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            min-width: 180px;
-            justify-content: center;
-        }
-        
-        .store-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(242, 180, 126, 0.4);
-            background: #E8A56E;
-        }
-        
-        .store-btn svg {
-            width: 22px;
-            height: 22px;
-        }
-        
-        .store-btn span {
-            font-weight: 600;
-        }
-        
-        /* Hero Mockup */
-        .hero-mockup {
-            max-width: 280px;
-            margin: 0 auto;
-        }
-        
-        .hero-mockup img {
-            width: 100%;
-            height: auto;
-            border-radius: 32px;
-            box-shadow: 0 25px 80px rgba(45, 64, 59, 0.2);
-        }
-        
-        /* ===== STATS ===== */
-        .stats {
-            background: var(--blanc);
-            padding: 3rem 1.5rem;
-            border-bottom: 1px solid var(--gris-100);
-        }
-        
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-        }
-        
-        .stat-number {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-            line-height: 1;
-            margin-bottom: 0.25rem;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--gris-600);
-        }
-        
-        /* ===== SECTION TITLE ===== */
-        .section-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            margin-bottom: 0.5rem;
-        }
-        
-        .section-subtitle {
-            color: var(--gris-600);
-            font-size: 1rem;
-        }
-        
-        /* ===== FEATURES ===== */
-        .features {
-            padding: 4rem 1.5rem;
-            background: var(--gris-50);
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .feature-card {
-            background: var(--blanc);
-            border-radius: 20px;
-            padding: 1.5rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.06);
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(45, 64, 59, 0.12);
-        }
-        
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--vert-clair) 0%, #C8E59B 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        
-        .feature-content h3 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-            margin-bottom: 0.35rem;
-        }
-        
-        .feature-content p {
-            font-size: 0.9rem;
-            color: var(--gris-600);
-            line-height: 1.5;
-        }
-        
-        /* ===== SCREENSHOTS ===== */
-        .screenshots {
-            padding: 4rem 0;
-            background: var(--blanc);
-        }
-        
-        .screenshots .section-header {
-            padding: 0 1.5rem;
-        }
-        
-        .screenshots-carousel {
-            display: flex;
-            gap: 1.25rem;
-            padding: 0 1.5rem;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding-bottom: 1rem;
-        }
-        
-        .screenshots-carousel::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .screenshot-item {
-            flex: 0 0 auto;
-            width: 240px;
-            scroll-snap-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .screenshot-item:hover {
-            transform: scale(1.02);
-        }
-        
-        .screenshot-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 28px;
-            box-shadow: 0 15px 50px rgba(45, 64, 59, 0.15);
-        }
-        
-        /* ===== TESTIMONIALS ===== */
-        .testimonials {
-            padding: 4rem 1.5rem;
-            background: linear-gradient(180deg, var(--gris-50) 0%, var(--vert-clair) 100%);
-        }
-        
-        .testimonials-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .testimonial-card {
-            background: var(--blanc);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.08);
-            position: relative;
-        }
-        
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: 0.75rem;
-            left: 1.25rem;
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            color: var(--vert-clair);
-            line-height: 1;
-        }
-        
-        .testimonial-stars {
-            color: #FBBF24;
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
-            letter-spacing: 2px;
-        }
-        
-        .testimonial-text {
-            font-size: 0.95rem;
-            color: var(--gris-800);
-            line-height: 1.65;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .testimonial-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--jaune-dore), var(--peche));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            font-size: 0.9rem;
-        }
-        
-        .testimonial-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .testimonial-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-        }
-        
-        .testimonial-source {
-            font-size: 0.75rem;
-            color: var(--gris-600);
-        }
-        
-        /* ===== FAQ ===== */
-        .faq {
-            padding: 4rem 1.5rem;
-            background: var(--blanc);
-        }
-        
-        .faq-list {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            border-bottom: 1px solid var(--gris-200);
-        }
-        
-        .faq-question {
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 1.25rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            text-align: left;
-            font-family: inherit;
-        }
-        
-        .faq-question h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            padding-right: 1rem;
-        }
-        
-        .faq-icon {
-            width: 28px;
-            height: 28px;
-            background: var(--vert-clair);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            color: var(--vert-fonce);
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .faq-item.open .faq-icon {
-            transform: rotate(45deg);
-            background: var(--vert-fonce);
-            color: var(--blanc);
-        }
-        
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .faq-item.open .faq-answer {
-            max-height: 200px;
-        }
-        
-        .faq-answer p {
-            padding-bottom: 1.25rem;
-            font-size: 0.95rem;
-            color: var(--gris-600);
-            line-height: 1.65;
-        }
-        
-        /* ===== CTA INLINE ===== */
-        .cta-inline {
-            margin-top: 2.5rem;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .cta-inline .store-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0;
-        }
-        
-        @media (min-width: 768px) {
-            .cta-inline .store-buttons {
-                flex-direction: row;
-            }
-        }
-        
-        /* ===== FOUNDERS ===== */
-        .founders {
-            padding: 4rem 1.5rem;
-            background: var(--blanc);
-        }
-        
-        .founders-card {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: center;
-            background: linear-gradient(135deg, #FDF8F3 0%, #FFF9F0 100%);
-            border-radius: 24px;
-            padding: 2rem 1.5rem;
-            max-width: 700px;
-            margin: 0 auto;
-            box-shadow: 0 8px 30px rgba(45, 64, 59, 0.08);
-            text-align: center;
-        }
-        
-        .founders-avatars {
-            display: flex;
-            gap: -0.5rem;
-        }
-        
-        .founder-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid var(--blanc);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .founder-avatar:last-child {
-            margin-left: -1rem;
-        }
-        
-        .founder-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 20%;
-        }
-        
-        .founders-content p {
-            font-size: 1.05rem;
-            color: var(--gris-600);
-            line-height: 1.7;
-            margin-bottom: 0.75rem;
-        }
-        
-        .founders-content p strong {
-            color: var(--vert-fonce);
-        }
-        
-        .founders-badges {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        
-        .founders-badges .badge {
-            background: var(--vert-clair);
-            color: var(--vert-fonce);
-            padding: 0.4rem 0.85rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        /* ===== WHY OP ===== */
-        .why-op {
-            padding: 4rem 1.5rem;
-            background: linear-gradient(180deg, var(--gris-50) 0%, var(--vert-clair) 100%);
-        }
-        
-        .why-badge {
-            display: inline-block;
-            background: var(--jaune-dore);
-            color: var(--vert-fonce);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .why-op .section-title {
-            font-size: 1.5rem;
-            line-height: 1.3;
-        }
-        
-        .why-op .section-title span {
-            color: var(--peche);
-        }
-        
-        .why-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-        
-        .why-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            background: var(--blanc);
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 15px rgba(45, 64, 59, 0.06);
-        }
-        
-        .why-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--vert-clair);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-        
-        .why-content h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--vert-fonce);
-            margin-bottom: 0.25rem;
-        }
-        
-        .why-content p {
-            font-size: 0.9rem;
-            color: var(--gris-600);
-            line-height: 1.5;
-        }
-        
-        .trust-bar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .trust-item {
-            background: var(--blanc);
-            color: var(--vert-fonce);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(45, 64, 59, 0.08);
-        }
-        
-        .why-tagline {
-            text-align: center;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-        }
-        
-        /* ===== CTA FINAL ===== */
-        .cta-final {
-            padding: 4rem 1.5rem;
-            background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
-            text-align: center;
-        }
-        
-        .cta-final h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            margin-bottom: 0.75rem;
-        }
-        
-        .cta-final p {
-            color: var(--vert-fonce);
-            opacity: 0.85;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-        
-        .cta-final .store-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0;
-        }
-        
-        @media (min-width: 768px) {
-            .cta-final .store-buttons {
-                flex-direction: row;
-                justify-content: center;
-            }
-        }
-        
-        /* ===== FOOTER ===== */
-        .footer {
-            padding: 2.5rem 1.5rem;
-            background: var(--vert-fonce);
-            text-align: center;
-        }
-        
-        .footer-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--jaune-dore);
-            margin-bottom: 1.25rem;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.25rem;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: color 0.2s ease;
-        }
-        
-        .footer-links a:hover {
-            color: var(--blanc);
-        }
-        
-        .footer-copy {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-        
-        /* ===== DESKTOP ===== */
-        @media (min-width: 768px) {
-            .hero {
-                min-height: auto;
-                padding: 2rem 0 4rem;
-            }
-            
-            .hero-content {
-                flex-direction: row;
-                text-align: left;
-                justify-content: space-between;
-                align-items: center;
-                max-width: 1100px;
-                margin: 0 auto;
-                padding: 3rem 2rem;
-                gap: 3rem;
-            }
-            
-            .hero-text {
-                flex: 1;
-                max-width: 500px;
-            }
-            
-            .hero h1 {
-                font-size: 2.75rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.15rem;
-                max-width: 100%;
-            }
-            
-            .store-buttons {
-                flex-direction: row;
-            }
-            
-            .hero-mockup {
-                flex: 0 0 300px;
-                max-width: 300px;
-            }
-            
-            .stats {
-                padding: 3.5rem 2rem;
-            }
-            
-            .stats-grid {
-                gap: 4rem;
-            }
-            
-            .stat-number {
-                font-size: 3.5rem;
-            }
-            
-            .features {
-                padding: 5rem 2rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-                max-width: 1000px;
-                gap: 1.5rem;
-            }
-            
-            .feature-card {
-                flex-direction: column;
-                text-align: center;
-                padding: 2rem 1.5rem;
-            }
-            
-            .feature-icon {
-                margin: 0 auto 1rem;
-                width: 64px;
-                height: 64px;
-            }
-            
-            .screenshots {
-                padding: 5rem 0;
-            }
-            
-            .screenshots-carousel {
-                justify-content: center;
-                gap: 2rem;
-                padding: 0 2rem;
-            }
-            
-            .screenshot-item {
-                width: 280px;
-            }
-            
-            .testimonials {
-                padding: 5rem 2rem;
-            }
-            
-            .testimonials-grid {
-                flex-direction: row;
-                max-width: 1000px;
-                gap: 1.5rem;
-            }
-            
-            .testimonial-card {
-                flex: 1;
-            }
-            
-            .faq {
-                padding: 5rem 2rem;
-            }
-            
-            .cta-final {
-                padding: 5rem 2rem;
-            }
-            
-            .cta-final h2 {
-                font-size: 2.5rem;
-            }
-            
-            .founders {
-                padding: 5rem 2rem;
-            }
-            
-            .founders-card {
-                flex-direction: row;
-                text-align: left;
-                padding: 2.5rem;
-                gap: 2rem;
-            }
-            
-            .founders-avatars {
-                flex-shrink: 0;
-            }
-            
-            .founder-avatar {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .founders-badges {
-                justify-content: flex-start;
-            }
-            
-            .why-op {
-                padding: 5rem 2rem;
-            }
-            
-            .why-op .section-title {
-                font-size: 1.75rem;
-            }
-            
-            .why-grid {
-                grid-template-columns: repeat(2, 1fr);
-                max-width: 800px;
-                gap: 1.25rem;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .hero-mockup {
-                flex: 0 0 340px;
-                max-width: 340px;
-            }
-            
-            .why-op .section-title {
-                font-size: 2rem;
-            }
+            --peche-light: #F7CCA3;
+            --peche-lighter: #FDF5ED;
+            --cream: #FFFCF5;
+            --white: #FFFFFF;
+            --text-dark: #2D403B;
+            --text: #3D4F3D;
+            --text-light: #6B7F6B;
+            --text-muted: #8A9B8A;
+            --radius: 16px;
+            --shadow: 0 4px 24px rgba(45,64,59,0.06);
+            --shadow-lg: 0 12px 48px rgba(45,64,59,0.1);
+            --shadow-xl: 0 24px 64px rgba(45,64,59,0.14);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', -apple-system, sans-serif; color: var(--text); background: var(--cream); line-height: 1.7; overflow-x: hidden; }
+
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,252,245,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(45,64,59,0.06); padding: 12px 0; transition: all 0.3s ease; }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+        .navbar-logo img { height: 38px; }
+        .navbar-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--peche); color: var(--vert-fonce); padding: 10px 24px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; }
+        .navbar-cta:hover { background: var(--peche-light); transform: translateY(-1px); box-shadow: var(--shadow); }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+        .hero { padding: 140px 0 80px; background: linear-gradient(180deg, var(--cream) 0%, var(--vert-clair-light) 60%, var(--vert-clair) 100%); text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -150px; right: -150px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(242,214,128,0.15) 0%, transparent 70%); border-radius: 50%; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--white); color: var(--vert-fonce); padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; margin-bottom: 28px; border: 1px solid rgba(45,64,59,0.12); }
+        .hero-badge .dot { width: 8px; height: 8px; background: var(--vert-fonce); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 900; color: var(--vert-fonce); line-height: 1.15; max-width: 750px; margin: 0 auto 20px; letter-spacing: -0.02em; }
+        .hero h1 span { color: var(--vert-fonce); position: relative; }
+        .hero h1 span::after { content: ''; position: absolute; bottom: 2px; left: 0; right: 0; height: 6px; background: rgba(242,180,126,0.4); border-radius: 3px; }
+        .hero-subtitle { font-size: 1.15rem; color: var(--text-light); max-width: 560px; margin: 0 auto 14px; line-height: 1.7; }
+        .hero-micro { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 36px; font-style: italic; }
+        .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+        .btn-store { display: inline-flex; align-items: center; gap: 12px; background: var(--peche); color: var(--vert-fonce); padding: 14px 28px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; border: 2px solid var(--peche); }
+        .btn-store:hover { background: var(--peche-light); border-color: var(--peche-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(242,180,126,0.3); }
+        .btn-store svg { width: 24px; height: 24px; }
+        .hero-phone { max-width: 340px; margin: 0 auto; filter: drop-shadow(0 30px 60px rgba(45,64,59,0.18)); position: relative; z-index: 1; }
+        .hero-phone img { width: 100%; height: auto; border-radius: 32px; }
+
+        .social-proof-bar { background: var(--white); border-top: 1px solid rgba(45,64,59,0.04); border-bottom: 1px solid rgba(45,64,59,0.04); padding: 28px 0; }
+        .proof-grid { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
+        .proof-item { text-align: center; }
+        .proof-number { font-size: 1.8rem; font-weight: 800; color: var(--vert-fonce); line-height: 1; }
+        .proof-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+        .section-eyebrow { text-transform: uppercase; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; color: var(--peche); margin-bottom: 12px; }
+        .section-title { font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 800; color: var(--vert-fonce); line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.01em; }
+        .section-subtitle { font-size: 1.05rem; color: var(--text-light); max-width: 600px; line-height: 1.7; }
+
+        .pain-section { padding: 100px 0; background: var(--white); }
+        .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 48px; }
+        .pain-card { background: var(--peche-lighter); border: 1px solid rgba(242,180,126,0.2); border-radius: var(--radius); padding: 32px; transition: transform 0.3s ease; }
+        .pain-card:hover { transform: translateY(-4px); }
+        .pain-card .pain-icon { font-size: 1.6rem; margin-bottom: 16px; }
+        .pain-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 10px; }
+        .pain-card p { font-size: 0.95rem; color: var(--text-light); line-height: 1.65; }
+
+        .transformation { padding: 100px 0; background: var(--cream); }
+        .transform-wrapper { display: grid; grid-template-columns: 1fr auto 1fr; gap: 32px; align-items: start; margin-top: 48px; }
+        .transform-col h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        .transform-col.before h3 { color: var(--peche); }
+        .transform-col.after h3 { color: var(--vert-fonce); }
+        .transform-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid rgba(45,64,59,0.06); font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .transform-item:last-child { border-bottom: none; }
+        .transform-item .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+        .before .transform-item .icon { color: var(--peche); }
+        .after .transform-item .icon { color: var(--vert-fonce); }
+        .transform-arrow { display: flex; align-items: center; justify-content: center; padding-top: 60px; font-size: 2.5rem; color: var(--jaune-dore); }
+
+        .features { padding: 100px 0; background: var(--white); }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 56px; }
+        .feature-card { background: var(--vert-clair-light); border-radius: var(--radius); padding: 40px 32px; text-align: center; border: 1px solid rgba(45,64,59,0.05); transition: all 0.3s ease; overflow: hidden; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .feature-card .feature-icon { width: 64px; height: 64px; background: var(--vert-clair); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 1.6rem; }
+        .feature-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 12px; }
+        .feature-card p { font-size: 0.93rem; color: var(--text-light); line-height: 1.65; }
+        .feature-card .feature-detail { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(45,64,59,0.08); font-size: 0.82rem; color: var(--vert-fonce); font-weight: 600; }
+
+        .quiz-showcase { padding: 100px 0; background: var(--cream); }
+        .quiz-cards-row { display: flex; justify-content: center; gap: 28px; margin-top: 48px; flex-wrap: wrap; }
+        .quiz-card-img { width: 260px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); transition: all 0.4s ease; background: var(--white); }
+        .quiz-card-img:hover { transform: translateY(-10px) scale(1.02); box-shadow: var(--shadow-xl); }
+        .quiz-card-img img { width: 100%; height: auto; display: block; }
+
+        .how-it-works { padding: 100px 0; background: var(--white); }
+        .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 48px; }
+        .step-card { text-align: center; position: relative; }
+        .step-number { width: 48px; height: 48px; background: var(--vert-fonce); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; margin: 0 auto 20px; }
+        .step-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 10px; }
+        .step-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
+        .step-card::after { content: '\2192'; position: absolute; top: 22px; right: -22px; color: var(--jaune-dore); font-size: 1.3rem; font-weight: 700; }
+        .step-card:last-child::after { display: none; }
+
+        .app-preview { padding: 100px 0; background: linear-gradient(180deg, var(--white) 0%, var(--vert-clair-light) 100%); text-align: center; }
+        .app-preview-grid { display: flex; justify-content: center; align-items: center; gap: 48px; margin-top: 56px; flex-wrap: wrap; }
+        .app-phone { width: 300px; filter: drop-shadow(0 24px 48px rgba(45,64,59,0.15)); }
+        .app-phone img { width: 100%; height: auto; border-radius: 28px; }
+        .app-preview-text { max-width: 420px; text-align: left; }
+        .app-preview-text h3 { font-size: 1.5rem; font-weight: 800; color: var(--vert-fonce); margin-bottom: 16px; line-height: 1.3; }
+        .app-preview-text p { font-size: 1rem; color: var(--text-light); line-height: 1.75; margin-bottom: 16px; }
+        .app-preview-list { list-style: none; margin-top: 20px; }
+        .app-preview-list li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; font-size: 0.95rem; color: var(--text); }
+        .app-preview-list li .li-icon { width: 28px; height: 28px; background: var(--vert-clair); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; color: var(--vert-fonce); }
+
+        .founders { padding: 100px 0; background: var(--cream); }
+        .founders-card { background: var(--white); border-radius: 24px; padding: 60px; box-shadow: var(--shadow); display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center; max-width: 900px; margin: 0 auto; }
+        .founders-photos { display: flex; }
+        .founder-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--white); box-shadow: var(--shadow); }
+        .founder-photo:last-child { margin-left: -20px; }
+        .founders-text h3 { font-size: 1.3rem; font-weight: 800; color: var(--vert-fonce); margin-bottom: 6px; }
+        .founders-role { font-size: 0.88rem; color: var(--peche); font-weight: 600; margin-bottom: 20px; }
+        .founders-story { font-size: 1rem; color: var(--text); line-height: 1.75; margin-bottom: 16px; }
+        .founders-story:last-of-type { margin-bottom: 24px; }
+        .founders-story strong { color: var(--vert-fonce); }
+        .founders-badges { display: flex; gap: 24px; flex-wrap: wrap; }
+        .founders-badge { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text); font-weight: 500; }
+
+        .testimonials { padding: 100px 0; background: var(--white); }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+        .testimonial-card { background: var(--cream); border-radius: var(--radius); padding: 32px; border: 1px solid rgba(45,64,59,0.05); }
+        .testimonial-stars { color: var(--jaune-dore); font-size: 0.9rem; margin-bottom: 16px; letter-spacing: 2px; }
+        .testimonial-text { font-size: 0.95rem; color: var(--text); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--vert-clair); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--vert-fonce); font-size: 0.9rem; }
+        .testimonial-name { font-weight: 600; font-size: 0.9rem; color: var(--vert-fonce); }
+        .testimonial-source { font-size: 0.78rem; color: var(--text-muted); }
+
+        .why-op { padding: 100px 0; background: var(--vert-fonce); color: var(--white); }
+        .why-op .section-eyebrow { color: var(--jaune-dore); }
+        .why-op .section-title { color: var(--white); }
+        .why-op .section-subtitle { color: rgba(255,255,255,0.6); }
+        .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
+        .why-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); padding: 32px; transition: background 0.3s ease; }
+        .why-card:hover { background: rgba(255,255,255,0.1); }
+        .why-card .why-icon { font-size: 1.5rem; margin-bottom: 16px; }
+        .why-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+        .why-card p { font-size: 0.92rem; color: rgba(255,255,255,0.6); line-height: 1.65; }
+        .why-trust { display: flex; gap: 32px; margin-top: 40px; justify-content: center; flex-wrap: wrap; }
+        .why-trust-item { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 500; }
+        .why-trust-item .check { color: var(--jaune-dore); }
+
+        .faq { padding: 100px 0; background: var(--cream); }
+        .faq-list { max-width: 720px; margin: 48px auto 0; }
+        .faq-item { border-bottom: 1px solid rgba(45,64,59,0.08); }
+        .faq-question { width: 100%; background: none; border: none; padding: 24px 0; font-size: 1.05rem; font-weight: 600; color: var(--vert-fonce); text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: inherit; gap: 16px; }
+        .faq-question:hover { color: var(--peche); }
+        .faq-toggle { width: 28px; height: 28px; border-radius: 50%; background: var(--vert-clair); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; transition: transform 0.3s ease; color: var(--vert-fonce); }
+        .faq-item.active .faq-toggle { transform: rotate(45deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .faq-answer-inner { padding: 0 0 24px; font-size: 0.95rem; color: var(--text-light); line-height: 1.7; }
+
+        .final-cta { padding: 100px 0; background: linear-gradient(135deg, var(--vert-clair-light) 0%, var(--vert-clair) 50%, var(--cream) 100%); text-align: center; }
+        .final-cta h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900; color: var(--vert-fonce); max-width: 650px; margin: 0 auto 16px; line-height: 1.2; }
+        .final-cta p { font-size: 1.05rem; color: var(--text-light); max-width: 500px; margin: 0 auto 36px; line-height: 1.7; }
+        .final-cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+        .guarantee { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+        footer { background: var(--vert-fonce); color: rgba(255,255,255,0.5); padding: 40px 0; text-align: center; font-size: 0.85rem; }
+        footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+        footer a:hover { color: var(--white); }
+        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; }
+
+        @media (max-width: 968px) {
+            .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .transform-wrapper { grid-template-columns: 1fr; }
+            .transform-arrow { padding-top: 0; transform: rotate(90deg); padding: 16px 0; }
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .step-card::after { display: none; }
+            .why-grid { grid-template-columns: 1fr; }
+            .founders-card { grid-template-columns: 1fr; padding: 40px 28px; text-align: center; }
+            .founders-photos { justify-content: center; }
+            .founders-badges { justify-content: center; }
+            .app-preview-grid { flex-direction: column; }
+            .app-preview-text { text-align: center; }
+        }
+        @media (max-width: 640px) {
+            .hero { padding: 120px 0 60px; }
+            .pain-grid, .steps-grid { grid-template-columns: 1fr; }
+            .proof-grid { gap: 32px; }
+            .hero-ctas, .final-cta-buttons { flex-direction: column; align-items: center; }
+            .btn-store { width: auto; max-width: 280px; }
+            .quiz-card-img { width: 220px; }
+            .quiz-cards-row { gap: 16px; }
         }
     </style>
 </head>
 <body>
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-header">
-            <img src="assets/images/logo.png" alt="OP!" class="hero-logo-img">
+    <nav class="navbar"><div class="container"><a href="https://op-parents.fr" class="navbar-logo"><img src="assets/images/logo.png" alt="OP!"></a><a href="#telecharger" class="navbar-cta">Télécharger — c'est gratuit</a></div></nav>
+
+    <section class="hero"><div class="container">
+        <div class="hero-badge"><span class="dot"></span>100% gratuit — aucune carte requise</div>
+        <h1>Tes finances familiales méritent <span>mieux que l'improvisation</span></h1>
+        <p class="hero-subtitle">Des quiz qui te donnent des réponses claires, des webinaires qui t'apprennent l'essentiel, et un expert patrimoine dispo si tu veux passer à l'action.</p>
+        <p class="hero-micro">Rejoins les parents qui ont décidé de prendre les choses en main.</p>
+        <div class="hero-ctas" id="telecharger">
+            <a href="#" class="btn-store"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.82 11.78 5.7 12.55 5.7C13.33 5.7 14.8 4.66 16.36 4.81C17.03 4.84 18.83 5.09 19.92 6.77C19.83 6.83 17.67 8.07 17.69 10.69C17.71 13.84 20.43 14.88 20.46 14.89C20.44 14.95 20.01 16.46 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>App Store</a>
+            <a href="#" class="btn-store"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 010 1.38l-2.302 2.302L15.396 13l2.302-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>Google Play</a>
         </div>
-        
-        <div class="hero-content">
-            <div class="hero-text">
-                <span class="hero-badge">✨ 100% Gratuit</span>
-                <h1>Reprends le contrôle de tes finances familiales</h1>
-                <p class="hero-subtitle">Quiz, webinaires, accompagnement. Le repère des parents qui veulent y voir clair, sans jargon.</p>
-                
-                <div class="store-buttons">
-                    <a href="#" class="store-btn">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                        </svg>
-                        <span>App Store</span>
-                    </a>
-                    <a href="#" class="store-btn">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                        </svg>
-                        <span>Google Play</span>
-                    </a>
-                </div>
+        <div class="hero-phone"><img src="assets/images/tel_1.png" alt="Application OP!"></div>
+    </div></section>
+
+    <section class="social-proof-bar"><div class="container"><div class="proof-grid">
+        <div class="proof-item"><div class="proof-number">12+</div><div class="proof-label">Quiz interactifs</div></div>
+        <div class="proof-item"><div class="proof-number">3</div><div class="proof-label">Webinaires / mois</div></div>
+        <div class="proof-item"><div class="proof-number">6 ans</div><div class="proof-label">D'expertise patrimoine</div></div>
+        <div class="proof-item"><div class="proof-number">0€</div><div class="proof-label">100% gratuit</div></div>
+    </div></div></section>
+
+    <section class="pain-section"><div class="container">
+        <div class="section-eyebrow">Le constat</div>
+        <h2 class="section-title">On est censés tout savoir… sans que personne nous ait rien appris.</h2>
+        <p class="section-subtitle">La gestion financière familiale, c'est un sujet énorme. Mais entre le quotidien, les enfants et le boulot, on fait comme on peut — souvent au doigt mouillé.</p>
+        <div class="pain-grid">
+            <div class="pain-card"><div class="pain-icon">😶</div><h3>Le flou permanent</h3><p>Tu épargnes « quand il reste quelque chose ». Tu ne sais pas si ton assurance vie est bonne. Tu sens que tu passes à côté de trucs importants — mais lesquels ?</p></div>
+            <div class="pain-card"><div class="pain-icon">🤯</div><h3>L'overdose d'infos contradictoires</h3><p>Un article dit d'investir en bourse, un autre dit le contraire. Les influenceurs finance te promettent la lune. Résultat : tu ne fais rien, paralysé(e) par le doute.</p></div>
+            <div class="pain-card"><div class="pain-icon">😤</div><h3>Le jargon qui exclut</h3><p>PEA, SCPI, TMI, PER, PEL… On dirait un autre langage. Et quand tu oses poser une question, on te regarde de haut. Tu finis par abandonner le sujet.</p></div>
+        </div>
+    </div></section>
+
+    <section class="transformation"><div class="container">
+        <div class="section-eyebrow" style="text-align:center;">La transformation</div>
+        <h2 class="section-title" style="text-align:center;">Ce qui change quand tu reprends le contrôle</h2>
+        <div class="transform-wrapper">
+            <div class="transform-col before">
+                <h3>🔴 Avant OP!</h3>
+                <div class="transform-item"><span class="icon">✗</span><span>Tu repousses les décisions financières depuis des mois (voire des années)</span></div>
+                <div class="transform-item"><span class="icon">✗</span><span>Tu ne sais pas si tu mets assez de côté pour tes enfants</span></div>
+                <div class="transform-item"><span class="icon">✗</span><span>Tu fais confiance à ton banquier sans savoir s'il défend tes intérêts</span></div>
+                <div class="transform-item"><span class="icon">✗</span><span>L'argent est un sujet tabou ou source de tensions dans le couple</span></div>
+                <div class="transform-item"><span class="icon">✗</span><span>Tu culpabilises de ne pas en faire assez pour l'avenir de ta famille</span></div>
             </div>
-            
-            <div class="hero-mockup">
-                <img src="assets/images/app-screen-1.png" alt="Application OP!">
+            <div class="transform-arrow">→</div>
+            <div class="transform-col after">
+                <h3>🟢 Après OP!</h3>
+                <div class="transform-item"><span class="icon">✓</span><span>Tu sais exactement où tu en es — et tu as un plan d'action clair</span></div>
+                <div class="transform-item"><span class="icon">✓</span><span>Tu épargnes intelligemment avec des véhicules adaptés à tes objectifs</span></div>
+                <div class="transform-item"><span class="icon">✓</span><span>Tu comprends les produits financiers et tu fais tes propres choix éclairés</span></div>
+                <div class="transform-item"><span class="icon">✓</span><span>L'argent devient un sujet de projet commun, pas de conflit</span></div>
+                <div class="transform-item"><span class="icon">✓</span><span>Tu construis sereinement l'avenir financier de ta famille</span></div>
             </div>
         </div>
-    </section>
-    
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">12+</div>
-                <div class="stat-label">quiz interactifs</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">3</div>
-                <div class="stat-label">webinaires/mois</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">0€</div>
-                <div class="stat-label">100% gratuit</div>
-            </div>
+    </div></section>
+
+    <section class="features"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">Comment ça marche</div>
+            <h2 class="section-title">Trois piliers pour reprendre la main</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Chaque fonctionnalité est pensée pour t'emmener un cran plus loin — à ton rythme, sans pression.</p>
         </div>
-    </section>
-    
-    <!-- FEATURES -->
-    <section class="features">
-        <div class="section-header">
-            <h2 class="section-title">Ce que nous proposons</h2>
-            <p class="section-subtitle">Tout ce dont tu as besoin pour y voir clair</p>
-        </div>
-        
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <div class="feature-content">
-                    <h3>Quiz personnalisés</h3>
-                    <p>Évalue ta situation et identifie tes priorités en quelques minutes.</p>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">🎥</div>
-                <div class="feature-content">
-                    <h3>Webinaires</h3>
-                    <p>Impôts, épargne, transmission... 45 min pour tout comprendre.</p>
-                </div>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">💬</div>
-                <div class="feature-content">
-                    <h3>Accompagnement</h3>
-                    <p>Un expert patrimoine disponible si tu veux aller plus loin.</p>
-                </div>
+            <div class="feature-card"><div class="feature-icon">📊</div><h3>Quiz personnalisés</h3><p>En 5 minutes, tu obtiens un diagnostic précis de ta situation. Mindset financier, gestion du budget, niveau de connaissances : chaque quiz te donne des réponses concrètes et un bilan détaillé avec des pistes d'action.</p><div class="feature-detail">12+ quiz disponibles • Résultats instantanés</div></div>
+            <div class="feature-card"><div class="feature-icon">🎥</div><h3>Webinaires pratiques</h3><p>45 minutes pour maîtriser un sujet clé : impôts, épargne enfant, investissement, transmission… Animés par un conseiller en gestion de patrimoine, pas un vendeur de rêves. Tu repars avec des actions concrètes à mettre en place dès le lendemain.</p><div class="feature-detail">3 webinaires / mois • En direct &amp; replay</div></div>
+            <div class="feature-card"><div class="feature-icon">💬</div><h3>Accompagnement expert</h3><p>Tu veux aller plus loin ? Un ingénieur en patrimoine indépendant est disponible pour t'accompagner. Pas de produit maison à te vendre. Juste un expert qui défend tes intérêts et t'aide à mettre en place une vraie stratégie patrimoniale.</p><div class="feature-detail">100% indépendant • Sans engagement</div></div>
+        </div>
+    </div></section>
+
+    <section class="quiz-showcase"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">Nos quiz</div>
+            <h2 class="section-title">Des thématiques qui parlent à tous les parents</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Étapes de vie des enfants, super-pouvoirs de parents, négociation salariale… Choisis ton quiz et découvre ton bilan en 5 minutes.</p>
+        </div>
+        <div class="quiz-cards-row">
+            <div class="quiz-card-img"><img src="assets/images/quiz_e.jpg" alt="Quiz — Les grandes étapes de la vie des enfants"></div>
+            <div class="quiz-card-img"><img src="assets/images/quiz_p.jpg" alt="Quiz — Vos super-pouvoirs de parents"></div>
+            <div class="quiz-card-img"><img src="assets/images/quiz_s.jpg" alt="Quiz — Négocier son salaire"></div>
+        </div>
+    </div></section>
+
+    <section class="how-it-works"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">En 4 étapes</div>
+            <h2 class="section-title">De « je sais pas par où commencer » à « j'ai un plan »</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card"><div class="step-number">1</div><h3>Télécharge l'app</h3><p>Gratuit, sans engagement, sans carte bancaire. En 30 secondes tu es dedans.</p></div>
+            <div class="step-card"><div class="step-number">2</div><h3>Fais ton 1er quiz</h3><p>Découvre où tu en es vraiment. Ton bilan personnalisé t'attend à la fin — sans filtre.</p></div>
+            <div class="step-card"><div class="step-number">3</div><h3>Apprends à ton rythme</h3><p>Webinaires, contenus, échanges : choisis ce qui te parle. Aucune obligation.</p></div>
+            <div class="step-card"><div class="step-number">4</div><h3>Passe à l'action</h3><p>Seul ou avec un expert, tu mets en place les actions qui font vraiment la différence.</p></div>
+        </div>
+    </div></section>
+
+    <section class="app-preview"><div class="container">
+        <div class="app-preview-grid">
+            <div class="app-phone"><img src="assets/images/webinaire_ex.png" alt="Webinaires OP!"></div>
+            <div class="app-preview-text">
+                <div class="section-eyebrow">Les webinaires</div>
+                <h3>Les sujets qu'on repousse, expliqués simplement</h3>
+                <p>Impôts, épargne, transmission, couple et argent… Chaque mois, 3 webinaires en direct pour comprendre et agir. Animés par un vrai conseiller en patrimoine, pas un influenceur.</p>
+                <ul class="app-preview-list">
+                    <li><span class="li-icon">🎯</span><span>45 min chrono, un sujet, des actions concrètes</span></li>
+                    <li><span class="li-icon">🔁</span><span>Replays disponibles si tu rates le direct</span></li>
+                    <li><span class="li-icon">💬</span><span>Pose tes questions en live à l'expert</span></li>
+                    <li><span class="li-icon">🆓</span><span>Gratuit, sans inscription obligatoire</span></li>
+                </ul>
             </div>
         </div>
-        
-        <!-- CTA intermédiaire -->
-        <div class="cta-inline">
-            <div class="store-buttons">
-                <a href="#" class="store-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    <span>App Store</span>
-                </a>
-                <a href="#" class="store-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                    </svg>
-                    <span>Google Play</span>
-                </a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- SCREENSHOTS -->
-    <section class="screenshots">
-        <div class="section-header">
-            <h2 class="section-title">Découvrez l'expérience</h2>
-        </div>
-        
-        <div class="screenshots-carousel">
-            <div class="screenshot-item">
-                <img src="assets/images/app-screen-1.png" alt="Écran accueil OP!">
-            </div>
-            <div class="screenshot-item">
-                <img src="assets/images/app-screen-2.png" alt="Inscription OP!">
-            </div>
-            <div class="screenshot-item">
-                <img src="assets/images/app-screen-3.png" alt="Webinaires OP!">
-            </div>
-        </div>
-    </section>
-    
-    <!-- QUI SOMMES-NOUS -->
-    <section class="founders">
-        <div class="section-header">
-            <h2 class="section-title">Qui sommes-nous ?</h2>
-            <p class="section-subtitle">Florent & Charlène — parents de deux enfants</p>
-        </div>
-        
+    </div></section>
+
+    <section class="founders"><div class="container">
         <div class="founders-card">
-            <div class="founders-avatars">
-                <div class="founder-avatar">
-                    <img src="assets/images/florent.png" alt="Florent">
-                </div>
-                <div class="founder-avatar">
-                    <img src="assets/images/charlene.jpg" alt="Charlène">
-                </div>
+            <div class="founders-photos">
+                <img src="assets/images/florent.png" alt="Florent" class="founder-photo">
+                <img src="assets/images/charlene.jpg" alt="Charlène" class="founder-photo">
             </div>
-            <div class="founders-content">
-                <p>On a créé OP! parce qu'on sait à quel point c'est difficile de trouver des réponses fiables sur l'argent quand on est parent.</p>
-                <p><strong>On voulait un repère de confiance. Il n'existait pas, alors on l'a construit.</strong></p>
+            <div class="founders-text">
+                <h3>Florent &amp; Charlène</h3>
+                <div class="founders-role">Parents de deux enfants • Créateurs d'OP!</div>
+                <p class="founders-story">On a vécu exactement la même chose que toi. À la naissance de notre premier enfant, on s'est retrouvés face à un mur de questions sans réponses fiables : comment épargner pour lui ? Est-ce qu'on optimise bien nos impôts ? On fait confiance au bon interlocuteur ?</p>
+                <p class="founders-story"><strong>On a cherché un repère de confiance. Il n'existait pas. Alors on l'a construit.</strong> Florent apporte ses 6 ans d'expertise en gestion de patrimoine, Charlène sa vision pédagogique et sa capacité à rendre les choses limpides. Ensemble, on a créé l'outil qu'on aurait aimé avoir.</p>
                 <div class="founders-badges">
-                    <span class="badge">👨‍👩‍👧‍👦 Parents de 2 enfants</span>
-                    <span class="badge">📊 6 ans d'expertise patrimoine</span>
-                    <span class="badge">✅ 100% indépendant</span>
+                    <span class="founders-badge">👨‍👩‍👧‍👦 Parents de 2 enfants</span>
+                    <span class="founders-badge">📊 6 ans d'expertise patrimoine</span>
+                    <span class="founders-badge">✅ 100% indépendant</span>
                 </div>
             </div>
         </div>
-        
-        <!-- CTA intermédiaire -->
-        <div class="cta-inline">
-            <div class="store-buttons">
-                <a href="#" class="store-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    <span>App Store</span>
-                </a>
-                <a href="#" class="store-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                    </svg>
-                    <span>Google Play</span>
-                </a>
-            </div>
+    </div></section>
+
+    <section class="testimonials"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">Ils l'ont fait</div>
+            <h2 class="section-title">Ce que les parents disent après avoir essayé</h2>
         </div>
-    </section>
-    
-    <!-- TESTIMONIALS -->
-    <section class="testimonials">
-        <div class="section-header">
-            <h2 class="section-title">Vos avis</h2>
-        </div>
-        
         <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">Enfin une app qui explique les finances sans nous prendre de haut. Les quiz m'ont ouvert les yeux sur mes priorités.</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">S</div>
-                    <div class="testimonial-info">
-                        <span class="testimonial-name">Sophie</span>
-                        <span class="testimonial-source">App Store</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">Je repoussais le sujet depuis des années. Grâce au webinaire, j'ai enfin compris comment épargner pour mes enfants.</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">M</div>
-                    <div class="testimonial-info">
-                        <span class="testimonial-name">Marc</span>
-                        <span class="testimonial-source">Google Play</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="testimonial-stars">★★★★★</div>
-                <p class="testimonial-text">Super application, très facile à utiliser. Les contenus sont clairs et vraiment utiles au quotidien.</p>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">L</div>
-                    <div class="testimonial-info">
-                        <span class="testimonial-name">Lucie</span>
-                        <span class="testimonial-source">App Store</span>
-                    </div>
-                </div>
-            </div>
+            <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">« Enfin quelqu'un qui explique les finances sans me prendre de haut. Les quiz m'ont ouvert les yeux sur mes priorités. En 10 minutes, j'avais plus de clarté que mes 3 derniers rendez-vous bancaires. »</p><div class="testimonial-author"><div class="testimonial-avatar">S</div><div><div class="testimonial-name">Sophie</div><div class="testimonial-source">Maman de 2 enfants • App Store</div></div></div></div>
+            <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">« Je repoussais le sujet depuis des années par manque de temps et de connaissances. Le webinaire sur l'épargne enfant a été un déclic. J'ai ouvert un contrat le week-end suivant. »</p><div class="testimonial-author"><div class="testimonial-avatar">M</div><div><div class="testimonial-name">Marc</div><div class="testimonial-source">Papa de 3 enfants • Google Play</div></div></div></div>
+            <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">« Avec mon conjoint, on n'arrivait jamais à parler d'argent sans que ça tourne au conflit. Les quiz nous ont donné une base commune pour discuter. Ça a vraiment changé notre dynamique. »</p><div class="testimonial-author"><div class="testimonial-avatar">L</div><div><div class="testimonial-name">Lucie</div><div class="testimonial-source">Maman de jumeaux • App Store</div></div></div></div>
         </div>
-    </section>
-    
-    <!-- FAQ -->
-    <section class="faq">
-        <div class="section-header">
-            <h2 class="section-title">Questions fréquentes</h2>
+    </div></section>
+
+    <section class="why-op"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">Pourquoi OP!</div>
+            <h2 class="section-title">Parce que ta famille mérite un vrai copilote financier</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Pas un énième blog finance. Pas un robot. Un vrai accompagnement créé par des parents, pour des parents.</p>
         </div>
-        
-        <div class="faq-list">
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <h3>C'est vraiment 100% gratuit ?</h3>
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Oui ! L'application, les quiz et les webinaires sont entièrement gratuits. Si tu veux un accompagnement personnalisé avec un expert, c'est en option.</p>
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <h3>C'est quoi OP! exactement ?</h3>
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>OP! est le repère financier des parents. On t'aide à comprendre, décider et agir sur tes finances familiales. Sans jargon, sans pression.</p>
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <h3>Qui est derrière OP! ?</h3>
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Florent et Charlène, parents de 2 enfants. Florent est conseiller en gestion de patrimoine depuis 6 ans. On a créé OP! parce qu'on cherchait ce repère pour nous-mêmes.</p>
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    <h3>Mes données sont-elles protégées ?</h3>
-                    <span class="faq-icon">+</span>
-                </button>
-                <div class="faq-answer">
-                    <p>Absolument. Tes données restent confidentielles et ne sont jamais vendues. On respecte le RGPD et ta vie privée.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- POURQUOI OP! -->
-    <section class="why-op">
-        <div class="section-header">
-            <span class="why-badge">🧭 Pourquoi OP! ?</span>
-            <h2 class="section-title">Parce que gérer l'argent de sa famille,<br><span>ça ne s'improvise pas.</span></h2>
-            <p class="section-subtitle">Et pourtant, personne ne nous apprend. OP! change ça.</p>
-        </div>
-        
         <div class="why-grid">
-            <div class="why-card">
-                <div class="why-icon">🎯</div>
-                <div class="why-content">
-                    <h3>Des repères clairs</h3>
-                    <p>Découvre où tu en es vraiment — finances, mindset, objectifs.</p>
-                </div>
-            </div>
-            
-            <div class="why-card">
-                <div class="why-icon">🛡️</div>
-                <div class="why-content">
-                    <h3>L'expertise sans les travers</h3>
-                    <p>Pros de la finance, on te transmet ce qui marche vraiment. Sans jargon.</p>
-                </div>
-            </div>
-            
-            <div class="why-card">
-                <div class="why-icon">💡</div>
-                <div class="why-content">
-                    <h3>Enfin compréhensible</h3>
-                    <p>Exit le jargon. Ici, on t'explique comme on expliquerait à un ami.</p>
-                </div>
-            </div>
-            
-            <div class="why-card">
-                <div class="why-icon">🤝</div>
-                <div class="why-content">
-                    <h3>Un vrai accompagnement</h3>
-                    <p>Quiz, webinaires, et un expert dispo si tu veux aller plus loin.</p>
-                </div>
-            </div>
+            <div class="why-card"><div class="why-icon">🎯</div><h3>Des réponses, pas du bruit</h3><p>Chaque quiz te donne un bilan clair et des actions à mettre en place. Pas de théorie vague — du concret adapté à ta situation de parent.</p></div>
+            <div class="why-card"><div class="why-icon">🛡️</div><h3>L'indépendance comme garantie</h3><p>Aucun produit maison, aucune commission cachée. On est indépendants : les conseils sont dans ton intérêt, pas celui d'une banque ou d'un assureur.</p></div>
+            <div class="why-card"><div class="why-icon">💡</div><h3>Le jargon, c'est fini</h3><p>On t'explique les choses comme on les expliquerait à un ami autour d'un café. Si tu comprends, tu décides mieux. C'est aussi simple que ça.</p></div>
+            <div class="why-card"><div class="why-icon">🤝</div><h3>Un expert derrière, pas un algorithme</h3><p>Derrière OP!, il y a Florent, conseiller en gestion de patrimoine depuis 6 ans. Si tu veux aller plus loin, tu parles à un humain — pas à un chatbot.</p></div>
         </div>
-        
-        <div class="trust-bar">
-            <span class="trust-item">✓ 100% indépendant</span>
-            <span class="trust-item">✓ Créé par des parents</span>
-            <span class="trust-item">✓ Expert certifié</span>
+        <div class="why-trust">
+            <span class="why-trust-item"><span class="check">✓</span> 100% indépendant</span>
+            <span class="why-trust-item"><span class="check">✓</span> Créé par des parents</span>
+            <span class="why-trust-item"><span class="check">✓</span> Expert certifié ORIAS</span>
+            <span class="why-trust-item"><span class="check">✓</span> Membre ANACOFI</span>
         </div>
-        
-        <p class="why-tagline">Le repère financier que tout parent devrait avoir. 💛</p>
-    </section>
-    
-    <!-- CTA FINAL -->
-    <section class="cta-final">
-        <h2>Prêt(e) à y voir clair ?</h2>
-        <p>Télécharge l'app gratuitement et fais ton premier quiz.</p>
-        
-        <div class="store-buttons">
-            <a href="#" class="store-btn">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <span>App Store</span>
-            </a>
-            <a href="#" class="store-btn">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
-                </svg>
-                <span>Google Play</span>
-            </a>
+    </div></section>
+
+    <section class="faq"><div class="container">
+        <div style="text-align:center;">
+            <div class="section-eyebrow">Questions fréquentes</div>
+            <h2 class="section-title">Tout ce que tu veux savoir avant de télécharger</h2>
         </div>
-    </section>
-    
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-logo">OP!</div>
-        <div class="footer-links">
-            <a href="https://op-parents.fr">Site web</a>
-            <a href="https://op-parents.fr/mentions-legales.html">Mentions légales</a>
-            <a href="https://op-parents.fr/politique-confidentialite.html">Confidentialité</a>
+        <div class="faq-list">
+            <div class="faq-item"><button class="faq-question">C'est vraiment 100% gratuit ? Où est le piège ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Il n'y a aucun piège. L'application, tous les quiz et les webinaires sont entièrement gratuits. Notre modèle est simple : on offre de l'éducation financière de qualité à tous les parents. Si certains souhaitent aller plus loin avec un accompagnement patrimonial personnalisé, c'est une option — jamais une obligation. Tu peux utiliser OP! indéfiniment sans jamais dépenser un centime.</div></div></div>
+            <div class="faq-item"><button class="faq-question">C'est quoi OP! exactement ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">OP! est le repère financier des parents. C'est une application mobile gratuite qui t'aide à comprendre ta situation financière, prendre de meilleures décisions pour ta famille, et passer à l'action — le tout sans jargon et sans pression. Concrètement : des quiz qui font le point sur ta situation, des webinaires animés par un vrai expert patrimoine, et la possibilité d'être accompagné individuellement si tu le souhaites.</div></div></div>
+            <div class="faq-item"><button class="faq-question">Ça prend combien de temps ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Un quiz se fait en 5 minutes. Un webinaire dure 45 minutes. Tu avances à ton rythme, quand tu veux. Pas de programme imposé, pas de calendrier à respecter. Même 5 minutes par semaine peuvent faire la différence quand on part de zéro.</div></div></div>
+            <div class="faq-item"><button class="faq-question">Qui est derrière OP! ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Florent et Charlène, parents de 2 enfants. Florent est conseiller en gestion de patrimoine indépendant depuis plus de 6 ans, enregistré à l'ORIAS et membre de l'ANACOFI. Charlène gère la pédagogie et la communication. On a créé OP! parce qu'on cherchait exactement ce repère pour notre propre famille — et qu'il n'existait nulle part.</div></div></div>
+            <div class="faq-item"><button class="faq-question">Mes données sont-elles protégées ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">Absolument. Tes données restent confidentielles et ne sont jamais vendues ni partagées avec des tiers. On respecte le RGPD et ta vie privée. Les résultats de tes quiz ne sont accessibles que par toi.</div></div></div>
+            <div class="faq-item"><button class="faq-question">Est-ce adapté même si je n'y connais rien en finance ?<span class="faq-toggle">+</span></button><div class="faq-answer"><div class="faq-answer-inner">C'est justement pour toi qu'on a créé OP!. Tout est pensé pour les parents qui partent de zéro ou qui ont quelques bases mais veulent structurer leurs connaissances. Pas de prérequis, pas de jargon incompréhensible. Si tu sais lire, tu peux comprendre — on s'en est assuré.</div></div></div>
         </div>
-        <p class="footer-copy">© 2026 OP! - Tous droits réservés</p>
-    </footer>
-    
+    </div></section>
+
+    <section class="final-cta"><div class="container">
+        <h2>Ton premier pas vers des finances familiales sereines</h2>
+        <p>Télécharge l'app, fais ton premier quiz en 5 minutes, et découvre enfin où tu en es — sans engagement, sans jargon, sans jugement.</p>
+        <div class="final-cta-buttons">
+            <a href="#" class="btn-store"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.56 2.93 11.3 4.7 7.72C5.57 5.94 7.36 4.86 9.28 4.84C10.56 4.82 11.78 5.7 12.55 5.7C13.33 5.7 14.8 4.66 16.36 4.81C17.03 4.84 18.83 5.09 19.92 6.77C19.83 6.83 17.67 8.07 17.69 10.69C17.71 13.84 20.43 14.88 20.46 14.89C20.44 14.95 20.01 16.46 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>App Store</a>
+            <a href="#" class="btn-store"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 010 1.38l-2.302 2.302L15.396 13l2.302-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/></svg>Google Play</a>
+        </div>
+        <div class="guarantee">🔒 Gratuit pour toujours • Aucune carte bancaire requise • Désinstallable en 1 tap</div>
+    </div></section>
+
+    <footer><div class="container">
+        <div class="footer-links"><a href="https://op-parents.fr">Site web</a><a href="https://op-parents.fr/mentions-legales.html">Mentions légales</a><a href="https://op-parents.fr/politique-confidentialite.html">Confidentialité</a></div>
+        <p>© 2026 OP! — Le repère financier des parents. Tous droits réservés.</p>
+    </div></footer>
+
     <script>
-        function toggleFaq(button) {
-            const item = button.parentElement;
-            const wasOpen = item.classList.contains('open');
-            
-            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-            
-            if (!wasOpen) {
-                item.classList.add('open');
-            }
-        }
+        document.querySelectorAll('.faq-question').forEach(btn=>{btn.addEventListener('click',()=>{const item=btn.closest('.faq-item');const answer=item.querySelector('.faq-answer');const isActive=item.classList.contains('active');document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('active');i.querySelector('.faq-answer').style.maxHeight=null;});if(!isActive){item.classList.add('active');answer.style.maxHeight=answer.scrollHeight+'px';}});});
+        window.addEventListener('scroll',()=>{document.querySelector('.navbar').style.boxShadow=window.scrollY>50?'0 2px 20px rgba(45,59,45,0.06)':'none';});
     </script>
 </body>
 </html>

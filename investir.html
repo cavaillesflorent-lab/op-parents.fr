@@ -156,7 +156,7 @@
             font-weight: 600;
         }
         
-        /* Section Services améliorée */
+        /* Section Services avec images */
         .investir-services-section {
             padding: var(--space-3xl) 0;
             background: var(--white);
@@ -164,40 +164,67 @@
         
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: var(--space-lg);
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
         }
         
-        .service-card {
+        .service-card-img {
             background: var(--gray-50);
             border-radius: var(--radius-xl);
-            padding: var(--space-xl);
+            overflow: hidden;
             transition: all 0.3s ease;
             border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
         }
         
-        .service-card:hover {
+        .service-card-img:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
             border-color: var(--vert-clair);
         }
         
-        .service-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
+        .service-card-image {
+            height: 220px;
+            overflow: hidden;
         }
         
-        .service-card h3 {
+        .service-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            transition: transform 0.4s ease;
+        }
+        
+        .service-card-img:hover .service-card-image img {
+            transform: scale(1.05);
+        }
+        
+        .service-card-body {
+            padding: var(--space-lg);
+            flex: 1;
+        }
+        
+        .service-card-body h3 {
             font-family: var(--font-serif);
             font-size: 1.2rem;
             color: var(--vert-fonce);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-xs);
         }
         
-        .service-card p {
+        .service-subtitle {
             font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--terracotta);
+            margin-bottom: var(--space-sm);
+            line-height: 1.4;
+        }
+        
+        .service-card-body > p:last-child {
+            font-size: 0.92rem;
             color: var(--text-secondary);
             line-height: 1.6;
         }
@@ -272,7 +299,7 @@
             margin-left: calc(var(--space-lg) + 23px);
         }
         
-        /* Section Rémunération (nouvelle) */
+        /* Section Rémunération */
         .investir-pricing-section {
             padding: var(--space-3xl) 0;
             background: var(--white);
@@ -404,7 +431,6 @@
             max-width: 600px;
             margin: 0 auto;
             color: var(--vert-fonce);
-            
         }
         
         .investir-cta-card h2 {
@@ -551,6 +577,10 @@
                 grid-template-columns: 1fr;
             }
             
+            .service-card-image {
+                height: 200px;
+            }
+            
             .process-cta {
                 padding: 0 1rem;
             }
@@ -644,28 +674,70 @@
                 <h2 class="section-title">Sur quoi Florent peut t'aider</h2>
                 
                 <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">🔍</div>
-                        <h3>Bilan patrimonial</h3>
-                        <p>Où tu en es vraiment ? Revenus, charges, épargne, crédits, assurances... On pose tout à plat pour y voir clair et identifier les priorités.</p>
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/90.jpg" alt="Bilan patrimonial">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Bilan patrimonial</h3>
+                            <p class="service-subtitle">Faire le point, tout simplement.</p>
+                            <p>Combien tu gagnes, combien tu dépenses, ce que tu as mis de côté… On regarde ensemble ta situation pour savoir où tu en es vraiment — et par où commencer.</p>
+                        </div>
                     </div>
 
-                    <div class="service-card">
-                        <div class="service-icon">📈</div>
-                        <h3>Stratégie d'investissement</h3>
-                        <p>Assurance-vie, PEA, PER, SCPI... Qu'est-ce qui a du sens pour toi ? On définit ensemble une stratégie adaptée à tes objectifs et ton horizon.</p>
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/83.jpg" alt="Stratégie d'investissement">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Stratégie d'investissement</h3>
+                            <p class="service-subtitle">Faire travailler ton argent (même en dormant).</p>
+                            <p>Assurance-vie, PER, SCPI… Derrière ces sigles, il y a des solutions concrètes. On t'aide à choisir celles qui collent à ta vie de parent et à tes projets.</p>
+                        </div>
                     </div>
 
-                    <div class="service-card">
-                        <div class="service-icon">🏠</div>
-                        <h3>Projet immobilier</h3>
-                        <p>Acheter sa résidence, renégocier son prêt, se lancer dans le locatif... Les simulations, les pièges à éviter, le bon montage pour ta situation.</p>
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/87.jpg" alt="Projet immobilier">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Projet immobilier</h3>
+                            <p class="service-subtitle">Acheter, investir, renégocier : on t'accompagne.</p>
+                            <p>Premier achat, investissement locatif ou renégociation de prêt — on t'aide à y voir clair, éviter les pièges et faire le bon choix pour ta famille.</p>
+                        </div>
                     </div>
 
-                    <div class="service-card">
-                        <div class="service-icon">👨‍👩‍👧‍👦</div>
-                        <h3>Protection de la famille</h3>
-                        <p>Le sujet qu'on repousse toujours. Succession, donation, prévoyance : on en parle simplement pour que tes proches soient protégés quoi qu'il arrive.</p>
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/81.jpg" alt="Retraite">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Retraite</h3>
+                            <p class="service-subtitle">Préparer demain sans sacrifier aujourd'hui.</p>
+                            <p>Entre les couches et les devoirs, la retraite semble loin. Pourtant, quelques bons réflexes maintenant peuvent tout changer. On t'aide à anticiper sans te priver.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/91.jpg" alt="Protection de la famille">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Protection de la famille</h3>
+                            <p class="service-subtitle">Parce qu'on n'y pense jamais… jusqu'au jour où.</p>
+                            <p>Succession, donation, prévoyance : des mots qu'on repousse toujours. On t'explique simplement comment protéger tes proches, quoi qu'il arrive.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card-img">
+                        <div class="service-card-image">
+                            <img src="assets/images/88.jpg" alt="Défiscalisation">
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Défiscalisation</h3>
+                            <p class="service-subtitle">Payer moins d'impôts, c'est possible (et légal).</p>
+                            <p>Tu paies trop d'impôts ? Il existe des solutions adaptées à ta situation de parent. On t'aide à comprendre lesquelles valent vraiment le coup — sans jargon.</p>
+                        </div>
                     </div>
                 </div>
                 

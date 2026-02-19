@@ -9,7 +9,50 @@
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <link rel="canonical" href="https://op-parents.fr/mission.html">
     <style>
-        /* Styles spécifiques page Mission */
+        /* ===== HERO UNIFORMISÉ (ref: page webinaires) ===== */
+        .page-hero {
+            padding: var(--space-3xl) 0;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        
+        .page-hero .page-hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #2D403B;
+            margin-bottom: 1rem;
+            line-height: 1.25;
+        }
+        
+        .page-hero p {
+            font-size: 1.1rem;
+            color: #4A5854;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .page-hero {
+                padding: 1rem 1rem 1.5rem;
+                margin-top: 0.5rem;
+            }
+            .page-hero h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            .page-hero p {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* ===== Styles spécifiques page Mission ===== */
         
         /* Section Constat - Fond Vert */
         .mission-constat {
@@ -218,7 +261,6 @@
             box-shadow: var(--shadow-xl);
         }
         
-        /* Image container - hauteur fixe uniforme */
         .concrete-card-image {
             width: 100%;
             height: 220px;
@@ -238,7 +280,6 @@
             transform: scale(1.05);
         }
         
-        /* Contenu texte */
         .concrete-card-body {
             padding: var(--space-lg);
         }
@@ -475,7 +516,6 @@
         <section class="page-hero">
             <div class="container">
                 <div class="page-hero-content">
-                    
                     <h1>Et si vous n'aviez rien à regretter ?</h1>
                     <p>Les voyages qu'on repousse. La sécurité qu'on n'a jamais vraiment. Le temps qu'on passe à courir sans savoir où. OP! existe pour que vous puissiez enfin faire une pause, y voir clair, et construire la vie que vous voulez vraiment.</p>
                 </div>

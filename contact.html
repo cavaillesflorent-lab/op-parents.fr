@@ -8,16 +8,11 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
-        /* ============================================
-           PAGE CONTACT - DESIGN MODERNE
-           ============================================ */
-        
-        /* Hero simplifié */
+        /* ===== HERO UNIFORMISÉ (ref: page webinaires) ===== */
         .contact-hero {
             background: #f8f9fa;
             padding: var(--space-3xl) 0;
             text-align: center;
-            color: var(--vert-fonce);
             position: relative;
             overflow: hidden;
         }
@@ -36,12 +31,12 @@
         .contact-hero-content {
             position: relative;
             z-index: 1;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
         
         .contact-hero h1 {
-           font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', serif;
             font-size: 2.25rem;
             font-weight: 700;
             color: #2D403B;
@@ -51,9 +46,26 @@
         
         .contact-hero p {
             font-size: 1.1rem;
-            opacity: 0.9;
-            color: var(--vert-fonce);
+            color: #4A5854;
+            line-height: 1.6;
+            margin: 0;
         }
+        
+        @media (max-width: 768px) {
+            .contact-hero {
+                padding: 1rem 1rem 1.5rem;
+                margin-top: 0.5rem;
+            }
+            .contact-hero h1 {
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            .contact-hero p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* ===== Styles spécifiques page Contact ===== */
         
         /* Section principale */
         .contact-main {
@@ -511,10 +523,6 @@
         }
         
         @media (max-width: 768px) {
-            .contact-hero {
-                padding: calc(80px + var(--space-lg)) var(--space-md) var(--space-lg);
-            }
-            
             .form-row {
                 grid-template-columns: 1fr;
             }

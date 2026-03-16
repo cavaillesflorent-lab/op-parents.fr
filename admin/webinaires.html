@@ -1076,7 +1076,20 @@
             document.getElementById('titre').value = data.titre || '';
             document.getElementById('description').value = data.description || '';
             document.getElementById('description_longue').value = data.description_longue || '';
-            document.getElementById('date_heure').value = data.date_heure ? data.date_heure.slice(0, 16) : '';
+            
+            // ✅ CORRECTION TIMEZONE : Convertir UTC → heure locale pour le champ input
+            if (data.date_heure) {
+                const d = new Date(data.date_heure);
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                const hours = String(d.getHours()).padStart(2, '0');
+                const minutes = String(d.getMinutes()).padStart(2, '0');
+                document.getElementById('date_heure').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            } else {
+                document.getElementById('date_heure').value = '';
+            }
+            
             document.getElementById('statut').value = data.statut || 'a_venir';
             
             // Intervenant
@@ -1128,11 +1141,14 @@
 
             const id = document.getElementById('webinaire-id').value;
             
+            // ✅ CORRECTION TIMEZONE : Convertir en ISO (UTC) pour Supabase
+            const dateHeureValue = document.getElementById('date_heure').value;
+            
             const webinaire = {
                 titre: document.getElementById('titre').value,
                 description: document.getElementById('description').value,
                 description_longue: document.getElementById('description_longue').value,
-                date_heure: document.getElementById('date_heure').value || null,
+                date_heure: dateHeureValue ? new Date(dateHeureValue).toISOString() : null,
                 statut: document.getElementById('statut').value,
                 
                 // Intervenant

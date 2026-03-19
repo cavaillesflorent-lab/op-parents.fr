@@ -9,71 +9,43 @@
     <link rel="stylesheet" href="assets/css/style-responsive.css">
     <style>
         /* ============================================
-           PAGE WEBINAIRE DETAIL - STYLES SPÉCIFIQUES
+           PAGE WEBINAIRE DETAIL - STRUCTURE 8 BLOCS
            ============================================ */
         
-        .webinaire-detail-section {
-            padding: var(--space-lg) 0 var(--space-3xl);
+        :root {
+            --vert-fonce: #2D403B;
+            --vert-clair: #DFF2B6;
+            --jaune-dore: #F2D680;
+            --peche: #F2B47E;
+        }
+        
+        .webinaire-page {
             background: var(--gray-50);
-            min-height: 80vh;
+            min-height: 100vh;
         }
         
-        .webinaire-detail-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        /* Breadcrumb */
-        .webinaire-breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-            flex-wrap: wrap;
-        }
-        
-        .webinaire-breadcrumb a {
-            color: var(--vert-fonce);
-            text-decoration: none;
-            transition: opacity 0.2s ease;
-        }
-        
-        .webinaire-breadcrumb a:hover {
-            opacity: 0.7;
-        }
-        
-        .webinaire-breadcrumb .separator {
-            color: var(--gray-400);
-        }
-        
-        .webinaire-breadcrumb .current {
-            color: var(--text-secondary);
-            max-width: 250px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* Carte principale */
-        .webinaire-detail-card {
-            background: var(--white);
-            border-radius: var(--radius-2xl);
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: var(--space-xl);
-        }
-        
-        /* Header de la carte */
-        .webinaire-detail-header {
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
-            padding: var(--space-xl);
-            color: var(--white);
+        /* ============================================
+           BLOC 1 : HERO
+           ============================================ */
+        .webinaire-hero {
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #1F2E29 100%);
+            padding: 4rem 0 3rem;
             position: relative;
+            overflow: hidden;
         }
         
-        .webinaire-detail-header::after {
+        .webinaire-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(223, 242, 182, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .webinaire-hero::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -83,210 +55,462 @@
             background: linear-gradient(90deg, var(--vert-clair) 0%, var(--jaune-dore) 50%, var(--peche) 100%);
         }
         
-        .webinaire-detail-badge {
-            display: inline-block;
-            padding: 0.4rem 1rem;
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: var(--space-md);
+        .hero-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
         }
         
-        .webinaire-detail-badge.status-a_venir {
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-badge.status-a_venir {
             background: var(--jaune-dore);
             color: var(--vert-fonce);
         }
         
-        .webinaire-detail-badge.status-replay {
+        .hero-badge.status-replay {
             background: var(--peche);
             color: var(--vert-fonce);
         }
         
-        .webinaire-detail-badge.status-termine {
+        .hero-badge.status-termine {
             background: var(--gray-300);
             color: var(--gray-700);
         }
         
-        .webinaire-detail-title {
+        .hero-title {
             font-family: var(--font-serif);
-            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
             font-weight: 700;
             color: var(--white);
-            margin: 0 0 var(--space-md) 0;
-            line-height: 1.3;
+            margin: 0 0 1.5rem 0;
+            line-height: 1.2;
         }
         
-        .webinaire-detail-date {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .webinaire-detail-date .date-icon {
-            font-size: 1.2rem;
-        }
-        
-        /* Corps de la carte */
-        .webinaire-detail-body {
-            padding: var(--space-xl);
-        }
-        
-        /* Section intervenant */
-        .webinaire-detail-speaker {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            padding: var(--space-lg);
-            background: #FDF8F3;
-            border-radius: var(--radius-xl);
-            margin-bottom: var(--space-xl);
-        }
-        
-        .speaker-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
-        }
-        
-        .speaker-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .speaker-avatar-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-        }
-        
-        .speaker-info {
-            flex: 1;
-        }
-        
-        .speaker-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-        }
-        
-        .speaker-name {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
-        }
-        
-        .speaker-title {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .speaker-bio {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-        
-        /* Description */
-        .webinaire-detail-description {
-            margin-bottom: var(--space-xl);
-        }
-        
-        .webinaire-detail-description h2 {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            color: var(--text-primary);
-            margin-bottom: var(--space-md);
-        }
-        
-        .webinaire-detail-description p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-        }
-        
-        /* Points clés */
-        .webinaire-detail-points {
-            background: var(--vert-clair);
-            border-radius: var(--radius-xl);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-xl);
-        }
-        
-        .webinaire-detail-points h3 {
-            font-family: var(--font-serif);
+        .hero-accroche {
             font-size: 1.1rem;
-            color: var(--vert-fonce);
-            margin-bottom: var(--space-md);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .webinaire-detail-points ul {
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+        
+        .hero-meta-icon {
+            font-size: 1.25rem;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--jaune-dore);
+            color: var(--vert-fonce);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* ============================================
+           CONTENEUR PRINCIPAL
+           ============================================ */
+        .webinaire-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+        
+        /* Bloc générique */
+        .webinaire-bloc {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .bloc-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin: 0 0 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .bloc-title-icon {
+            font-size: 1.5rem;
+        }
+        
+        /* ============================================
+           BLOC 2 : CIBLE (Pour qui ?)
+           ============================================ */
+        .bloc-cible {
+            background: linear-gradient(135deg, #FDF8F3 0%, #FEF3E8 100%);
+            border: 2px solid var(--peche);
+        }
+        
+        .cible-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
         
-        .webinaire-detail-points li {
-            position: relative;
-            padding-left: 1.75rem;
+        .cible-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
             font-size: 1rem;
-            line-height: 1.6;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        .cible-list li:not(:last-child) {
+            border-bottom: 1px solid rgba(242, 180, 126, 0.3);
+        }
+        
+        .cible-icon {
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+        
+        /* ============================================
+           BLOC 3 : POURQUOI PARTICIPER
+           ============================================ */
+        .bloc-pourquoi .pourquoi-intro {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+        
+        .pourquoi-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .pourquoi-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        .pourquoi-icon {
+            flex-shrink: 0;
+            font-size: 1rem;
             color: var(--vert-fonce);
+        }
+        
+        /* ============================================
+           BLOC 4 : PROGRAMME
+           ============================================ */
+        .bloc-programme {
+            background: var(--vert-clair);
+            border: none;
+        }
+        
+        .bloc-programme .bloc-title {
+            color: var(--vert-fonce);
+        }
+        
+        .programme-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .programme-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.875rem 0;
+            font-size: 1rem;
+            color: var(--vert-fonce);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        
+        .programme-list li:not(:last-child) {
+            border-bottom: 1px solid rgba(45, 64, 59, 0.15);
+        }
+        
+        .programme-icon {
+            flex-shrink: 0;
+            font-size: 1.1rem;
+            color: var(--vert-fonce);
+        }
+        
+        /* ============================================
+           BLOC 5 : ACQUIS
+           ============================================ */
+        .bloc-acquis {
+            border: 2px solid var(--vert-fonce);
+        }
+        
+        .acquis-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+        
+        .acquis-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        .acquis-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--vert-clair);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--vert-fonce);
+            font-weight: 700;
+        }
+        
+        /* ============================================
+           BLOC 6 : INTERVENANT
+           ============================================ */
+        .bloc-intervenant {
+            background: linear-gradient(135deg, #FDF8F3 0%, var(--white) 100%);
+        }
+        
+        .intervenant-content {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .intervenant-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, var(--vert-clair) 0%, var(--peche) 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .intervenant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .intervenant-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+        
+        .intervenant-info {
+            flex: 1;
+        }
+        
+        .intervenant-name {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .intervenant-title {
+            font-size: 1rem;
+            color: var(--vert-fonce);
+            font-weight: 600;
             margin-bottom: 0.75rem;
         }
         
-        .webinaire-detail-points li:last-child {
-            margin-bottom: 0;
+        .intervenant-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
         
-        .webinaire-detail-points li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--vert-fonce);
-            font-weight: bold;
-            font-size: 1.1rem;
+        /* ============================================
+           BLOC 7 : INFOS PRATIQUES
+           ============================================ */
+        .bloc-infos {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
         }
         
-        /* Section vidéo */
-        .webinaire-detail-video {
-            margin-bottom: var(--space-xl);
+        .infos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
         }
         
-        .webinaire-detail-video h3 {
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            margin-bottom: var(--space-md);
+        .info-item {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 12px;
         }
         
-        .video-container {
+        .info-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.125rem;
+        }
+        
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .infos-note {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        /* ============================================
+           BLOC 8 : CTA FINAL
+           ============================================ */
+        .bloc-cta-final {
+            background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
+            text-align: center;
+            border: none;
+        }
+        
+        .cta-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .cta-text {
+            font-size: 1rem;
+            color: var(--vert-fonce);
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--vert-fonce);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        
+        .cta-btn:hover {
+            background: #1F2E29;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-note {
+            font-size: 0.85rem;
+            color: var(--vert-fonce);
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+        
+        /* ============================================
+           BLOC VIDEO (pour replays)
+           ============================================ */
+        .bloc-video .video-container {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border-radius: var(--radius-xl);
+            border-radius: 12px;
             background: var(--gray-100);
         }
         
-        .video-container iframe {
+        .bloc-video .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -299,10 +523,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--space-sm);
-            padding: var(--space-xl);
-            background: linear-gradient(135deg, var(--vert-fonce) 0%, var(--vert-fonce-light) 100%);
-            border-radius: var(--radius-xl);
+            gap: 0.75rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--vert-fonce) 0%, #1F2E29 100%);
+            border-radius: 12px;
             color: var(--white);
             text-decoration: none;
             font-size: 1.1rem;
@@ -312,198 +536,49 @@
         
         .video-external-link:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
         
-        /* Section inscription */
-        .webinaire-detail-inscription {
-            background: linear-gradient(135deg, var(--jaune-dore) 0%, var(--peche) 100%);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            text-align: center;
-            margin-bottom: var(--space-xl);
+        /* ============================================
+           NAVIGATION RETOUR
+           ============================================ */
+        .webinaire-nav {
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
         }
         
-        .inscription-icon {
-            font-size: 3rem;
-            margin-bottom: var(--space-md);
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .inscription-title {
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            color: var(--vert-fonce);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .inscription-date {
-            font-size: 1.1rem;
-            color: var(--vert-fonce);
-            opacity: 0.9;
-            margin-bottom: var(--space-lg);
-        }
-        
-        .inscription-btn {
+        .nav-back {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-md) var(--space-xl);
-            background: var(--vert-fonce);
-            color: var(--white);
+            gap: 0.5rem;
+            color: var(--vert-fonce);
             text-decoration: none;
-            border-radius: var(--radius-lg);
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
         }
         
-        .inscription-btn:hover {
-            background: var(--vert-fonce-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        .nav-back:hover {
+            opacity: 0.7;
         }
         
-        .inscription-note {
-            font-size: 0.9rem;
-            color: var(--vert-fonce);
-            opacity: 0.8;
-            margin-top: var(--space-md);
-        }
-        
-        /* Section non dispo */
-        .webinaire-detail-unavailable {
-            background: var(--gray-100);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            text-align: center;
-            margin-bottom: var(--space-xl);
-        }
-        
-        .unavailable-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
-        }
-        
-        .unavailable-title {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            color: var(--text-primary);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .unavailable-text {
-            color: var(--text-secondary);
-        }
-        
-        /* Webinaires associés */
-        .webinaire-related-section {
-            padding: var(--space-xl) 0;
-        }
-        
-        .related-title {
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            margin-bottom: var(--space-lg);
-            text-align: center;
-        }
-        
-        .related-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--space-lg);
-        }
-        
-        .related-card {
-            background: #FDF8F3;
-            border-radius: var(--radius-xl);
-            padding: var(--space-lg);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-        
-        .related-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .related-badge {
-            display: inline-block;
-            width: fit-content;
-            padding: 0.3rem 0.75rem;
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .related-badge.status-a_venir {
-            background: var(--vert-clair);
-            color: var(--vert-fonce);
-        }
-        
-        .related-badge.status-replay {
-            background: var(--peche);
-            color: var(--vert-fonce);
-        }
-        
-        .related-card h4 {
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            line-height: 1.3;
-            margin: 0;
-        }
-        
-        .related-speaker {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        
-        .related-arrow {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            margin-top: auto;
-        }
-        
-        /* CTA final */
-        .webinaire-detail-cta {
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            text-align: center;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .webinaire-detail-cta h3 {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            color: var(--text-primary);
-            margin-bottom: var(--space-sm);
-        }
-        
-        .webinaire-detail-cta p {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-        }
-        
-        .webinaire-detail-cta .btn {
-            margin: 0 var(--space-sm);
-        }
-        
-        /* Loading & Error states */
+        /* ============================================
+           LOADING & ERROR STATES
+           ============================================ */
         .webinaire-loading,
         .webinaire-error {
             text-align: center;
-            padding: var(--space-3xl);
+            padding: 4rem 2rem;
             background: var(--white);
-            border-radius: var(--radius-2xl);
+            border-radius: 20px;
+            margin: 2rem auto;
+            max-width: 500px;
         }
         
         .webinaire-loading .spinner {
@@ -513,7 +588,7 @@
             border-top-color: var(--vert-fonce);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto var(--space-md);
+            margin: 0 auto 1rem;
         }
         
         @keyframes spin {
@@ -522,193 +597,117 @@
         
         .webinaire-error .error-icon {
             font-size: 3rem;
-            margin-bottom: var(--space-md);
+            margin-bottom: 1rem;
         }
         
         .webinaire-error h2 {
             font-family: var(--font-serif);
             font-size: 1.5rem;
-            margin-bottom: var(--space-sm);
+            margin-bottom: 0.5rem;
         }
         
         .webinaire-error p {
             color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
+            margin-bottom: 1.5rem;
+        }
+        
+        .webinaire-error .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--vert-fonce);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
         }
         
         /* ============================================
-           RESPONSIVE - 768px
+           RESPONSIVE
            ============================================ */
         @media (max-width: 768px) {
-            
-            .webinaire-detail-section {
-                padding: var(--space-md) 0 var(--space-xl);
+            .webinaire-hero {
+                padding: 3rem 0 2rem;
             }
             
-            .webinaire-breadcrumb {
-                font-size: 0.8rem;
-                margin-bottom: var(--space-md);
+            .hero-meta {
+                gap: 1rem;
             }
             
-            .webinaire-breadcrumb .current {
-                max-width: 180px;
-            }
-            
-            .webinaire-detail-header {
-                padding: var(--space-lg);
-            }
-            
-            .webinaire-detail-body {
-                padding: var(--space-lg);
-            }
-            
-            .webinaire-detail-speaker {
-                flex-direction: column;
-                text-align: center;
-                padding: var(--space-md);
-            }
-            
-            .speaker-avatar {
-                margin: 0 auto;
-            }
-            
-            .speaker-info {
-                text-align: center;
-            }
-            
-            .webinaire-detail-description p {
-                font-size: 0.95rem;
-                line-height: 1.7;
-            }
-            
-            .webinaire-detail-points {
-                padding: var(--space-md);
-            }
-            
-            .webinaire-detail-points li {
-                font-size: 0.95rem;
-            }
-            
-            .video-external-link {
-                padding: var(--space-lg);
-                font-size: 1rem;
-            }
-            
-            .webinaire-detail-inscription {
-                padding: var(--space-lg);
-            }
-            
-            .inscription-icon {
-                font-size: 2.5rem;
-            }
-            
-            .inscription-title {
-                font-size: 1.25rem;
-            }
-            
-            .inscription-btn {
-                display: flex;
-                justify-content: center;
+            .hero-cta {
                 width: 100%;
-                max-width: 280px;
-                margin: 0 auto;
-                padding: var(--space-md) var(--space-lg);
-                font-size: 1rem;
-                box-sizing: border-box;
+                max-width: 300px;
+                justify-content: center;
             }
             
-            .webinaire-detail-unavailable {
-                padding: var(--space-lg);
+            .webinaire-content {
+                padding: 1.5rem 1rem 3rem;
             }
             
-            .related-title {
-                font-size: 1.25rem;
+            .webinaire-bloc {
+                padding: 1.5rem;
+                border-radius: 16px;
             }
             
-            .related-grid {
+            .intervenant-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .intervenant-avatar {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .infos-grid {
                 grid-template-columns: 1fr;
             }
             
-            .related-card {
-                padding: var(--space-md);
-            }
-            
-            .webinaire-detail-cta {
-                padding: var(--space-lg);
-            }
-            
-            .webinaire-detail-cta .btn {
-                display: block;
+            .cta-btn {
                 width: 100%;
-                margin: var(--space-sm) 0;
-            }
-            
-            .webinaire-loading,
-            .webinaire-error {
-                padding: var(--space-xl);
+                max-width: 280px;
+                justify-content: center;
             }
         }
         
-        /* ============================================
-           RESPONSIVE - 480px
-           ============================================ */
         @media (max-width: 480px) {
-            .webinaire-detail-header {
-                padding: var(--space-md);
+            .bloc-title {
+                font-size: 1.15rem;
             }
             
-            .webinaire-detail-badge {
-                font-size: 0.75rem;
-                padding: 0.3rem 0.75rem;
+            .hero-title {
+                font-size: 1.5rem;
             }
             
-            .webinaire-detail-date {
-                font-size: 0.9rem;
-            }
-            
-            .webinaire-detail-body {
-                padding: var(--space-md);
-            }
-            
-            .webinaire-detail-description h2 {
-                font-size: 1.1rem;
-            }
-            
-            .webinaire-detail-description p {
-                font-size: 0.9rem;
-            }
-            
-            .speaker-name {
-                font-size: 1.1rem;
-            }
-            
-            .speaker-title,
-            .speaker-bio {
-                font-size: 0.85rem;
-            }
-            
-            .webinaire-detail-cta h3 {
-                font-size: 1.1rem;
+            .hero-accroche {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
-<body>
+<body class="webinaire-page">
     <!-- HEADER (chargé dynamiquement) -->
     <div id="header-placeholder"></div>
 
-    <!-- CONTENU PRINCIPAL -->
-    <section class="webinaire-detail-section">
-        <div class="container">
-            <div class="webinaire-detail-wrapper" id="webinaire-content">
-                <!-- Loading state -->
-                <div class="webinaire-loading" id="loading-state">
-                    <div class="spinner"></div>
-                    <p>Chargement du webinaire...</p>
-                </div>
-            </div>
+    <!-- Navigation retour -->
+    <nav class="webinaire-nav">
+        <div class="nav-container">
+            <a href="webinaires.html" class="nav-back">
+                ← Retour aux webinaires
+            </a>
         </div>
-    </section>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <div id="webinaire-content">
+        <!-- Loading state -->
+        <div class="webinaire-loading" id="loading-state">
+            <div class="spinner"></div>
+            <p>Chargement du webinaire...</p>
+        </div>
+    </div>
 
     <!-- FOOTER (chargé dynamiquement) -->
     <div id="footer-placeholder"></div>
@@ -731,6 +730,14 @@
             initSupabase();
             loadWebinaire();
         });
+        
+        // Fallback si componentsLoaded ne se déclenche pas
+        setTimeout(() => {
+            if (!webinaire) {
+                initSupabase();
+                loadWebinaire();
+            }
+        }, 1000);
 
         // Charger le webinaire
         async function loadWebinaire() {
@@ -759,9 +766,6 @@
                 
                 // Afficher le webinaire
                 displayWebinaire();
-                
-                // Charger les webinaires associés
-                loadRelatedWebinaires();
 
             } catch (error) {
                 console.error('Erreur:', error);
@@ -777,201 +781,273 @@
                     <div class="error-icon">😕</div>
                     <h2>Oups !</h2>
                     <p>${message}</p>
-                    <a href="webinaires.html" class="btn btn-primary">← Retour aux webinaires</a>
+                    <a href="webinaires.html" class="btn">← Retour aux webinaires</a>
                 </div>
             `;
         }
 
-        // Afficher le webinaire
+        // Afficher le webinaire avec la structure 8 blocs
         function displayWebinaire() {
             const container = document.getElementById('webinaire-content');
             const status = webinaire.statut || 'replay';
             const statusLabels = {
-                'a_venir': 'À venir',
-                'replay': 'Replay disponible',
-                'termine': 'Terminé'
+                'a_venir': '📅 À venir',
+                'replay': '▶️ Replay disponible',
+                'termine': '✅ Terminé'
             };
 
             // Formater la date
-            let dateHTML = '';
+            let dateFormatted = '';
+            let dateShort = '';
             if (webinaire.date_heure) {
                 const date = new Date(webinaire.date_heure);
-                const options = { 
+                dateFormatted = date.toLocaleDateString('fr-FR', { 
                     weekday: 'long', 
                     day: 'numeric', 
-                    month: 'long', 
-                    year: 'numeric',
+                    month: 'long',
                     hour: '2-digit',
                     minute: '2-digit'
-                };
-                const formattedDate = date.toLocaleDateString('fr-FR', options);
-                dateHTML = `
-                    <div class="webinaire-detail-date">
-                        <span class="date-icon">📅</span>
-                        <span>${formattedDate}</span>
-                    </div>
-                `;
+                });
+                dateShort = date.toLocaleDateString('fr-FR', { 
+                    day: 'numeric', 
+                    month: 'long'
+                });
             }
 
-            // Bloc intervenant
-            let speakerHTML = '';
-            const speakerName = webinaire.speaker_name || webinaire.intervenant || '';
-            const speakerTitle = webinaire.speaker_title || webinaire.intervenant_titre || '';
-            const speakerBio = webinaire.speaker_bio || webinaire.intervenant_bio || '';
-            const speakerAvatar = webinaire.speaker_avatar || webinaire.intervenant_photo || null;
+            // URL du CTA
+            const ctaUrl = status === 'a_venir' 
+                ? (webinaire.lien_inscription || webinaire.lien_meet || '#')
+                : (webinaire.lien_replay || '#');
+            const ctaText = status === 'a_venir' ? 'Je réserve ma place gratuite' : 'Voir le replay';
 
-            if (speakerName) {
-                const avatarContent = speakerAvatar 
-                    ? `<img src="${speakerAvatar}" alt="${speakerName}">`
-                    : `<div class="speaker-avatar-placeholder">👤</div>`;
-                
-                speakerHTML = `
-                    <div class="webinaire-detail-speaker">
-                        <div class="speaker-avatar">
-                            ${avatarContent}
+            // Construire le HTML
+            let html = `
+                <!-- BLOC 1 : HERO -->
+                <section class="webinaire-hero">
+                    <div class="hero-container">
+                        <span class="hero-badge status-${status}">${statusLabels[status]}</span>
+                        <h1 class="hero-title">${esc(webinaire.titre)}</h1>
+                        ${webinaire.accroche ? `<p class="hero-accroche">${esc(webinaire.accroche)}</p>` : ''}
+                        <div class="hero-meta">
+                            ${dateFormatted ? `
+                                <div class="hero-meta-item">
+                                    <span class="hero-meta-icon">📅</span>
+                                    <span>${dateFormatted}</span>
+                                </div>
+                            ` : ''}
+                            ${webinaire.duree ? `
+                                <div class="hero-meta-item">
+                                    <span class="hero-meta-icon">⏱</span>
+                                    <span>${esc(webinaire.duree)}</span>
+                                </div>
+                            ` : ''}
                         </div>
-                        <div class="speaker-info">
-                            <div class="speaker-label">Animé par</div>
-                            <div class="speaker-name">${speakerName}</div>
-                            ${speakerTitle ? `<div class="speaker-title">${speakerTitle}</div>` : ''}
-                            ${speakerBio ? `<p class="speaker-bio">${speakerBio}</p>` : ''}
-                        </div>
+                        ${status !== 'termine' ? `
+                            <a href="${ctaUrl}" target="_blank" class="hero-cta">
+                                ${ctaText}
+                                <span>→</span>
+                            </a>
+                        ` : ''}
                     </div>
-                `;
-            }
-
-            // Description (priorité à description_longue, sinon description courte)
-            let descriptionHTML = '';
-            const descriptionText = webinaire.description_longue || webinaire.description;
-            if (descriptionText) {
-                descriptionHTML = `
-                    <div class="webinaire-detail-description">
-                        <h2>À propos de ce webinaire</h2>
-                        <p>${descriptionText}</p>
-                    </div>
-                `;
-            }
-
-            // Points clés (compatibilité avec "points_cles" et ancien "attendus")
-            let pointsHTML = '';
-            const rawPoints = webinaire.points_cles || webinaire.attendus;
-            if (rawPoints) {
-                let pointsList = [];
+                </section>
                 
-                // Gérer si c'est un JSON ou du texte
-                if (typeof rawPoints === 'string') {
-                    try {
-                        pointsList = JSON.parse(rawPoints);
-                    } catch {
-                        pointsList = rawPoints.split('\n').filter(p => p.trim());
-                    }
-                } else if (Array.isArray(rawPoints)) {
-                    pointsList = rawPoints;
-                }
+                <div class="webinaire-content">
+            `;
 
-                if (pointsList.length > 0) {
-                    pointsHTML = `
-                        <div class="webinaire-detail-points">
-                            <h3>🎯 Ce que vous allez apprendre</h3>
-                            <ul>
-                                ${pointsList.map(point => `<li>${point}</li>`).join('')}
+            // BLOC 2 : CIBLE (Ce webinaire est fait pour vous si...)
+            const cible = webinaire.cible || [];
+            if (cible.length > 0) {
+                html += `
+                    <div class="webinaire-bloc bloc-cible">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">🎯</span>
+                            Ce webinaire est fait pour vous si...
+                        </h2>
+                        <ul class="cible-list">
+                            ${cible.map(item => `
+                                <li>
+                                    <span class="cible-icon">•</span>
+                                    ${esc(item)}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // BLOC 3 : POURQUOI PARTICIPER
+            const pourquoiIntro = webinaire.pourquoi_intro || '';
+            const pourquoiPoints = webinaire.pourquoi_points || [];
+            if (pourquoiIntro || pourquoiPoints.length > 0) {
+                html += `
+                    <div class="webinaire-bloc bloc-pourquoi">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">💡</span>
+                            Pourquoi participer
+                        </h2>
+                        ${pourquoiIntro ? `<p class="pourquoi-intro">${esc(pourquoiIntro)}</p>` : ''}
+                        ${pourquoiPoints.length > 0 ? `
+                            <ul class="pourquoi-list">
+                                ${pourquoiPoints.map(item => `
+                                    <li>
+                                        <span class="pourquoi-icon">•</span>
+                                        ${esc(item)}
+                                    </li>
+                                `).join('')}
                             </ul>
-                        </div>
-                    `;
-                }
-            }
-
-            // Section action (vidéo, inscription, ou non dispo)
-            let actionHTML = '';
-            
-            if (status === 'replay') {
-                const videoUrl = webinaire.lien_replay || webinaire.video_url || webinaire.lien_meet;
-                if (videoUrl) {
-                    const embedHTML = getVideoEmbed(videoUrl);
-                    actionHTML = `
-                        <div class="webinaire-detail-video">
-                            <h3>▶️ Regarder le replay</h3>
-                            ${embedHTML}
-                        </div>
-                    `;
-                }
-            } else if (status === 'a_venir') {
-                const inscriptionUrl = webinaire.lien_inscription || webinaire.lien_meet || '#';
-                const dateText = webinaire.date_heure 
-                    ? new Date(webinaire.date_heure).toLocaleDateString('fr-FR', { 
-                        weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' 
-                    })
-                    : 'Date à confirmer';
-                
-                actionHTML = `
-                    <div class="webinaire-detail-inscription">
-                        <div class="inscription-icon">🎫</div>
-                        <h3 class="inscription-title">Participez à ce webinaire !</h3>
-                        <p class="inscription-date">${dateText}</p>
-                        <a href="${inscriptionUrl}" target="_blank" class="inscription-btn">
-                            S'inscrire gratuitement
-                            <span>→</span>
-                        </a>
-                        <p class="inscription-note">Gratuit • Places limitées</p>
-                    </div>
-                `;
-            } else {
-                actionHTML = `
-                    <div class="webinaire-detail-unavailable">
-                        <div class="unavailable-icon">📭</div>
-                        <h3 class="unavailable-title">Replay non disponible</h3>
-                        <p class="unavailable-text">Ce webinaire a eu lieu mais le replay n'est pas encore disponible.</p>
+                        ` : ''}
                     </div>
                 `;
             }
 
-            // Assembler la page
-            container.innerHTML = `
-                <!-- Breadcrumb -->
-                <nav class="webinaire-breadcrumb">
-                    <a href="index.html">Accueil</a>
-                    <span class="separator">›</span>
-                    <a href="webinaires.html">Webinaires</a>
-                    <span class="separator">›</span>
-                    <span class="current">${webinaire.titre}</span>
-                </nav>
-                
-                <!-- Carte principale -->
-                <div class="webinaire-detail-card">
-                    <!-- Header -->
-                    <div class="webinaire-detail-header">
-                        <span class="webinaire-detail-badge status-${status}">${statusLabels[status]}</span>
-                        <h1 class="webinaire-detail-title">${webinaire.titre}</h1>
-                        ${dateHTML}
+            // BLOC 4 : PROGRAMME
+            const programme = webinaire.programme || webinaire.points_cles || [];
+            if (programme.length > 0) {
+                html += `
+                    <div class="webinaire-bloc bloc-programme">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">📋</span>
+                            Programme du webinaire
+                        </h2>
+                        <ul class="programme-list">
+                            ${programme.map(item => `
+                                <li>
+                                    <span class="programme-icon">✔</span>
+                                    ${esc(item)}
+                                </li>
+                            `).join('')}
+                        </ul>
                     </div>
-                    
-                    <!-- Corps -->
-                    <div class="webinaire-detail-body">
-                        ${speakerHTML}
-                        ${descriptionHTML}
-                        ${pointsHTML}
-                        ${actionHTML}
+                `;
+            }
+
+            // BLOC 5 : ACQUIS
+            const acquis = webinaire.acquis || [];
+            if (acquis.length > 0) {
+                html += `
+                    <div class="webinaire-bloc bloc-acquis">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">🎓</span>
+                            Ce que vous saurez après le webinaire
+                        </h2>
+                        <ul class="acquis-list">
+                            ${acquis.map(item => `
+                                <li>
+                                    <span class="acquis-icon">✓</span>
+                                    ${esc(item)}
+                                </li>
+                            `).join('')}
+                        </ul>
                     </div>
-                </div>
+                `;
+            }
+
+            // BLOC VIDEO (pour replays)
+            if (status === 'replay' && webinaire.lien_replay) {
+                html += `
+                    <div class="webinaire-bloc bloc-video">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">▶️</span>
+                            Regarder le replay
+                        </h2>
+                        ${getVideoEmbed(webinaire.lien_replay)}
+                    </div>
+                `;
+            }
+
+            // BLOC 6 : INTERVENANT
+            const speakerName = webinaire.speaker_name || '';
+            if (speakerName) {
+                const speakerTitle = webinaire.speaker_title || '';
+                const speakerBio = webinaire.speaker_bio || '';
+                const speakerAvatar = webinaire.speaker_avatar || '';
                 
-                <!-- Webinaires associés -->
-                <div class="webinaire-related-section">
-                    <h2 class="related-title">Autres webinaires</h2>
-                    <div class="related-grid" id="related-webinaires">
-                        <div class="webinaire-loading">
-                            <div class="spinner"></div>
+                html += `
+                    <div class="webinaire-bloc bloc-intervenant">
+                        <h2 class="bloc-title">
+                            <span class="bloc-title-icon">👤</span>
+                            Intervenant
+                        </h2>
+                        <div class="intervenant-content">
+                            <div class="intervenant-avatar">
+                                ${speakerAvatar 
+                                    ? `<img src="${speakerAvatar}" alt="${esc(speakerName)}">`
+                                    : `<div class="intervenant-avatar-placeholder">👤</div>`
+                                }
+                            </div>
+                            <div class="intervenant-info">
+                                <h3 class="intervenant-name">${esc(speakerName)}</h3>
+                                ${speakerTitle ? `<div class="intervenant-title">${esc(speakerTitle)}</div>` : ''}
+                                ${speakerBio ? `<p class="intervenant-bio">${esc(speakerBio)}</p>` : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- CTA -->
-                <div class="webinaire-detail-cta">
-                    <h3>Envie d'aller plus loin ?</h3>
-                    <p>Pour un regard expert sur ta situation, échange directement avec Florent.</p>
-                    <a href="investir.html" class="btn btn-primary">Parler à Florent</a>
-                    <a href="webinaires.html" class="btn btn-secondary">Voir tous les webinaires</a>
+                `;
+            }
+
+            // BLOC 7 : INFOS PRATIQUES
+            html += `
+                <div class="webinaire-bloc bloc-infos">
+                    <h2 class="bloc-title">
+                        <span class="bloc-title-icon">ℹ️</span>
+                        Informations pratiques
+                    </h2>
+                    <div class="infos-grid">
+                        ${dateShort ? `
+                            <div class="info-item">
+                                <span class="info-icon">📅</span>
+                                <div class="info-content">
+                                    <div class="info-label">Date</div>
+                                    <div class="info-value">${dateShort}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="info-item">
+                            <span class="info-icon">💻</span>
+                            <div class="info-content">
+                                <div class="info-label">Format</div>
+                                <div class="info-value">${esc(webinaire.format || 'Webinaire en ligne')}</div>
+                            </div>
+                        </div>
+                        ${webinaire.duree ? `
+                            <div class="info-item">
+                                <span class="info-icon">⏱</span>
+                                <div class="info-content">
+                                    <div class="info-label">Durée</div>
+                                    <div class="info-value">${esc(webinaire.duree)}</div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${status === 'a_venir' ? `
+                        <div class="infos-note">
+                            📧 Une fois inscrit, vous recevrez par email le lien de connexion au webinaire.
+                        </div>
+                    ` : ''}
                 </div>
             `;
+
+            // BLOC 8 : CTA FINAL
+            if (status !== 'termine') {
+                html += `
+                    <div class="webinaire-bloc bloc-cta-final">
+                        <h2 class="cta-title">${status === 'a_venir' ? 'Réservez votre place' : 'Accédez au replay'}</h2>
+                        <p class="cta-text">${status === 'a_venir' 
+                            ? 'Le webinaire est gratuit mais l\'inscription est nécessaire pour recevoir le lien d\'accès.'
+                            : 'Retrouvez l\'intégralité du webinaire en replay.'
+                        }</p>
+                        <a href="${ctaUrl}" target="_blank" class="cta-btn">
+                            ${ctaText}
+                            <span>→</span>
+                        </a>
+                        ${status === 'a_venir' ? '<p class="cta-note">Gratuit • Places limitées</p>' : ''}
+                    </div>
+                `;
+            }
+
+            html += '</div>'; // Fermer webinaire-content
+
+            container.innerHTML = html;
         }
 
         // Générer l'embed vidéo
@@ -1022,55 +1098,12 @@
             `;
         }
 
-        // Charger les webinaires associés
-        async function loadRelatedWebinaires() {
-            const container = document.getElementById('related-webinaires');
-            if (!container || !webinaire) return;
-
-            try {
-                const { data, error } = await supabaseClient
-                    .from('webinaires')
-                    .select('*')
-                    .neq('id', webinaire.id)
-                    .limit(3)
-                    .order('date_heure', { ascending: false });
-
-                if (error) throw error;
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = `
-                        <p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">
-                            Aucun autre webinaire pour le moment.
-                        </p>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = data.map(w => generateRelatedCard(w)).join('');
-
-            } catch (error) {
-                console.error('Erreur chargement related:', error);
-                container.innerHTML = '';
-            }
-        }
-
-        // Générer une carte webinaire associé
-        function generateRelatedCard(w) {
-            const status = w.statut || 'replay';
-            const statusLabels = { 'a_venir': 'À venir', 'replay': 'Replay', 'termine': 'Terminé' };
-            const speakerName = w.speaker_name || w.intervenant || '';
-
-            return `
-                <a href="webinaire-detail.html?id=${w.id}" class="related-card">
-                    <span class="related-badge status-${status}">${statusLabels[status]}</span>
-                    <h4>${w.titre}</h4>
-                    ${speakerName ? `<span class="related-speaker">Avec ${speakerName}</span>` : ''}
-                    <span class="related-arrow">
-                        Voir le webinaire
-                        <span>→</span>
-                    </span>
-                </a>
-            `;
+        // Escape HTML
+        function esc(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
     </script>
 </body>

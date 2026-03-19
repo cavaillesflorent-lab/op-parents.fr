@@ -309,6 +309,52 @@
             border-color: var(--vert-fonce);
             color: var(--white);
         }
+        
+        /* Listes dynamiques (cible, programme, acquis) */
+        .dynamic-list-container {
+            margin-bottom: var(--space-sm);
+        }
+        
+        .dynamic-list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            background: var(--white);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .dynamic-list-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .dynamic-list-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+        }
+        
+        .dynamic-list-input:focus {
+            outline: none;
+            border-color: var(--vert-fonce);
+        }
+        
+        .btn-remove-item {
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-remove-item:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="admin-body">
@@ -400,19 +446,19 @@
                     
                     <div class="form-group">
                         <label for="titre">Titre du webinaire *</label>
-                        <input type="text" id="titre" name="titre" required placeholder="Ex: Comment parler d'argent avec ses enfants ?">
+                        <input type="text" id="titre" name="titre" required placeholder="Ex: Retraite et parentalité : calculer, anticiper, agir">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accroche">Accroche / Sous-titre</label>
+                        <textarea id="accroche" name="accroche" rows="3" placeholder="Ex: Congé maternité, temps partiel, interruptions de carrière... La parentalité peut avoir un impact sur votre future pension de retraite."></textarea>
+                        <small class="form-hint">Texte d'accroche affiché sous le titre principal dans le hero (2-3 phrases)</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="description">Description courte</label>
                         <textarea id="description" name="description" rows="3" placeholder="Résumé en 1-2 phrases pour la liste des webinaires..."></textarea>
                         <small class="form-hint">Affichée sur la carte du webinaire dans la liste</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="description_longue">Description détaillée</label>
-                        <textarea id="description_longue" name="description_longue" rows="6" class="textarea-large" placeholder="Description complète du webinaire : contexte, objectifs, ce qui sera abordé..."></textarea>
-                        <small class="form-hint">Affichée sur la page détail du webinaire</small>
                     </div>
                 </div>
                 
@@ -437,10 +483,92 @@
                             </select>
                         </div>
                     </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="duree">Durée</label>
+                            <input type="text" id="duree" name="duree" placeholder="Ex: environ 1 heure">
+                            <small class="form-hint">Affiché dans les infos pratiques</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="format">Format</label>
+                            <input type="text" id="format" name="format" placeholder="Ex: Webinaire en ligne" value="Webinaire en ligne">
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- ============================================
-                     SECTION 3 : INTERVENANT
+                     SECTION 3 : CIBLE (Pour qui ?)
+                     ============================================ -->
+                <div class="form-section">
+                    <h3>🎯 Ce webinaire est fait pour vous si...</h3>
+                    <p class="section-desc">Listez les profils de personnes concernées par ce webinaire.</p>
+                    
+                    <div class="dynamic-list-container" id="cible-container">
+                        <!-- Les items seront ajoutés ici dynamiquement -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-cible">
+                        + Ajouter un profil cible
+                    </button>
+                </div>
+                
+                <!-- ============================================
+                     SECTION 4 : POURQUOI PARTICIPER
+                     ============================================ -->
+                <div class="form-section">
+                    <h3>💡 Pourquoi participer</h3>
+                    <p class="section-desc">Expliquez le contexte et les raisons de participer à ce webinaire.</p>
+                    
+                    <div class="form-group">
+                        <label for="pourquoi_intro">Introduction</label>
+                        <textarea id="pourquoi_intro" name="pourquoi_intro" rows="3" placeholder="Ex: Le calcul de la retraite est souvent perçu comme complexe. Pour les parents, plusieurs éléments peuvent entrer en jeu..."></textarea>
+                    </div>
+                    
+                    <div class="dynamic-list-container" id="pourquoi-container">
+                        <!-- Les items seront ajoutés ici dynamiquement -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-pourquoi">
+                        + Ajouter un point
+                    </button>
+                </div>
+                
+                <!-- ============================================
+                     SECTION 5 : PROGRAMME
+                     ============================================ -->
+                <div class="form-section">
+                    <h3>📋 Programme du webinaire</h3>
+                    <p class="section-desc">Les sujets qui seront abordés pendant le webinaire.</p>
+                    
+                    <div class="dynamic-list-container" id="programme-container">
+                        <!-- Les items seront ajoutés ici dynamiquement -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-programme">
+                        + Ajouter au programme
+                    </button>
+                </div>
+                
+                <!-- ============================================
+                     SECTION 6 : CE QUE VOUS SAUREZ APRÈS
+                     ============================================ -->
+                <div class="form-section">
+                    <h3>🎓 Ce que vous saurez après le webinaire</h3>
+                    <p class="section-desc">Les compétences et connaissances acquises à l'issue du webinaire.</p>
+                    
+                    <div class="dynamic-list-container" id="acquis-container">
+                        <!-- Les items seront ajoutés ici dynamiquement -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-acquis">
+                        + Ajouter un acquis
+                    </button>
+                </div>
+                
+                <!-- ============================================
+                     SECTION 7 : INTERVENANT
                      ============================================ -->
                 <div class="form-section">
                     <h3>👤 Intervenant</h3>
@@ -460,18 +588,18 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="speaker_name">Nom de l'intervenant</label>
-                            <input type="text" id="speaker_name" name="speaker_name" placeholder="Ex: Florent Cavaillès">
+                            <input type="text" id="speaker_name" name="speaker_name" placeholder="Ex: Florent" value="Florent">
                         </div>
                         
                         <div class="form-group">
                             <label for="speaker_title">Titre / Fonction</label>
-                            <input type="text" id="speaker_title" name="speaker_title" placeholder="Ex: Ingénieur Patrimonial">
+                            <input type="text" id="speaker_title" name="speaker_title" placeholder="Ex: Ingénieur patrimonial" value="Ingénieur patrimonial">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label for="speaker_bio">Biographie courte</label>
-                        <textarea id="speaker_bio" name="speaker_bio" rows="3" placeholder="Quelques lignes sur l'expertise et le parcours de l'intervenant..."></textarea>
+                        <textarea id="speaker_bio" name="speaker_bio" rows="3" placeholder="Quelques lignes sur l'expertise et le parcours de l'intervenant...">Florent accompagne depuis plus de 6 ans des familles dans la compréhension et l'optimisation de leur patrimoine. Son objectif est de rendre les sujets financiers accessibles et d'aider chacun à prendre des décisions éclairées.</textarea>
                     </div>
                     
                     <div class="form-group">
@@ -509,23 +637,7 @@
                 </div>
                 
                 <!-- ============================================
-                     SECTION 4 : POINTS CLÉS
-                     ============================================ -->
-                <div class="form-section">
-                    <h3>🎯 Ce que les participants vont apprendre</h3>
-                    <p class="section-desc">Listez les points clés que les participants retiendront de ce webinaire.</p>
-                    
-                    <div class="attendus-container" id="attendus-container">
-                        <!-- Les attendus seront ajoutés ici dynamiquement -->
-                    </div>
-                    
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-add-attendu">
-                        + Ajouter un point clé
-                    </button>
-                </div>
-                
-                <!-- ============================================
-                     SECTION 5 : LIENS
+                     SECTION 8 : LIENS
                      ============================================ -->
                 <div class="form-section">
                     <h3>🔗 Liens</h3>
@@ -557,7 +669,7 @@
                 </div>
                 
                 <!-- ============================================
-                     SECTION 6 : IMAGE DE COUVERTURE
+                     SECTION 9 : IMAGE DE COUVERTURE
                      ============================================ -->
                 <div class="form-section">
                     <h3>🖼️ Image de couverture</h3>
@@ -629,7 +741,6 @@
         const client = initSupabase();
 
         let currentDeleteId = null;
-        let attendusCount = 0;
 
         // Écouter les changements d'authentification
         client.auth.onAuthStateChange((event, session) => {
@@ -699,56 +810,64 @@
             const fieldInscription = document.getElementById('field-inscription');
             const fieldReplay = document.getElementById('field-replay');
             
-            // Afficher/masquer selon le statut
             fieldInscription.classList.toggle('visible', statut === 'a_venir');
             fieldReplay.classList.toggle('visible', statut === 'replay');
         }
         
-        // Écouter le changement de statut
         document.getElementById('statut').addEventListener('change', updateConditionalFields);
 
-        // === GESTION DES ATTENDUS (Points clés) ===
+        // === GESTION DES LISTES DYNAMIQUES ===
         
-        function addAttendu(value = '') {
-            attendusCount++;
-            const container = document.getElementById('attendus-container');
-            const div = document.createElement('div');
-            div.className = 'attendu-item';
-            div.innerHTML = `
-                <span class="attendu-icon">✅</span>
-                <input type="text" class="attendu-input" placeholder="Ex: Comprendre les bases de l'éducation financière" value="${value}">
-                <button type="button" class="btn-icon btn-remove-attendu" onclick="removeAttendu(this)">🗑️</button>
-            `;
-            container.appendChild(div);
-        }
-        
-        function removeAttendu(btn) {
-            btn.closest('.attendu-item').remove();
-        }
-        
-        function getAttendus() {
-            const inputs = document.querySelectorAll('.attendu-input');
-            return Array.from(inputs)
-                .map(input => input.value.trim())
-                .filter(val => val !== '');
-        }
-        
-        function setAttendus(attendus) {
-            const container = document.getElementById('attendus-container');
-            container.innerHTML = '';
-            attendusCount = 0;
+        // Fonction générique pour créer une liste dynamique
+        function createDynamicListManager(containerId, btnId, icon, placeholder) {
+            const container = document.getElementById(containerId);
+            const btn = document.getElementById(btnId);
             
-            if (attendus && attendus.length > 0) {
-                attendus.forEach(att => addAttendu(att));
-            } else {
-                // Ajouter 2 champs vides par défaut
-                addAttendu();
-                addAttendu();
+            function addItem(value = '') {
+                const div = document.createElement('div');
+                div.className = 'dynamic-list-item';
+                div.innerHTML = `
+                    <span class="dynamic-list-icon">${icon}</span>
+                    <input type="text" class="dynamic-list-input" placeholder="${placeholder}" value="${escapeHtml(value)}">
+                    <button type="button" class="btn-icon btn-remove-item" onclick="this.closest('.dynamic-list-item').remove()">🗑️</button>
+                `;
+                container.appendChild(div);
             }
+            
+            function getItems() {
+                return Array.from(container.querySelectorAll('.dynamic-list-input'))
+                    .map(input => input.value.trim())
+                    .filter(val => val !== '');
+            }
+            
+            function setItems(items) {
+                container.innerHTML = '';
+                if (items && items.length > 0) {
+                    items.forEach(item => addItem(item));
+                } else {
+                    // Ajouter 2 champs vides par défaut
+                    addItem();
+                    addItem();
+                }
+            }
+            
+            btn.addEventListener('click', () => addItem());
+            
+            return { addItem, getItems, setItems };
         }
         
-        // Bouton ajouter attendu
-        document.getElementById('btn-add-attendu').addEventListener('click', () => addAttendu());
+        // Initialiser les listes dynamiques
+        const cibleManager = createDynamicListManager('cible-container', 'btn-add-cible', '👤', 'Ex: vous avez pris ou envisagez un congé parental');
+        const pourquoiManager = createDynamicListManager('pourquoi-container', 'btn-add-pourquoi', '•', 'Ex: trimestres validés pendant les congés maternité');
+        const programmeManager = createDynamicListManager('programme-container', 'btn-add-programme', '✔', 'Ex: Comprendre comment se calcule votre retraite');
+        const acquisManager = createDynamicListManager('acquis-container', 'btn-add-acquis', '🎓', 'Ex: Comprendre les mécanismes du calcul de la retraite');
+        
+        // Escape HTML pour éviter XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         // === PRÉVISUALISATION INTERVENANT ===
         
@@ -768,7 +887,6 @@
             }
         }
         
-        // Écouter les changements sur les champs intervenant
         document.getElementById('speaker_name').addEventListener('input', updateSpeakerPreview);
         document.getElementById('speaker_title').addEventListener('input', updateSpeakerPreview);
 
@@ -776,40 +894,33 @@
         
         let currentImageUrl = null;
         
-        // Clic sur le bouton d'upload
         document.getElementById('btn-upload-image').addEventListener('click', () => {
             document.getElementById('image-file').click();
         });
         
-        // Sélection d'un fichier
         document.getElementById('image-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             
-            // Vérifier la taille (max 5 Mo)
             if (file.size > 5 * 1024 * 1024) {
                 alert('L\'image est trop lourde. Maximum 5 Mo.');
                 return;
             }
             
-            // Vérifier le type
             if (!file.type.startsWith('image/')) {
                 alert('Le fichier doit être une image.');
                 return;
             }
             
-            // Afficher la prévisualisation locale
             const reader = new FileReader();
             reader.onload = (e) => {
                 showImagePreview(e.target.result);
             };
             reader.readAsDataURL(file);
             
-            // Upload vers Supabase Storage
             await uploadImage(file);
         });
         
-        // Upload de l'image vers Supabase Storage
         async function uploadImage(file) {
             const progressEl = document.getElementById('upload-progress');
             const progressFill = document.getElementById('upload-progress-fill');
@@ -818,14 +929,12 @@
             progressFill.style.width = '30%';
             
             try {
-                // Générer un nom unique
                 const timestamp = Date.now();
                 const ext = file.name.split('.').pop();
                 const fileName = `webinaire-${timestamp}.${ext}`;
                 
                 progressFill.style.width = '50%';
                 
-                // Upload vers Supabase Storage
                 const { data, error } = await supabaseClient.storage
                     .from('webinaires')
                     .upload(fileName, file, {
@@ -842,7 +951,6 @@
                 
                 progressFill.style.width = '80%';
                 
-                // Récupérer l'URL publique
                 const { data: urlData } = supabaseClient.storage
                     .from('webinaires')
                     .getPublicUrl(fileName);
@@ -856,8 +964,6 @@
                     progressEl.style.display = 'none';
                 }, 500);
                 
-                console.log('Image uploadée:', currentImageUrl);
-                
             } catch (err) {
                 console.error('Erreur:', err);
                 alert('Erreur lors de l\'upload');
@@ -865,7 +971,6 @@
             }
         }
         
-        // Afficher la prévisualisation
         function showImagePreview(src) {
             const previewImg = document.getElementById('preview-img');
             const placeholder = document.getElementById('image-placeholder');
@@ -877,7 +982,6 @@
             removeBtn.style.display = 'inline-flex';
         }
         
-        // Masquer la prévisualisation
         function hideImagePreview() {
             const previewImg = document.getElementById('preview-img');
             const placeholder = document.getElementById('image-placeholder');
@@ -893,47 +997,39 @@
             currentImageUrl = null;
         }
         
-        // Bouton supprimer image
         document.getElementById('btn-remove-image').addEventListener('click', hideImagePreview);
 
         // === GESTION DE L'UPLOAD PHOTO INTERVENANT ===
         
         let currentSpeakerUrl = null;
         
-        // Clic sur le bouton d'upload speaker
         document.getElementById('btn-upload-speaker').addEventListener('click', () => {
             document.getElementById('speaker-file').click();
         });
         
-        // Sélection d'un fichier speaker
         document.getElementById('speaker-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
             
-            // Vérifier la taille (max 2 Mo pour une photo de profil)
             if (file.size > 2 * 1024 * 1024) {
                 alert('L\'image est trop lourde. Maximum 2 Mo.');
                 return;
             }
             
-            // Vérifier le type
             if (!file.type.startsWith('image/')) {
                 alert('Le fichier doit être une image.');
                 return;
             }
             
-            // Afficher la prévisualisation locale
             const reader = new FileReader();
             reader.onload = (e) => {
                 showSpeakerPreview(e.target.result);
             };
             reader.readAsDataURL(file);
             
-            // Upload vers Supabase Storage
             await uploadSpeakerImage(file);
         });
         
-        // Upload de l'image speaker vers Supabase Storage
         async function uploadSpeakerImage(file) {
             const progressEl = document.getElementById('speaker-upload-progress');
             const progressFill = document.getElementById('speaker-upload-fill');
@@ -942,14 +1038,12 @@
             progressFill.style.width = '30%';
             
             try {
-                // Générer un nom unique
                 const timestamp = Date.now();
                 const ext = file.name.split('.').pop();
                 const fileName = `speaker-${timestamp}.${ext}`;
                 
                 progressFill.style.width = '50%';
                 
-                // Upload vers Supabase Storage (bucket "speakers")
                 const { data, error } = await supabaseClient.storage
                     .from('speakers')
                     .upload(fileName, file, {
@@ -966,7 +1060,6 @@
                 
                 progressFill.style.width = '80%';
                 
-                // Récupérer l'URL publique
                 const { data: urlData } = supabaseClient.storage
                     .from('speakers')
                     .getPublicUrl(fileName);
@@ -980,10 +1073,7 @@
                     progressEl.style.display = 'none';
                 }, 500);
                 
-                // Mettre à jour la prévisualisation dans la section intervenant
                 updateSpeakerPreview();
-                
-                console.log('Photo intervenant uploadée:', currentSpeakerUrl);
                 
             } catch (err) {
                 console.error('Erreur:', err);
@@ -992,7 +1082,6 @@
             }
         }
         
-        // Afficher la prévisualisation speaker
         function showSpeakerPreview(src) {
             const previewImg = document.getElementById('speaker-preview-img');
             const placeholder = document.getElementById('speaker-upload-placeholder');
@@ -1004,7 +1093,6 @@
             removeBtn.style.display = 'inline-flex';
         }
         
-        // Masquer la prévisualisation speaker
         function hideSpeakerPreview() {
             const previewImg = document.getElementById('speaker-preview-img');
             const placeholder = document.getElementById('speaker-upload-placeholder');
@@ -1019,14 +1107,13 @@
             document.getElementById('speaker-file').value = '';
             currentSpeakerUrl = null;
             
-            // Mettre à jour la prévisualisation dans la section intervenant
             updateSpeakerPreview();
         }
         
-        // Bouton supprimer photo speaker
         document.getElementById('btn-remove-speaker').addEventListener('click', hideSpeakerPreview);
 
-        // Ouvrir le modal
+        // === MODAL ===
+        
         function openModal(title = 'Nouveau webinaire') {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('webinaire-modal').classList.add('active');
@@ -1034,26 +1121,32 @@
             updateSpeakerPreview();
         }
 
-        // Fermer le modal
         function closeModal() {
             document.getElementById('webinaire-modal').classList.remove('active');
             document.getElementById('webinaire-form').reset();
             document.getElementById('webinaire-id').value = '';
-            setAttendus(null);
+            
+            // Réinitialiser les listes dynamiques
+            cibleManager.setItems(null);
+            pourquoiManager.setItems(null);
+            programmeManager.setItems(null);
+            acquisManager.setItems(null);
+            
             hideImagePreview();
             hideSpeakerPreview();
             updateSpeakerPreview();
         }
 
-        // Nouveau webinaire
         document.getElementById('new-webinaire-btn').addEventListener('click', () => {
-            setAttendus(null);
+            cibleManager.setItems(null);
+            pourquoiManager.setItems(null);
+            programmeManager.setItems(null);
+            acquisManager.setItems(null);
             hideImagePreview();
             hideSpeakerPreview();
             openModal('Nouveau webinaire');
         });
 
-        // Fermer modal
         document.getElementById('modal-close').addEventListener('click', closeModal);
         document.getElementById('cancel-btn').addEventListener('click', closeModal);
         document.querySelector('#webinaire-modal .modal-overlay').addEventListener('click', closeModal);
@@ -1074,10 +1167,13 @@
             // Remplir les champs
             document.getElementById('webinaire-id').value = data.id;
             document.getElementById('titre').value = data.titre || '';
+            document.getElementById('accroche').value = data.accroche || '';
             document.getElementById('description').value = data.description || '';
-            document.getElementById('description_longue').value = data.description_longue || '';
+            document.getElementById('duree').value = data.duree || '';
+            document.getElementById('format').value = data.format || 'Webinaire en ligne';
+            document.getElementById('pourquoi_intro').value = data.pourquoi_intro || '';
             
-            // ✅ CORRECTION TIMEZONE : Convertir UTC → heure locale pour le champ input
+            // Timezone fix
             if (data.date_heure) {
                 const d = new Date(data.date_heure);
                 const year = d.getFullYear();
@@ -1106,10 +1202,11 @@
             // Image
             document.getElementById('image_url').value = data.image_url || '';
             
-            // Charger les attendus (points clés)
-            // Compatibilité avec l'ancien champ "attendus" et nouveau "points_cles"
-            const pointsCles = data.points_cles || data.attendus || [];
-            setAttendus(pointsCles);
+            // Charger les listes dynamiques
+            cibleManager.setItems(data.cible || []);
+            pourquoiManager.setItems(data.pourquoi_points || []);
+            programmeManager.setItems(data.programme || data.points_cles || []);
+            acquisManager.setItems(data.acquis || []);
             
             // Charger l'image existante
             if (data.image_url) {
@@ -1141,15 +1238,23 @@
 
             const id = document.getElementById('webinaire-id').value;
             
-            // ✅ CORRECTION TIMEZONE : Convertir en ISO (UTC) pour Supabase
             const dateHeureValue = document.getElementById('date_heure').value;
             
             const webinaire = {
                 titre: document.getElementById('titre').value,
+                accroche: document.getElementById('accroche').value,
                 description: document.getElementById('description').value,
-                description_longue: document.getElementById('description_longue').value,
+                duree: document.getElementById('duree').value,
+                format: document.getElementById('format').value,
                 date_heure: dateHeureValue ? new Date(dateHeureValue).toISOString() : null,
                 statut: document.getElementById('statut').value,
+                
+                // Listes dynamiques
+                cible: cibleManager.getItems(),
+                pourquoi_intro: document.getElementById('pourquoi_intro').value,
+                pourquoi_points: pourquoiManager.getItems(),
+                programme: programmeManager.getItems(),
+                acquis: acquisManager.getItems(),
                 
                 // Intervenant
                 speaker_name: document.getElementById('speaker_name').value,
@@ -1162,17 +1267,14 @@
                 lien_replay: document.getElementById('lien_replay').value,
                 lien_meet: document.getElementById('lien_meet').value,
                 
-                // Image et points clés
-                image_url: document.getElementById('image_url').value,
-                points_cles: getAttendus()
+                // Image
+                image_url: document.getElementById('image_url').value
             };
 
             let error;
             if (id) {
-                // Update
                 ({ error } = await supabaseClient.from('webinaires').update(webinaire).eq('id', id));
             } else {
-                // Insert
                 ({ error } = await supabaseClient.from('webinaires').insert([webinaire]));
             }
 
@@ -1201,7 +1303,6 @@
             document.getElementById('delete-modal').classList.remove('active');
         });
 
-        // Supprimer
         document.getElementById('delete-confirm').addEventListener('click', async () => {
             if (!currentDeleteId) return;
 

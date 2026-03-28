@@ -58,6 +58,91 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(242, 180, 126, 0.4);
         }
+        
+        /* ========================================
+           HERO REDESIGN - Style épuré
+           ======================================== */
+        .hero .hero-content {
+            text-align: right;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem) !important;
+            line-height: 1.2 !important;
+            margin-bottom: 1.5rem !important;
+            color: #2D403B !important;
+        }
+        
+        .hero h1 .highlight {
+            color: #8BA888 !important;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: #2D403B;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .hero-subtitle .underline {
+            background: linear-gradient(180deg, transparent 60%, #F2D680 60%);
+            padding: 0 4px;
+        }
+        
+        .hero-proof {
+            font-size: 1rem;
+            color: #5A6E6B;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+        
+        .hero-proof strong {
+            color: #8BA888;
+            font-weight: 700;
+        }
+        
+        .hero-baseline {
+            font-size: 1.05rem;
+            color: #5A6E6B;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        /* Responsive hero */
+        @media (max-width: 768px) {
+            .hero .hero-content {
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem !important;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .hero-cta {
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-cta .btn {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -70,7 +155,13 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
         <div class="container">
             <div class="hero-content hero-content-right">
                 
-                <h1>Prêts à booster <span>vos finances familiales ?</span> OP!, l'app finances des parents — simple, concrète et 100% conseils <span>Plus de 100 parents ont fait confiance à OP! </span> pour réaliser leurs projets de vie. <span>On vous explique d'abord. Vous décidez ensuite.</span></h1>
+                <h1>Prêts à booster vos <span class="highlight">finances familiales</span> ?</h1>
+                
+                <p class="hero-subtitle">OP!, l'app finances des parents — <span class="underline">simple, concrète et 100% conseils</span> 🚀</p>
+                
+                <p class="hero-proof">Plus de <strong>100 parents</strong> nous ont fait confiance pour réaliser leurs projets de vie.</p>
+                
+                <p class="hero-baseline">On vous explique d'abord. Vous décidez ensuite.</p>
                
                 <div class="hero-cta">
                     <a href="quizzes.html" class="btn btn-primary">Voir les Quiz</a>
@@ -275,7 +366,7 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">« Très bon rendez-vous, explications claires, précises et personnalisées. Professionnel à l’écoute. Je recommande.»</p>
+                    <p class="testimonial-text">« Très bon rendez-vous, explications claires, précises et personnalisées. Professionnel à l'écoute. Je recommande.»</p>
                     <p class="testimonial-author">— Anaïs</p>
                 </div>
                 

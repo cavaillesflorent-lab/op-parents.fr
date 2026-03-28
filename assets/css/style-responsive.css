@@ -1281,3 +1281,14 @@ body {
         margin-bottom: 2rem !important;
     }
 }
+
+/* Fix couleurs Hero mobile */
+@media (max-width: 768px) {
+    .hero h1 span {
+        color: #2D403B; /* Vert foncé comme sur desktop */
+    }
+    
+    .hero h1 {
+        color: #5A6E6B; /* Gris-vert pour le texte hors span */
+    }
+}

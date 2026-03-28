@@ -1289,6 +1289,6 @@ body {
     }
     
     .hero h1 {
-        color: #5A6E6B; /* Gris-vert pour le texte hors span */
+        color: white; /* Blanc pour le texte hors span */
     }
 }

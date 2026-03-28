@@ -1590,6 +1590,18 @@ section {
     min-height: 400px;
 }
 
+.btn-tertiary {
+    background: #F2B47E;
+    color: #2D403B;
+    border: none;
+}
+
+.btn-tertiary:hover {
+    background: #E9A56E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(242, 180, 126, 0.4);
+}
+
 /* État vide commun */
 .page-empty {
     text-align: center;

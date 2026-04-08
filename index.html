@@ -69,23 +69,24 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             background-size: cover !important;
         }
         
-        /* Overlay léger - juste un voile subtil à droite */
+        /* Overlay léger - juste un voile subtil à gauche */
         .hero-overlay {
             background: linear-gradient(90deg, 
-                rgba(255, 255, 255, 0) 0%, 
-                rgba(255, 255, 255, 0.3) 60%,
-                rgba(255, 255, 255, 0.5) 100%) !important;
+                rgba(255, 255, 255, 0.5) 0%, 
+                rgba(255, 255, 255, 0.3) 40%,
+                rgba(255, 255, 255, 0) 100%) !important;
         }
         
-        /* Bloc texte semi-transparent */
+        /* Bloc texte semi-transparent - à gauche */
         .hero .hero-content {
-            text-align: right;
+            text-align: left;
             background: rgba(255, 255, 255, 0.75);
             padding: 2.5rem;
             border-radius: 20px;
             backdrop-filter: blur(3px);
             max-width: 500px;
-            margin-left: auto;
+            margin-right: auto;
+            margin-left: 0;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
         }
         
@@ -135,7 +136,7 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
         .hero-cta {
             display: flex;
             gap: 1rem;
-            justify-content: flex-end;
+            justify-content: flex-start;
             flex-wrap: wrap;
         }
         
@@ -221,7 +222,7 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
     <section class="hero" style="background-image: url('assets/images/accueil5.jpg');">
         <div class="hero-overlay"></div>
         <div class="container">
-            <div class="hero-content hero-content-right">
+            <div class="hero-content hero-content-left">
                 
                 <h1>Prêts à booster vos finances familiales ?</h1>
                     

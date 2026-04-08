@@ -77,6 +77,13 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
                 rgba(255, 255, 255, 0) 100%) !important;
         }
         
+        /* Container hero - aligner à gauche */
+        .hero .container {
+            display: flex;
+            justify-content: flex-start !important;
+            align-items: center;
+        }
+        
         /* Bloc texte semi-transparent - à gauche */
         .hero .hero-content {
             text-align: left;
@@ -85,8 +92,8 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             border-radius: 20px;
             backdrop-filter: blur(3px);
             max-width: 500px;
-            margin-right: auto;
-            margin-left: 0;
+            margin-left: 0 !important;
+            margin-right: auto !important;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
         }
         

@@ -77,24 +77,31 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
                 rgba(255, 255, 255, 0) 100%) !important;
         }
         
-        /* Container hero - aligner à gauche */
-        .hero .container {
-            display: flex;
+        /* FORCER le bloc à gauche - écraser style.css */
+        section.hero .container {
+            display: flex !important;
             justify-content: flex-start !important;
-            align-items: center;
+            align-items: center !important;
         }
         
-        /* Bloc texte semi-transparent - à gauche */
-        .hero .hero-content {
-            text-align: left;
-            background: rgba(255, 255, 255, 0.75);
-            padding: 2.5rem;
-            border-radius: 20px;
-            backdrop-filter: blur(3px);
-            max-width: 500px;
+        section.hero .hero-content,
+        section.hero .hero-content-left,
+        section.hero .hero-content-right,
+        .hero .hero-content.hero-content-left {
+            text-align: left !important;
+            background: rgba(255, 255, 255, 0.75) !important;
+            padding: 2.5rem !important;
+            border-radius: 20px !important;
+            backdrop-filter: blur(3px) !important;
+            max-width: 500px !important;
             margin-left: 0 !important;
             margin-right: auto !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
+            float: none !important;
+            position: relative !important;
+            left: 0 !important;
+            right: auto !important;
+            transform: none !important;
         }
         
         .hero h1 {

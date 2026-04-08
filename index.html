@@ -69,24 +69,24 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             background-size: cover !important;
         }
         
-        /* Overlay plus marqué pour contraste */
+        /* Overlay léger - juste un voile subtil à droite */
         .hero-overlay {
             background: linear-gradient(90deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                rgba(255, 255, 255, 0.7) 50%,
-                rgba(255, 255, 255, 0.85) 100%) !important;
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.3) 60%,
+                rgba(255, 255, 255, 0.5) 100%) !important;
         }
         
-        /* Fond semi-transparent sur le texte (desktop) */
+        /* Bloc texte semi-transparent */
         .hero .hero-content {
             text-align: right;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.75);
             padding: 2.5rem;
             border-radius: 20px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(3px);
             max-width: 500px;
             margin-left: auto;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
         }
         
         .hero h1 {
@@ -146,12 +146,12 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
             }
             
             .hero-overlay {
-                background: rgba(255, 255, 255, 0.4) !important;
+                background: rgba(255, 255, 255, 0.2) !important;
             }
             
             .hero .hero-content {
                 text-align: center;
-                background: rgba(255, 255, 255, 0.9);
+                background: rgba(255, 255, 255, 0.85);
                 padding: 2rem 1.5rem;
                 border-radius: 20px;
                 margin: 1rem;

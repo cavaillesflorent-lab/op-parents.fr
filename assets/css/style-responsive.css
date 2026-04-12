@@ -1292,3 +1292,34 @@ body {
         color: white; /* Blanc pour le texte hors span */
     }
 }
+
+/* ========================================
+   NOUVEAU HERO - FOND UNI + TÉLÉPHONE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .hero {
+        background: #F2EDE4 !important;
+        background-image: none !important;
+    }
+    
+    .hero h1,
+    .hero-content h1 {
+        color: #2D403B !important;
+    }
+    
+    .hero-subtitle {
+        color: #5A6E6B !important;
+        text-shadow: none !important;
+    }
+    
+    .hero .container {
+        flex-direction: column-reverse !important;
+        text-align: center;
+    }
+    
+    .hero-image {
+        max-width: 280px;
+        margin: 0 auto 1.5rem;
+    }
+}

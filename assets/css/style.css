@@ -377,8 +377,9 @@ section {
     max-width: 1200px;
     width: 100%;
     display: flex;
-    justify-content: flex-end;
-    padding-left: 40%;
+    align-items: center;
+    gap: 3rem;
+    padding: 2rem;
 }
 
 .hero-content {

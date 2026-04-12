@@ -635,6 +635,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/config.js"></script>
     <script src="assets/js/components.js"></script>
     <script>
@@ -642,9 +643,125 @@
         // RESSOURCES — Logique formulaire + téléchargements
         // ============================================
 
-        const MAKE_WEBHOOK = 'https://hook.eu2.make.com/xpabkvk01i54lmnc5mitb0gtw74eoxqi';
+        const SUPABASE_URL  = 'https://qjdoepgvqpmckqnxcsob.supabase.co';
+        const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqZG9lcGd2cXBtY2txbnhjc29iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDIxNDgsImV4cCI6MjA4MjQxODE0OH0.EPY7Oo_MIcJp40PRpkQ3tV3O8KPG2wZGonVRd6XrmR4';
+
+        // Client Supabase propre à cette page
+        let sbClient = null;
 
         const RESOURCES = [
+            { id: 1, file: 'assets/documents/vision board familial ok.pdf',        filename: 'vision_board_familial_op.pdf',       label: '⬇️ Télécharger le Vision Board' },
+            { id: 2, file: 'assets/documents/boussole budget ok.pdf',              filename: 'boussole_budget_op.pdf',             label: '⬇️ Télécharger la Boussole Budget' },
+            { id: 3, file: 'assets/documents/investir en couple ok.pdf',           filename: 'investir_en_couple_op.pdf',          label: '⬇️ Télécharger le Guide Couple' },
+            { id: 4, file: 'assets/documents/gestionnaire de budget annuel.xlsx',  filename: 'gestionnaire_budget_annuel_op.xlsx', label: '⬇️ Télécharger le Gestionnaire Excel' }
+        ];
+
+        function isUnlocked() {
+            return !!localStorage.getItem('op_ressources_email');
+        }
+
+        function getStoredPrenom() {
+            return localStorage.getItem('op_ressources_prenom') || '';
+        }
+
+        function downloadFile(filePath, filename) {
+            const a = document.createElement('a');
+            a.href = filePath;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function unlockAll(prenom) {
+            document.getElementById('capture-section').style.display = 'none';
+            const banner = document.getElementById('unlocked-banner');
+            banner.style.display = 'block';
+            if (prenom) {
+                document.getElementById('banner-prenom-txt').textContent = prenom + ' ';
+            }
+            RESOURCES.forEach(r => {
+                const card = document.getElementById('card-' + r.id);
+                const btn  = document.getElementById('btn-' + r.id);
+                if (card) card.classList.remove('locked');
+                if (btn) {
+                    btn.className   = 'btn-download';
+                    btn.disabled    = false;
+                    btn.textContent = r.label;
+                    btn.onclick     = () => downloadFile(r.file, r.filename);
+                }
+            });
+        }
+
+        async function handleCapture(e) {
+            e.preventDefault();
+
+            const prenom  = document.getElementById('cap-prenom').value.trim();
+            const email   = document.getElementById('cap-email').value.trim();
+            const consent = document.getElementById('cap-consent').checked;
+            const btn     = document.getElementById('capture-btn');
+            const errDiv  = document.getElementById('capture-error');
+
+            if (!prenom || !email || !consent) return;
+
+            btn.disabled         = true;
+            btn.textContent      = 'Enregistrement en cours...';
+            errDiv.style.display = 'none';
+
+            try {
+                // Insertion Supabase directe
+                if (sbClient) {
+                    const { error } = await sbClient
+                        .from('newsletter_subscribers')
+                        .upsert([{
+                            email:       email,
+                            prenom:      prenom,
+                            source:      'ressources',
+                            guide_slug:  'pack-4-ressources',
+                            guide_title: 'Pack 4 ressources gratuites'
+                        }], { onConflict: 'email' });
+
+                    if (error) {
+                        console.error('Supabase error:', error.message);
+                    } else {
+                        console.log('✅ Inscrit en base');
+                    }
+                } else {
+                    console.warn('sbClient non disponible');
+                }
+
+                // Sauvegarder localement
+                localStorage.setItem('op_ressources_email',  email);
+                localStorage.setItem('op_ressources_prenom', prenom);
+
+                // Déverrouiller
+                unlockAll(prenom);
+
+            } catch (err) {
+                console.error('Erreur:', err);
+                errDiv.textContent   = 'Une erreur est survenue. Merci de réessayer.';
+                errDiv.style.display = 'block';
+                btn.disabled         = false;
+                btn.textContent      = 'Accéder à toutes les ressources →';
+            }
+        }
+
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Créer le client Supabase dès que le SDK est disponible
+            if (typeof supabase !== 'undefined') {
+                sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('✅ Supabase initialisé (ressources)');
+            } else {
+                console.warn('SDK Supabase non chargé');
+            }
+
+            // Déverrouiller si déjà inscrit
+            if (isUnlocked()) {
+                unlockAll(getStoredPrenom());
+            }
+        });
+    </script>
             { id: 1, file: 'assets/documents/vision board familial ok.pdf',        filename: 'vision_board_familial_op.pdf',       label: '⬇️ Télécharger le Vision Board' },
             { id: 2, file: 'assets/documents/boussole budget ok.pdf',              filename: 'boussole_budget_op.pdf',             label: '⬇️ Télécharger la Boussole Budget' },
             { id: 3, file: 'assets/documents/investir en couple ok.pdf',           filename: 'investir_en_couple_op.pdf',          label: '⬇️ Télécharger le Guide Couple' },
@@ -691,88 +808,6 @@
             });
         }
 
-        async function handleCapture(e) {
-            e.preventDefault();
-
-            const prenom  = document.getElementById('cap-prenom').value.trim();
-            const email   = document.getElementById('cap-email').value.trim();
-            const consent = document.getElementById('cap-consent').checked;
-            const btn     = document.getElementById('capture-btn');
-            const errDiv  = document.getElementById('capture-error');
-
-            if (!prenom || !email || !consent) return;
-
-            btn.disabled         = true;
-            btn.textContent      = 'Enregistrement en cours...';
-            errDiv.style.display = 'none';
-
-            try {
-                // Initialiser Supabase (appelé ici explicitement)
-                if (typeof initSupabase === 'function') {
-                    initSupabase();
-                }
-
-                // Insertion Supabase
-                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-                    const { error } = await supabaseClient
-                        .from('newsletter_subscribers')
-                        .upsert([{
-                            email:       email,
-                            prenom:      prenom,
-                            source:      'ressources',
-                            guide_slug:  'pack-4-ressources',
-                            guide_title: 'Pack 4 ressources gratuites'
-                        }], { onConflict: 'email' });
-
-                    if (error) {
-                        console.error('Supabase error:', error.message);
-                    } else {
-                        console.log('✅ Inscrit en base');
-                    }
-                } else {
-                    console.warn('supabaseClient non disponible');
-                }
-
-                // Webhook Make (alerte admin)
-                try {
-                    await fetch(MAKE_WEBHOOK, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        mode: 'no-cors',
-                        body: JSON.stringify({
-                            prenom:    prenom,
-                            email:     email,
-                            ressource: 'Pack 4 ressources',
-                            source:    'page-ressources',
-                            timestamp: new Date().toISOString()
-                        })
-                    });
-                } catch (wErr) {
-                    console.warn('Webhook Make:', wErr);
-                }
-
-                // Sauvegarder localement pour éviter de refaire le formulaire
-                localStorage.setItem('op_ressources_email',  email);
-                localStorage.setItem('op_ressources_prenom', prenom);
-
-                // Déverrouiller
-                unlockAll(prenom);
-
-            } catch (err) {
-                console.error('Erreur:', err);
-                errDiv.textContent   = 'Une erreur est survenue. Merci de réessayer.';
-                errDiv.style.display = 'block';
-                btn.disabled         = false;
-                btn.textContent      = 'Accéder à toutes les ressources →';
-            }
-        }
-
-        // Au chargement : vérifier si déjà inscrit
-        document.addEventListener('DOMContentLoaded', function() {
-            if (isUnlocked()) {
-                unlockAll(getStoredPrenom());
-            }
-        });
     </script>
 </body>
 </html>

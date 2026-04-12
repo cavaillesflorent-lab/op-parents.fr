@@ -215,6 +215,14 @@
                     <span class="nav-icon">📧</span> Newsletter
                 </a>
             </nav>
+            <div class="sidebar-footer">
+                <a href="../index.html" class="nav-item">
+                    <span class="nav-icon">🏠</span> Voir le site
+                </a>
+                <button class="nav-item logout-btn" id="logout-btn" onclick="supabaseClient.auth.signOut().then(()=>window.location.href='login.html')">
+                    <span class="nav-icon">🚪</span> Déconnexion
+                </button>
+            </div>
         </aside>
 
         <!-- Contenu principal -->
@@ -299,6 +307,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/js/config.js"></script>
     <script>
         // ============================================
@@ -311,7 +320,13 @@
         const PER_PAGE = 25;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            initSupabase();
+            const client = initSupabase();
+
+            if (!client) {
+                document.getElementById('subscribers-tbody').innerHTML =
+                    '<tr class="loading-row"><td colspan="7">❌ SDK Supabase non chargé. Rechargez la page.</td></tr>';
+                return;
+            }
 
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 if (!session) {

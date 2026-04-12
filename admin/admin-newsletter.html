@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter - Admin OP!</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <style>
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--vert-fonce);
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-left { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+
+        .search-input {
+            padding: 0.6rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            width: 260px;
+            font-family: var(--font-sans);
+        }
+
+        .search-input:focus { outline: none; border-color: var(--vert-fonce); }
+
+        .filter-select {
+            padding: 0.6rem 0.875rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+        }
+
+        .btn-export {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            background: var(--vert-fonce);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: background 0.2s;
+        }
+
+        .btn-export:hover { background: #1e2e2a; }
+
+        .subscribers-table {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .subscribers-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .subscribers-table thead tr {
+            background: var(--vert-fonce);
+            color: var(--white);
+        }
+
+        .subscribers-table thead th {
+            padding: 0.875rem 1rem;
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .subscribers-table tbody tr {
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.15s;
+        }
+
+        .subscribers-table tbody tr:hover { background: #f9fafb; }
+        .subscribers-table tbody tr:last-child { border-bottom: none; }
+
+        .subscribers-table tbody td {
+            padding: 0.875rem 1rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .source-badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .source-badge.ressources { background: #DFF2B6; color: var(--vert-fonce); }
+        .source-badge.guide      { background: #F2D680; color: var(--vert-fonce); }
+        .source-badge.webinaire  { background: #F2B47E; color: var(--vert-fonce); }
+        .source-badge.autre      { background: #e5e7eb; color: #6b7280; }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+        }
+
+        .status-dot.active   { background: #10b981; }
+        .status-dot.inactive { background: #ef4444; }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .btn-delete:hover { background: #fef2f2; }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #f3f4f6;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination-btns { display: flex; gap: 0.5rem; }
+
+        .pagination-btn {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: var(--white);
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.15s;
+        }
+
+        .pagination-btn:hover:not(:disabled) { border-color: var(--vert-fonce); color: var(--vert-fonce); }
+        .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .loading-row td { text-align: center; color: var(--text-secondary); padding: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <img src="../assets/images/logo.png" alt="OP!">
+                <span>Admin OP!</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <span class="nav-icon">📊</span> Tableau de bord
+                </a>
+                <a href="quizzes.html" class="nav-item">
+                    <span class="nav-icon">📚</span> Guides & Quiz
+                </a>
+                <a href="webinaires.html" class="nav-item">
+                    <span class="nav-icon">🎥</span> Webinaires
+                </a>
+                <a href="newsletter.html" class="nav-item active">
+                    <span class="nav-icon">📧</span> Newsletter
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <div>
+                    <h1>Newsletter</h1>
+                    <p>Gestion des abonnés et exports</p>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-total">—</div>
+                    <div class="stat-label">Total abonnés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-actifs">—</div>
+                    <div class="stat-label">Actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-ressources">—</div>
+                    <div class="stat-label">Via Ressources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-guides">—</div>
+                    <div class="stat-label">Via Guides</div>
+                </div>
+            </div>
+
+            <!-- Barre d'outils -->
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <input type="text" class="search-input" id="search-input" placeholder="🔍 Rechercher un email ou prénom..." oninput="filterTable()">
+                    <select class="filter-select" id="filter-source" onchange="filterTable()">
+                        <option value="">Toutes les sources</option>
+                        <option value="ressources">Ressources</option>
+                        <option value="guide">Guides</option>
+                        <option value="webinaire">Webinaires</option>
+                    </select>
+                    <select class="filter-select" id="filter-status" onchange="filterTable()">
+                        <option value="">Tous les statuts</option>
+                        <option value="true">Actifs</option>
+                        <option value="false">Inactifs</option>
+                    </select>
+                </div>
+                <button class="btn-export" onclick="exportCSV()">
+                    ⬇️ Exporter CSV
+                </button>
+            </div>
+
+            <!-- Tableau -->
+            <div class="subscribers-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Source</th>
+                            <th>Ressource / Guide</th>
+                            <th>Date inscription</th>
+                            <th>Statut</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscribers-tbody">
+                        <tr class="loading-row">
+                            <td colspan="7">Chargement...</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <span id="pagination-info">—</span>
+                    <div class="pagination-btns">
+                        <button class="pagination-btn" id="btn-prev" onclick="changePage(-1)" disabled>← Précédent</button>
+                        <button class="pagination-btn" id="btn-next" onclick="changePage(1)" disabled>Suivant →</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../assets/js/config.js"></script>
+    <script>
+        // ============================================
+        // ADMIN NEWSLETTER
+        // ============================================
+
+        let allSubscribers = [];
+        let filteredSubscribers = [];
+        let currentPage = 1;
+        const PER_PAGE = 25;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            initSupabase();
+
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                if (!session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                loadSubscribers();
+            });
+        });
+
+        async function loadSubscribers() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('newsletter_subscribers')
+                    .select('*')
+                    .order('subscribed_at', { ascending: false });
+
+                if (error) throw error;
+
+                allSubscribers      = data || [];
+                filteredSubscribers = [...allSubscribers];
+
+                updateStats();
+                renderTable();
+
+            } catch (err) {
+                console.error('Erreur chargement:', err);
+                document.getElementById('subscribers-tbody').innerHTML =
+                    '<tr class="loading-row"><td colspan="7">Erreur de chargement. Vérifiez les politiques RLS.</td></tr>';
+            }
+        }
+
+        function updateStats() {
+            const total     = allSubscribers.length;
+            const actifs    = allSubscribers.filter(s => s.is_active !== false).length;
+            const ressources = allSubscribers.filter(s => s.source === 'ressources').length;
+            const guides    = allSubscribers.filter(s => s.source === 'guide').length;
+
+            document.getElementById('stat-total').textContent     = total;
+            document.getElementById('stat-actifs').textContent    = actifs;
+            document.getElementById('stat-ressources').textContent = ressources;
+            document.getElementById('stat-guides').textContent    = guides;
+        }
+
+        function filterTable() {
+            const search  = document.getElementById('search-input').value.toLowerCase();
+            const source  = document.getElementById('filter-source').value;
+            const status  = document.getElementById('filter-status').value;
+
+            filteredSubscribers = allSubscribers.filter(s => {
+                const matchSearch = !search ||
+                    (s.email  && s.email.toLowerCase().includes(search)) ||
+                    (s.prenom && s.prenom.toLowerCase().includes(search)) ||
+                    (s.guide_title && s.guide_title.toLowerCase().includes(search));
+
+                const matchSource = !source || s.source === source;
+                const matchStatus = !status || String(s.is_active !== false) === status;
+
+                return matchSearch && matchSource && matchStatus;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('subscribers-tbody');
+            const total = filteredSubscribers.length;
+            const start = (currentPage - 1) * PER_PAGE;
+            const end   = Math.min(start + PER_PAGE, total);
+            const page  = filteredSubscribers.slice(start, end);
+
+            if (total === 0) {
+                tbody.innerHTML = '<tr class="loading-row"><td colspan="7">Aucun abonné trouvé.</td></tr>';
+                document.getElementById('pagination-info').textContent = '0 résultat';
+                document.getElementById('btn-prev').disabled = true;
+                document.getElementById('btn-next').disabled = true;
+                return;
+            }
+
+            tbody.innerHTML = page.map(s => {
+                const date    = s.subscribed_at
+                    ? new Date(s.subscribed_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                    : '—';
+                const source  = s.source || 'autre';
+                const active  = s.is_active !== false;
+                const prenom  = s.prenom || '—';
+                const guide   = s.guide_title || s.guide_slug || '—';
+
+                return `
+                    <tr>
+                        <td>${escapeHtml(prenom)}</td>
+                        <td><a href="mailto:${escapeHtml(s.email)}" style="color:var(--vert-fonce)">${escapeHtml(s.email)}</a></td>
+                        <td><span class="source-badge ${source}">${source}</span></td>
+                        <td style="font-size:0.83rem;color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(guide)}">${escapeHtml(guide)}</td>
+                        <td>${date}</td>
+                        <td>
+                            <span class="status-dot ${active ? 'active' : 'inactive'}"></span>
+                            ${active ? 'Actif' : 'Inactif'}
+                        </td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteSubscriber('${s.id}', '${escapeHtml(s.email)}')" title="Supprimer">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('pagination-info').textContent =
+                `${start + 1}–${end} sur ${total} abonné${total > 1 ? 's' : ''}`;
+
+            document.getElementById('btn-prev').disabled = currentPage <= 1;
+            document.getElementById('btn-next').disabled = end >= total;
+        }
+
+        function changePage(dir) {
+            currentPage += dir;
+            renderTable();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteSubscriber(id, email) {
+            if (!confirm(`Supprimer l'abonné "${email}" ?\nCette action est irréversible.`)) return;
+            try {
+                const { error } = await supabaseClient
+                    .from('newsletter_subscribers')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
+                allSubscribers = allSubscribers.filter(s => s.id !== id);
+                filterTable();
+                updateStats();
+            } catch (err) {
+                alert('Erreur lors de la suppression : ' + err.message);
+            }
+        }
+
+        function exportCSV() {
+            const data = filteredSubscribers;
+            if (!data.length) { alert('Aucune donnée à exporter.'); return; }
+
+            const headers = ['Prenom', 'Email', 'Source', 'Ressource', 'Date inscription', 'Actif'];
+            const rows = data.map(s => [
+                s.prenom || '',
+                s.email,
+                s.source || '',
+                s.guide_title || s.guide_slug || '',
+                s.subscribed_at ? new Date(s.subscribed_at).toLocaleDateString('fr-FR') : '',
+                s.is_active !== false ? 'Oui' : 'Non'
+            ]);
+
+            const csv = [headers, ...rows]
+                .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = `newsletter_subscribers_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>

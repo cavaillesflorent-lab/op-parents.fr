@@ -10,14 +10,32 @@
     <style>
         /* ===== PAGE RESSOURCES ===== */
 
-        /* Hero */
-        .ressources-hero-section {
-            padding: var(--space-3xl) 0 var(--space-xl);
-            background: var(--white);
-            text-align: center;
+        /* --- SECTION CAPTURE --- */
+        .capture-section {
+            padding: var(--space-3xl) 0;
+            background: var(--vert-fonce);
+            position: relative;
+            overflow: hidden;
         }
 
-        .ressources-hero-badge {
+        .capture-section::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50%;
+        }
+
+        .capture-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .capture-badge {
             display: inline-block;
             background: var(--vert-clair);
             color: var(--vert-fonce);
@@ -30,39 +48,168 @@
             margin-bottom: var(--space-md);
         }
 
-        .ressources-hero-section h1 {
+        .capture-inner h1 {
             font-family: var(--font-serif);
-            font-size: 2.5rem;
-            color: var(--vert-fonce);
+            font-size: 2.25rem;
+            color: var(--white);
             margin-bottom: var(--space-md);
-            line-height: 1.2;
+            line-height: 1.25;
         }
 
-        .ressources-hero-section p {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            max-width: 620px;
-            margin: 0 auto var(--space-lg);
+        .capture-inner > p {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: var(--space-xl);
             line-height: 1.7;
         }
 
-        .hero-trust-bar {
+        .capture-trust {
             display: flex;
             justify-content: center;
-            gap: var(--space-xl);
+            gap: var(--space-lg);
             flex-wrap: wrap;
+            margin-bottom: var(--space-xl);
         }
 
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
+        .capture-trust span { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+
+        .capture-form-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .capture-form-box h2 {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            color: var(--vert-fonce);
+            margin-bottom: 0.4rem;
+            text-align: center;
+        }
+
+        .capture-form-box .form-sub {
             font-size: 0.9rem;
             color: var(--text-secondary);
-            font-weight: 500;
+            text-align: center;
+            margin-bottom: var(--space-lg);
         }
 
-        /* Grille ressources */
+        .capture-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+
+        .capture-form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+
+        .capture-form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+
+        .capture-form-group input {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .capture-form-group input:focus { outline: none; border-color: var(--vert-fonce); }
+
+        .capture-consent {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+            margin: var(--space-md) 0;
+            padding: 0.875rem 1rem;
+            background: #f8faf8;
+            border-radius: 10px;
+        }
+
+        .capture-consent input[type="checkbox"] {
+            width: 18px; height: 18px; min-width: 18px;
+            margin-top: 2px; cursor: pointer;
+            accent-color: var(--vert-fonce);
+        }
+
+        .capture-consent label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .capture-consent label a { color: var(--vert-fonce); }
+
+        .capture-submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #F2B47E;
+            color: var(--vert-fonce);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: var(--font-sans);
+        }
+
+        .capture-submit-btn:hover:not(:disabled) {
+            background: #E8A56E;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(242,180,126,0.4);
+        }
+
+        .capture-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .capture-error {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
+        .capture-legal {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+
+        /* --- BANDEAU DÉVERROUILLÉ --- */
+        .unlocked-banner {
+            background: var(--vert-clair);
+            padding: var(--space-lg) 0;
+            text-align: center;
+        }
+
+        .unlocked-banner p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--vert-fonce);
+        }
+
+        .unlocked-banner span {
+            font-weight: 400;
+            font-size: 0.95rem;
+            opacity: 0.8;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* --- GRILLE RESSOURCES --- */
         .ressources-grid-section {
             padding: var(--space-xl) 0 var(--space-3xl);
             background: var(--white);
@@ -83,12 +230,14 @@
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 20px rgba(45, 64, 59, 0.08);
+            box-shadow: 0 4px 20px rgba(45,64,59,0.08);
         }
 
-        .ressource-card:hover {
+        .ressource-card.locked { opacity: 0.65; filter: grayscale(0.25); }
+
+        .ressource-card:hover:not(.locked) {
             transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(45, 64, 59, 0.14);
+            box-shadow: 0 16px 40px rgba(45,64,59,0.14);
             border-color: var(--vert-clair);
         }
 
@@ -98,7 +247,7 @@
             flex-direction: column;
             align-items: flex-start;
             gap: var(--space-sm);
-            min-height: 160px;
+            min-height: 140px;
         }
 
         .ressource-card:nth-child(1) .ressource-card-header { background: #DFF2B6; }
@@ -109,7 +258,6 @@
         .ressource-type-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
             background: rgba(255,255,255,0.6);
             color: var(--vert-fonce);
             padding: 0.3rem 0.75rem;
@@ -122,14 +270,14 @@
 
         .ressource-card-header h3 {
             font-family: var(--font-serif);
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             color: var(--vert-fonce);
             line-height: 1.25;
             margin: 0;
         }
 
         .ressource-card-header .ressource-desc-short {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--vert-fonce);
             opacity: 0.8;
             margin: 0;
@@ -139,15 +287,11 @@
             background: var(--white);
             padding: var(--space-lg);
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
         }
 
         .ressource-points {
             list-style: none;
-            padding: 0;
-            margin: 0;
+            padding: 0; margin: 0;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -157,7 +301,7 @@
             display: flex;
             align-items: flex-start;
             gap: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-secondary);
             line-height: 1.5;
         }
@@ -171,7 +315,7 @@
         }
 
         .ressource-card-footer {
-            padding: var(--space-md) var(--space-lg) var(--space-lg);
+            padding: var(--space-sm) var(--space-lg) var(--space-lg);
             background: var(--white);
         }
 
@@ -196,14 +340,26 @@
         .btn-download:hover {
             background: #1e2e2a;
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(45, 64, 59, 0.3);
+            box-shadow: 0 6px 18px rgba(45,64,59,0.3);
         }
 
-        .btn-download .download-icon {
-            font-size: 1.1rem;
+        .btn-locked {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            width: 100%;
+            padding: var(--space-md) var(--space-lg);
+            background: #e5e7eb;
+            color: #9ca3af;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: not-allowed;
         }
 
-        /* Section "Qui sommes-nous" */
+        /* Section auteur */
         .ressources-about-section {
             padding: var(--space-3xl) 0;
             background: var(--vert-clair);
@@ -222,87 +378,44 @@
         }
 
         .about-avatar {
-            width: 150px;
-            height: 150px;
+            width: 140px; height: 140px;
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
 
         .about-avatar img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             object-position: center 15%;
         }
 
         .about-info h2 {
             font-family: var(--font-serif);
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             color: var(--vert-fonce);
             margin-bottom: var(--space-xs);
         }
 
-        .about-subtitle {
-            font-size: 1rem;
-            color: var(--terracotta);
-            font-weight: 600;
-            margin-bottom: var(--space-md);
-        }
-
-        .about-bio {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: var(--space-lg);
-        }
-
-        .about-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-sm);
-        }
-
-        .about-badges .badge {
-            background: var(--vert-clair);
-            color: var(--vert-fonce);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.88rem;
-            font-weight: 600;
-        }
+        .about-subtitle { font-size: 0.95rem; color: var(--terracotta); font-weight: 600; margin-bottom: var(--space-md); }
+        .about-bio { font-size: 0.98rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md); }
+        .about-badges { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+        .about-badges .badge { background: var(--vert-clair); color: var(--vert-fonce); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 600; }
 
         /* CTA final */
         .ressources-cta-section {
             padding: var(--space-3xl) 0;
             background: #FDF8F3;
-        }
-
-        .ressources-cta-card {
             text-align: center;
-            max-width: 580px;
-            margin: 0 auto;
         }
 
-        .ressources-cta-card h2 {
-            font-family: var(--font-serif);
-            font-size: 2rem;
-            color: var(--vert-fonce);
-            margin-bottom: var(--space-sm);
-        }
-
-        .ressources-cta-card > p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            line-height: 1.6;
-        }
+        .ressources-cta-section h2 { font-family: var(--font-serif); font-size: 2rem; color: var(--vert-fonce); margin-bottom: var(--space-sm); }
+        .ressources-cta-section .cta-sub { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: var(--space-xl); line-height: 1.6; max-width: 520px; margin-left: auto; margin-right: auto; }
 
         .cta-btn-rdv {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: var(--space-sm);
             padding: var(--space-md) var(--space-xl);
             background: #F2B47E;
@@ -314,288 +427,23 @@
             transition: all 0.2s ease;
         }
 
-        .cta-btn-rdv:hover {
-            background: #E8A56E;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(242, 180, 126, 0.4);
-        }
-
-        .cta-note {
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-            margin-top: var(--space-md);
-        }
-
-        /* ===== MODAL CAPTURE EMAIL ===== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(45, 64, 59, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.is-open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-box {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 2.5rem;
-            max-width: 460px;
-            width: 100%;
-            position: relative;
-            transform: translateY(20px) scale(0.97);
-            transition: transform 0.3s ease;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.2);
-        }
-
-        .modal-overlay.is-open .modal-box {
-            transform: translateY(0) scale(1);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 34px;
-            height: 34px;
-            border: none;
-            background: rgba(45,64,59,0.08);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--vert-fonce);
-            transition: background 0.2s;
-        }
-
-        .modal-close:hover {
-            background: rgba(45,64,59,0.15);
-        }
-
-        .modal-resource-badge {
-            display: inline-block;
-            padding: 0.3rem 0.9rem;
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-bottom: var(--space-md);
-            color: var(--vert-fonce);
-        }
-
-        .modal-box h2 {
-            font-family: var(--font-serif);
-            font-size: 1.5rem;
-            color: var(--vert-fonce);
-            margin-bottom: 0.5rem;
-            line-height: 1.25;
-        }
-
-        .modal-box .modal-sub {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-            line-height: 1.5;
-        }
-
-        .modal-form-group {
-            margin-bottom: 1rem;
-        }
-
-        .modal-form-group label {
-            display: block;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--vert-fonce);
-            margin-bottom: 0.4rem;
-        }
-
-        .modal-form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 1rem;
-            color: var(--text-primary);
-            background: var(--white);
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-            font-family: var(--font-sans);
-        }
-
-        .modal-form-group input:focus {
-            outline: none;
-            border-color: var(--vert-fonce);
-        }
-
-        .modal-consent {
-            display: flex;
-            gap: 0.75rem;
-            align-items: flex-start;
-            margin-bottom: var(--space-lg);
-            padding: 1rem;
-            background: #f9fafb;
-            border-radius: 12px;
-        }
-
-        .modal-consent input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            min-width: 18px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: var(--vert-fonce);
-        }
-
-        .modal-consent label {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            cursor: pointer;
-        }
-
-        .modal-consent label strong {
-            color: var(--vert-fonce);
-        }
-
-        .modal-submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--vert-fonce);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: var(--font-sans);
-        }
-
-        .modal-submit-btn:hover:not(:disabled) {
-            background: #1e2e2a;
-            transform: translateY(-1px);
-        }
-
-        .modal-submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .modal-legal {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            text-align: center;
-            margin-top: 0.75rem;
-            line-height: 1.5;
-        }
-
-        /* Message succès modal */
-        .modal-success {
-            text-align: center;
-            padding: 1rem 0;
-        }
-
-        .modal-success-icon {
-            font-size: 3.5rem;
-            margin-bottom: var(--space-md);
-        }
-
-        .modal-success h3 {
-            font-family: var(--font-serif);
-            font-size: 1.4rem;
-            color: var(--vert-fonce);
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-success p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: var(--space-lg);
-            line-height: 1.6;
-        }
-
-        .modal-download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.875rem 1.75rem;
-            background: #F2B47E;
-            color: var(--vert-fonce);
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .modal-download-btn:hover {
-            background: #E8A56E;
-            transform: translateY(-2px);
-        }
-
-        /* Message erreur */
-        .modal-error-msg {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            margin-top: 0.75rem;
-            display: none;
-        }
+        .cta-btn-rdv:hover { background: #E8A56E; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(242,180,126,0.4); }
+        .cta-note { font-size: 0.88rem; color: var(--text-secondary); margin-top: var(--space-md); }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .ressources-hero-section h1 {
-                font-size: 1.75rem;
-            }
-
-            .ressources-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .about-card {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .about-badges {
-                justify-content: center;
-            }
-
-            .modal-box {
-                padding: 1.75rem 1.5rem;
-            }
-
-            .ressources-cta-card h2 {
-                font-size: 1.5rem;
-            }
-
-            .hero-trust-bar {
-                gap: var(--space-md);
-            }
+            .capture-inner h1 { font-size: 1.65rem; }
+            .capture-form-row { grid-template-columns: 1fr; }
+            .ressources-grid { grid-template-columns: 1fr; }
+            .about-card { flex-direction: column; text-align: center; }
+            .about-badges { justify-content: center; }
+            .ressources-cta-section h2 { font-size: 1.5rem; }
+            .capture-trust { gap: var(--space-sm); }
         }
 
         @media (max-width: 480px) {
-            .ressource-card-header {
-                min-height: auto;
-                padding: var(--space-lg);
-            }
+            .ressource-card-header { min-height: auto; padding: var(--space-lg); }
+            .capture-form-box { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -603,119 +451,146 @@
     <div id="header-placeholder"></div>
 
     <main>
-        <!-- HERO -->
-        <section class="ressources-hero-section">
+        <!-- ====== SECTION CAPTURE ====== -->
+        <section class="capture-section" id="capture-section">
             <div class="container">
-                <span class="ressources-hero-badge">🎁 Ressources gratuites</span>
-                <h1>Tes outils pour prendre<br>le contrôle de tes finances</h1>
-                <p>4 ressources conçues par Florent & Charlène pour t'aider à visualiser tes projets, maîtriser ton budget et investir avec ton partenaire. 100% gratuit, directement dans ta boîte mail.</p>
-                <div class="hero-trust-bar">
-                    <span class="trust-item">✅ 100% gratuit</span>
-                    <span class="trust-item">📧 Envoi immédiat</span>
-                    <span class="trust-item">🔒 Sans engagement</span>
-                    <span class="trust-item">📄 PDF + Excel</span>
+                <div class="capture-inner">
+                    <span class="capture-badge">🎁 4 ressources gratuites</span>
+                    <h1>Tes outils pour prendre<br>le contrôle de tes finances</h1>
+                    <p>Vision board, boussole budget, guide investir en couple et gestionnaire de budget annuel. Remplis le formulaire une seule fois pour tout télécharger librement.</p>
+
+                    <div class="capture-trust">
+                        <span>✅ 100% gratuit</span>
+                        <span>📧 Accès immédiat</span>
+                        <span>🔒 Sans engagement</span>
+                    </div>
+
+                    <div class="capture-form-box">
+                        <h2>Accéder aux 4 ressources gratuites</h2>
+                        <p class="form-sub">Un seul formulaire pour tout débloquer</p>
+
+                        <form id="capture-form" onsubmit="handleCapture(event)">
+                            <div class="capture-form-row">
+                                <div class="capture-form-group">
+                                    <label for="cap-prenom">Ton prénom</label>
+                                    <input type="text" id="cap-prenom" placeholder="Sophie" required autocomplete="given-name">
+                                </div>
+                                <div class="capture-form-group">
+                                    <label for="cap-email">Ton email</label>
+                                    <input type="email" id="cap-email" placeholder="ton@email.fr" required autocomplete="email">
+                                </div>
+                            </div>
+
+                            <div class="capture-consent">
+                                <input type="checkbox" id="cap-consent" required>
+                                <label for="cap-consent">
+                                    J'accepte de recevoir la newsletter d'OP! avec des conseils financiers et des ressources exclusives. Tu peux te désinscrire à tout moment.
+                                    Données traitées selon notre <a href="politique-confidentialite.html" target="_blank">politique de confidentialité</a>.
+                                </label>
+                            </div>
+
+                            <button type="submit" class="capture-submit-btn" id="capture-btn">
+                                Accéder à toutes les ressources →
+                            </button>
+                            <div class="capture-error" id="capture-error"></div>
+                            <p class="capture-legal">🔒 Aucune carte bancaire · Gratuit · Sans engagement</p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- GRILLE RESSOURCES -->
+        <!-- Bandeau après inscription -->
+        <div class="unlocked-banner" id="unlocked-banner" style="display:none;">
+            <div class="container">
+                <p>🎉 Tout est déverrouillé <span id="banner-prenom-txt"></span>!
+                    <span>Clique sur le bouton de chaque ressource pour la télécharger.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- ====== GRILLE RESSOURCES ====== -->
         <section class="ressources-grid-section">
             <div class="container">
                 <div class="ressources-grid">
 
-                    <!-- Ressource 1 : Vision Board -->
-                    <div class="ressource-card">
+                    <div class="ressource-card locked" id="card-1">
                         <div class="ressource-card-header">
                             <span class="ressource-type-badge">📋 PDF · 13 pages</span>
                             <h3>Vision Board Familial</h3>
-                            <p class="ressource-desc-short">Transforme vos rêves de famille en plan d'action concret</p>
+                            <p class="ressource-desc-short">Transforme vos rêves de famille en plan d'action</p>
                         </div>
                         <div class="ressource-card-body">
                             <ul class="ressource-points">
-                                <li>La science derrière la visualisation (vraiment efficace)</li>
-                                <li>Tes 4 grandes catégories de projets de vie</li>
-                                <li>5 étapes pour construire ton vision board en famille</li>
-                                <li>Combien coûtent vraiment vos rêves — repères chiffrés</li>
-                                <li>10 astuces pour que ça marche sur le long terme</li>
+                                <li>La science derrière la visualisation</li>
+                                <li>4 grandes catégories de projets de vie</li>
+                                <li>5 étapes pour construire ton vision board</li>
+                                <li>Combien coûtent vraiment vos rêves</li>
+                                <li>10 astuces pour tenir sur le long terme</li>
                             </ul>
                         </div>
                         <div class="ressource-card-footer">
-                            <button class="btn-download" onclick="openModal('vision-board', 'Vision Board Familial', '#DFF2B6', 'vision_board_familial_ok.pdf')">
-                                <span class="download-icon">⬇️</span>
-                                Télécharger gratuitement
-                            </button>
+                            <button class="btn-locked" id="btn-1" disabled>🔒 Remplis le formulaire ci-dessus</button>
                         </div>
                     </div>
 
-                    <!-- Ressource 2 : Boussole Budget -->
-                    <div class="ressource-card">
+                    <div class="ressource-card locked" id="card-2">
                         <div class="ressource-card-header">
                             <span class="ressource-type-badge">📋 PDF · 14 pages</span>
                             <h3>Ta Boussole Budget</h3>
-                            <p class="ressource-desc-short">Le guide pratique pour reprendre le contrôle de tes finances</p>
+                            <p class="ressource-desc-short">Reprends le contrôle de tes finances au quotidien</p>
                         </div>
                         <div class="ressource-card-body">
                             <ul class="ressource-points">
                                 <li>Quiz : quel type de gestionnaire es-tu ?</li>
                                 <li>4 méthodes de budget testées et approuvées</li>
-                                <li>10 astuces concrètes pour économiser 200–500 €/mois</li>
-                                <li>Plan d'action sur 30 jours, semaine par semaine</li>
-                                <li>Les 5 erreurs qui plombent ton budget (à éviter)</li>
+                                <li>10 astuces pour économiser 200–500 €/mois</li>
+                                <li>Plan d'action sur 30 jours</li>
+                                <li>Les 5 erreurs qui plombent ton budget</li>
                             </ul>
                         </div>
                         <div class="ressource-card-footer">
-                            <button class="btn-download" onclick="openModal('boussole-budget', 'Ta Boussole Budget', '#F2D680', 'boussole_budget_ok.pdf')">
-                                <span class="download-icon">⬇️</span>
-                                Télécharger gratuitement
-                            </button>
+                            <button class="btn-locked" id="btn-2" disabled>🔒 Remplis le formulaire ci-dessus</button>
                         </div>
                     </div>
 
-                    <!-- Ressource 3 : Investir en Couple -->
-                    <div class="ressource-card">
+                    <div class="ressource-card locked" id="card-3">
                         <div class="ressource-card-header">
                             <span class="ressource-type-badge">📋 PDF · 16 pages</span>
                             <h3>Investir en Couple</h3>
-                            <p class="ressource-desc-short">Comment prendre les bonnes décisions financières ensemble</p>
+                            <p class="ressource-desc-short">Les bonnes décisions financières ensemble</p>
                         </div>
                         <div class="ressource-card-body">
                             <ul class="ressource-points">
-                                <li>La vérité sur l'argent en couple, en 4 chiffres clés</li>
-                                <li>Quiz : votre profil financier à deux (Entrepreneur, Stratège, Protecteur)</li>
+                                <li>La vérité sur l'argent en couple</li>
+                                <li>Quiz : votre profil financier à deux</li>
                                 <li>La réunion budget mensuelle qui change tout</li>
-                                <li>Les 5 vraies questions avant d'investir ensemble</li>
-                                <li>10 astuces concrètes pour éviter les conflits d'argent</li>
+                                <li>5 questions clés avant d'investir ensemble</li>
+                                <li>10 astuces pour éviter les conflits d'argent</li>
                             </ul>
                         </div>
                         <div class="ressource-card-footer">
-                            <button class="btn-download" onclick="openModal('investir-couple', 'Investir en Couple', '#F2B47E', 'investir_en_couple_ok.pdf')">
-                                <span class="download-icon">⬇️</span>
-                                Télécharger gratuitement
-                            </button>
+                            <button class="btn-locked" id="btn-3" disabled>🔒 Remplis le formulaire ci-dessus</button>
                         </div>
                     </div>
 
-                    <!-- Ressource 4 : Gestionnaire Budget -->
-                    <div class="ressource-card">
+                    <div class="ressource-card locked" id="card-4">
                         <div class="ressource-card-header">
                             <span class="ressource-type-badge">📊 Excel · Fichier interactif</span>
                             <h3>Gestionnaire de Budget Annuel</h3>
-                            <p class="ressource-desc-short">Le tableau de bord pour piloter tes finances mois par mois</p>
+                            <p class="ressource-desc-short">Pilote tes finances mois par mois</p>
                         </div>
                         <div class="ressource-card-body">
                             <ul class="ressource-points">
-                                <li>Suivi mensuel de tes revenus et dépenses</li>
-                                <li>Calcul automatique de ton épargne disponible</li>
+                                <li>Suivi mensuel revenus et dépenses</li>
+                                <li>Calcul automatique de l'épargne disponible</li>
                                 <li>Vue annuelle pour anticiper et planifier</li>
-                                <li>Catégories personnalisables selon ta situation</li>
-                                <li>Tableau de bord visuel avec graphiques intégrés</li>
+                                <li>Catégories personnalisables</li>
+                                <li>Tableau de bord avec graphiques intégrés</li>
                             </ul>
                         </div>
                         <div class="ressource-card-footer">
-                            <button class="btn-download" onclick="openModal('budget-annuel', 'Gestionnaire de Budget Annuel', '#D2B8F8', 'gestionnaire_de_budget_annuel.xlsx')">
-                                <span class="download-icon">⬇️</span>
-                                Télécharger gratuitement
-                            </button>
+                            <button class="btn-locked" id="btn-4" disabled>🔒 Remplis le formulaire ci-dessus</button>
                         </div>
                     </div>
 
@@ -734,9 +609,7 @@
                     <div class="about-info">
                         <h2>Florent & Charlène</h2>
                         <p class="about-subtitle">Fondateurs d'OP! · Ingénieur patrimonial & Communication</p>
-                        <p class="about-bio">
-                            On a créé OP! parce qu'on sait à quel point il est difficile de trouver des réponses fiables sur l'argent quand on est parent. Ces ressources sont le reflet de notre conviction : <strong>comprendre d'abord, décider ensuite</strong>. Zéro jargon, zéro pression.
-                        </p>
+                        <p class="about-bio">On a créé OP! parce qu'on sait à quel point il est difficile de trouver des réponses fiables sur l'argent quand on est parent. Ces ressources sont le reflet de notre conviction : <strong>comprendre d'abord, décider ensuite</strong>. Zéro jargon, zéro pression.</p>
                         <div class="about-badges">
                             <span class="badge">🏅 Inscrit à l'ORIAS</span>
                             <span class="badge">📚 +150 familles accompagnées</span>
@@ -750,75 +623,15 @@
         <!-- CTA FINAL -->
         <section class="ressources-cta-section">
             <div class="container">
-                <div class="ressources-cta-card">
-                    <h2>Tu veux aller plus loin ?</h2>
-                    <p>Après les outils, passe à l'action. Réserve un premier échange gratuit avec Florent pour faire le point sur ta situation.</p>
-                    <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="cta-btn-rdv">
-                        📅 Réserver un appel gratuit
-                    </a>
-                    <p class="cta-note">🔒 Sans engagement · 15 min · Réponse sous 48h</p>
-                </div>
+                <h2>Tu veux aller plus loin ?</h2>
+                <p class="cta-sub">Après les outils, passe à l'action. Réserve un premier échange gratuit avec Florent pour faire le point sur ta situation.</p>
+                <a href="https://calendar.app.google/jNScgUoyh4cvkeB67" target="_blank" class="cta-btn-rdv">
+                    📅 Réserver un appel gratuit
+                </a>
+                <p class="cta-note">🔒 Sans engagement · 15 min · Réponse sous 48h</p>
             </div>
         </section>
     </main>
-
-    <!-- MODAL CAPTURE EMAIL -->
-    <div class="modal-overlay" id="download-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeModal()" aria-label="Fermer">✕</button>
-
-            <!-- Contenu du formulaire -->
-            <div id="modal-form-content">
-                <span class="modal-resource-badge" id="modal-badge">📋 PDF</span>
-                <h2 id="modal-title">Télécharger gratuitement</h2>
-                <p class="modal-sub">Entre ton prénom et ton email pour recevoir ta ressource instantanément.</p>
-
-                <form id="download-form" onsubmit="handleDownload(event)">
-                    <div class="modal-form-group">
-                        <label for="field-prenom">Ton prénom</label>
-                        <input type="text" id="field-prenom" name="prenom" placeholder="Ex : Sophie" required autocomplete="given-name">
-                    </div>
-                    <div class="modal-form-group">
-                        <label for="field-email">Ton adresse email</label>
-                        <input type="email" id="field-email" name="email" placeholder="ton@email.fr" required autocomplete="email">
-                    </div>
-
-                    <div class="modal-consent">
-                        <input type="checkbox" id="consent-newsletter" name="consent" required>
-                        <label for="consent-newsletter">
-                            J'accepte de recevoir la newsletter d'OP! avec des conseils financiers, des astuces et des ressources exclusives.
-                            <strong>Tu peux te désinscrire à tout moment.</strong>
-                            Tes données sont traitées conformément à notre
-                            <a href="politique-confidentialite.html" target="_blank" style="color: var(--vert-fonce);">politique de confidentialité</a>.
-                        </label>
-                    </div>
-
-                    <button type="submit" class="modal-submit-btn" id="submit-btn">
-                        Télécharger ma ressource gratuitement →
-                    </button>
-
-                    <div class="modal-error-msg" id="error-msg">
-                        Une erreur est survenue. Merci de réessayer.
-                    </div>
-
-                    <p class="modal-legal">🔒 Aucune carte bancaire requise · Gratuit · Sans engagement</p>
-                </form>
-            </div>
-
-            <!-- Succès -->
-            <div id="modal-success-content" style="display:none;">
-                <div class="modal-success">
-                    <div class="modal-success-icon">🎉</div>
-                    <h3>Ta ressource est prête !</h3>
-                    <p id="success-message">Clique sur le bouton ci-dessous pour télécharger ta ressource. Tu recevras aussi nos prochains conseils directement dans ta boîte mail.</p>
-                    <a href="#" id="final-download-link" class="modal-download-btn" download>
-                        ⬇️ Télécharger maintenant
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     <div id="footer-placeholder"></div>
 
@@ -826,143 +639,140 @@
     <script src="assets/js/components.js"></script>
     <script>
         // ============================================
-        // RESSOURCES - Logique de téléchargement
+        // RESSOURCES — Logique formulaire + téléchargements
         // ============================================
 
-        // Mapping fichiers → chemins de téléchargement
-        const RESOURCE_FILES = {
-            'vision_board_familial_ok.pdf': 'assets/documents/vision board familial ok.pdf',
-            'boussole_budget_ok.pdf': 'assets/documents/boussole budget ok.pdf',
-            'investir_en_couple_ok.pdf': 'assets/documents/investir en couple ok.pdf',
-            'gestionnaire_de_budget_annuel.xlsx': 'assets/documents/gestionnaire de budget annuel.xlsx'
-        };
+        const MAKE_WEBHOOK = 'https://hook.eu2.make.com/xpabkvk01i54lmnc5mitb0gtw74eoxqi';
 
-        // Make webhook (newsletter)
-        const MAKE_WEBHOOK_URL = 'https://hook.eu2.make.com/xpabkvk01i54lmnc5mitb0gtw74eoxqi';
+        const RESOURCES = [
+            { id: 1, file: 'assets/documents/vision board familial ok.pdf',        filename: 'vision_board_familial_op.pdf',       label: '⬇️ Télécharger le Vision Board' },
+            { id: 2, file: 'assets/documents/boussole budget ok.pdf',              filename: 'boussole_budget_op.pdf',             label: '⬇️ Télécharger la Boussole Budget' },
+            { id: 3, file: 'assets/documents/investir en couple ok.pdf',           filename: 'investir_en_couple_op.pdf',          label: '⬇️ Télécharger le Guide Couple' },
+            { id: 4, file: 'assets/documents/gestionnaire de budget annuel.xlsx',  filename: 'gestionnaire_budget_annuel_op.xlsx', label: '⬇️ Télécharger le Gestionnaire Excel' }
+        ];
 
-        // État courant
-        let currentResource = null;
-        let currentFile = null;
-
-        function openModal(resourceSlug, resourceTitle, badgeColor, filename) {
-            currentResource = { slug: resourceSlug, title: resourceTitle };
-            currentFile = filename;
-
-            // Reset
-            document.getElementById('modal-form-content').style.display = 'block';
-            document.getElementById('modal-success-content').style.display = 'none';
-            document.getElementById('download-form').reset();
-            document.getElementById('error-msg').style.display = 'none';
-            document.getElementById('submit-btn').disabled = false;
-            document.getElementById('submit-btn').textContent = 'Télécharger ma ressource gratuitement →';
-
-            // Personnaliser le modal
-            document.getElementById('modal-title').textContent = resourceTitle;
-            const badge = document.getElementById('modal-badge');
-            badge.style.background = badgeColor;
-            badge.textContent = resourceTitle.length > 25 ? '📋 Ressource gratuite' : '📋 ' + resourceTitle;
-
-            // Ouvrir
-            document.getElementById('download-modal').classList.add('is-open');
-            document.body.style.overflow = 'hidden';
-
-            // Focus accessibilité
-            setTimeout(() => {
-                document.getElementById('field-prenom').focus();
-            }, 300);
+        function isUnlocked() {
+            return !!localStorage.getItem('op_ressources_email');
         }
 
-        function closeModal() {
-            document.getElementById('download-modal').classList.remove('is-open');
-            document.body.style.overflow = '';
+        function getStoredPrenom() {
+            return localStorage.getItem('op_ressources_prenom') || '';
         }
 
-        // Fermer en cliquant sur l'overlay
-        document.getElementById('download-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        function downloadFile(filePath, filename) {
+            const a = document.createElement('a');
+            a.href = filePath;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
 
-        // Fermer avec Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+        function unlockAll(prenom) {
+            // Masquer formulaire, afficher bandeau
+            document.getElementById('capture-section').style.display = 'none';
+            const banner = document.getElementById('unlocked-banner');
+            banner.style.display = 'block';
+            if (prenom) {
+                document.getElementById('banner-prenom-txt').textContent = prenom + ' ';
+            }
 
-        async function handleDownload(e) {
+            // Activer chaque bouton
+            RESOURCES.forEach(r => {
+                const card = document.getElementById('card-' + r.id);
+                const btn  = document.getElementById('btn-' + r.id);
+                if (card) card.classList.remove('locked');
+                if (btn) {
+                    btn.className = 'btn-download';
+                    btn.disabled  = false;
+                    btn.textContent = r.label;
+                    btn.onclick = () => downloadFile(r.file, r.filename);
+                }
+            });
+        }
+
+        async function handleCapture(e) {
             e.preventDefault();
 
-            const prenom = document.getElementById('field-prenom').value.trim();
-            const email = document.getElementById('field-email').value.trim();
-            const consent = document.getElementById('consent-newsletter').checked;
-            const btn = document.getElementById('submit-btn');
-            const errDiv = document.getElementById('error-msg');
+            const prenom  = document.getElementById('cap-prenom').value.trim();
+            const email   = document.getElementById('cap-email').value.trim();
+            const consent = document.getElementById('cap-consent').checked;
+            const btn     = document.getElementById('capture-btn');
+            const errDiv  = document.getElementById('capture-error');
 
             if (!prenom || !email || !consent) return;
 
-            btn.disabled = true;
-            btn.textContent = 'Envoi en cours...';
+            btn.disabled         = true;
+            btn.textContent      = 'Enregistrement en cours...';
             errDiv.style.display = 'none';
 
             try {
-                // 1. Sauvegarder dans Supabase newsletter_subscribers
-                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
-                    try {
-                        await supabaseClient
-                            .from('newsletter_subscribers')
-                            .upsert([{
-                                email: email,
-                                source: 'ressources',
-                                guide_slug: currentResource.slug,
-                                guide_title: currentResource.title
-                            }], { onConflict: 'email' });
-                    } catch (sbErr) {
-                        console.warn('Supabase:', sbErr);
-                        // On continue même si Supabase échoue
-                    }
+                // Initialiser Supabase (appelé ici explicitement)
+                if (typeof initSupabase === 'function') {
+                    initSupabase();
                 }
 
-                // 2. Déclencher Make webhook pour alerte admin
+                // Insertion Supabase
+                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                    const { error } = await supabaseClient
+                        .from('newsletter_subscribers')
+                        .upsert([{
+                            email:       email,
+                            prenom:      prenom,
+                            source:      'ressources',
+                            guide_slug:  'pack-4-ressources',
+                            guide_title: 'Pack 4 ressources gratuites'
+                        }], { onConflict: 'email' });
+
+                    if (error) {
+                        console.error('Supabase error:', error.message);
+                    } else {
+                        console.log('✅ Inscrit en base');
+                    }
+                } else {
+                    console.warn('supabaseClient non disponible');
+                }
+
+                // Webhook Make (alerte admin)
                 try {
-                    await fetch(MAKE_WEBHOOK_URL, {
+                    await fetch(MAKE_WEBHOOK, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         mode: 'no-cors',
                         body: JSON.stringify({
-                            email: email,
-                            prenom: prenom,
-                            ressource: currentResource.title,
-                            source: 'page-ressources',
+                            prenom:    prenom,
+                            email:     email,
+                            ressource: 'Pack 4 ressources',
+                            source:    'page-ressources',
                             timestamp: new Date().toISOString()
                         })
                     });
-                } catch (webhookErr) {
-                    console.warn('Webhook:', webhookErr);
+                } catch (wErr) {
+                    console.warn('Webhook Make:', wErr);
                 }
 
-                // 3. Afficher succès + lien de téléchargement
-                const filePath = RESOURCE_FILES[currentFile] || `assets/documents/${currentFile}`;
-                document.getElementById('final-download-link').href = filePath;
-                document.getElementById('success-message').textContent =
-                    `Merci ${prenom} ! Clique ci-dessous pour télécharger "${currentResource.title}". On te retrouve aussi dans ta boîte mail avec nos prochains conseils.`;
+                // Sauvegarder localement pour éviter de refaire le formulaire
+                localStorage.setItem('op_ressources_email',  email);
+                localStorage.setItem('op_ressources_prenom', prenom);
 
-                document.getElementById('modal-form-content').style.display = 'none';
-                document.getElementById('modal-success-content').style.display = 'block';
-
-                // Déclencher le téléchargement automatiquement après 1s
-                setTimeout(() => {
-                    const link = document.createElement('a');
-                    link.href = filePath;
-                    link.download = currentFile;
-                    link.click();
-                }, 800);
+                // Déverrouiller
+                unlockAll(prenom);
 
             } catch (err) {
                 console.error('Erreur:', err);
-                errDiv.textContent = 'Une erreur est survenue. Merci de réessayer.';
+                errDiv.textContent   = 'Une erreur est survenue. Merci de réessayer.';
                 errDiv.style.display = 'block';
-                btn.disabled = false;
-                btn.textContent = 'Télécharger ma ressource gratuitement →';
+                btn.disabled         = false;
+                btn.textContent      = 'Accéder à toutes les ressources →';
             }
         }
+
+        // Au chargement : vérifier si déjà inscrit
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isUnlocked()) {
+                unlockAll(getStoredPrenom());
+            }
+        });
     </script>
 </body>
 </html>

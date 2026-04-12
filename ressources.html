@@ -660,7 +660,7 @@
                     'apikey':        SB_KEY,
                     'Authorization': 'Bearer ' + SB_KEY,
                     'Content-Type':  'application/json',
-                    'Prefer':        'resolution=merge-duplicates'
+                    'Prefer':        'return=minimal'
                 },
                 body: JSON.stringify({
                     email:       email,
@@ -670,11 +670,15 @@
                     guide_title: 'Pack 4 ressources gratuites'
                 })
             });
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error('Supabase: ' + err);
+
+            // 201 = créé, 409 = email déjà inscrit (on laisse passer)
+            if (res.status === 201 || res.status === 409) {
+                console.log('✅ Supabase OK (status ' + res.status + ')');
+                return;
             }
-            console.log('✅ Inscrit en base Supabase');
+
+            const err = await res.text();
+            throw new Error('Supabase ' + res.status + ': ' + err);
         }
 
         function isUnlocked()    { return !!localStorage.getItem('op_ressources_email'); }

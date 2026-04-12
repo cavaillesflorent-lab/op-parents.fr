@@ -46,6 +46,9 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 
     <style>
+        /* Import Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        
         /* Style bouton tertiaire (RDV) */
         .btn-tertiary {
             background: #F2B47E;
@@ -60,178 +63,188 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
         }
         
         /* ========================================
-           HERO REDESIGN - Style épuré + Lisibilité
+           NOUVEAU HERO - Fond uni + Image droite
            ======================================== */
         
-        /* Mieux cadrer l'image (centrer sur les visages) */
         .hero {
-            background-position: center 20% !important;
-            background-size: cover !important;
+            background: #F2EDE4 !important;
+            background-image: none !important;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Overlay léger - juste un voile subtil à gauche */
         .hero-overlay {
-            background: linear-gradient(90deg, 
-                rgba(255, 255, 255, 0.5) 0%, 
-                rgba(255, 255, 255, 0.3) 40%,
-                rgba(255, 255, 255, 0) 100%) !important;
+            display: none !important;
         }
         
-        /* FORCER le bloc à gauche - écraser style.css */
-        section.hero .container {
+        .hero .container {
             display: flex !important;
-            justify-content: flex-start !important;
+            justify-content: space-between !important;
             align-items: center !important;
-            padding-left: var(--space-lg) !important;
-            padding-right: 40% !important;
+            gap: 3rem;
+            padding: 2rem !important;
+            max-width: 1200px;
         }
         
-        section.hero .hero-content,
-        section.hero .hero-content-left,
-        section.hero .hero-content-right,
-        .hero .hero-content.hero-content-left {
-            text-align: left !important;
-            background: rgba(255, 255, 255, 0.75) !important;
-            padding: 2.5rem !important;
-            border-radius: 20px !important;
-            backdrop-filter: blur(3px) !important;
-            max-width: 500px !important;
-            margin-left: 0 !important;
-            margin-right: auto !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
-            float: none !important;
-            position: relative !important;
-            left: 0 !important;
-            right: auto !important;
-            transform: none !important;
+        .hero-content {
+            flex: 1;
+            max-width: 550px !important;
+            background: transparent !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
         }
         
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 3.2rem) !important;
+            font-family: 'Poppins', sans-serif !important;
+            font-size: clamp(2rem, 4vw, 2.8rem) !important;
+            font-weight: 700 !important;
             line-height: 1.2 !important;
-            margin-bottom: 1.5rem !important;
             color: #2D403B !important;
-        }
-        
-        .hero h1 .highlight {
-            color: #8BA888 !important;
+            margin-bottom: 1.25rem !important;
         }
         
         .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-size: 1.15rem;
+            color: #5A6E6B;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+        
+        .hero-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+        
+        .hero-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 1rem;
             color: #2D403B;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.85rem;
             line-height: 1.5;
         }
         
-        .hero-subtitle .underline {
-            background: linear-gradient(180deg, transparent 60%, #F2D680 60%);
-            padding: 0 4px;
-        }
-        
-        .hero-proof {
-            font-size: 1rem;
-            color: #5A6E6B;
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-        
-        .hero-proof strong {
-            color: #8BA888;
+        .hero-features li::before {
+            content: "✓";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: #DFF2B6;
+            color: #2D403B;
+            border-radius: 50%;
+            font-size: 0.75rem;
             font-weight: 700;
-        }
-        
-        .hero-baseline {
-            font-size: 1.05rem;
-            color: #5A6E6B;
-            margin-bottom: 2rem;
-            font-style: italic;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
         
         .hero-cta {
             display: flex;
             gap: 1rem;
-            justify-content: flex-start;
             flex-wrap: wrap;
+            justify-content: flex-start !important;
+        }
+        
+        .btn-violet {
+            background: #D2B8F8 !important;
+            color: #2D403B !important;
+            border: none;
+            padding: 1rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-violet:hover {
+            background: #C4A8F0 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(210, 184, 248, 0.4);
+        }
+        
+        .btn-vert-clair {
+            background: #DFF2B6 !important;
+            color: #2D403B !important;
+            border: none;
+            padding: 1rem 1.75rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-vert-clair:hover {
+            background: #D0E8A0 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(223, 242, 182, 0.5);
+        }
+        
+        /* Image du téléphone à droite */
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 500px;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            max-height: 600px;
+            object-fit: contain;
         }
         
         /* Responsive hero */
-        @media (max-width: 768px) {
-            .hero {
-                background-position: center center !important;
-            }
-            
-            section.hero .container {
-                padding-left: var(--space-md) !important;
-                padding-right: var(--space-md) !important;
-                justify-content: center !important;
-            }
-            
-            .hero-overlay {
-                background: rgba(255, 255, 255, 0.2) !important;
-            }
-            
-            .hero .hero-content {
+        @media (max-width: 968px) {
+            .hero .container {
+                flex-direction: column-reverse !important;
                 text-align: center;
-                background: rgba(255, 255, 255, 0.85);
-                padding: 2rem 1.5rem;
-                border-radius: 20px;
-                margin: 1rem;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-                max-width: none;
-                margin-left: 1rem;
-                margin-right: 1rem;
+                padding: 2rem 1.5rem !important;
+            }
+            
+            .hero-content {
+                max-width: 100% !important;
             }
             
             .hero h1 {
-                font-size: 1.75rem !important;
-                color: #2D403B !important;
+                font-size: 1.8rem !important;
             }
             
-            .hero h1 .highlight {
-                color: #8BA888 !important;
-            }
-            
-            .hero-subtitle {
-                font-size: 1rem;
-                color: #2D403B;
-            }
-            
-            .hero-proof {
-                color: #2D403B;
-            }
-            
-            .hero-proof strong {
-                color: #8BA888;
-            }
-            
-            .hero-baseline {
-                color: #5A6E6B;
+            .hero-features li {
+                justify-content: center;
+                text-align: left;
             }
             
             .hero-cta {
-                justify-content: center;
+                justify-content: center !important;
                 flex-direction: column;
                 align-items: center;
             }
             
             .hero-cta .btn {
                 width: 100%;
-                max-width: 280px;
+                max-width: 300px;
                 text-align: center;
                 justify-content: center;
             }
             
-            /* Bouton secondaire lisible sur mobile */
-            .hero-cta .btn-secondary {
-                background: #2D403B;
-                color: #FFFFFF;
-                border: none;
+            .hero-image {
+                max-width: 300px;
+                margin-bottom: 1rem;
             }
             
-            .hero-cta .btn-secondary:hover {
-                background: #1F2E29;
+            .hero-image img {
+                max-height: 400px;
             }
         }
     </style>
@@ -241,20 +254,29 @@ src="https://www.facebook.com/tr?id=925948590314572&ev=PageView&noscript=1"
     <div id="header-placeholder"></div>
 
     <!-- SECTION 1 — HERO PLEIN ÉCRAN -->
-    <section class="hero" style="background-image: url('assets/images/accueil5.jpg');">
+    <section class="hero">
         <div class="hero-overlay"></div>
         <div class="container">
-            <div class="hero-content hero-content-left">
+            <div class="hero-content">
                 
-                <h1>Prêts à booster vos finances familiales ?</h1>
-                    
-                <p class="hero-proof">L'application des parents qui investissent et construisent leur avenir financier. OP! vous accompagne dans votre parcours d'investisseur.</p>
+                <h1>Investissez pour votre famille, sereinement.</h1>
+                
+                <p class="hero-subtitle">L'appli pensée pour les parents qui veulent faire grandir leur épargne.</p>
+                
+                <ul class="hero-features">
+                    <li>Investissez à votre rythme, même en partant de zéro</li>
+                    <li>Préparez sereinement les projets qui comptent (études, immobilier…)</li>
+                    <li>Décidez à deux, en couple ou en solo, en confiance</li>
+                </ul>
             
                 <div class="hero-cta">
-                
-                    <a href="mission.html" class="btn btn-tertiary">Boostez vos finances</a>
-                   
+                    <a href="investir.html" class="btn btn-violet">Commencer à investir</a>
+                    <a href="quizzes.html" class="btn btn-vert-clair">Accéder aux outils gratuits</a>
                 </div>
+            </div>
+            
+            <div class="hero-image">
+                <img src="assets/images/hero-phone.png" alt="Application OP! sur smartphone">
             </div>
         </div>
     </section>

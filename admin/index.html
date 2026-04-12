@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
     <style>
-        /* Dashboard Styles */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -32,7 +31,7 @@
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -55,18 +54,20 @@
         }
         
         .stat-icon {
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            flex-shrink: 0;
         }
         
-        .stat-card.webinaires .stat-icon { background: #fde8e4; }
-        .stat-card.quiz .stat-icon { background: #e8f5e9; }
+        .stat-card.webinaires .stat-icon   { background: #fde8e4; }
+        .stat-card.quiz .stat-icon         { background: #e8f5e9; }
         .stat-card.inscriptions .stat-icon { background: #fef3c7; }
+        .stat-card.newsletter .stat-icon   { background: #ede9fe; }
         
         .stat-info { flex: 1; }
         
@@ -79,7 +80,7 @@
         }
         
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-secondary);
             margin-top: 0.25rem;
         }
@@ -96,6 +97,11 @@
         .stat-card.quiz .stat-badge {
             background: #e8f5e9;
             color: var(--vert-fonce);
+        }
+
+        .stat-card.newsletter .stat-badge {
+            background: #ede9fe;
+            color: #6d28d9;
         }
         
         /* Main Grid */
@@ -144,7 +150,7 @@
         .quick-actions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 0.875rem;
         }
         
         .quick-action-btn {
@@ -152,7 +158,7 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            padding: 1.25rem 1rem;
+            padding: 1.1rem 1rem;
             background: var(--gray-50);
             border-radius: 12px;
             text-align: center;
@@ -165,10 +171,10 @@
             border-color: #bf604B;
         }
         
-        .action-icon { font-size: 1.75rem; }
+        .action-icon { font-size: 1.6rem; }
         
         .action-text {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             color: var(--text-primary);
         }
@@ -185,21 +191,21 @@
         .webinaire-item:last-child { border-bottom: none; }
         
         .webinaire-date {
-            width: 50px;
+            width: 48px;
             text-align: center;
             flex-shrink: 0;
         }
         
         .date-day {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #bf604B;
             line-height: 1;
         }
         
         .date-month {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-secondary);
             text-transform: uppercase;
         }
@@ -207,14 +213,14 @@
         .webinaire-info { flex: 1; }
         
         .webinaire-info h4 {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
         
         .webinaire-time {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-secondary);
         }
         
@@ -234,7 +240,7 @@
             border-radius: 8px;
         }
         
-        /* Quiz List */
+        /* Quiz / Newsletter List */
         .quiz-item {
             display: flex;
             align-items: center;
@@ -246,14 +252,14 @@
         .quiz-item:last-child { border-bottom: none; }
         
         .quiz-info h4 {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
         
         .quiz-meta {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-secondary);
         }
         
@@ -262,10 +268,47 @@
             padding: 0.25rem 0.75rem;
             border-radius: 50px;
             font-weight: 600;
+            white-space: nowrap;
         }
         
         .quiz-status.published { background: #e8f5e9; color: var(--vert-fonce); }
-        .quiz-status.draft { background: var(--gray-100); color: var(--text-secondary); }
+        .quiz-status.draft     { background: var(--gray-100); color: var(--text-secondary); }
+        
+        /* Newsletter row */
+        .nl-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .nl-item:last-child { border-bottom: none; }
+
+        .nl-email {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .nl-meta {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-top: 0.1rem;
+        }
+
+        .nl-source {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .nl-source.ressources { background: #DFF2B6; color: var(--vert-fonce); }
+        .nl-source.guide      { background: #F2D680; color: var(--vert-fonce); }
+        .nl-source.webinaire  { background: #F2B47E; color: var(--vert-fonce); }
+        .nl-source.autre      { background: #e5e7eb; color: #6b7280; }
         
         /* Empty State */
         .empty-state {
@@ -294,8 +337,8 @@
         }
         
         .loading-spinner {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             border: 3px solid var(--gray-200);
             border-top-color: #bf604B;
             border-radius: 50%;
@@ -308,7 +351,8 @@
 </head>
 <body class="admin-body">
     <div class="admin-layout">
-        <!-- Sidebar -->
+
+        <!-- ====== SIDEBAR ====== -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
                 <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
@@ -327,6 +371,10 @@
                     <span class="nav-icon">📚</span>
                     Guides & Quiz
                 </a>
+                <a href="newsletter.html" class="nav-item">
+                    <span class="nav-icon">📧</span>
+                    Newsletter
+                </a>
             </nav>
             <div class="sidebar-footer">
                 <a href="../index.html" class="nav-item">
@@ -340,8 +388,9 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- ====== CONTENU PRINCIPAL ====== -->
         <main class="admin-main">
+
             <!-- Header -->
             <header class="dashboard-header">
                 <div class="welcome-section">
@@ -353,37 +402,47 @@
                 </div>
             </header>
 
-            <!-- Stats Cards -->
+            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card webinaires">
                     <div class="stat-icon">🎥</div>
                     <div class="stat-info">
-                        <span class="stat-value" id="stat-webinaires">0</span>
+                        <span class="stat-value" id="stat-webinaires">—</span>
                         <span class="stat-label">Webinaires</span>
                     </div>
                     <span class="stat-badge" id="stat-webinaires-avenir">0 à venir</span>
                 </div>
-                
+
                 <div class="stat-card quiz">
                     <div class="stat-icon">📚</div>
                     <div class="stat-info">
-                        <span class="stat-value" id="stat-quiz">0</span>
+                        <span class="stat-value" id="stat-quiz">—</span>
                         <span class="stat-label">Guides</span>
                     </div>
                     <span class="stat-badge" id="stat-quiz-published">0 publiés</span>
                 </div>
-                
+
                 <div class="stat-card inscriptions">
                     <div class="stat-icon">👥</div>
                     <div class="stat-info">
-                        <span class="stat-value" id="stat-inscriptions">0</span>
+                        <span class="stat-value" id="stat-inscriptions">—</span>
                         <span class="stat-label">Inscriptions</span>
                     </div>
+                </div>
+
+                <div class="stat-card newsletter">
+                    <div class="stat-icon">📧</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-newsletter">—</span>
+                        <span class="stat-label">Abonnés newsletter</span>
+                    </div>
+                    <span class="stat-badge" id="stat-newsletter-new">0 ce mois</span>
                 </div>
             </div>
 
             <!-- Main Grid -->
             <div class="dashboard-grid">
+
                 <!-- Prochains webinaires -->
                 <div class="dashboard-card">
                     <div class="card-header">
@@ -412,13 +471,21 @@
                             <span class="action-icon">📚</span>
                             <span class="action-text">Créer un guide</span>
                         </a>
+                        <a href="newsletter.html" class="quick-action-btn">
+                            <span class="action-icon">📧</span>
+                            <span class="action-text">Gérer newsletter</span>
+                        </a>
+                        <a href="../ressources.html" target="_blank" class="quick-action-btn">
+                            <span class="action-icon">🎁</span>
+                            <span class="action-text">Page ressources</span>
+                        </a>
                         <a href="../webinaires.html" target="_blank" class="quick-action-btn">
                             <span class="action-icon">👁️</span>
                             <span class="action-text">Page webinaires</span>
                         </a>
-                        <a href="../formations.html" target="_blank" class="quick-action-btn">
+                        <a href="../quiz.html" target="_blank" class="quick-action-btn">
                             <span class="action-icon">🎯</span>
-                            <span class="action-text">Page formations</span>
+                            <span class="action-text">Page guides</span>
                         </a>
                     </div>
                 </div>
@@ -437,19 +504,20 @@
                     </div>
                 </div>
 
-                <!-- Derniers webinaires créés -->
+                <!-- Derniers abonnés newsletter -->
                 <div class="dashboard-card">
                     <div class="card-header">
-                        <h2>🆕 Derniers webinaires créés</h2>
-                        <a href="webinaires.html" class="card-link">Gérer →</a>
+                        <h2>📧 Derniers abonnés</h2>
+                        <a href="newsletter.html" class="card-link">Voir tout →</a>
                     </div>
-                    <div id="recent-webinaires">
+                    <div id="newsletter-list">
                         <div class="loading-placeholder">
                             <div class="loading-spinner"></div>
                             <span>Chargement...</span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
@@ -467,44 +535,58 @@
             }
         });
 
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').textContent = 
-            new Date().toLocaleDateString('fr-FR', options);
+        document.getElementById('current-date').textContent =
+            new Date().toLocaleDateString('fr-FR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
 
         async function loadDashboard() {
             await Promise.all([
                 loadStats(),
                 loadUpcomingWebinaires(),
                 loadQuiz(),
-                loadRecentWebinaires()
+                loadNewsletter()
             ]);
         }
 
         async function loadStats() {
             try {
+                // Webinaires
                 const { data: webinaires } = await supabaseClient
                     .from('webinaires').select('id, date_heure');
-                
-                const total = webinaires?.length || 0;
-                const avenir = webinaires?.filter(w => 
+                const total  = webinaires?.length || 0;
+                const avenir = webinaires?.filter(w =>
                     w.date_heure && new Date(w.date_heure) > new Date()
                 ).length || 0;
-                
-                document.getElementById('stat-webinaires').textContent = total;
+                document.getElementById('stat-webinaires').textContent       = total;
                 document.getElementById('stat-webinaires-avenir').textContent = avenir + ' à venir';
 
+                // Guides
                 const { data: quizzes } = await supabaseClient
                     .from('quizzes').select('id, published');
-                
-                document.getElementById('stat-quiz').textContent = quizzes?.length || 0;
-                document.getElementById('stat-quiz-published').textContent = 
+                document.getElementById('stat-quiz').textContent          = quizzes?.length || 0;
+                document.getElementById('stat-quiz-published').textContent =
                     (quizzes?.filter(q => q.published).length || 0) + ' publiés';
 
-                const { count } = await supabaseClient
+                // Inscriptions webinaires
+                const { count: inscCount } = await supabaseClient
                     .from('webinaire_inscriptions')
                     .select('*', { count: 'exact', head: true });
-                
-                document.getElementById('stat-inscriptions').textContent = count || 0;
+                document.getElementById('stat-inscriptions').textContent = inscCount || 0;
+
+                // Newsletter
+                const { data: nlAll } = await supabaseClient
+                    .from('newsletter_subscribers')
+                    .select('id, subscribed_at');
+                const nlTotal = nlAll?.length || 0;
+                const startOfMonth = new Date();
+                startOfMonth.setDate(1); startOfMonth.setHours(0,0,0,0);
+                const nlNew = nlAll?.filter(s =>
+                    s.subscribed_at && new Date(s.subscribed_at) >= startOfMonth
+                ).length || 0;
+                document.getElementById('stat-newsletter').textContent      = nlTotal;
+                document.getElementById('stat-newsletter-new').textContent  = nlNew + ' ce mois';
+
             } catch (err) {
                 console.error('Erreur stats:', err);
             }
@@ -512,7 +594,6 @@
 
         async function loadUpcomingWebinaires() {
             const container = document.getElementById('upcoming-webinaires');
-            
             try {
                 const { data: webinaires } = await supabaseClient
                     .from('webinaires')
@@ -520,99 +601,94 @@
                     .gte('date_heure', new Date().toISOString())
                     .order('date_heure', { ascending: true })
                     .limit(4);
-                
+
                 if (!webinaires?.length) {
                     container.innerHTML = '<div class="empty-state"><span class="empty-icon">📅</span><p>Aucun webinaire à venir</p><a href="webinaires.html" class="btn btn-sm btn-primary">Créer un webinaire</a></div>';
                     return;
                 }
-                
+
                 container.innerHTML = webinaires.map(w => {
-                    const date = new Date(w.date_heure);
+                    const date    = new Date(w.date_heure);
                     const isToday = date.toDateString() === new Date().toDateString();
-                    
-                    return '<div class="webinaire-item ' + (isToday ? 'today' : '') + '">' +
-                        '<div class="webinaire-date">' +
-                            '<span class="date-day">' + date.getDate() + '</span>' +
-                            '<span class="date-month">' + date.toLocaleDateString('fr-FR', { month: 'short' }) + '</span>' +
-                        '</div>' +
-                        '<div class="webinaire-info">' +
-                            '<h4>' + w.titre + '</h4>' +
-                            '<span class="webinaire-time">🕐 ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span>' +
-                        '</div>' +
-                        (isToday ? '<span class="badge-today">Aujourd\'hui</span>' : '') +
-                    '</div>';
+                    return `
+                        <div class="webinaire-item ${isToday ? 'today' : ''}">
+                            <div class="webinaire-date">
+                                <span class="date-day">${date.getDate()}</span>
+                                <span class="date-month">${date.toLocaleDateString('fr-FR', { month: 'short' })}</span>
+                            </div>
+                            <div class="webinaire-info">
+                                <h4>${w.titre}</h4>
+                                <span class="webinaire-time">🕐 ${date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                            ${isToday ? '<span class="badge-today">Aujourd\'hui</span>' : ''}
+                        </div>`;
                 }).join('');
             } catch (err) {
-                console.error('Erreur:', err);
-                container.innerHTML = '<p class="error">Erreur de chargement</p>';
+                container.innerHTML = '<p style="color:red;font-size:0.85rem;padding:1rem;">Erreur de chargement</p>';
             }
         }
 
         async function loadQuiz() {
             const container = document.getElementById('quiz-list');
-            
             try {
                 const { data: quizzes } = await supabaseClient
                     .from('quizzes')
                     .select('*')
                     .order('created_at', { ascending: false })
-                    .limit(4);
-                
+                    .limit(5);
+
                 if (!quizzes?.length) {
                     container.innerHTML = '<div class="empty-state"><span class="empty-icon">📚</span><p>Aucun guide créé</p><a href="quizzes.html" class="btn btn-sm btn-primary">Créer un guide</a></div>';
                     return;
                 }
-                
-                container.innerHTML = quizzes.map(q => {
-                    const icon = q.icon || '📝';
-                    return '<div class="quiz-item">' +
-                        '<div class="quiz-info">' +
-                            '<h4>' + icon + ' ' + q.titre + '</h4>' +
-                            '<span class="quiz-meta">' + (q.duree || '10 min') + '</span>' +
-                        '</div>' +
-                        '<span class="quiz-status ' + (q.published ? 'published' : 'draft') + '">' +
-                            (q.published ? '✅ Publié' : '📝 Brouillon') +
-                        '</span>' +
-                    '</div>';
-                }).join('');
+
+                container.innerHTML = quizzes.map(q => `
+                    <div class="quiz-item">
+                        <div class="quiz-info">
+                            <h4>${q.icon || '📝'} ${q.titre}</h4>
+                            <span class="quiz-meta">${q.duree || '10 min'}</span>
+                        </div>
+                        <span class="quiz-status ${q.published ? 'published' : 'draft'}">
+                            ${q.published ? '✅ Publié' : '📝 Brouillon'}
+                        </span>
+                    </div>`
+                ).join('');
             } catch (err) {
-                console.error('Erreur:', err);
-                container.innerHTML = '<p class="error">Erreur de chargement</p>';
+                container.innerHTML = '<p style="color:red;font-size:0.85rem;padding:1rem;">Erreur de chargement</p>';
             }
         }
 
-        async function loadRecentWebinaires() {
-            const container = document.getElementById('recent-webinaires');
-            
+        async function loadNewsletter() {
+            const container = document.getElementById('newsletter-list');
             try {
-                const { data: webinaires } = await supabaseClient
-                    .from('webinaires')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(4);
-                
-                if (!webinaires?.length) {
-                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">🎥</span><p>Aucun webinaire</p></div>';
+                const { data: subscribers } = await supabaseClient
+                    .from('newsletter_subscribers')
+                    .select('email, prenom, source, subscribed_at')
+                    .order('subscribed_at', { ascending: false })
+                    .limit(6);
+
+                if (!subscribers?.length) {
+                    container.innerHTML = '<div class="empty-state"><span class="empty-icon">📧</span><p>Aucun abonné pour l\'instant</p></div>';
                     return;
                 }
-                
-                container.innerHTML = webinaires.map(w => {
-                    const date = w.date_heure ? new Date(w.date_heure) : null;
-                    const isPast = date && date < new Date();
-                    
-                    return '<div class="quiz-item">' +
-                        '<div class="quiz-info">' +
-                            '<h4>' + w.titre + '</h4>' +
-                            '<span class="quiz-meta">' + (date ? date.toLocaleDateString('fr-FR') : 'Date non définie') + '</span>' +
-                        '</div>' +
-                        '<span class="quiz-status ' + (isPast ? 'draft' : 'published') + '">' +
-                            (isPast ? '✅ Passé' : '📅 À venir') +
-                        '</span>' +
-                    '</div>';
+
+                container.innerHTML = subscribers.map(s => {
+                    const date   = s.subscribed_at
+                        ? new Date(s.subscribed_at).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' })
+                        : '—';
+                    const source = s.source || 'autre';
+                    const prenom = s.prenom ? `${s.prenom} · ` : '';
+                    return `
+                        <div class="nl-item">
+                            <div>
+                                <div class="nl-email">${s.email}</div>
+                                <div class="nl-meta">${prenom}${date}</div>
+                            </div>
+                            <span class="nl-source ${source}">${source}</span>
+                        </div>`;
                 }).join('');
             } catch (err) {
-                console.error('Erreur:', err);
-                container.innerHTML = '<p class="error">Erreur de chargement</p>';
+                container.innerHTML = '<p style="color:red;font-size:0.85rem;padding:1rem;">Erreur de chargement</p>';
             }
         }
 

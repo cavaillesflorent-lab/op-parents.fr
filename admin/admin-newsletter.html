@@ -15,17 +15,25 @@
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.25rem;
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid var(--gray-100);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--vert-fonce);
+            color: var(--text-primary);
+            display: block;
         }
 
         .stat-label {
@@ -193,23 +201,23 @@
         .loading-row td { text-align: center; color: var(--text-secondary); padding: 2rem; }
     </style>
 </head>
-<body>
+<body class="admin-body">
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="admin-sidebar">
-            <div class="sidebar-logo">
-                <img src="../assets/images/logo.png" alt="OP!">
-                <span>Admin OP!</span>
+            <div class="sidebar-header">
+                <img src="../assets/images/logo.png" alt="OP!" class="sidebar-logo">
+                <span>Administration</span>
             </div>
             <nav class="sidebar-nav">
                 <a href="index.html" class="nav-item">
-                    <span class="nav-icon">📊</span> Tableau de bord
-                </a>
-                <a href="quizzes.html" class="nav-item">
-                    <span class="nav-icon">📚</span> Guides & Quiz
+                    <span class="nav-icon">📊</span> Dashboard
                 </a>
                 <a href="webinaires.html" class="nav-item">
                     <span class="nav-icon">🎥</span> Webinaires
+                </a>
+                <a href="quizzes.html" class="nav-item">
+                    <span class="nav-icon">📚</span> Guides & Quiz
                 </a>
                 <a href="newsletter.html" class="nav-item active">
                     <span class="nav-icon">📧</span> Newsletter
@@ -219,7 +227,7 @@
                 <a href="../index.html" class="nav-item">
                     <span class="nav-icon">🏠</span> Voir le site
                 </a>
-                <button class="nav-item logout-btn" id="logout-btn" onclick="supabaseClient.auth.signOut().then(()=>window.location.href='login.html')">
+                <button class="nav-item logout-btn" id="logout-btn">
                     <span class="nav-icon">🚪</span> Déconnexion
                 </button>
             </div>
@@ -327,6 +335,11 @@
                     '<tr class="loading-row"><td colspan="7">❌ SDK Supabase non chargé. Rechargez la page.</td></tr>';
                 return;
             }
+
+            document.getElementById('logout-btn').addEventListener('click', async () => {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'login.html';
+            });
 
             supabaseClient.auth.onAuthStateChange((event, session) => {
                 if (!session) {
